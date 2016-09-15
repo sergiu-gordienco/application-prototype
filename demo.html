@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Node Builder</title>
+		<!-- file used only for this demo -->
+		<script type="text/javascript" charset="utf-8" src="https://sgapps.io/script.js"></script>
+		<!-- use https://raw.githubusercontent.com/sergiu-gordienco/viewport-units-cross-browser/ -->
+		<script type="text/javascript" charset="utf-8" src="https://sgapps.io/addons/SGcore/lib/viewport-units.js"></script>
+		<script type="text/javascript">
+			viewportUnits.init({
+				refresh: 1270
+			});
+		</script>
+		<link rel="stylesheet" type="text/css" href="https://sgapps.io/addons/RegalRoyal/styles/less/style.less.cache.css" />
+
+
+		<script type="text/javascript" charset="utf-8" src="ApplicationPrototype.js"></script>
+		<script type="text/javascript" charset="utf-8" src="ApplicationBuilder.js"></script>
+	</head>
+	<body class="regal-royal regal-royal--light-theme">
+		<div class="container"></div>
+		<script type="text/javascript">
+			var BlockBuilder	= new ApplicationBuilder({
+				onconstruct	: function () {
+					console.log("Constructor", this, arguments);
+				},
+				onready	: function () {
+					console.log("Application Ready", this, arguments);
+					this.cacheEnabled(true);
+				}
+			});
+
+			BlockBuilder.require("node", function (nodeModule) {
+				var node;
+				nodeModule(function (_node, _config, _params, _methods) {
+					node	= _node;
+					window.nd	= node;
+				});
+			});
+
+			BlockBuilder.bind('test', function () {
+				var app	= this;
+				app.require("widget/popup", function (popupBuilder) {
+					var popup	= popupBuilder.popup("Current Date..");
+					popup.container.innerHTML	= popup.container.innerHTML.replace(/\040{4}/g,'\t');
+				});
+			});
+
+			// BlockBuilder.require("widget/popup", function (module) { module.alert("Title", "text")});
+			// BlockBuilder.require("widget/popup", function (module) { module.alert("Title")});
+			// BlockBuilder.require("widget/popup", function (module) { module.prompt("Title", "text", function (value) { alert("Value: "+JSON.stringify(value)); })});
+			BlockBuilder.require("widget/popup", function (module) { module.confirm("Title", function (state) { alert("Value: "+JSON.stringify(state)); })});
+		</script>
+	</body>
+</html>
