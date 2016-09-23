@@ -157,6 +157,76 @@ var ApplicationBuilder	= function (callback) {
 		}
 		return module_path;
 	});
+
+	;((function () {
+		var store	= {};
+		Application.bind('moduleRegister', function (path, modules) {
+			if (typeof(path) === "string" && Array.isArray(modules)) {
+				modules.forEach(function (module_name) {
+					var moduleMeta	= Application.moduleResolve(module_name, path);
+					store[moduleMeta["name"]]	= moduleMeta;
+					store['#' + module_name]	= moduleMeta;
+				});
+			}
+			return store;
+		});
+		var cached_moduleNames	= {};
+		Application.bind("moduleResolve", function (module_name, path) {
+			if (typeof(path) === "undefined")
+				path = module_path;
+			
+			/** module name formats
+
+			https://example/module/path/{module-name}.js
+			http://example/module/path/{module-name}.js#?module={module-name}
+			http://example/module/path/file.js?module={module-name}
+			{path/to/module-name}
+			{path/to/module-name.js}
+			path/to/file.js#?module={module-name}
+			*/
+			// return moduleMeta but requestQuery
+			if (('#' + module_name) in store) {
+				// console.warn('#' + module_name, ' founded in store ', store['#' + module_name]);
+				return store['#' + module_name];
+			}
+
+			var moduleMeta	= {
+				store	: {},
+				$requestQuery : module_name,
+				module_path	: path,
+				name	: module_name,
+				url		: path + '/' + module_name + '.js',
+				path	: '',
+				__dirname	: ''
+			};
+			if (module_name.match(/^(http|https|ws)\:\/\//)) {
+				moduleMeta.url = module_name;
+			} else if (module_name.match(/^\//)) {
+				moduleMeta.url = module_name;
+				if (!moduleMeta.url.match(/((\.js|)\?.*|\#.*)$/)) {
+					moduleMeta.url += '.js';
+				}
+			}
+			;((function (m) {
+				if (m && m[2]) {
+					moduleMeta["name"] = m[2];
+				}
+			})(module_name.match(/(\#module\=|\?module\=|\&module\=)([a-z0-9A-Z][a-z0-9\_\.\-A-Z]*)/)));
+
+
+			if (moduleMeta["name"] in store) {
+				// console.warn(moduleMeta["name"], ' founded in store ', store[moduleMeta["name"]]);
+				return store[moduleMeta["name"]];
+			}
+
+			moduleMeta.path = moduleMeta.url.replace(/(\.js|)(\?.*|\#.*|)$/, '');
+			moduleMeta.__dirname	= moduleMeta.path.replace(/\/[^\/]+$/, '');
+			
+			return moduleMeta;
+		});
+	})());
+
+
 	;((function () {
 		var fs = false;
 		if (isNode) {
@@ -165,27 +235,28 @@ var ApplicationBuilder	= function (callback) {
 		var require_cache	= {};
 		Application.bind("require", function (module_name, callback) {
 			if (typeof(module_name) === "string") {
-
-				var __dirname	= ( module_path + '/' + module_name ).replace(/\/[^\/]+$/,'');
+				var moduleMeta	= Application.moduleResolve(module_name);
+				var __dirname	= moduleMeta.__dirname;
 				// TODO validate path
-				if (module_name in require_cache) {
+				if (moduleMeta["name"] in require_cache) {
 					if (callback)
-						callback(require_cache[module_name].exports || null, undefined);
-					return require_cache[module_name].$request;
+						callback(require_cache[moduleMeta["name"]].exports || null, undefined);
+					return require_cache[moduleMeta["name"]].$request;
 				} else {
 					var module	= {
 						require	: function (moduleName, cb) {
 							if (typeof(moduleName) === "string") {
-								return Application.require(module_path + "/" + module_name + "/" + moduleName, cb);
+								return Application.require(moduleMeta.path + "/" + moduleName, cb);
 							} else if (Array.isArray(moduleName)) {
 								return Application.require(moduleName.map(function (m) {
-									module_path + "/" + module_name + "/" + m;
+									return moduleMeta.path + "/" + m;
 								}), cb);
 							}
 						},
 						resourceUrl	: function (path) {
-							return module_path + "/" + module_name + "/" + path;
+							return moduleMeta.path + "/" + path;
 						},
+						meta : moduleMeta,
 						$request	: new Application.Promise()
 					};
 
@@ -196,7 +267,7 @@ var ApplicationBuilder	= function (callback) {
 							set: function(val) {
 								if ( typeof(data) === "undefined" ) {
 									data	= val;
-									require_cache[module_name]	= module;
+									require_cache[moduleMeta["name"]]	= module;
 									module.$request.resolve(module.exports);
 									if (callback)
 										callback(module.exports || null, undefined);
@@ -215,7 +286,7 @@ var ApplicationBuilder	= function (callback) {
 						return (Application || global || null);
 					};
 
-					var module_url = module_path+'/'+module_name+'.js'+(Application.cacheEnabled() ? '?t='+module.atime : '');
+					var module_url = moduleMeta.url + (Application.cacheEnabled() ? ((moduleMeta.url.indexOf('?') === -1 ? '?' : '&') + 't='+module.atime ) : '');
 					if (isNode) {
 						fs.readFile(module_url, 'utf8', function (err, module_text) {
 							var err;
@@ -250,7 +321,7 @@ var ApplicationBuilder	= function (callback) {
 				module_name.forEach(function (module_name) {
 					var module_link	= false;
 					((function (m) {
-						if (m) {
+						if (Array.isArray(m) && m[3].substr(0, 2) !== '//') {
 							module_link	= m[1];
 							module_name	= m[3];
 						}
@@ -282,7 +353,7 @@ var ApplicationBuilder	= function (callback) {
 			params.callback_ready.apply(Application, [vars, config]);
 		} catch (er) {
 			console.warn("Application callbackReady error", er);
-		};
+		}
 	}
 	return Application;
 };
@@ -315,3 +386,4 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 if (isNode) {
 	module.exports	= ApplicationPrototype;
 }
+

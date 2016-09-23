@@ -1,9 +1,17 @@
+/* jshint -W002 */
+/* jshint -W084 */
+/**
+ * loadScript - is a function for adding scripts into the header
+ * @param  {string,Array}   url      url/urls of scripts
+ * @param  {Function} callback [description]
+ * @param  {object}   opts     settings with info related to the script tags
+ */
 function loadScript(url, callback, opts){
 	if (!callback) callback = function () {};
 
 	if (!Array.isArray(url)) {
-		url	= [url]
-	};
+		url	= [url];
+	}
 
 	if (!opts) {
 		opts = {
@@ -12,7 +20,7 @@ function loadScript(url, callback, opts){
 				"charset"	: "utf-8"
 			}
 		};
-	};
+	}
 
 	var waitScripts	= 1;
 	var waitScriptsChecker	= function () {
@@ -33,7 +41,7 @@ function loadScript(url, callback, opts){
 			}
 		} else {
 			waitScripts	+= 1;
-			script = document.createElement("script")
+			script = document.createElement("script");
 			script.type = "text/javascript";
 			if (opts && "attr" in opts) {
 				var at;
@@ -79,8 +87,14 @@ function loadScript(url, callback, opts){
 		}
 	});
 	waitScriptsChecker();
-};
+}
 
+/**
+ * loadLink - is a function for adding link tags into the header
+ * @param  {string,Array}   url      url/urls of link tags
+ * @param  {Function} callback [description]
+ * @param  {object}   opts     settings with info related to the link tags
+ */
 function loadLink(url, callback, opts){
 	if (!callback) callback = function () {};
 
@@ -91,11 +105,11 @@ function loadLink(url, callback, opts){
 				"type"	: "text/css"
 			}
 		};
-	};
+	}
 
 	if (!Array.isArray(url)) {
-		url	= [url]
-	};
+		url	= [url];
+	}
 
 	var waitLinks	= 1;
 	var waitLinksChecker	= function () {
@@ -180,7 +194,7 @@ function loadLink(url, callback, opts){
 		}
 	});
 	waitLinksChecker();
-};
+}
 
 module.exports = {
 	script	: loadScript,
