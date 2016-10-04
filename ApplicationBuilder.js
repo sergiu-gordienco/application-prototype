@@ -174,7 +174,7 @@ var ApplicationBuilder	= function (callback) {
 		Application.bind("moduleResolve", function (module_name, path) {
 			if (typeof(path) === "undefined")
 				path = module_path;
-			
+
 			/** module name formats
 
 			https://example/module/path/{module-name}.js
@@ -221,7 +221,7 @@ var ApplicationBuilder	= function (callback) {
 
 			moduleMeta.path = moduleMeta.url.replace(/(\.js|)(\?.*|\#.*|)$/, '');
 			moduleMeta.__dirname	= moduleMeta.path.replace(/\/[^\/]+$/, '');
-			
+
 			return moduleMeta;
 		});
 	})());
@@ -245,11 +245,19 @@ var ApplicationBuilder	= function (callback) {
 				} else {
 					var module	= {
 						require	: function (moduleName, cb) {
+							var updateModuleName = function (name, path) {
+								if (name.indexOf("::") !== -1) {
+									name = name.split(/\s*\:\:\s*/);
+									return name[0] + " :: " + path + "/" + name[1];
+								} else {
+									return path + "/" + name;
+								}
+							};
 							if (typeof(moduleName) === "string") {
-								return Application.require(moduleMeta.path + "/" + moduleName, cb);
+								return Application.require(updateModuleName(moduleName, moduleMeta.path), cb);
 							} else if (Array.isArray(moduleName)) {
 								return Application.require(moduleName.map(function (m) {
-									return moduleMeta.path + "/" + m;
+									return updateModuleName(m, moduleMeta.path);
 								}), cb);
 							}
 						},
@@ -386,4 +394,3 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 if (isNode) {
 	module.exports	= ApplicationPrototype;
 }
-
