@@ -158,7 +158,7 @@ module.exports = function (canvas) {
             config.operations.forEach(function (operation) {
                 try {
                     if (typeof(operation.operation) === "function") {
-                        context[operation.operation].apply(app, operation.params);
+                        operation.operation.apply(app, operation.params);
                     } else if (typeof(context[operation.operation]) === "function") {
                         context[operation.operation].apply(context, operation.params);
                     } else {
