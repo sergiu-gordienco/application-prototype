@@ -38,11 +38,10 @@ module.exports = function (canvas) {
         var path = new ApplicationPrototype();
         var config  = {
             id      : keyGenerator(),
-            isReady : false,
+            isReady : false, // TODO not yet used
             groups  : [],
             coords  : [],
-            operations  : [],
-            smoothing   : true
+            operations  : []
         };
         ((function () {
             var i;
@@ -62,12 +61,16 @@ module.exports = function (canvas) {
             });
             return config.operations;
         }, "");
-        path.bind("operationsRemoveByKey", function (key) {
+        path.bind("operationsRemoveById", function (key) {
             config.operations = config.operations.filter(function (operation) {
                 return operation.key === key;
             });
             return config.operations;
         }, "");
+        path.bind("operationsRemoveByKey", function (key) {
+            console.warn("path.operationsRemoveByKey is deprecated from 2016.10.05");
+            return path.operationsRemoveById(key);
+        });
         path.bind("operationById", function (id) {
             return config.operations.filter(function (operation) {
                 return operation.key === id;
@@ -154,7 +157,9 @@ module.exports = function (canvas) {
             var er;
             config.operations.forEach(function (operation) {
                 try {
-                    if (typeof(context[operation.operation]) === "function") {
+                    if (typeof(operation.operation) === "function") {
+                        context[operation.operation].apply(app, operation.params);
+                    } else if (typeof(context[operation.operation]) === "function") {
                         context[operation.operation].apply(context, operation.params);
                     } else {
                         context[operation.operation]    = operation.params;
