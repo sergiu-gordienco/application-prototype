@@ -75,7 +75,7 @@ var ApplicationBuilder	= function (callback) {
 				if (typeof(onFullfiled) === "function") {
 					if (pending) {
 						cb_resolve.push(onFullfiled);
-					} else {
+					} else if (typeof(err) === "undefined") {
 						run(onFullfiled, value);
 					}
 				}
