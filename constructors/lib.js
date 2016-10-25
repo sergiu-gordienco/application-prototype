@@ -10,13 +10,29 @@ loader.list = [
 		modules	: [
 			'async',
 			'browser-session',
-			'uri-load',
-			'js-template',
+			'browser-session/strategy/indexed-db',
+			'browser-session/strategy/local-storage',
 			'canvas-draw',
 			'custom-elements',
+			'extensions/prototype',
+			'graphic',
+			'graphic/convert',
+			'graphic/convert/blob-to-imagedata',
+			'graphic/convert/imagedata-to-blob',
+			'graphic/filters',
+			'graphic/filters/blur',
+			'graphic/filters/contrast',
+			'graphic/filters/saturation',
+			'graphic/polyfill',
+			'graphic/recognition',
+			'graphic/recognition/edge-detection',
+			'graphic/utils',
+			'graphic/utils/imagedata-clone',
+			'js-template',
+			'lib',
 			'request',
-			'browser-session/strategy/local-storage',
-			'browser-session/strategy/indexed-db'
+			'request/params-parser',
+			'uri-load'
 		]
 	}
 ];

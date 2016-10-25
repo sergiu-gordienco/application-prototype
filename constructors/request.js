@@ -1,3 +1,4 @@
+/* jshint -W002 */
 Application.require("extensions/prototype", function (epro) {
     module.exports  = function () {
         var app     = new ApplicationPrototype();
@@ -109,7 +110,7 @@ Application.require("extensions/prototype", function (epro) {
                                 resolve(data);
                             }, function (er) {
                                 reject(er);
-                            }, "test");
+                            });
                         });
                         app.on("error", function (er) {
                             reject(er);
