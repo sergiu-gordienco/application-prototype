@@ -9,7 +9,9 @@ Application.require("extensions/prototype", function (epro) {
             url     : "#",
             async   : true,
             opened  : false,
-            isSent  : false
+            isSent  : false,
+            isLoaded: false,
+            isUploaded: false
         };
 
         var configurator    = {
@@ -64,6 +66,10 @@ Application.require("extensions/prototype", function (epro) {
         httpRequest.addEventListener("load", function (evt) {
             app.emit("load", [evt]);
         });
+        httpRequest.addEventListener("loadend", function (evt) {
+            config.isLoaded = true;
+            app.emit("loadend", [evt]);
+        });
         httpRequest.addEventListener("error", function (evt) {
             app.emit("error", [evt]);
         });
@@ -92,7 +98,8 @@ Application.require("extensions/prototype", function (epro) {
 
 
         httpRequest.upload.addEventListener("loadend", function (evt) {
-            app.emit("loadend", [evt]);
+            config.isUploaded = true;
+            app.emit("upload-loadend", [evt]);
         });
 
         app.bind("request", function () { return httpRequest; }, "");
@@ -103,8 +110,10 @@ Application.require("extensions/prototype", function (epro) {
             } else {
                 if (!config.isSent) {
                     app.send();
+                }
+                if (!config.isLoaded) {
                     return new Application.Promise(function (resolve, reject) {
-                        app.on("load", function () {
+                        app.on("loadend", function () {
                             var result = app.response(type, params);
                             result.then(function (data) {
                                 resolve(data);
