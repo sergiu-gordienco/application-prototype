@@ -234,6 +234,7 @@ var ApplicationBuilder	= function (callback) {
 			fs = require('fs');
 		}
 		var module_cache = {};
+		var module_requests = {};
 		var require_cache	= {};
 		Application.bind("require", function (module_name, callback) {
 			if (typeof(module_name) === "string") {
@@ -245,6 +246,14 @@ var ApplicationBuilder	= function (callback) {
 						callback(require_cache[moduleMeta["name"]].exports || null, undefined);
 					return require_cache[moduleMeta["name"]].$request;
 				} else {
+					var $request, requireDownload;
+					if (moduleMeta.path in module_requests) {
+						$request = module_requests[moduleMeta.path];
+					} else {
+						requireDownload = true;
+						$request = new Application.Promise();
+						module_requests[moduleMeta.path] = $request;
+					}
 					var module	= {
 						cache		: function () {
 							module_cache[moduleMeta.path] = module_cache[moduleMeta.path] || {};
@@ -271,7 +280,7 @@ var ApplicationBuilder	= function (callback) {
 							return moduleMeta.path + "/" + path;
 						},
 						meta : moduleMeta,
-						$request	: new Application.Promise()
+						$request	: $request
 					};
 
 					;((function () {
@@ -301,28 +310,38 @@ var ApplicationBuilder	= function (callback) {
 					};
 
 					var module_url = moduleMeta.url + (Application.cacheEnabled() ? ((moduleMeta.url.indexOf('?') === -1 ? '?' : '&') + 't='+module.atime ) : '');
-					if (isNode) {
-						fs.readFile(module_url, 'utf8', function (err, module_text) {
-							var err;
-							try {
-								eval(module_text);
-							} catch(err) {
-								console.warn("Application Loading Module", module_url);
-								console.error(err);
-								module.$request.reject(err);
-							}
-						});
+					if (requireDownload) {
+						if (isNode) {
+							fs.readFile(module_url, 'utf8', function (err, module_text) {
+								var err;
+								try {
+									eval(module_text);
+								} catch(err) {
+									console.warn("Application Loading Module", module_url);
+									console.error(err);
+									module.$request.reject(err);
+								}
+							});
+						} else {
+							m_urlload(module_url, function (module_url, module_text) {
+								var err;
+								try {
+									eval(module_text);
+								} catch(err) {
+									console.warn("Application Loading Module", module_url);
+									console.error(err);
+									module.$request.reject(err);
+								}
+							});
+						}
 					} else {
-						m_urlload(module_url, function (module_url, module_text) {
-							var err;
-							try {
-								eval(module_text);
-							} catch(err) {
-								console.warn("Application Loading Module", module_url);
-								console.error(err);
-								module.$request.reject(err);
-							}
-						});
+						module.$request.then(function (obj) {
+							if (callback)
+								callback(obj || null, undefined);
+						}).catch(function (er) {
+							console.warn("Application Loading Module", module_url);
+							console.error(er);
+						})
 					}
 					return module.$request;
 				}
