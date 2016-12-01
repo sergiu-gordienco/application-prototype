@@ -1,8 +1,17 @@
 ((function () {
+    if (!('_elements' in module.cache())) {
+      module.cache()._elements = {};
+    }
+    if (!('_elementsKeys' in module.cache())) {
+      module.cache()._elementsKeys = [];
+    }
+    if (!('_pendingList' in module.cache())) {
+      module.cache()._pendingList = {};
+    }
     var target = document.body;
-    var _elements = {};
-    var _elementsKeys   = [];
-    var _pendingList = {};
+    var _elements = module.cache()._elements;
+    var _elementsKeys   = module.cache()._elementsKeys;
+    var _pendingList = module.cache()._pendingList;
     var trackNodes  = function (nodeList, cbName, attrs) {
         if (nodeList.length) {
             var i, tagName, er;
@@ -65,7 +74,20 @@
   if (typeof(document.createElement('span').methods) !== "object") {
     Object.defineProperty(HTMLElement.prototype, 'methods', {
         get	: function () {
-            return _elements[this.tagName.toLowerCase()] || {};
+            var tagName = this.tagName.toLowerCase();
+            var node = this;
+            var method = function (name) {
+                return function () {
+                    _elements[tagName][name].apply(node, arguments);
+                };
+            };
+            var methods = {};
+            if (tagName in _elements) {
+                for (i in _elements[tagName]) {
+                    methods[i] = method(i);
+                }
+            }
+            return methods;
         },
         set	: function (methods) {
             var tagName = this.tagName.toLowerCase();

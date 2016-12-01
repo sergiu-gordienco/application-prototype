@@ -158,6 +158,7 @@ var ApplicationBuilder	= function (callback) {
 		return module_path;
 	});
 
+
 	;((function () {
 		var store	= {};
 		Application.bind('moduleRegister', function (path, modules) {
@@ -232,6 +233,7 @@ var ApplicationBuilder	= function (callback) {
 		if (isNode) {
 			fs = require('fs');
 		}
+		var module_cache = {};
 		var require_cache	= {};
 		Application.bind("require", function (module_name, callback) {
 			if (typeof(module_name) === "string") {
@@ -244,6 +246,10 @@ var ApplicationBuilder	= function (callback) {
 					return require_cache[moduleMeta["name"]].$request;
 				} else {
 					var module	= {
+						cache		: function () {
+							module_cache[moduleMeta.path] = module_cache[moduleMeta.path] || {};
+							return module_cache[moduleMeta.path];
+						},
 						require	: function (moduleName, cb) {
 							var updateModuleName = function (name, path) {
 								if (name.indexOf("::") !== -1) {
