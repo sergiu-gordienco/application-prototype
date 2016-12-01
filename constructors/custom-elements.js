@@ -62,7 +62,7 @@
 
 
 
-
+  if (typeof(document.createElement('span').methods) !== "object") {
     Object.defineProperty(HTMLElement.prototype, 'methods', {
         get	: function () {
             return _elements[this.tagName.toLowerCase()] || {};
@@ -83,7 +83,7 @@
         enumerable: true,
         configurable: false
     });
-
+  }
 
 
 

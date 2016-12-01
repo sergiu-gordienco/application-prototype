@@ -1,13 +1,13 @@
 # Async
 
-* `async.flow` - TODO
-* `async.map` or `async.flow.map` - TODO
-* `async.filter` or `async.flow.filter` - TODO
-* `async.forEach` or `async.flow.forEach` - TODO
-* `async.waterfall` - TODO
-* `async.waterfall.map` - TODO
-* `async.waterfall.filter` - TODO
-* `async.waterfall.forEach` - TODO
+* `async.flow` - execution of operations step by step
+* `async.map` or `async.flow.map` - execution of operations step by step and return a array of results of their operations
+* `async.filter` or `async.flow.filter` - execution of operations step by step and return a array of results of their operations only if they were successful
+* `async.forEach` or `async.flow.forEach` - TODO documentation
+* `async.waterfall` - TODO documentation
+* `async.waterfall.map` - TODO documentation
+* `async.waterfall.filter` - TODO documentation
+* `async.waterfall.forEach` - TODO documentation
 
 ## Descriptions
 
