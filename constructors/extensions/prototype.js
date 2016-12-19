@@ -428,7 +428,7 @@ var slDOMset=function(v){
 			return methods;
 		},
 		each	: function (callback) {
-			set = set.forEach(function (node, k) {
+			set.forEach(function (node, k) {
 				return (callback(node, k, set, p) || false);
 			});
 			return methods;
