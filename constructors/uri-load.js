@@ -1,13 +1,25 @@
 /* jshint -W002 */
 /* jshint -W084 */
+
+var callbackOnce = function (cb) {
+	var executed = false;
+	return function (a, b) {
+		if (executed) return;
+		executed = true;
+		cb(a,b);
+	}
+};
+
 /**
  * loadScript - is a function for adding scripts into the header
  * @param  {string,Array}   url      url/urls of scripts
  * @param  {Function} callback [description]
  * @param  {object}   opts     settings with info related to the script tags
  */
+
 function loadScript(url, callback, opts){
 	if (!callback) callback = function () {};
+	callback	= callbackOnce(callback); // TODO fix trick
 
 	if (!Array.isArray(url)) {
 		url	= [url];
@@ -97,6 +109,7 @@ function loadScript(url, callback, opts){
  */
 function loadLink(url, callback, opts){
 	if (!callback) callback = function () {};
+	callback	= callbackOnce(callback); // TODO fix trick
 
 	if (!opts) {
 		opts = {
