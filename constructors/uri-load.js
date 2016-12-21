@@ -4,10 +4,13 @@
 var callbackOnce = function (cb) {
 	var executed = false;
 	return function (a, b) {
-		if (executed) return;
+		if (executed) {
+			console.log('callbackOnce', a, b);
+			return;
+		}
 		executed = true;
 		cb(a,b);
-	}
+	};
 };
 
 /**
@@ -17,7 +20,8 @@ var callbackOnce = function (cb) {
  * @param  {object}   opts     settings with info related to the script tags
  */
 
-function loadScript(url, callback, opts){
+function loadScript(url, callback, opts, document){
+	if (!document) document = window.document;
 	if (!callback) callback = function () {};
 	callback	= callbackOnce(callback); // TODO fix trick
 
@@ -107,7 +111,8 @@ function loadScript(url, callback, opts){
  * @param  {Function} callback [description]
  * @param  {object}   opts     settings with info related to the link tags
  */
-function loadLink(url, callback, opts){
+function loadLink(url, callback, opts, document){
+	if (!document) document = window.document;
 	if (!callback) callback = function () {};
 	callback	= callbackOnce(callback); // TODO fix trick
 
