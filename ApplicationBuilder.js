@@ -165,7 +165,9 @@ var ApplicationBuilder	= function (callback) {
 			if (typeof(path) === "string" && Array.isArray(modules)) {
 				modules.forEach(function (module_name) {
 					var moduleMeta	= Application.moduleResolve(module_name, path);
+					console.log("modulePath", App.modulePath(), module_name, moduleMeta);
 					store[moduleMeta["name"]]	= moduleMeta;
+					store['#' + module_name + " ~ " + path]		= moduleMeta;
 					store['#' + module_name]	= moduleMeta;
 				});
 			}
@@ -185,6 +187,11 @@ var ApplicationBuilder	= function (callback) {
 			{path/to/module-name.js}
 			path/to/file.js#?module={module-name}
 			*/
+			if (('#' + module_name + " ~ " + path) in store) {
+				// console.warn('#' + module_name, ' founded in store ', store['#' + module_name]);
+				return store['#' + module_name + " ~ " + path];
+			}
+
 			// return moduleMeta but requestQuery
 			if (('#' + module_name) in store) {
 				// console.warn('#' + module_name, ' founded in store ', store['#' + module_name]);
@@ -220,6 +227,11 @@ var ApplicationBuilder	= function (callback) {
 				return store[moduleMeta["name"]];
 			}
 
+			if (moduleMeta["name"] in store) {
+				// console.warn(moduleMeta["name"], ' founded in store ', store[moduleMeta["name"]]);
+				return store[moduleMeta["name"]];
+			}
+
 			moduleMeta.path = moduleMeta.url.replace(/(\.js|)(\?.*|\#.*|)$/, '');
 			moduleMeta.__dirname	= moduleMeta.path.replace(/\/[^\/]+$/, '');
 
@@ -238,7 +250,7 @@ var ApplicationBuilder	= function (callback) {
 		var require_cache	= {};
 		Application.bind("require", function (module_name, callback) {
 			if (typeof(module_name) === "string") {
-				var moduleMeta	= Application.moduleResolve(module_name);
+				var moduleMeta	= Application.moduleResolve(module_name, undefined);
 				var __dirname	= moduleMeta.__dirname;
 				// TODO validate path
 				if (moduleMeta["name"] in require_cache) {

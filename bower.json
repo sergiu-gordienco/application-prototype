@@ -1,6 +1,6 @@
 {
   "name"   : "application-builder",
-  "version": "1.7.7",
+  "version": "1.7.8",
   "main"   : "ApplicationPrototype.js",
   "ignore" : [
     "**/*.txt"
