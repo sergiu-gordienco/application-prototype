@@ -327,7 +327,7 @@ var ApplicationBuilder	= function (callback) {
 						return (Application || global || null);
 					};
 
-					var module_url = moduleMeta.url + (Application.cacheEnabled() ? ((moduleMeta.url.indexOf('?') === -1 ? '?' : '&') + 't='+module.atime ) : '');
+					var module_url = moduleMeta.url + (!Application.cacheEnabled() ? ((moduleMeta.url.indexOf('?') === -1 ? '?' : '&') + 't='+module.atime ) : '');
 
 					var module_header = Application.debugEnabled() ? ("/**" +
 						"\n * Platform: ApplicationBuilder/ApplicationPrototype by Sergiu Gordienco Vasile" +
