@@ -409,7 +409,7 @@ var ApplicationBuilder	= function (callback) {
 			}
 		});
 	})());
-	console.error("Application", Application);
+
 	if (typeof(params.callback_ready) === "function") {
 		var er;
 		try {
