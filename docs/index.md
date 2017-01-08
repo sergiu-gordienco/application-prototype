@@ -99,6 +99,14 @@ app.emit("afterRender", [param1, param2]);
 
 # ApplicationBuilder
 
+# Documentation not ready
+
+Sorry, but you may help.
+
+## Contribution
+if you find code interesting you may participate by updating documentation using pull request or mail messages to [sergiu.gordienco@gmail.com](mailto:sergiu.gordienco@gmail.com)
+
+
 ## Application.Promise
 
 It is a polyfill for Promise constructors
