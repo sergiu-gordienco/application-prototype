@@ -5,6 +5,28 @@ returns an object ApplicationPrototype
 ### Methods:
 
 - **bind** - `function` - Attach an method
+	- arguments:
+		- **methodName** `string`
+		- **method** `function`
+		- **config** [`string` or `object`]
+			- if `object`
+			```js
+			{
+				listenedBefore	: true, // enable event beforeMethod
+				listenedOn		: true, // enable event onMethod
+				listenedAfter	: true, // enable event afterMethod
+				allowInteruption: true // enable interruption by returning false in method
+			}
+			```
+			- if is `string` options from object are `false` and if it contains some substrings it enables specific options from object
+				- `"light"` - enables `listenedOn` and `allowInteruption`
+				- `"on"` » `listenedOn = true`
+				- `"af"` » `listenedAfter = true`
+				- `"st"` » `allowInteruption = true`
+				- `"bf"` » `listenedBefore = true`
+				- `"before"` » `listenedBefore = true`
+
+
 
 - **on** - `function` - Attach an event listener to an eventName, returns listener-id
 ```js
