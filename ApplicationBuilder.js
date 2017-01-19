@@ -3,9 +3,10 @@
 // jshint -W083
 // jshint -W069
 // jshint -W061
-var isNode	= ( typeof global !== "undefined" &&
-	typeof process !== "undefined" &&
-	{}.toString.call(global) == '[object global]' );
+// jshint -W054
+var isBrowser=new Function("try {return this===window;}catch(e){ return false;}");
+var isNode=new Function("try {return this===global;}catch(e){return false;}");
+// jshint +W054
 
 var ApplicationBuilder	= function (callback) {
 	var config;
@@ -26,7 +27,7 @@ var ApplicationBuilder	= function (callback) {
 		}
 	}
 
-	if (isNode) ApplicationPrototype = require('./ApplicationPrototype.js');
+	if (isNode()) ApplicationPrototype = require('./ApplicationPrototype.js');
 	var Application	= new ApplicationPrototype(function (
 			configurations,
 			variables,
@@ -43,6 +44,14 @@ var ApplicationBuilder	= function (callback) {
 			callback.apply(methods, [variables, configurations]);
 		}
 	});
+
+	Application.bind("isNode", function () {
+		return isNode();
+	}, "");
+
+	Application.bind("isBrowser", function () {
+		return isBrowser();
+	}, "");
 
 	Application.bind("Promise", function (cb) {
 		var err		= undefined;
@@ -80,14 +89,25 @@ var ApplicationBuilder	= function (callback) {
 		var p = {
 			then : function (onFullfiled, onRejected) {
 				p.catch(onRejected);
-				if (typeof(onFullfiled) === "function") {
-					if (pending) {
-						cb_resolve.push(onFullfiled);
-					} else if (typeof(err) === "undefined") {
-						run(onFullfiled, value);
+				return Application.Promise(function (resolve, reject) {
+					var callback = function (data) {
+						var res, err;
+						try {
+							res = onFullfiled(data);
+							resolve(res);
+						} catch (err) {
+							reject(err);
+						}
+					};
+					p.catch(reject);
+					if (typeof(onFullfiled) === "function") {
+						if (pending) {
+							cb_resolve.push(callback);
+						} else if (typeof(err) === "undefined") {
+							run(callback, value);
+						}
 					}
-				}
-				return p;
+				});
 			},
 			catch: function (onRejected) {
 				if (typeof(onRejected) === "function") {
@@ -111,6 +131,12 @@ var ApplicationBuilder	= function (callback) {
 		}
 		return p;
 	});
+
+	if (Application.isBrowser()) {
+		if (!window.Promise) {
+			window.Promise = Application.Promise;
+		}
+	}
 
 	Application.Promise.reject	= function (value) {
 		return new Application.Promise(function (resolve, reject) {
@@ -251,7 +277,7 @@ var ApplicationBuilder	= function (callback) {
 
 	;((function () {
 		var fs = false;
-		if (isNode) {
+		if (isNode()) {
 			fs = require('fs');
 		}
 		var module_cache = {};
@@ -338,7 +364,7 @@ var ApplicationBuilder	= function (callback) {
 						"\n * Module Url: " + module.meta.url +
 						"\n */\n\n") : "";
 					if (requireDownload) {
-						if (isNode) {
+						if (isNode()) {
 							fs.readFile(module_url, 'utf8', function (err, module_text) {
 								err = undefined;
 								try {
@@ -449,6 +475,6 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 // jshint +W033
 // jshint +W032
 
-if (isNode) {
+if (isNode()) {
 	module.exports	= ApplicationBuilder;
 }

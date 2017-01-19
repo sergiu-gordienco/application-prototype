@@ -1,6 +1,5 @@
-var isNode	= ( typeof global !== "undefined" &&
-	typeof process !== "undefined" &&
-	{}.toString.call(global) == '[object global]' );
+var isBrowser=new Function("try {return this===window;}catch(e){ return false;}");
+var isNode=new Function("try {return this===global;}catch(e){return false;}");
 
 ;((function (window, undefined) {
 	window.ApplicationPrototype	= (function (builder) {
@@ -161,6 +160,6 @@ var isNode	= ( typeof global !== "undefined" &&
 })()));
 
 
-if (isNode) {
+if (isNode()) {
 	module.exports	= ApplicationPrototype;
 }
