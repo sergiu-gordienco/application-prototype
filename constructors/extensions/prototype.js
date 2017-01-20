@@ -15,6 +15,7 @@ module.exports =
 
 
 	;((function (window) {
+		window.URL = (window.URL || window.webkitURL || {});
 		window.createObjectURL = (window.URL || window.webkitURL || {}).createObjectURL || function(){};
 		window.MutationObserver = window.MutationObserver
 			|| window.WebKitMutationObserver
@@ -1638,6 +1639,55 @@ var i;for(i in o) {
 		}
 	};
 })());
+
+;(function () {
+	Function.prototype.toWorkerURL = function () {
+		var func = this;
+		var call = function (self) {
+			var run;
+			self.addEventListener("message", function (ev) {
+				run(ev.data, function (res) {
+					self.postMessage(res);
+				})
+			});
+		};
+
+		var code = ";("+call.toString().replace('var run;', 'var run = '+func.toString()+';')+")(self);";
+		var blob = new Blob([code], { type: "text/javascript" });
+		var url = URL.createObjectURL(blob);
+		return url;
+	};
+
+
+	Function.prototype.toWorker = function () {
+		var func = this;
+		var url = func.toWorkerURL();
+		var worker = new Worker(url);
+		worker._terminate = worker.terminate;
+		worker.terminate = function () {
+			worker._terminate();
+			URL.revokeObjectURL(url);
+		}
+		return worker;
+	};
+
+	Function.prototype.runInWorker = function (data, cb, keep) {
+		var func = this;
+		var url = func.toWorkerURL();
+		var worker = new Worker(url);
+		worker._terminate = worker.terminate;
+		worker.terminate = function () {
+			worker._terminate();
+			URL.revokeObjectURL(url);
+		};
+		worker.addEventListener("message", function (ev) {
+			cb(ev.data, ev);
+			if (!keep) worker.terminate();
+		});
+		worker.postMessage(data);
+		return worker;
+	};
+})();
 
 ((function () {
 	if (!Event.prototype.preventDefault) {
