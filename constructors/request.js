@@ -127,7 +127,11 @@ Application.require("extensions/prototype", function (epro) {
                     });
                 }
                 var response = Application.Promise(), reader;
-                if (httpRequest.responseType === "arraybuffer") {
+                if (type === "request") {
+                  response.resolve(app);
+                } else if (type === "response") {
+                  response.resolve(httpRequest.response);
+                } else if (httpRequest.responseType === "arraybuffer") {
                     switch (type) {
                         case "blob":
                             response.resolve(new Blob(
