@@ -96,6 +96,8 @@ var ApplicationBuilder	= function (callback) {
 							res = onFullfiled(data);
 							resolve(res);
 						} catch (err) {
+							console.warn("Unchecked error in Promise");
+							console.error(err);
 							reject(err);
 						}
 					};
@@ -127,6 +129,8 @@ var ApplicationBuilder	= function (callback) {
 				cb(resolve, reject);
 			}
 		} catch (err) {
+			console.warn("Promise Exception on constructor exeution: ", cb);
+			console.error(err);
 			reject(err);
 		}
 		return p;

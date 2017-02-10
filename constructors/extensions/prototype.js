@@ -1834,7 +1834,7 @@ _public.fn.downloadFile = function (filename,content,encoding,mimetype) {
 	};
 	var i = getRandId('donwload-link');
 	var p = _();
-	p.E('a').Et(LOC_BODY()).V({href:dataURItoBlobUrl(content,mimetype).url,id:i}).v({download:filename})._().click();
+	p.E('a').Et(document.body).V({href:dataURItoBlobUrl(content,mimetype).url,id:i}).v({download:filename})._().click();
 	var f = function () {
 		p.I(i).D();
 	};
@@ -1842,7 +1842,8 @@ _public.fn.downloadFile = function (filename,content,encoding,mimetype) {
 	return false;
 };
 
-_public.fn.base64toBlob	= function(b64Data, contentType, sliceSize) {
+_public.fn.base64toBlob	= base64toBlob;
+function base64toBlob(b64Data, contentType, sliceSize) {
 	contentType = contentType || '';
 	sliceSize = sliceSize || 1024;
 	function charCodeFromCharacter(c) {	return c.charCodeAt(0);	};
@@ -1861,7 +1862,8 @@ _public.fn.base64toBlob	= function(b64Data, contentType, sliceSize) {
 	var blob = new Blob(byteArrays, {type: contentType});
 	return blob;
 };
-_public.fn.dataURItoBlobUrl = function(dataURI,mimeString) {
+_public.fn.dataURItoBlobUrl = dataURItoBlobUrl;
+function dataURItoBlobUrl(dataURI,mimeString) {
 	var byteString;
 	if (typeof(dataURI) === "string") {
 		var dataURI_splited	= dataURI.split(',');

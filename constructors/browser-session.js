@@ -186,13 +186,13 @@ module.require('strategy/indexed-db').then(function (dbConnectionBuilder) {
 	try {
 		_sessionConnection	= dbConnectionBuilder();
 	} catch (er) {}
-	
+
 	_sessionConnection.initialization.then(function () {
 		loader.resolve(_sessionConnection);
 	}, function (err) {
 		console.warn(err);
 		var er;
-		try {		
+		try {
 			console.warn("IndexDB not supported, fallback to localStorage or polyfill emulation");
 			module.require('strategy/local-storage').then(function (strategyStore) {
 				_sessionConnection	= strategyStore();
@@ -208,7 +208,7 @@ module.require('strategy/indexed-db').then(function (dbConnectionBuilder) {
 			loader.reject(er);
 		}
 	});
-
+	
 	loader.then(function (_sessionConnection) {
 		sessionDbConnection	= _sessionConnection;
 		if (typeof(module) === "object" && module) {
@@ -219,7 +219,7 @@ module.require('strategy/indexed-db').then(function (dbConnectionBuilder) {
 	}, function (err) {
 		console.error("browserSession Error", err);
 	});
-	
+
 
 	// browserSessionBuilder.dbConnectionBuilder	= dbConnectionBuilder;
 }).catch(function (reason) {
