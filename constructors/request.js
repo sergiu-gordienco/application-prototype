@@ -11,10 +11,17 @@ Application.require("extensions/prototype", function (epro) {
             opened  : false,
             isSent  : false,
             isLoaded: false,
-            isUploaded: false
+            isUploaded: false,
+            ignoreStatusCode : false
         };
 
         var configurator    = {
+            "ignore-status-code"  : function () {
+              config.ignoreStatusCode = true;
+            },
+            "check-status-code"  : function () {
+              config.ignoreStatusCode = false;
+            },
             "prepare-post"  : function () {
                 httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             },
@@ -118,10 +125,12 @@ Application.require("extensions/prototype", function (epro) {
                             result.then(function (data) {
                                 resolve(data);
                             }, function (er) {
+                                er.httpRequest = app;
                                 reject(er);
                             });
                         });
                         app.on("error", function (er) {
+                            er.httpRequest = app;
                             reject(er);
                         });
                     });
@@ -245,7 +254,25 @@ Application.require("extensions/prototype", function (epro) {
                         break;
                     }
                 }
-                return response;
+                return new Application.Promise(function (resolve, reject) {
+                  response.then(function (data) {
+                    if (httpRequest.status === 200 || config.ignoreStatusCode) {
+                      resolve(data);
+                    } else {
+                      var er = Error(
+                        httpRequest.statusText ?
+                        ('Status '+ httpRequest.status + ': ' + httpRequest.statusText) :
+                        ("Response Status is " + httpRequest.status)
+                      );
+                      er.httpRequest = app;
+                      er.httpResponse = data;
+                      reject(er);
+                    }
+                  }, function (er) {
+                    er.httpRequest = app;
+                    reject(er);
+                  });
+                });
             }
         }, "");
         app.bind("async", function (bool) {

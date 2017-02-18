@@ -78,6 +78,10 @@ loadend [ event ]
 
 ## Configuration Sets
 
+### ignore-status-code
+
+### check-status-code
+
 ### POST » prepare-post
 
 ### binary » retrieve-binary-string
