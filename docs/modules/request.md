@@ -20,6 +20,31 @@ returns configuration object
 
 ```
 
+// Client has been created. open() not called yet.
+query.READY_STATE_UNSENT = 0;
+
+// open() has been called.
+query.READY_STATE_OPENED = 1;
+
+// send() has been called, and headers and status are available.
+query.READY_STATE_HEADERS_RECEIVED = 2;
+
+// Downloading; responseText holds partial data.
+query.READY_STATE_LOADING = 3;
+
+// Downloading is done
+query.READY_STATE_DONE = 4;
+
+
+query.readyState()
+
+query.status()
+
+query.statusText()
+
+query.timeout(int_seconds)
+
+query.withCredentials(status_boolean)
 
 ### query.configurator( <template:string|function> )
 
@@ -54,6 +79,8 @@ query.on('EVENT_NAME', function () {
 	// callbackbody
 });
 ```
+
+onReadyState [ int:readyState, int:status ]
 
 progress [ event:Object{ total:Number, loaded:Number } [ percentComplete:Float ]]
 

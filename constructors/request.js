@@ -275,6 +275,52 @@ Application.require("extensions/prototype", function (epro) {
                 });
             }
         }, "");
+
+        app.bind("timeout", function (seconds) {
+          if (typeof(seconds) === "number") {
+            httpRequest.timeout = seconds || 0;
+            return app;
+          }
+          return httpRequest.timeout || 0;
+        });
+
+        app.bind("withCredentials", function (status) {
+          if (typeof(status) === "boolean") {
+            httpRequest.withCredentials = !!status;
+            return app;
+          }
+          return !!httpRequest.withCredentials;
+        });
+
+        // Client has been created. open() not called yet.
+        app.READY_STATE_UNSENT = 0;
+        // open() has been called.
+        app.READY_STATE_OPENED = 1;
+        // send() has been called, and headers and status are available.
+        app.READY_STATE_HEADERS_RECEIVED = 2;
+        // Downloading; responseText holds partial data.
+        app.READY_STATE_LOADING = 3;
+        // Downloading is done
+        app.READY_STATE_DONE = 4;
+
+        app.bind("readyState", function (int) {
+          return httpRequest.readyState;
+        });
+
+        httpRequest.onreadystatechange = function () {
+          app.emit('onReadyState', [httpRequest.readyState, httpRequest.status]);
+        };
+
+        app.bind("status", function (int) {
+          return httpRequest.status;
+        });
+
+        app.bind("statusText", function (int) {
+          return httpRequest.status;
+        });
+
+
+
         app.bind("async", function (bool) {
             if (typeof(bool) !== "undefined") {
                 config.async = !!bool;
@@ -296,11 +342,12 @@ Application.require("extensions/prototype", function (epro) {
             }
             return config.url;
         });
-        app.bind("open", function (method, url, async) {
+        app.bind("open", function (method, url, async, timeout) {
             if (method && typeof(url) === "undefined" && typeof(async) === "undefined") {
                 url = method;
                 method = undefined;
             }
+            app.timeout(timeout);
             config.opened   = true;
             httpRequest.open(method || config.method, url || config.url, async || config.async);
             return app;
@@ -328,6 +375,9 @@ Application.require("extensions/prototype", function (epro) {
             return app;
         });
 
+        app.bind("headers", function () {
+          return httpRequest.getAllResponseHeaders();
+        });
 
         app.bind("header", function (name, value) {
             httpRequest.setRequestHeader(name, value);
