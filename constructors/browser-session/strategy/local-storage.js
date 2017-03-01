@@ -47,11 +47,11 @@ module.exports  = function (storage) {
   return {
     setItem : function (key, value) {
       return new Application.Promise(function (resolve, reject) {
-        var er, data;
+        var er, err, data;
         try {
           storage.setItem(prefix + key, JSON.stringify(value));
           data = JSON.parse(storage.getItem(prefix + key));
-        } catch (er) {}
+        } catch (err) { er = err; }
         if (er) {
           reject(er);
         } else {
@@ -61,10 +61,10 @@ module.exports  = function (storage) {
     },
     removeItem : function (key) {
       return new Application.Promise(function (resolve, reject) {
-        var er, data;
+        var er, err, data;
         try {
           storage.removeItem(prefix + key, value);
-        } catch (er) {}
+        } catch (err) { er = err; }
         if (er) {
           reject(er);
         } else {
@@ -74,10 +74,10 @@ module.exports  = function (storage) {
     },
     getItem : function (key) {
       return new Application.Promise(function (resolve, reject) {
-        var er, data;
+        var er, err, data;
         try {
           data = JSON.parse(storage.getItem(prefix + key));
-        } catch (er) {}
+        } catch (err) { er = err; }
         if (er) {
           reject(er);
         } else {

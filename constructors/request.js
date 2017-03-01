@@ -111,7 +111,7 @@ Application.require("extensions/prototype", function (epro) {
 
         app.bind("request", function () { return httpRequest; }, "");
         app.bind("response", function (type, params) {
-            var er, data, node;
+            var er, err, data, node;
             if (typeof(type) === "undefined") {
                 return httpRequest.response;
             } else {
@@ -154,7 +154,7 @@ Application.require("extensions/prototype", function (epro) {
                             try {
                                 data = JSON.parse(httpRequest.response.toStringUtf8());
                                 response.resolve(data);
-                            } catch (er) {}
+                            } catch (err) { er = err; }
                             if (typeof(er) !== "undefined") {
                                 response.reject(er);
                             }
@@ -187,7 +187,7 @@ Application.require("extensions/prototype", function (epro) {
                                     try {
                                         data = JSON.parse(str);
                                         response.resolve(data);
-                                    } catch (er) {}
+                                    } catch (err) { er = err; }
                                     if (typeof(er) !== "undefined") {
                                         response.reject(er);
                                     }
@@ -236,7 +236,7 @@ Application.require("extensions/prototype", function (epro) {
                             try {
                                 data = JSON.parse(str);
                                 response.resolve(data);
-                            } catch (er) {}
+                            } catch (err) { er = err; }
                             if (typeof(er) !== "undefined") {
                                 response.reject(er);
                             }

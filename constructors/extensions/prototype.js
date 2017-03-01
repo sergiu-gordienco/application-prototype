@@ -1614,7 +1614,7 @@ var i;for(i in o) {
 
 ;((function () {
 	Blob.prototype.toArrayBuffer	= function (cb) {
-		var er;
+		var er, err;
 		try {
 			var reader = new FileReader();
 			reader.addEventListener("loadend", function() {
@@ -1631,7 +1631,7 @@ var i;for(i in o) {
 				} catch (er) {};
 			});
 			reader.readAsArrayBuffer(this);
-		} catch (er) {};
+		} catch (err) { er = err; };
 		if (typeof(er) !== "undefined") {
 			try {
 				cb(er);
