@@ -338,12 +338,12 @@ var attrsNodesUnder = function (el, cb, config) {
 
 
 
-Element.prototype.renderJs    = function (context, args) {
-    this.renderJsArgs(context, args);
-    this.renderJsTemplate(context, args);
+Element.prototype.renderJs    = function (context, args, cb) {
+    this.renderJsArgs(context, args, cb);
+    this.renderJsTemplate(context, args, cb);
 };
 
-Element.prototype.renderJsTemplate    = function (context, args) {
+Element.prototype.renderJsTemplate    = function (context, args, cb) {
     if (!this.__renderContent) {
         this.__renderContent = module.exports.parseContent(this, cb, {
             context : ( context || this ),
@@ -354,7 +354,7 @@ Element.prototype.renderJsTemplate    = function (context, args) {
     }
 };
 
-Element.prototype.renderJsArgs    = function (context, args) {
+Element.prototype.renderJsArgs    = function (context, args, cb) {
     if (!this.__renderArgs) {
         this.__renderArgs = module.exports.parseAttributes(this, cb, {
             context : ( context || this ),
