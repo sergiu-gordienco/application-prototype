@@ -1,6 +1,30 @@
-# Documentation not ready
+# Lib
+---
+#### Registers all default sub-modules from library
 
-Sorry, but you may help.
-
-## Contribution
-if you find code interesting you may participate by updating documentation using pull request or mail messages to [sergiu.gordienco@gmail.com](mailto:sergiu.gordienco@gmail.com)
+#### It includes following modules by default:
+- async
+- browser-session
+- browser-session/strategy/indexed-db
+- browser-session/strategy/local-storage
+- canvas-draw
+- custom-elements
+- extensions/prototype
+- graphic
+- graphic/convert
+- graphic/convert/blob-to-imagedata
+- graphic/convert/imagedata-to-blob
+- graphic/filters
+- graphic/filters/blur
+- graphic/filters/contrast
+- graphic/filters/saturation
+- graphic/polyfill
+- graphic/recognition
+- graphic/recognition/edge-detection
+- graphic/utils
+- graphic/utils/imagedata-clone
+- js-template
+- lib
+- request
+- request/params-parser
+- uri-load

@@ -7,4 +7,4 @@ module.require([
 		return lib.saturation(imageData, 0, destImageData);
 	};
 	module.exports	= lib;
-})
+});

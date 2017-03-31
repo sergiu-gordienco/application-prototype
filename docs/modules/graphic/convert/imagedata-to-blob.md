@@ -1,6 +1,24 @@
-# Documentation not ready
+# Graphics
+## Convert module
+### imagedata-to-blob
 
-Sorry, but you may help.
+This function converts ImageData to blob and returns it in callback function
 
-## Contribution
-if you find code interesting you may participate by updating documentation using pull request or mail messages to [sergiu.gordienco@gmail.com](mailto:sergiu.gordienco@gmail.com)
+```js
+	function (imageData, cb) { ... }
+
+	cb = function (blob) { ... }
+```
+
+## Example
+
+This function converts imageData to Blob object. It will always pass Blob object, even if imageData is malformed.
+```js
+	module.require([
+		"convert :: convert",
+	], function (convert) {
+		convert.imageDataToBlob(imgData, function (blob) {
+			//blob is a Blob object
+		});
+	});
+```

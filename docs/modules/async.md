@@ -1,19 +1,8 @@
 # Async
 
-* `async.flow` - execution of operations step by step
-* `async.map` or `async.flow.map` - execution of operations step by step and return a array of results of their operations
-* `async.filter` or `async.flow.filter` - execution of operations step by step and return a array of results of their operations only if they were successful
-* `async.forEach` or `async.flow.forEach` - TODO documentation
-* `async.waterfall` - TODO documentation
-* `async.waterfall.map` - TODO documentation
-* `async.waterfall.filter` - TODO documentation
-* `async.waterfall.forEach` - TODO documentation
-
-## Descriptions
-
 ### Operations
 
-is an array where a stored operations in following way
+Is an array where stored procedures have following structure:
 
 ```js
 var operations  = [
@@ -32,33 +21,12 @@ var operations  = [
 
 ```
 
-### Callback
-
-is an array where a stored operations in following way
-
-```js
-var operations  = [
-  [
-    function (cb) { /* operation function */ cb(); },
-    args, /* (optional) operation arguments */
-    context /* ( optional ) */
-  ],
-  [
-    function (err, cb) { /* operation function */ },
-    args, /* (optional) operation arguments */
-    context, /* ( optional ) */
-    1 /* (optional) the index of cb argument in operation function */
-  ],
-  // ...
-];
-
-```
-
 ## async.flow
 
 **description:**
 
-`async.flow` = `function (Operations, callback, timeout);`
+`async.flow` = `function ([Operations], callback, timeout);`
+Executes functions from Operations one by one with given timeout between each. Returns an instance of _async_ object.
 
 **arguments:**
 
@@ -95,7 +63,21 @@ async.test.flow	= function (n) {
 		window.a1 = a1;
 	});
 };
+```
 
+## async.waterfall
+
+**description:**
+
+`async.waterfall` = `function ([Operations], callback, parralel, timeout)`
+
+**arguments:**
+* **Operations** _array_  - list of operations ( [Operations Example](#operations) )
+* **callback** _function_ - callback after all operation were executed ( [Callback Example](#callback) )
+* **parralel** _number_ _(optional)_ _(default: 27)_ - the maximum parralel function executions
+* **timeout** _number_ _(optional)_ _(default: 0)_ - the timeout between operation execution
+
+```js
 async.test.waterfall	= function (n) {
 	console.clear();
 	global.require('async', function (async) {
@@ -124,6 +106,8 @@ async.test.waterfall	= function (n) {
 		window.a1 = a1;
 	});
 };
+```
+
 async.test.map = async.test.flow.map	= function (n) {
 	console.clear();
 	global.require('async', function (async) {
