@@ -52,7 +52,7 @@ var async	= function () {
 
 	app.bind('processing', function () {
 		return ( waited - recieved );
-	}, '')
+	}, '');
 
 	app.bind('responses', function (id) {
 		if (id === true) {
@@ -175,7 +175,7 @@ async.waterfall	= function (ops, cb, parralel, timeout) {
 		app.on('onRecieve', function () {
 			// console.log("tick");
 			while (( parralel === 0 || parralel > app.processing()) && tick()) {
-				true;
+				// true;
 			}
 		});
 		tick();
@@ -269,7 +269,7 @@ async.waterfall.map	= function (ops, ev, cb, parralel, timeout) {
 		};
 		app.on('onRecieve', function () {
 			while (( parralel === 0 || parralel > app.processing()) && tick()) {
-				true;
+				// true;
 			}
 		});
 		tick();
@@ -357,11 +357,14 @@ async.waterfall.filter	= function (ops, ev, cb, parralel, timeout) {
 						app.emit('error', err);
 					}
 				}, timeout);
+				return true;
 			}
+			return false;
 		};
 		app.on('onRecieve', function () {
+			// debugger;
 			while (( parralel === 0 || parralel > app.processing()) && tick()) {
-				true;
+				// true;
 			}
 		});
 		tick();
@@ -402,7 +405,9 @@ async.forEach = async.flow.forEach	= function (ops, ev, cb, timeout) {
 						app.emit('error', err);
 					}
 				}, timeout);
+				return true;
 			}
+			return false;
 		};
 		app.on('onRecieve', function () {
 			tick();
@@ -446,11 +451,13 @@ async.waterfall.forEach	= function (ops, ev, cb, parralel, timeout) {
 						app.emit('error', err);
 					}
 				}, timeout);
+				return true;
 			}
+			return false;
 		};
 		app.on('onRecieve', function () {
 			while (( parralel === 0 || parralel > app.processing()) && tick()) {
-				true;
+				// true;
 			}
 		});
 		tick();
@@ -462,7 +469,7 @@ async.waterfall.forEach	= function (ops, ev, cb, parralel, timeout) {
 
 
 
-async.test	= {}
+async.test	= {};
 async.test.flow	= function (n) {
 	console.clear();
 	global.require('async', function (async) {
@@ -532,9 +539,9 @@ async.test.map = async.test.flow.map	= function (n) {
 			cb(Math.floor(Math.random() * 1000));
 		}, function (r) {
 			console.log("DONE", r);
-		})
+		});
 	});
-}
+};
 
 async.test.waterfall.map	= function (n) {
 	console.clear();
@@ -548,9 +555,9 @@ async.test.waterfall.map	= function (n) {
 			cb(Math.floor(Math.random() * 1000));
 		}, function (r) {
 			console.log("DONE", r);
-		})
+		});
 	});
-}
+};
 
 
 async.test.filter = async.test.flow.filter	= function (n) {
@@ -565,9 +572,9 @@ async.test.filter = async.test.flow.filter	= function (n) {
 			cb(Math.random() > 0.5);
 		}, function (r) {
 			console.log("DONE ", r.length);
-		})
+		});
 	});
-}
+};
 
 async.test.waterfall.filter	= function (n) {
 	console.clear();
@@ -581,9 +588,9 @@ async.test.waterfall.filter	= function (n) {
 			cb(Math.random() > 0.5);
 		}, function (r) {
 			console.log("DONE ", r.length);
-		})
+		});
 	});
-}
+};
 
 async.test.forEach = async.test.flow.forEach	= function (n) {
 	console.clear();
@@ -597,9 +604,9 @@ async.test.forEach = async.test.flow.forEach	= function (n) {
 			cb();
 		}, function (r) {
 			console.log("DONE ", r.length);
-		})
+		});
 	});
-}
+};
 
 async.test.waterfall.forEach	= function (n) {
 	console.clear();
@@ -613,9 +620,9 @@ async.test.waterfall.forEach	= function (n) {
 			cb();
 		}, function (r) {
 			console.log("DONE ", r.length);
-		})
+		});
 	});
-}
+};
 
 
 

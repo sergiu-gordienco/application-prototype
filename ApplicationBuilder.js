@@ -335,7 +335,7 @@ var ApplicationBuilder	= function (callback) {
 					};
 
 					;((function () {
-						var data	= undefined;
+						var data	= null;
 						Object.defineProperty(module, 'exports', {
 							get: function() { return data; },
 							set: function(val) {

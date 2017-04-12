@@ -12,6 +12,8 @@ loader.list = [
 			'browser-session',
 			'browser-session/strategy/indexed-db',
 			'browser-session/strategy/local-storage',
+			'devices/getUserMedia',
+			'devices/webcam',
 			'canvas-draw',
 			'custom-elements',
 			'extensions/prototype',
