@@ -361,7 +361,7 @@ Element.prototype.renderJsArgs    = function (context, args, cb) {
             args    : ( args || [] )
         });
     } else {
-        this.__renderContentArgs.redraw();
+        this.__renderArgs.redraw();
     }
 };
 

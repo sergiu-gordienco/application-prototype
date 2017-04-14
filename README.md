@@ -4,7 +4,7 @@ A JavaScript Application Builder
 available for front-end ( browsers or applications like electron.atom.io, or another cool stuff )
 
 ```sh
-bowser install app-prototype
+bower install app-prototype
 ```
 
 and available as a NodeJS package `application-prototype`
