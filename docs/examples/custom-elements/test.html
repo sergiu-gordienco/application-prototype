@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script type="text/javascript" charset="utf-8" src="../../../ApplicationPrototype.js"></script>
+		<script type="text/javascript" charset="utf-8" src="../../../ApplicationBuilder.js"></script>
+		<meta charset="utf-8">
+		<title>custom-elements test</title>
+	</head>
+	<body>
+		<mycustomelement>
+
+		</mycustomelement>
+	</body>
+	<script type="text/javascript">
+		// using promise to ensure that all modules will load before doing something
+		new Promise(function(resolve, reject) {
+			window.App = new ApplicationBuilder();
+			App.modulePath('../../../constructors');
+			App.require([
+				'customElements :: custom-elements',
+			]).then(function (a) {
+				App.bind('customElements', function () {
+					return a.customElements;
+				});
+				resolve(App);
+			});
+			App.modulePath('/docs/examples/custom-elements');
+		}).then(function (App) {
+			App.customElements().lazyLoadModules({
+				mycustomelement : 'elements/custom'
+			});
+		});
+	</script>
+</html>

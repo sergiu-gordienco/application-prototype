@@ -25,10 +25,10 @@ sudo npm install -g application-prototype
 - [lib](docs/modules/lib.md) - a `function` that register in Application all default sub-modules
 - [async](docs/modules/async.md) - a module for executing asynchronous a list of operations in flow or waterfall
 
-- [js-template](docs/modules/js-template.md) - a library for emulating Two-Way Data Binding; documentation @TODO
-- [custom-elements](docs/modules/custom-elements.md) - a library for implementing webComponents ;  documentation @TODO
+- [js-template](docs/modules/js-template.md) - a library for emulating Two-Way Data Binding
+- [custom-elements](docs/modules/custom-elements.md) - a library for implementing webComponents
 
-- [browser-session](docs/modules/browser-session.md) - a cross browser function implemented with Promises and indexed-db ; documentation @TODO
+- [browser-session](docs/modules/browser-session.md) - a cross browser function implemented with Promises and indexed-db ;
 - [browser-session/strategy/indexed-db](docs/modules/browser-session/strategy/indexed-db.md) - IndexedDb strategy
 - [browser-session/strategy/local-storage](docs/modules/browser-session/strategy/local-storage.md) - Local Storage strategy
 
@@ -39,18 +39,18 @@ sudo npm install -g application-prototype
 
 - [canvas-draw](docs/modules/canvas-draw.md) - documentation @TODO
 - [graphic](docs/modules/graphic.md) - a function that quickly loads all `graphic` sub-modules
-- [graphic/convert](docs/modules/graphic/convert.md) - documentation @TODO
-- [graphic/convert/blob-to-imagedata](docs/modules/graphic/convert/blob-to-imagedata.md) - documentation @TODO
-- [graphic/convert/imagedata-to-blob](docs/modules/graphic/convert/imagedata-to-blob.md) - documentation @TODO
-- [graphic/filters](docs/modules/graphic/filters.md) - documentation @TODO
-- [graphic/filters/blur](docs/modules/graphic/filters/blur.md) - documentation @TODO
-- [graphic/filters/contrast](docs/modules/graphic/filters/contrast.md) - documentation @TODO
-- [graphic/filters/saturation](docs/modules/graphic/filters/saturation.md) - documentation @TODO
-- [graphic/polyfill](docs/modules/graphic/polyfill.md) - documentation @TODO
-- [graphic/recognition](docs/modules/graphic/recognition.md) - documentation @TODO
-- [graphic/recognition/edge-detection](docs/modules/graphic/recognition/edge-detection.md)
-- [graphic/utils](docs/modules/graphic/utils.md) - documentation @TODO
-- [graphic/utils/imagedata-clone](docs/modules/graphic/utils/imagedata-clone.md) - documentation @TODO
+- [graphic/convert](docs/modules/graphic/convert.md) - library, set of modules `graphic/convert/*`
+- [graphic/convert/blob-to-imagedata](docs/modules/graphic/convert/blob-to-imagedata.md) - conversion of Blob to ImageData
+- [graphic/convert/imagedata-to-blob](docs/modules/graphic/convert/imagedata-to-blob.md) - conversion of ImageData to Blob
+- [graphic/filters](docs/modules/graphic/filters.md) - library, set of modules `graphic/filters/*`
+- [graphic/filters/blur](docs/modules/graphic/filters/blur.md) - adding **Blur** filter over an ImageData
+- [graphic/filters/contrast](docs/modules/graphic/filters/contrast.md) - adding **Contrast** filter over an ImageData
+- [graphic/filters/saturation](docs/modules/graphic/filters/saturation.md) - adding **Saturation** filter over an ImageData
+- [graphic/polyfill](docs/modules/graphic/polyfill.md) - contains Commons Browsers polyfills
+- [graphic/recognition](docs/modules/graphic/recognition.md) - library, set of modules `graphic/recognition/*`
+- [graphic/recognition/edge-detection](docs/modules/graphic/recognition/edge-detection.md) - module for edge recognition
+- [graphic/utils](docs/modules/graphic/utils.md) - library, set of modules `graphic/utils/*`
+- [graphic/utils/imagedata-clone](docs/modules/graphic/utils/imagedata-clone.md) - module for ImageData Clone
 
 ## Contribution
 if you find code interesting you may participate by updating documentation using pull request or mail messages to [sergiu.gordienco@gmail.com](mailto:sergiu.gordienco@gmail.com)

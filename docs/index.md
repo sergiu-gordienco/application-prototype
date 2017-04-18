@@ -173,7 +173,7 @@ Application.require([
 
 ## Link modules to global module list
 
-@TODO
+@TODO documentation not ready
 
 ### module.cache
 

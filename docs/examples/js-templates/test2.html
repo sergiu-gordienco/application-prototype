@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script type="text/javascript" charset="utf-8" src="../../../ApplicationPrototype.js"></script>
+		<script type="text/javascript" charset="utf-8" src="../../../ApplicationBuilder.js"></script>
+		<meta charset="utf-8">
+		<title>custom-elements test</title>
+	</head>
+	<body>
+		<div class="rendered-element" js-style="display: {{ data.username ? 'block' : 'none' }}">
+			Hi {{ data.username }}
+			{{ console.log(this) || " " }}
+		</div>
+	</body>
+	<script type="text/javascript">
+		var render = function () {
+			// debugger;
+			document.querySelector(".rendered-element").renderJs(null, dataSource, console.log);
+		};
+		var dataSource = ((function (data, render) {
+			return {
+				data : {
+					get username() {
+						return data.username;
+					},
+					set username(v) {
+						data.username = v;
+						render();
+					}
+				}
+			};
+		})({
+			username : "test"
+		}, render));
+
+		// using promise to ensure that all modules will load before doing something
+		new Promise(function(resolve, reject) {
+			window.App = new ApplicationBuilder();
+			App.modulePath('../../../constructors');
+			App.require([
+				'jsTemplate :: js-template',
+			]).then(function (a) {
+				App.bind('jsTemplate', function () {
+					return a.jsTemplate;
+				});
+				resolve(App);
+			});
+		}).then(function (App) {
+			render();
+		});
+	</script>
+</html>

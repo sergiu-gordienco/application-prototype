@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script type="text/javascript" charset="utf-8" src="../../../ApplicationPrototype.js"></script>
+		<script type="text/javascript" charset="utf-8" src="../../../ApplicationBuilder.js"></script>
+		<meta charset="utf-8">
+		<title>uri-load test</title>
+	</head>
+	<body>
+		<iframe src="page.html" width="300" height="300" id='iframe'></iframe>
+	</body>
+	<script type="text/javascript">
+		new Promise(function(resolve, reject) {
+			window.App = new ApplicationBuilder();
+			App.modulePath('../../../constructors');
+			App.require([
+				'uriLoad :: uri-load'
+			]).then(function (a) {
+				App.bind('uriLoad', function () {
+					return a.uriLoad;
+				});
+				resolve(App);
+			});
+		}).then(function (App) {
+			document.getElementById('iframe').contentWindow.onload = function () {
+				var document = this.document;
+				App.uriLoad().link('myStylesheet.css', function () {
+					console.log('stylesheet loaded');
+				}, undefined, document);
+				App.uriLoad().script('script.js', function () {
+					console.log('script loaded');
+				}, undefined, document);
+			};
+
+		});
+
+	</script>
+</html>
