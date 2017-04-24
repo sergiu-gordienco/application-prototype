@@ -5,7 +5,7 @@
 // jshint -W061
 // jshint -W054
 var isBrowser=new Function("try {return this===window;}catch(e){ return false;}");
-var isNode=new Function("try {return this===global;}catch(e){return false;}");
+var isNode=new Function("var isBrowser = false; try { isBrowser = this===window;}catch(e){ isBrowser = false;}; try {return !isBrowser && ( this ===global );}catch(e){console.error(e); return false;}");
 // jshint +W054
 
 var ApplicationBuilder	= function (callback) {
