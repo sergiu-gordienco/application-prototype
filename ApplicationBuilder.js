@@ -335,9 +335,9 @@ var ApplicationBuilder	= function (callback) {
 					};
 
 					;((function () {
-						var data	= null;
+						var data	= undefined;
 						Object.defineProperty(module, 'exports', {
-							get: function() { return data; },
+							get: function() { return data || null; },
 							set: function(val) {
 								if ( typeof(data) === "undefined" ) {
 									data	= val;
