@@ -2024,8 +2024,17 @@ function dataURItoBlobUrl(dataURI,mimeString) {
 	}
 })(window));
 
-	window._	= _public._;
-	window.__	= _public.__;
+	if (typeof(window._) === "undefined") {
+		window._	= _public._;
+	} else {
+		console.warn("Unable to insert slDOM into Window since it is already busy");
+	}
+
+	if (typeof(window.__) === "undefined") {
+		window.__	= _public.__;
+	} else {
+		console.warn("Unable to insert slDOMset into Window since it is already busy");
+	}
 
 	return _public;
 })());

@@ -78,7 +78,7 @@
             var node = this;
             var method = function (name) {
                 return function () {
-                    _elements[tagName][name].apply(node, arguments);
+                    return _elements[tagName][name].apply(node, arguments);
                 };
             };
             var methods = {};

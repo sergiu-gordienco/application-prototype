@@ -45,7 +45,7 @@ An important part of these functions is the first function argument - `operation
 ```js
 [
 	[
-		function (cb) {
+		function (a, b, cb) {
 			/* operation function */ cb();
 		},
 		[2, 3, null] /* ( optional ) operation arguments */
@@ -53,7 +53,7 @@ An important part of these functions is the first function argument - `operation
 		2 // callbackIndex
 	],
 	[
-		function (cb) {
+		function (a, b, cb) {
 			/* operation function */ cb();
 		},
 		[2, 3, null] /* ( optional ) operation arguments */
