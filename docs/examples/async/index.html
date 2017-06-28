@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="../../../ApplicationPrototype.js"></script>
+		<script src="../../../ApplicationBuilder.js"></script>
+	</head>
+	<body>
+
+	</body>
+	<script type="text/javascript">
+		var unfiltered = [1, '1', 2, [], 'sun', {}, 3];
+
+		var timedFunction = function (next) {
+			console.log("started: " + new Date().valueOf());
+			setTimeout(function () {
+				var t = new Date().valueOf();
+				console.log("ended: " + t);
+				next(t + "");
+			}, 2000);
+		};
+		var App = new ApplicationBuilder(); // it will initialize bare-bone application prototype
+		App.require('../../../../constructors/async').then(function (Async) { // require async module.
+			App.bind('async', function () { // binds a function to App object.
+				return Async;
+			});
+
+		// async.flow
+			App.async().flow(
+				[[timedFunction], [timedFunction], [timedFunction], [timedFunction]],
+				function (data) {
+					console.log('final callback, data : ', data);
+				}
+			);
+		// end async.flow
+		// async.waterfall
+			// App.async().waterfall(
+			// 	[[timedFunction], [timedFunction], [timedFunction], [timedFunction]],
+			// 	function (data) {
+			// 		console.log('final callback, data : ', data);
+			// 	}
+			// );
+		// end async.waterfall
+		// async.map
+			// App.async().map([[timedFunction], [timedFunction], [timedFunction], [timedFunction]],
+			// 	function (next, op, i, arr) {
+			// 		op[0](next);
+			// 	}, function (data) {
+			// 		console.log('final callback, data : ', data);
+			// 	}
+			// );
+		// end async.map
+		// async.filter
+			// App.async().filter(
+			// 	unfiltered,
+			// 	function (next, op, i, arr) {
+			// 		console.log("started: " + new Date().valueOf());
+			// 		setTimeout(function () {
+			// 			console.log("ended: " + new Date().valueOf());
+			// 			next(typeof(op) === 'number' ? true : false);
+			// 		}, 2000);
+			// 	}, function (data) {
+			// 		console.log('final callback, data : ', data);
+			// 	});
+		// end async.filter
+		// async.forEach
+			// App.async().forEach([[timedFunction], [timedFunction], [timedFunction], [timedFunction]],
+			// 	function (next, op, i, arr) {
+			// 		op[0](next);
+			// 	}, function (data) {
+			// 		console.log('final callback, data : ', data);
+			// 	}
+			// );
+		// end async.forEach
+		// async.waterfall.map
+			// App.async().waterfall.map(
+			// 	[[timedFunction], [timedFunction], [timedFunction], [timedFunction]],
+			// 	function (next, op, i, arr) {
+			// 		op[0](next);
+			// 	}, function (data) {
+			// 		console.log('final callback, data : ', data);
+			// 	}
+			// 		);
+		// end async.waterfall.map
+		// async.waterfall.forEach
+			// App.async().waterfall.forEach(
+			// 	[[timedFunction], [timedFunction], [timedFunction], [timedFunction]],
+			// 	function (next, op, i, arr) {
+			// 		op[0](next);
+			// 	}, function (data) {
+			// 		console.log('final callback, data : ', data);
+			// 	}
+			// );
+		// end async.waterfall.forEach
+		// async.waterfall.filter
+			// App.async().waterfall.filter(
+			// 	unfiltered,
+			// 	function (next, op, i, arr) {
+			// 		console.log("started: " + new Date().valueOf());
+			// 				setTimeout(function () {
+			// 					console.log("ended: " + new Date().valueOf());
+			// 					next(typeof(op) === 'number' ? true : false);
+			// 				}, 2000);
+			// 	}, function (data) {
+			// 		console.log('final callback, data : ', data);
+			// 	}
+			// );
+		// end async.waterfall.filter
+	}, function (err) {
+		console.error(err);
+	});
+	</script>
+</html>

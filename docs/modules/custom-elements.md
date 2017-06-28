@@ -73,7 +73,14 @@ App.require('custom-elements', function (customElements) {
 		},
 		__onRemove : function () {
 			// is called when element is removed from DOM
-		}
+		},
+		/** other methods or properties that will be available on node.methods().myMethod()
+		myMethod : function () {
+			// this. is node
+		},
+		property1 : "test val", // global for all node with same tagname
+		... add others
+		*/
 	});
 	module.exports = {}; // nothing to export. But export is needed to signal end of module loading.
 });

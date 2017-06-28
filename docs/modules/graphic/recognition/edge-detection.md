@@ -1,6 +1,28 @@
-# Documentation not ready
+# Graphics
+## Edge detection
 
-Sorry, but you may help.
+This function finds all edges within a photo. (Currently working fine only for black and white photos). Function takes 2 parameters: `imageData`, threshold (or search radius). Function will return an array of point arrays in this format:
+```js
+	[
+		[
+			x : ... ,
+			y : ...
+		],
+		[
+			x : ... ,
+			y : ...
+		],
+		...
+	]
+```
 
-## Contribution
-if you find code interesting you may participate by updating documentation using pull request or mail messages to [sergiu.gordienco@gmail.com](mailto:sergiu.gordienco@gmail.com)
+## Example
+
+```js
+	module.require([
+		`edgeDetection :: edge-detection`
+	], function (lib) {
+		var points = lib.edgeDetection(someImageData, threshold)
+		//points is an array of edges from photo
+	});
+```

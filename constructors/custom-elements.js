@@ -1,3 +1,9 @@
+// jshint -W083
+// jshint -W002
+// jshint -W088
+// jshint -W014
+
+
 ((function () {
     if (!('_elements' in module.cache())) {
       module.cache()._elements = {};
@@ -84,7 +90,23 @@
             var methods = {};
             if (tagName in _elements) {
                 for (i in _elements[tagName]) {
-                    methods[i] = method(i);
+                    if (typeof(_elements[tagName][i]) === "function") {
+                        methods[i] = method(i);
+                    } else {
+                        ;((function (name) {
+                          Object.defineProperty(methods, name, {
+                            writable : true,
+                            enumerable : true,
+                            configurable : true,
+                            get : function () {
+                              return _elements[tagName][name];
+                            },
+                            set : function (v) {
+                              _elements[tagName][name] = v;
+                            }
+                          });
+                        })(i + ''));
+                    }
                 }
             }
             return methods;
