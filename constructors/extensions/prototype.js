@@ -1607,8 +1607,8 @@ var i;for(i in o) {
 })());
 
 ;((function () {
-	ArrayBuffer.prototype.toStringUtf8	= function () {
-		  return String.fromCharCode.apply(null, new Uint16Array(this));
+	ArrayBuffer.prototype.toStringUtf8	= function (use16Bit) {
+		return String.fromCharCode.apply(null, use16Bit ? new Uint16Array(this) : new Uint8Array(this));
 	};
 })());
 
