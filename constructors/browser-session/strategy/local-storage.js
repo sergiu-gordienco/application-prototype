@@ -63,7 +63,7 @@ module.exports  = function (storage) {
       return new Application.Promise(function (resolve, reject) {
         var er, err, data;
         try {
-          storage.removeItem(prefix + key, value);
+          storage.removeItem(prefix + key);
         } catch (err) { er = err; }
         if (er) {
           reject(er);

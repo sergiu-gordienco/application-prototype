@@ -190,7 +190,7 @@ module.require('strategy/indexed-db').then(function (dbConnectionBuilder) {
 	_sessionConnection.initialization.then(function () {
 		loader.resolve(_sessionConnection);
 	}, function (err) {
-		console.warn(err);
+		console.error(err);
 		var er;
 		try {
 			console.warn("IndexDB not supported, fallback to localStorage or polyfill emulation");
@@ -208,7 +208,7 @@ module.require('strategy/indexed-db').then(function (dbConnectionBuilder) {
 			loader.reject(er);
 		}
 	});
-	
+
 	loader.then(function (_sessionConnection) {
 		sessionDbConnection	= _sessionConnection;
 		if (typeof(module) === "object" && module) {
