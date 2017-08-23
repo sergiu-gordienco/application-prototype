@@ -31,6 +31,9 @@ returns an object ApplicationPrototype
 - **on** - `function` - Attach an event listener to an eventName, returns listener-id
 ```js
 	app.on("onRender", function (a, b, c ) { /* ... */ });
+
+	// add listeners to multiple events
+	app.on("onRender", function (a, b, c ) { /* ... */ });
 ```
 ```js
 	var listenerId = app.on(
@@ -42,10 +45,13 @@ returns an object ApplicationPrototype
 
 - **off** - `function` - Remove an event listener
 ```js
-app.on("onRender") // remove all listeners for a specific eventName
+app.off("onRender") // remove all listeners for a specific eventName
 ```
 ```js
-app.on("onRender", "listenerId") // remove an specific listener-id
+app.off("onRender", "listenerId") // remove an specific listener-id
+
+// remove an specific listener-id from multiple events
+app.off("onInit, onRender", "listenerId")
 ```
 
 - **emit** - `function` - emits an event
@@ -67,6 +73,15 @@ app.emit("onRender", [arg1, arg2 /*, ...*/], false, true);
 var app = new ApplicationPrototype();
 
 app.bind("render", function (p1, p2) {
+	// this !== app ; this contains methods from app but they may not be listened
+	// see app.emit
+
+	// your logic
+});
+
+// or
+
+app.bind(function renderSimplier(p1, p2) {
 	// this !== app ; this contains methods from app but they may not be listened
 	// see app.emit
 

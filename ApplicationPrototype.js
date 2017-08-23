@@ -78,6 +78,17 @@ var isNode=new Function("var isBrowser = false; try { isBrowser = this===window;
 				return public_methods;
 			};
 			methods.on	= function (eventName, handler, handlerId) {
+				if (eventName.match(/\s*\,\s*/)) {
+					eventName.split(/\s*\,\s*/).forEach(function (eventName) {
+						eventName = eventName.replace(/^\s+/, '').replace(/\s+$/, '');
+						if (!eventName) return;
+						methods.on(eventName, handler, handlerId);
+					});
+					return;
+				} else {
+					eventName = eventName.replace(/^\s+/, '').replace(/\s+$/, '');
+					if (!eventName) return;
+				}
 				if (typeof(handler) !== "function")
 					return false;
 				if (!(eventName in events)) {
@@ -93,6 +104,17 @@ var isNode=new Function("var isBrowser = false; try { isBrowser = this===window;
 				return handlerId;
 			};
 			methods.off	= function (eventName, handlerId) {
+				if (eventName.match(/\s*\,\s*/)) {
+					eventName.split(/\s*\,\s*/).forEach(function (eventName) {
+						eventName = eventName.replace(/^\s+/, '').replace(/\s+$/, '');
+						if (!eventName) return;
+						methods.off(eventName, handler, handlerId);
+					});
+					return;
+				} else {
+					eventName = eventName.replace(/^\s+/, '').replace(/\s+$/, '');
+					if (!eventName) return;
+				}
 				if (handlerId) {
 					if (eventName in events) {
 						if (handlerId in events[eventName]) {
@@ -125,6 +147,11 @@ var isNode=new Function("var isBrowser = false; try { isBrowser = this===window;
 				}
 			};
 			methods.bind	= function (method, callback, conf) {
+				if (typeof(method) === "function") {
+					conf     = callback;
+					callback = method;
+					method   = callback.name;
+				}
 				return bind_method(method, callback, conf);
 			};
 			var method;

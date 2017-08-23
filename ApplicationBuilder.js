@@ -88,7 +88,7 @@ var ApplicationBuilder	= function (callback) {
 		};
 		var p = {
 			then : function (onFullfiled, onRejected) {
-				p.catch(onRejected);
+				p.catch(onRejected || function PromiseError(err) { console.error(err); });
 				return Application.Promise(function (resolve, reject) {
 					var callback = function (data) {
 						var res, err;
