@@ -147,7 +147,17 @@ var textNodesUnder = function (el, cb, config) {
 
                     markNode.parentNode.removeChild(markNode);
                     
-                    nodes.forEach(function (node) {
+                    nodes.filter(function (node) {
+                        var found = false;
+                        var i;
+                        for (i = 0; i < nNodes.length; i++) {
+                            if (node === nNodes[i]) {
+                                found = true;
+                                break;
+                            }
+                        }
+                        return !found;
+                    }).forEach(function (node) {
                         if (node.parentNode) {
                             node.parentNode.removeChild(node);
                         }
