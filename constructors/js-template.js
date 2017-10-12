@@ -137,9 +137,16 @@ var textNodesUnder = function (el, cb, config) {
                         return;
                     var nodes = _methods.nodes;
                     _methods.nodes = nNodes;
+                    var markNode = document.createTextNode("");
+                    
+                    nodes[0].parentNode.insertBefore(markNode, nodes[0]);
+
                     nNodes.forEach(function (node) {
-                        nodes[0].parentNode.insertBefore(node, nodes[0]);
+                        markNode.parentNode.insertBefore(node, markNode);
                     });
+
+                    markNode.parentNode.removeChild(markNode);
+                    
                     nodes.forEach(function (node) {
                         if (node.parentNode) {
                             node.parentNode.removeChild(node);
