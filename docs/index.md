@@ -43,6 +43,12 @@ returns an object ApplicationPrototype
 	);
 ```
 
+- **once** - `function` - Attach an event listener to an eventName only once, returns listener-id
+```js
+	// listen once
+	app.once("onRender", function (a, b, c ) { /* ... */ });
+```
+
 - **off** - `function` - Remove an event listener
 ```js
 app.off("onRender") // remove all listeners for a specific eventName

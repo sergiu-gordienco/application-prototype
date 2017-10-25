@@ -103,6 +103,14 @@ var isNode=new Function("var isBrowser = false; try { isBrowser = this===window;
 				events[eventName][handlerId]	= handler;
 				return handlerId;
 			};
+			methods.once = function (eventName, handler, handlerId) {
+				var id;
+				id = methods.on(eventName, function () {
+					methods.off(eventName, id);
+					handler.apply(this, arguments);
+				}, handler);
+				return id;
+			};
 			methods.off	= function (eventName, handlerId) {
 				if (eventName.match(/\s*\,\s*/)) {
 					eventName.split(/\s*\,\s*/).forEach(function (eventName) {
