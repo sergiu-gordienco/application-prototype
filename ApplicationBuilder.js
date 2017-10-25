@@ -369,16 +369,23 @@ var ApplicationBuilder	= function (callback) {
 						"\n */\n\n") : "";
 					if (requireDownload) {
 						if (isNode()) {
-							fs.readFile(module_url, 'utf8', function (err, module_text) {
-								err = undefined;
-								try {
-									eval(module_header + module_text);
-								} catch(err) {
-									console.warn("Application Loading Module", module_url);
-									console.error(err);
-									module.$request.reject(err);
+							fs.readFile(
+								require("path").normalize((function (url) {
+									if (url.match(/^[a-z][a-z\d]*\:/)) {
+										return url;
+									}
+									return url.replace(/\?.*/, '');
+								})(module_url)), 'utf8', function (err, module_text) {
+									err = undefined;
+									try {
+										eval(module_header + module_text);
+									} catch(err) {
+										console.warn("Application Loading Module", module_url);
+										console.error(err);
+										module.$request.reject(err);
+									}
 								}
-							});
+							);
 						} else {
 							m_urlload(module_url, function (module_url, module_text) {
 								var err;

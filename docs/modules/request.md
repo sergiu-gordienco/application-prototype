@@ -146,8 +146,8 @@ This example sends a `post` request with the encoded string in it's body. All va
 ```js
 	app.url('some url')
 	.method('POST')
-	.configurator('prepare-post')
 	.open()
+	.configurator('prepare-post')
 	.send('hello%20world')
 	.then(function (data) {
 		//recieved data
