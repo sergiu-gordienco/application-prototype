@@ -1630,7 +1630,17 @@ var i;for(i in o) {
 })());
 
 ;((function () {
-	ArrayBuffer.prototype.toStringUtf8	= function () {
+	if (typeof(ArrayBuffer) !== "undefined") {
+		ArrayBuffer.prototype.toStringUtf8	= function () {
+			return (String.fromCharCode.apply(null, new Uint8Array(this))).utf8decode();
+		};
+	}
+	if (typeof(Buffer) !== "undefined") {
+		Buffer.prototype.toStringUtf8	= function () {
+			return (String.fromCharCode.apply(null, new Uint8Array(this))).utf8decode();
+		};
+	}
+	Array.prototype.toStringUtf8	= function () {
 		return (String.fromCharCode.apply(null, new Uint8Array(this))).utf8decode();
 	};
 })());
