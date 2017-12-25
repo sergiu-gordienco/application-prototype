@@ -1,12 +1,17 @@
-var indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+var indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB || null;
 // DON'T use "var indexedDB = ..." if you're not in a function.
 // Moreover, you may need references to some window.IDB* objects:
-var IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction || {READ_WRITE: "readwrite"}; // This line should only be needed if it is needed to support the object's constants for older browsers
+var IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction || { READ_WRITE: "readwrite" }; // This line should only be needed if it is needed to support the object's constants for older browsers
 var IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange || function () { console.error('IDBKeyRange is not supported'); };
 
 
 module.exports  = function (conf) {
 	var err_compile, methods;
+	if (!indexedDB) {
+		methods = methods || {};
+		methods.initialization	= Application.Promise.reject(Error("debug,,,"));
+		return methods;
+	}
 	try {
 		var promise = Application.Promise();
 		var db = false;
@@ -20,7 +25,7 @@ module.exports  = function (conf) {
 			if (typeof(IDBTransaction.READ_WRITE) !== "undefined") {
 				CONST_readwrite	= IDBTransaction.READ_WRITE;
 			}
-
+			
 			var objectStore, trans;
 			if (s === false) {
 				trans = db.transaction([config.table]);
@@ -54,7 +59,7 @@ module.exports  = function (conf) {
 					};
 					var cursorRequest	= objectStore.openCursor();
 					cursorRequest.onerror = function(error) {
-						console.log(error);
+						console.error(error);
 					};
 					cursorRequest.onsuccess = (
 						typeof(params) === "function" ? function (evt) {
@@ -89,6 +94,7 @@ module.exports  = function (conf) {
 						reject(event);
 					};
 				} catch (er) {
+					console.error(er);
 					reject(er);
 				}
 			});
@@ -110,28 +116,57 @@ module.exports  = function (conf) {
 				return transactionPromise("find", filter);
 			}
 		};
-		var request = indexedDB.open(config.dbName, 2);
-		console.info(request);
+		// var request = indexedDB.open(config.dbName, 1.0);
+		var request = indexedDB.open(config.dbName, 4);
+		console.info("IndexDB Request", request);
 		request.onerror = function(event) {
+			console.log("IndexDB » error", event);
 			promise.reject(event);
-			console.log("error", event);
 		};
 		request.onupgradeneeded = function(event) {
+			console.log("IndexDB » upgrade", event);
 			db = event.target.result;
-			var objectStore = db.createObjectStore(config.table, { keyPath: "k" });
-			objectStore.createIndex("v", "v", { unique: false });
-			objectStore.transaction.oncomplete = function(event) {
-				// Store values in the newly created objectStore.
-				// TODO emit init
+			var er;
+			try {
+				var objectStore = db.createObjectStore(config.table, { keyPath: "k" });
+				objectStore.createIndex("v", "v", { unique: false });
+				objectStore.transaction.oncomplete = function(event) {
+					// Store values in the newly created objectStore.
+					// TODO emit init
+					console.log("IndexDB » transation-complete » resolve", event);
+					promise.resolve(event);
+				};
+			} catch (er) {
 				promise.resolve(event);
-			};
+			}
 		};
 		request.onsuccess = function(event) {
+			console.log("IndexDB » success", event);
 			db = event.target.result;
-			promise.resolve(event);
+			var er;
+			try {
+				var objectStore = db.createObjectStore(config.table, { keyPath: "k" });
+				objectStore.createIndex("v", "v", { unique: false });
+				objectStore.transaction.oncomplete = function(event) {
+					// Store values in the newly created objectStore.
+					// TODO emit init
+					console.log("IndexDB » transation-complete » resolve", event);
+					promise.resolve(event);
+				};
+				objectStore.transaction.onerror = function(event) {
+					// Store values in the newly created objectStore.
+					// TODO emit init
+					console.log("IndexDB » transation-complete » resolve", event);
+					promise.reject(event);
+				};
+			} catch (er) {
+				console.error(er);
+				promise.resolve(event);
+			}
 		};
 		methods.initialization	= promise;
 	} catch (err_compile) {
+		methods = methods || {};
 		methods.initialization	= Application.Promise.reject(err_compile);
 	}
 	return methods;
