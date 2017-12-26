@@ -435,7 +435,7 @@ var slDOMset=function(v){
 			var config_unique	= this.config("unique");
 			var ret	= [];
 			set.forEach(function (node) {
-				p.e(node).q(s).forEach(function (child) {
+				p.E(node).q(s).forEach(function (child) {
 					if (!config_unique || ret.indexOf(child) === -1) {
 						ret.push(child);
 					}
