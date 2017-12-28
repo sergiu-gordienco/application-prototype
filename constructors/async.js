@@ -205,9 +205,14 @@ async.map = async.flow.map	= function (ops, ev, cb, timeout) {
 				var op	= ops[i++];
 				var id	= app.reserve();
 				var ri	= i-1;
-				var rr	= function (v) {
-					ret[ri]	= v;
-					app.recieve();
+				var rr	= function (v, err) {
+					if (err) {
+						app.recieve(id, err);
+						app.emit('error', err);
+					} else {
+						ret[ri]	= v;
+						app.recieve();
+					}
 				};
 				var err;
 				setTimeout(function () {
@@ -252,9 +257,14 @@ async.waterfall.map	= function (ops, ev, cb, parralel, timeout) {
 				var op	= ops[i++];
 				var id	= app.reserve();
 				var ri	= i-1;
-				var rr	= function (v) {
-					ret[ri]	= v;
-					app.recieve();
+				var rr	= function (v, err) {
+					if (err) {
+						app.recieve(id, err);
+						app.emit('error', err);
+					} else {
+						ret[ri]	= v;
+						app.recieve();
+					}
 				};
 				var err;
 				setTimeout(function () {
@@ -298,9 +308,14 @@ async.filter = async.flow.filter	= function (ops, ev, cb, timeout) {
 				var op	= ops[i++];
 				var id	= app.reserve();
 				var ri	= i-1;
-				var rr	= function (v) {
-					if (v) ret.push(op);
-					app.recieve();
+				var rr	= function (v, err) {
+					if (err) {
+						app.recieve(id, err);
+						app.emit('error', err);
+					} else {
+						if (v) ret.push(op);
+						app.recieve();
+					}
 				};
 				var err;
 				setTimeout(function () {
@@ -344,9 +359,14 @@ async.waterfall.filter	= function (ops, ev, cb, parralel, timeout) {
 				var op	= ops[i++];
 				var id	= app.reserve();
 				var ri	= i-1;
-				var rr	= function (v) {
-					if (v) ret.push(op);
-					app.recieve();
+				var rr	= function (v, err) {
+					if (err) {
+						app.recieve(id, err);
+						app.emit('error', err);
+					} else {
+						if (v) ret.push(op);
+						app.recieve();
+					}
 				};
 				var err;
 				setTimeout(function () {
@@ -393,8 +413,13 @@ async.forEach = async.flow.forEach	= function (ops, ev, cb, timeout) {
 				var op	= ops[i++];
 				var id	= app.reserve();
 				var ri	= i-1;
-				var rr	= function (v) {
-					app.recieve();
+				var rr	= function (err) {
+					if (err) {
+						app.recieve(id, err);
+						app.emit('error', err);
+					} else {
+						app.recieve();
+					}
 				};
 				var err;
 				setTimeout(function () {
@@ -439,8 +464,13 @@ async.waterfall.forEach	= function (ops, ev, cb, parralel, timeout) {
 				var op	= ops[i++];
 				var id	= app.reserve();
 				var ri	= i-1;
-				var rr	= function (v) {
-					app.recieve();
+				var rr	= function (err) {
+					if (err) {
+						app.recieve(id, err);
+						app.emit('error', err);
+					} else {
+						app.recieve();
+					}
 				};
 				var err;
 				setTimeout(function () {
