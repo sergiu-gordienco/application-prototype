@@ -1846,34 +1846,40 @@ _public.fn.insertAtCursor	= function (myField, myValue){if(document.selection){m
 _public.fn.IframeAddContent	= function (iframe,content){var doc = null,win=null;if(iframe.contentDocument){doc = iframe.contentDocument;win=iframe.contentWindow;}else if(iframe.contentWindow){doc = iframe.contentWindow.document;win=iframe.contentWindow;}else if(iframe.document){doc = iframe.document;win=iframe.window;};if(doc && content){doc.open();doc.write(content);if(!('\v' == 'v'))doc.close();};return {'document':doc,'window':win};};
 
 _public.fn.downloadFile = function (filename,content,encoding,mimetype) {
-	if(!encoding)
-		encoding	= 'none';
-	if(!mimetype)
-		mimetype	= "application/x-unknown";
-	switch(encoding) {
-		case 'base64':
-			content = "data:"+mimetype+";base64,"+content;
-		break;
-		case 'file-encoded':
-			// skip;
-		break;
-		case 'chunks':
-		break;
-		case 'escape':
-		case 'uri-encoded':
-			content = "data:"+mimetype+";base64,"+unescape(content).base64encode();
-		break;
-		case 'none':
-			content = "data:"+mimetype+";base64,"+content.base64encode();
-		break;
-	};
+	var url;
+	if (content instanceof Blob) {
+		url = URL.createObjectURL(blob);
+	} else {
+		if(!encoding)
+			encoding	= 'none';
+		if(!mimetype)
+			mimetype	= "application/x-unknown";
+		switch(encoding) {
+			case 'base64':
+				content = "data:"+mimetype+";base64,"+content;
+			break;
+			case 'file-encoded':
+				// skip;
+			break;
+			case 'chunks':
+			break;
+			case 'escape':
+			case 'uri-encoded':
+				content = "data:"+mimetype+";base64,"+unescape(content).base64encode();
+			break;
+			case 'none':
+				content = "data:"+mimetype+";base64,"+content.base64encode();
+			break;
+		};
+		url = dataURItoBlobUrl(content,mimetype).url;
+	}
 	var i = getRandId('donwload-link');
 	var p = _();
-	p.E('a').Et(document.body).V({href:dataURItoBlobUrl(content,mimetype).url,id:i}).v({download:filename})._().click();
+	p.E('a').Et(document.body).V({href:url,id:i}).v({download:filename})._().click();
 	var f = function () {
 		p.I(i).D();
 	};
-	setTimeout(f,2000);
+	setTimeout(f,10);
 	return false;
 };
 
