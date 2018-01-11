@@ -1848,7 +1848,7 @@ _public.fn.IframeAddContent	= function (iframe,content){var doc = null,win=null;
 _public.fn.downloadFile = function (filename,content,encoding,mimetype) {
 	var url;
 	if (content instanceof Blob) {
-		url = URL.createObjectURL(blob);
+		url = URL.createObjectURL(content);
 	} else {
 		if(!encoding)
 			encoding	= 'none';
