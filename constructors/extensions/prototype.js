@@ -277,7 +277,7 @@ if (document)
 						try {
 							this.attrdatastore[attr[i].name.replace(/^attrf\-/, '').replace(/-./g, function (m) {
 								return m.charAt(1).toUpperCase();
-							})]	= new Function("return ( " + attr[i].value + " );").bind(this);
+							})]	= new Function("return ( " + attr[i].value + " );").bind(this)();
 						} catch (er) {}
 					} else if (attr[i].name.match(/^data\-/)) {
 						if (typeof(this.attrdatastore.__dataset === "undefined")) {
