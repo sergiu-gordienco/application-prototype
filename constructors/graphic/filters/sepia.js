@@ -12,11 +12,11 @@ module.exports = function (imageData, value, destImageData) {
 
 	for (var i = 0; i < data.length; i += 4) {
         // red
-        data[i] = Math.min(255, (dA[i] * (1 - (0.61 * adjust))) + (dA[i+1] * (0.77 * adjust)) + (dA[i+2] * (0.19 * adjust)));
+        data[i] = Math.min(255, (dA[i] * (1 - (0.61 * value))) + (dA[i+1] * (0.77 * value)) + (dA[i+2] * (0.19 * value)));
         // green
-        data[i+1] = Math.min(255, (dA[i] * (0.35 * adjust)) + (dA[i+1] * (1 - (0.31 * adjust))) + (dA[i+2] * (0.17 * adjust)));
+        data[i+1] = Math.min(255, (dA[i] * (0.35 * value)) + (dA[i+1] * (1 - (0.31 * value))) + (dA[i+2] * (0.17 * value)));
         // blue
-        data[i+2] = Math.min(255, (dA[i] * (0.27 * adjust)) + (dA[i+1] * (0.53 * adjust)) + (dA[i+2] * (1 - (0.87 * adjust))));
+        data[i+2] = Math.min(255, (dA[i] * (0.27 * value)) + (dA[i+1] * (0.53 * value)) + (dA[i+2] * (1 - (0.87 * value))));
         data[i + 3] = dA[i + 3];
     }
     
