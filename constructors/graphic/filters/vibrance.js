@@ -7,11 +7,11 @@ module.exports = function (imageData, value, destImageData) {
 	var data = destImageData.data;
     
     var amt, avg, max;
-    max = Math.max(rgba.r, rgba.g, rgba.b);
-    avg = (rgba.r + rgba.g + rgba.b) / 3;
-    amt = ((Math.abs(max - avg) * 2 / 255) * value * -1);
-
+    
 	for (var i = 0; i < data.length; i += 4) {
+        max = Math.max(dA[i], dA[i+1], dA[i+2]);
+        avg = (dA[i] + dA[i+1] + dA[i+2]) / 3;
+        amt = ((Math.abs(max - avg) * 2 / 255) * value * -1);
         data[i]     = dA[i] !== max ? ( (max - dA[i]) * amt ) : dA[i];     // red
         data[i + 1] = dA[i+1] !== max ? ( (max - dA[i+1]) * amt ) : dA[i+1]; // green
         data[i + 2] = dA[i+2] !== max ? ( (max - dA[i+2]) * amt ) : dA[i+2]; // blue
