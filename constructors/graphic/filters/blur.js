@@ -1,4 +1,4 @@
-module.exports = function ( imageData, offset, destImageData, alpha ) {
+module.exports = function ( imageData, offset, alpha ) {
 	// TODO refactor
 	if (offset === 0) return imageData;
 	var canvas = document.createElement('canvas');

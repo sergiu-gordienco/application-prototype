@@ -227,16 +227,15 @@ Same as `Application.require` except that it will import modules from neighbor f
 - Example for a module named "module-a"
 
 ```javascript
-	module.require('render', function (err, function (err, render) {
+	module.require('render', function (err, render) {
 		// `render` required from file "./module-a/render.js"
-	}))
+	})
 ```
 
 ## Retrieving multiple sub-modules
 
 ```javascript
-module.require('render', function (err, function (err, render) {
-	// `render` required from file "./module-a/render.js"
-}))
-
+	module.require('render', function (err, render) {
+		// `render` required from file "./module-a/render.js"
+	})
 ```
