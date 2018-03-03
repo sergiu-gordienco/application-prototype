@@ -12,6 +12,7 @@ module.exports = function (imageData, value, destImageData) {
         data[i]     = value + dA[i];     // red
         data[i + 1] = value + dA[i + 1]; // green
         data[i + 2] = value + dA[i + 2]; // blue
+        data[i + 3] = dA[i + 3];
     }
 
 	return destImageData;

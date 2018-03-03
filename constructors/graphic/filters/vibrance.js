@@ -15,6 +15,7 @@ module.exports = function (imageData, value, destImageData) {
         data[i]     = dA[i] !== max ? ( (max - dA[i]) * amt ) : dA[i];     // red
         data[i + 1] = dA[i+1] !== max ? ( (max - dA[i+1]) * amt ) : dA[i+1]; // green
         data[i + 2] = dA[i+2] !== max ? ( (max - dA[i+2]) * amt ) : dA[i+2]; // blue
+        data[i + 3] = dA[i + 3];
     }
 
 	return destImageData;

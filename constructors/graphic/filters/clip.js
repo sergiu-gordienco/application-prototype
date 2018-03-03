@@ -12,6 +12,7 @@ module.exports = function (imageData, value, destImageData) {
         data[i]     = ( dA[i] > 255 - value ) ? 255 : 0;     // red
         data[i + 1] = ( dA[i+1] > 255 - value ) ? 255 : 0 // green
         data[i + 2] = ( dA[i+2] > 255 - value ) ? 255 : 0; // blue
+        data[i + 3] = dA[i + 3];
     }
 
 	return destImageData;

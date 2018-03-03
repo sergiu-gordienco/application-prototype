@@ -12,6 +12,7 @@ module.exports = function (imageData, value, destImageData) {
         data[i]     = Math.pow(dA[i] / 255, value) * 255;     // red
         data[i + 1] = Math.pow(dA[i + 1] / 255, value) * 255; // green
         data[i + 2] = Math.pow(dA[i + 2] / 255, value) * 255; // blue
+        data[i + 3] = dA[i + 3];
     }
 
 	return destImageData;
