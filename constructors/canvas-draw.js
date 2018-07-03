@@ -15,6 +15,10 @@ module.exports = function (canvas) {
 			return i.toString(36) + '_' + Math.floor(Math.random() * 1000000000).toString(36);
 		};
 	})());
+	var config      = {
+		debug : false
+	};
+
 	var resource	= {
 		/**
 	 	* set of canvas paths
@@ -24,6 +28,13 @@ module.exports = function (canvas) {
 		animationStatus : false,
 		animationRequest: false
 	};
+
+	app.bind("debug", function (status) {
+		if (typeof(status) !== "undefined") {
+			config.debug = !!status;
+		}
+		return config.debug;
+	})
 
 	app.bind("context", function () {
 		return context;
@@ -42,6 +53,7 @@ module.exports = function (canvas) {
 			isReady : true,
 			groups  : [],
 			coords  : [],
+			vars    : {},
 			operations  : []
 		};
 		((function () {
@@ -50,11 +62,33 @@ module.exports = function (canvas) {
 				config[i]   = conf[i];
 			}
 		})());
+
+		if (!Array.isArray(config.operations)) config.operations = [];
+
+		config.operations = config.operations.map(function (operation) {
+			if (!operation) return null;
+
+			if (typeof(operation) !== "object") return null;
+
+			if (!operation.operation) return null;
+
+			if (typeof(operation.group) !== "string") operation.group = "";
+
+			operation.id = operation.id || keyGenerator();
+
+			return operation;
+		}).filter(function (operation) {
+			return !!operation;
+		});
+
 		path.bind("app", function () {
 			return app;
 		}, "");
 		path.bind("config", function () {
 			return config;
+		}, "");
+		path.bind("vars", function () {
+			return config.vars;
 		}, "");
 		path.bind("groups", function () {
 			return config.groups;
@@ -67,7 +101,7 @@ module.exports = function (canvas) {
 		}, "");
 		path.bind("operationsRemoveById", function (key) {
 			config.operations = config.operations.filter(function (operation) {
-				return operation.key === key;
+				return operation.id === key;
 			});
 			return config.operations;
 		}, "");
@@ -77,7 +111,7 @@ module.exports = function (canvas) {
 		});
 		path.bind("operationById", function (id) {
 			return config.operations.filter(function (operation) {
-				return operation.key === id;
+				return operation.id === id;
 			})[0];
 		}, "");
 		path.bind("operationsByGroup", function (group) {
@@ -89,7 +123,7 @@ module.exports = function (canvas) {
 			var i;
 			var index = false;
 			for (i=0;i<config.operations.length;i++) {
-				if (config.operations[i].key === key) {
+				if (config.operations[i].id === key) {
 					index   = i;
 				}
 			}
@@ -102,7 +136,7 @@ module.exports = function (canvas) {
 				config.operations.push({
 					operation   : operation,
 					params	  : (params || []),
-					key	 : key || keyGenerator(),
+					id	 : key || keyGenerator(),
 					group	   : group || ""
 				});
 				return path;
@@ -161,12 +195,42 @@ module.exports = function (canvas) {
 			var er;
 			config.operations.forEach(function (operation) {
 				try {
+					var params = typeof(operation.params) === "function" ? (
+						operation.params(path, operation, app)
+					) : operation.params;
 					if (typeof(operation.operation) === "function") {
-						operation.operation.apply(path, operation.params);
+						if (app.debug()) {
+							console.log("Operation: operations[" + operation.id + "](", (
+								typeof(operation.params) === "function" ? (
+									"@Function"
+								) : ""
+							), params + ")");
+						}
+						operation.operation.apply(
+							path,
+							params || []
+						);
 					} else if (typeof(context[operation.operation]) === "function") {
-						context[operation.operation].apply(context, operation.params);
+						if (app.debug()) {
+							console.log("Operation: Context." + operation.operation + "(", (
+								typeof(operation.params) === "function" ? (
+									"@Function"
+								) : ""
+							), params, ")");
+						}
+						context[operation.operation].apply(
+							context,
+							params || []
+						);
 					} else {
-						context[operation.operation]	= operation.params;
+						if (app.debug()) {
+							console.log("Operation: Context." + operation.operation + " = ", (
+								typeof(operation.params) === "function" ? (
+									"@Function"
+								) : ""
+							), params);
+						}
+						context[operation.operation]	= params;
 					}
 				} catch (er) {
 					console.error(er);

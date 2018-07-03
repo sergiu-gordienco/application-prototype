@@ -23,7 +23,7 @@ global.require("devices/getUserMedia", function (getUserMedia) {
 			return config.loadTimeout;
 		},
 		loadVideo	: function (stream, video, cb) {
-			video.src = window.URL.createObjectURL(stream);
+			video.srcObject = stream;
 			var runned	= false;
 			video.onloadedmetadata = function(e) {
 				if (!runned) {
