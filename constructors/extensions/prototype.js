@@ -46,7 +46,7 @@ module.exports =
 		if (document)
 		eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--)r[e(c)]=k[c]||e(c);k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('(5(){1(!8.3.6){2 g=[];2 h=5(a,b){2 c=4;2 d=5(e){e.A=e.q;e.B=c;1(b.r){b.r(e)}9{b.C(c,e)}};1(a=="s"){2 f=5(e){1(j.t=="u"){d(e)}};j.v("w",f);g.x({k:4,l:a,m:b,7:f});1(j.t=="u"){2 e=D E();e.q=F;f(e)}}9{4.v("y"+a,d);g.x({k:4,l:a,m:b,7:d})}};2 i=5(a,b){2 c=0;G(c<g.H){2 d=g[c];1(d.k==4&&d.l==a&&d.m==b){1(a=="s"){4.z("w",d.7)}9{4.z("y"+a,d.7)}I}++c}};8.3.6=h;8.3.n=i;1(o){o.3.6=h;o.3.n=i}1(p){p.3.6=h;p.3.n=i}}})();',45,45,'|if|var|prototype|this|function|addEventListener|wrapper|Element|else||||||||||document|object|type|listener|removeEventListener|HTMLDocument|Window|srcElement|handleEvent|DOMContentLoaded|readyState|complete|attachEvent|onreadystatechange|push|on|detachEvent|target|currentTarget|call|new|Event|window|while|length|break'.split('|'),0,{}))
 	} catch (er) { console.warn("[warn]", er) }
-	
+
 	/**
 	 * window.addEvent(elem, type, handler)
 	 * window.removeEvent(elem, type, handlerId)
@@ -1452,7 +1452,16 @@ o.toArrayBufferFromUtf8	= function () {
 	return buf;
 };
 var i;for(i in o) {
-	String.prototype[i]=o[i];
+	Object.defineProperty(
+		String.prototype,
+		i,
+		{
+			value: o[i],
+			writable: false,
+			configurable: true,
+			enumerable: false
+		}
+	);
 }
 })());
 
@@ -1632,114 +1641,198 @@ var i;for(i in o) {
 		}
 	};
 	o.indexOfSect	= o.indexOf;
-	var i;for(i in o) if (!(i in Array.prototype)) Array.prototype[i]=o[i];
+	var i;for(i in o) {
+		if (!(i in Array.prototype)) {
+			Object.defineProperty(
+				Array.prototype,
+				i,
+				{
+					value: o[i],
+					writable: false,
+					configurable: true,
+					enumerable: false
+				}
+			);
+		}
+	};
 })());
 
 ;((function () {
 	if (typeof(ArrayBuffer) !== "undefined") {
-		ArrayBuffer.prototype.toStringUtf8	= function () {
-			return (String.fromCharCode.apply(null, new Uint8Array(this))).utf8decode();
-		};
+		Object.defineProperty(
+			ArrayBuffer.prototype,
+			'toStringUtf8',
+			{
+				value : function () {
+					return (String.fromCharCode.apply(null, new Uint8Array(this))).utf8decode();
+				},
+				writable: false,
+				configurable: true,
+				enumerable: false
+			}
+		);
 	}
 	if (typeof(Buffer) !== "undefined") {
-		Buffer.prototype.toStringUtf8	= function () {
-			return (String.fromCharCode.apply(null, new Uint8Array(this))).utf8decode();
-		};
+		Object.defineProperty(
+			Buffer.prototype,
+			'toStringUtf8',
+			{
+				value : function () {
+					return (String.fromCharCode.apply(null, new Uint8Array(this))).utf8decode();
+				},
+				writable: false,
+				configurable: true,
+				enumerable: false
+			}
+		);
 	}
-	Array.prototype.toStringUtf8	= function () {
-		return (String.fromCharCode.apply(null, new Uint8Array(this))).utf8decode();
-	};
+
+	Object.defineProperty(
+		Array.prototype,
+		'toStringUtf8',
+		{
+			value : function () {
+				return (String.fromCharCode.apply(null, new Uint8Array(this))).utf8decode();
+			},
+			writable: false,
+			configurable: true,
+			enumerable: false
+		}
+	);
 })());
 
 if (typeof(Blob) !== "undefined")
 ((function () {
-	Blob.prototype.toArrayBuffer	= function (cb) {
-		var er, err;
-		try {
-			var reader = new FileReader();
-			reader.addEventListener("loadend", function() {
-				var er;
+	Object.defineProperty(
+		Blob.prototype,
+		'toArrayBuffer',
+		{
+			value : function (cb) {
+				var er, err;
 				try {
-					cb(undefined, reader.result);
-				} catch (er) {};
-				// reader.result contains the contents of blob as a typed array
-			});
-			reader.addEventListener("error", function (evt) {
-				var er;
-				try {
-					cb(evt);
-				} catch (er) {};
-			});
-			reader.readAsArrayBuffer(this);
-		} catch (err) { er = err; };
-		if (typeof(er) !== "undefined") {
-			try {
-				cb(er);
-			} catch (er) {};
+					var reader = new FileReader();
+					reader.addEventListener("loadend", function() {
+						var er;
+						try {
+							cb(undefined, reader.result);
+						} catch (er) {};
+						// reader.result contains the contents of blob as a typed array
+					});
+					reader.addEventListener("error", function (evt) {
+						var er;
+						try {
+							cb(evt);
+						} catch (er) {};
+					});
+					reader.readAsArrayBuffer(this);
+				} catch (err) { er = err; };
+				if (typeof(er) !== "undefined") {
+					try {
+						cb(er);
+					} catch (er) {};
+				}
+			},
+			writable: false,
+			configurable: true,
+			enumerable: false
 		}
-	};
+	);
 })());
 
 ;(function () {
-	Function.prototype.toWorkerURL = function () {
-		var func = this;
-		var call = function (self) {
-			var run;
-			self.addEventListener("message", function (ev) {
-				run(ev.data, function (res) {
-					self.postMessage(res);
-				})
+	var options = {
+		toWorkerURL : function () {
+			var func = this;
+			var call = function (self) {
+				var run;
+				self.addEventListener("message", function (ev) {
+					run(ev.data, function (res) {
+						self.postMessage(res);
+					})
+				});
+			};
+
+			var code = ";("+call.toString().replace('var run;', 'var run = '+func.toString()+';')+")(self);";
+			var blob = new Blob([code], { type: "text/javascript" });
+			var url = URL.createObjectURL(blob);
+			return url;
+		},
+		toWorker : function () {
+			var func = this;
+			var url = func.toWorkerURL();
+			var worker = new Worker(url);
+			worker._terminate = worker.terminate;
+			worker.terminate = function () {
+				worker._terminate();
+				URL.revokeObjectURL(url);
+			}
+			return worker;
+		},
+		runInWorker : function (data, cb, keep) {
+			var func = this;
+			var url = func.toWorkerURL();
+			var worker = new Worker(url);
+			worker._terminate = worker.terminate;
+			worker.terminate = function () {
+				worker._terminate();
+				URL.revokeObjectURL(url);
+			};
+			worker.addEventListener("message", function (ev) {
+				cb(ev.data, ev);
+				if (!keep) worker.terminate();
 			});
-		};
-
-		var code = ";("+call.toString().replace('var run;', 'var run = '+func.toString()+';')+")(self);";
-		var blob = new Blob([code], { type: "text/javascript" });
-		var url = URL.createObjectURL(blob);
-		return url;
-	};
-
-
-	Function.prototype.toWorker = function () {
-		var func = this;
-		var url = func.toWorkerURL();
-		var worker = new Worker(url);
-		worker._terminate = worker.terminate;
-		worker.terminate = function () {
-			worker._terminate();
-			URL.revokeObjectURL(url);
+			worker.postMessage(data);
+			return worker;
 		}
-		return worker;
 	};
 
-	Function.prototype.runInWorker = function (data, cb, keep) {
-		var func = this;
-		var url = func.toWorkerURL();
-		var worker = new Worker(url);
-		worker._terminate = worker.terminate;
-		worker.terminate = function () {
-			worker._terminate();
-			URL.revokeObjectURL(url);
-		};
-		worker.addEventListener("message", function (ev) {
-			cb(ev.data, ev);
-			if (!keep) worker.terminate();
-		});
-		worker.postMessage(data);
-		return worker;
-	};
+	var property;
+	for (property in options) {
+		if (!(property in Function.prototype)) {
+			Object.defineProperty(
+				Function.prototype,
+				property,
+				{
+					value : options[property],
+					writable: false,
+					configurable: true,
+					enumerable: false
+				}
+			);
+		}
+	}
+
 })();
 
 if (typeof(Event) !== "undefined")
 ((function () {
 	if (!Event.prototype.preventDefault) {
-			Event.prototype.preventDefault=function() {
-				this.returnValue=false;
-			};
-		}
+		Object.defineProperty(
+			Event.prototype,
+			'preventDefault',
+			{
+				value : function() {
+					this.returnValue=false;
+				},
+				writable: false,
+				configurable: true,
+				enumerable: false
+			}
+		);
+	}
 	if (!Event.prototype.stopPropagation) {
-		Event.prototype.stopPropagation=function() {
-			this.cancelBubble=true;
-		};
+		Object.defineProperty(
+			Event.prototype,
+			'stopPropagation',
+			{
+				value : function() {
+					this.cancelBubble=false;
+				},
+				writable: false,
+				configurable: true,
+				enumerable: false
+			}
+		);
 	}
 })());
 ((function(){
@@ -1753,7 +1846,16 @@ if (typeof(Event) !== "undefined")
 			return ( odd ? ( r.length % 2 ? '0'+r : r ) : r );
 		}
 	};
-	var i;for(i in o)Number.prototype[i]=o[i];
+	var i;for(i in o) if (!(i in Number.prototype)) Object.defineProperty(
+		Number.prototype,
+		i,
+		{
+			value : o[i],
+			writable: false,
+			configurable: true,
+			enumerable: false
+		}
+	);
 })());
 
 var Sha1 = {hash : function(msg, utf8encode) {utf8encode = (typeof utf8encode == 'undefined') ? true : utf8encode;if (utf8encode) msg = (''+msg).utf8encode();var K = [0x5a827999, 0x6ed9eba1, 0x8f1bbcdc, 0xca62c1d6];msg += String.fromCharCode(0x80);var l = msg.length/4 + 2;var N = Math.ceil(l/16);var M = new Array(N);for (var i=0; i<N; i++) {M[i] = new Array(16);for (var j=0; j<16; j++) M[i][j] = (msg.charCodeAt(i*64+j*4)<<24) | (msg.charCodeAt(i*64+j*4+1)<<16) | (msg.charCodeAt(i*64+j*4+2)<<8) | (msg.charCodeAt(i*64+j*4+3));};M[N-1][14] = ((msg.length-1)*8) / Math.pow(2, 32); M[N-1][14] = Math.floor(M[N-1][14]);M[N-1][15] = ((msg.length-1)*8) & 0xffffffff;var H0 = 0x67452301;var H1 = 0xefcdab89;var H2 = 0x98badcfe;var H3 = 0x10325476;var H4 = 0xc3d2e1f0;var W = new Array(80); var a, b, c, d, e;for (var i=0; i<N; i++) {for (var t=0;	t<16; t++) W[t] = M[i][t];for (var t=16; t<80; t++) W[t] = Sha1.ROTL(W[t-3] ^ W[t-8] ^ W[t-14] ^ W[t-16], 1);a = H0; b = H1; c = H2; d = H3; e = H4;for (var t=0; t<80; t++){var s = Math.floor(t/20);var T = (Sha1.ROTL(a,5) + Sha1.f(s,b,c,d) + e + K[s] + W[t]) & 0xffffffff;e = d;d = c;c = Sha1.ROTL(b, 30);b = a;a = T;};H0 = (H0+a) & 0xffffffff;H1 = (H1+b) & 0xffffffff;H2 = (H2+c) & 0xffffffff;H3 = (H3+d) & 0xffffffff;H4 = (H4+e) & 0xffffffff;};return Sha1.toHexStr(H0) + Sha1.toHexStr(H1) + Sha1.toHexStr(H2) + Sha1.toHexStr(H3) + Sha1.toHexStr(H4);},f:function(s, x, y, z){switch (s) {case 0: return (x & y) ^ (~x & z);case 1: return x ^ y ^ z;case 2: return (x & y) ^ (x & z) ^ (y & z);case 3: return x ^ y ^ z;}},ROTL:function(x, n){return (x<<n) | (x>>>(32-n));},toHexStr:function(n){var s="", v;for (var i=7; i>=0; i--) { v = (n>>>(i*4)) & 0xf; s += v.toString(16); };return s;}};
@@ -2076,7 +2178,7 @@ if (document)
 	} else {
 		console.warn("Unable to insert slDOM into Window since it is already busy");
 	}
-	
+
 	if (typeof(window.__) === "undefined") {
 		window.__	= _public.__;
 	} else {

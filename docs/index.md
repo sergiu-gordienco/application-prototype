@@ -122,7 +122,7 @@ app.emit("afterRender", [param1, param2]);
 
 # Documentation not ready
 
-Example of initialization
+Example of initialization in a browser envirorment
 
 ```javascript
 var App;

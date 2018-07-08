@@ -15,9 +15,9 @@ sudo npm install -g application-prototype
 
 ## Present Objects
 
-- **ApplicationPrototype** - a builder for application design pattern ;
+- [**ApplicationPrototype**](docs/index.md) - a builder for application design pattern ;
   *Documentation* [here](docs/index.md)
-- **ApplicationBuilder** - a builder for application design pattern that requires a lot of custom dependencies ;
+- [**ApplicationBuilder**](docs/index.md#applicationbuilder) - a builder for application design pattern that requires a lot of custom dependencies ;
   *Documentation* [here](docs/index.md#applicationbuilder)
 
 ## Present modules / libraries
