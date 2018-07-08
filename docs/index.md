@@ -122,7 +122,57 @@ app.emit("afterRender", [param1, param2]);
 
 # Documentation not ready
 
-Sorry, but you may help.
+Example of initialization
+
+```javascript
+var App;
+((function () {
+	var AppInitialized = new Promise(function (resolve, reject) {
+		App	= new ApplicationBuilder({
+			onconstruct	: function () {
+				console.log("Constructor", this, arguments);
+			},
+			onready	: function () {
+				var App	= this;
+				// path from where will be requested default packages
+				App.modulePath('/components/app-prototype/constructors');
+				App.cacheEnabled(false);
+				App.debugEnabled(true);
+
+				// load 2 default packages
+				App.require([
+					"extensions/prototype",
+
+					// package "lib" is going to register location of all default packages
+					"lib"
+				], function (libs) {
+					// load lib to register location of default
+					// packages before change App.modulePath
+					libs.lib();
+
+					App.bind("ePrototype", function () {
+						return libs["extensions/prototype"];
+					});
+
+					// change modulePath to your default packages
+					App.modulePath('/scripts/modules/');
+
+					resolve(App);
+				});
+			}
+		});
+	});
+
+	window.Application = function (cb) {
+		AppInitialized.then(function () {
+			cb(App);
+		}, function (err) {
+			console.error(err);
+		});
+	};
+})());
+
+```
 
 ## Contribution
 if you find code interesting you may participate by updating documentation using pull request or mail messages to [sergiu.gordienco@gmail.com](mailto:sergiu.gordienco@gmail.com)
@@ -134,15 +184,25 @@ It is a polyfill for Promise constructors
 
 more documentation on [Promise - Mozilla | MDN](https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/Promise.jsm/Promise)
 
-## Application.cacheEnabled
+## Application.cacheEnabled( `true` or `false` )
 
-## Application.debugEnabled
+Enable / disable browser's cache for ApplicationBuilder
+
+## Application.debugEnabled( `true` or `false` )
+
+If it is enabled it, increase verbosity for ApplicationBuilder Framework
 
 ## Application.modulePath
 
+Defines the location from where will downloaded requested modules
+
 ## Application.moduleRegister
 
+`@TODO - documentation in progress`
+
 ## Application.moduleResolve
+
+`@TODO - documentation in progress`
 
 ## Application.require
 
@@ -196,9 +256,15 @@ Application.require([
 
 @TODO documentation not ready
 
-### module.cache
+### module.cache()
 
-### module.resourceUrl
+Returns an object that will be common for all modules from same path.
+
+### module.resourceUrl( path )
+
+Returns an URL like `modules.path + path`,
+
+For example for module `test` from `/scripts/modules/test.js` the `module.resourceUrl('style.css')` will result as `/scripts/modules/test/style.css`
 
 ### module.meta
 
