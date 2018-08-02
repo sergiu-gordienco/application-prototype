@@ -13,15 +13,15 @@ module.exports =
 
 	if (typeof(window) === "undefined") {
 		window = {};
-		console.warn("Not a Browser Space, window doesn't exist");
+		// console.warn("Not a Browser Space, window doesn't exist");
 	}
 	if (typeof(document) === "undefined") {
 		document = null;
-		console.warn("Not a Browser Space, document not found");
+		// console.warn("Not a Browser Space, document not found");
 	}
 	if (typeof(navigator) === "undefined") {
 		navigator = { userAgent: "Node Server" };
-		console.warn("Not a Browser Space, navigator not found");
+		// console.warn("Not a Browser Space, navigator not found");
 	}
 
 
@@ -1446,7 +1446,7 @@ o.unicode = o.utf8decode;
 o.toArrayBufferFromUtf8	= function () {
 	var buf = new ArrayBuffer(this.length*2); // 2 bytes for each char
 	var bufView = new Uint16Array(buf);
-	for (var i=0, strLen=this.length; i<strLen; i++) {
+	for (var i=0, strLen=this.length; i < strLen; i++) {
 		bufView[i] = this.charCodeAt(i);
 	}
 	return buf;

@@ -13,6 +13,7 @@ var paramsParse	= function (v, s, opts) {
 	var boud	= (opts.boud || '\x02\x00\x00\x03');
 	var tableIndex	= (opts.tableIndex || []);
 	var pRegExp	= ( opts.pRegExp || /\:([a-z][a-z0-9]+)/gi );
+	var fixedEnd = ( opts.fixedEnd === false ? false : true );
 	var pCleaner	= function (idx, parts) {
 		idx.push(parts[1]);
 		return true;
@@ -33,9 +34,14 @@ var paramsParse	= function (v, s, opts) {
 		}
 	});
 	var rboud	= new RegExp(boud.toHex().replace(/(.{2})/g,'\\x$1'), "g")
-	var matches = v.match(new RegExp(s.split(matchGroup).map(function (v) {
-		return v.replace(rboud, matchGroup).toHex().replace(/(.{2})/g,'\\x$1');
-	}).join(matchGroup), ""));
+	var matches = v.match(
+		new RegExp(
+			s.split(matchGroup).map(function (v) {
+				return v.replace(rboud, matchGroup).toHex().replace(/(.{2})/g,'\\x$1');
+			}).join(matchGroup) + ( fixedEnd ? "$" : ""),
+			""
+		)
+	);
 	if (!matches) return null;
 	if (!r) var r = {};
 	tableIndex.forEach(function (v, k) {
