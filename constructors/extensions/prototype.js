@@ -1983,7 +1983,8 @@ _public.fn.downloadFile = function (filename,content,encoding,mimetype) {
 	}
 	var i = getRandId('donwload-link');
 	var p = _();
-	p.E('a').Et(document.body).V({href:url,id:i}).v({download:filename})._().click();
+	if (filename === undefined) filename = "attachment.dat";
+	p.E('a').Et(document.body).V({href:url,id:i, download:filename }).v({download:filename})._().click();
 	var f = function () {
 		p.I(i).D();
 	};
