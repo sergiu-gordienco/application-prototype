@@ -119,7 +119,7 @@ async.flow	= function (ops, cb, timeout) {
 							op[0].apply(op[2] || c, ar);
 						} catch (err) {
 							app.recieve(id, err);
-							app.emit('error', err);
+							app.emit('error', [err]);
 						}
 					}, timeout);
 				}
@@ -164,7 +164,7 @@ async.waterfall	= function (ops, cb, parralel, timeout) {
 							op[0].apply(op[2] || c, ar);
 						} catch (err) {
 							app.recieve(id, err);
-							app.emit('error', err);
+							app.emit('error', [err]);
 						}
 					}, timeout);
 				}
@@ -208,7 +208,7 @@ async.map = async.flow.map	= function (ops, ev, cb, timeout) {
 				var rr	= function (v, err) {
 					if (err) {
 						app.recieve(id, err);
-						app.emit('error', err);
+						app.emit('error', [err]);
 					} else {
 						ret[ri]	= v;
 						app.recieve();
@@ -220,7 +220,7 @@ async.map = async.flow.map	= function (ops, ev, cb, timeout) {
 						ev.apply(ops, [rr, op, ri, ops]);
 					} catch (err) {
 						app.recieve(id, err);
-						app.emit('error', err);
+						app.emit('error', [err]);
 					}
 				}, timeout);
 			}
@@ -260,7 +260,7 @@ async.waterfall.map	= function (ops, ev, cb, parralel, timeout) {
 				var rr	= function (v, err) {
 					if (err) {
 						app.recieve(id, err);
-						app.emit('error', err);
+						app.emit('error', [err]);
 					} else {
 						ret[ri]	= v;
 						app.recieve();
@@ -272,7 +272,7 @@ async.waterfall.map	= function (ops, ev, cb, parralel, timeout) {
 						ev.apply(ops, [rr, op, ri, ops]);
 					} catch (err) {
 						app.recieve(id, err);
-						app.emit('error', err);
+						app.emit('error', [err]);
 					}
 				}, timeout);
 			}
@@ -311,7 +311,7 @@ async.filter = async.flow.filter	= function (ops, ev, cb, timeout) {
 				var rr	= function (v, err) {
 					if (err) {
 						app.recieve(id, err);
-						app.emit('error', err);
+						app.emit('error', [err]);
 					} else {
 						if (v) ret.push(op);
 						app.recieve();
@@ -323,7 +323,7 @@ async.filter = async.flow.filter	= function (ops, ev, cb, timeout) {
 						ev.apply(ops, [rr, op, ri, ops]);
 					} catch (err) {
 						app.recieve(id, err);
-						app.emit('error', err);
+						app.emit('error', [err]);
 					}
 				}, timeout);
 			}
@@ -362,7 +362,7 @@ async.waterfall.filter	= function (ops, ev, cb, parralel, timeout) {
 				var rr	= function (v, err) {
 					if (err) {
 						app.recieve(id, err);
-						app.emit('error', err);
+						app.emit('error', [err]);
 					} else {
 						if (v) ret.push(op);
 						app.recieve();
@@ -374,7 +374,7 @@ async.waterfall.filter	= function (ops, ev, cb, parralel, timeout) {
 						ev.apply(ops, [rr, op, ri, ops]);
 					} catch (err) {
 						app.recieve(id, err);
-						app.emit('error', err);
+						app.emit('error', [err]);
 					}
 				}, timeout);
 				return true;
@@ -416,7 +416,7 @@ async.forEach = async.flow.forEach	= function (ops, ev, cb, timeout) {
 				var rr	= function (err) {
 					if (err) {
 						app.recieve(id, err);
-						app.emit('error', err);
+						app.emit('error', [err]);
 					} else {
 						app.recieve();
 					}
@@ -427,7 +427,7 @@ async.forEach = async.flow.forEach	= function (ops, ev, cb, timeout) {
 						ev.apply(ops, [rr, op, ri, ops]);
 					} catch (err) {
 						app.recieve(id, err);
-						app.emit('error', err);
+						app.emit('error', [err]);
 					}
 				}, timeout);
 				return true;
@@ -467,7 +467,7 @@ async.waterfall.forEach	= function (ops, ev, cb, parralel, timeout) {
 				var rr	= function (err) {
 					if (err) {
 						app.recieve(id, err);
-						app.emit('error', err);
+						app.emit('error', [err]);
 					} else {
 						app.recieve();
 					}
@@ -478,7 +478,7 @@ async.waterfall.forEach	= function (ops, ev, cb, parralel, timeout) {
 						ev.apply(ops, [rr, op, ri, ops]);
 					} catch (err) {
 						app.recieve(id, err);
-						app.emit('error', err);
+						app.emit('error', [err]);
 					}
 				}, timeout);
 				return true;
