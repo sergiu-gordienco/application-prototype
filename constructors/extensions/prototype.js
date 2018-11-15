@@ -169,7 +169,10 @@ module.exports =
 			config: {}
 		};
 		MouseMove.config.tracking = true;
-		MouseMove.event = undefined;
+		MouseMove.event = {
+			pageX : 0,
+			pageY : 0
+		};
 		document.addEventListener("mousemove", function (e) {
 			if (MouseMove.config.tracking) {
 				MouseMove.event	= e;
