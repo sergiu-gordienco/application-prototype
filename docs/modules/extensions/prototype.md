@@ -406,6 +406,19 @@ Example:
 	// returns an array that is equal to a
 ```
 
+#### Blob method toURL
+
+```js
+	Blob.prototype.URL : function (options) { /*...*/ return url_str;}
+```
+Example:
+```js
+	var a = new Blob(["test"], { type: "text/css" });
+
+	var url = a.toURL();
+	var url_text_plain = a.toURL({ type: "text/plain" })
+```
+
 ***
 ### Array prototype
 
@@ -433,6 +446,51 @@ Example:
 	Array.prototype.splitSect	= function(elem, num) {
 		return this.split(elem, (num || 0), "indexOfSect");
 	},
+```
+
+#### Array to Blob » array of bytes to Blob
+```javascript
+	Array.prototype.toBlob = function (mimetype, sliceSize) {
+		return _public.fn.base64toBlob(
+			this.base64encode(),
+			mimetype || this.type || "application/octet-binary",
+			sliceSize
+		);
+	};
+```
+#### Array to base64 » array of bytes to base64 String
+```javascript
+	Array.prototype.base64encode = function () {
+		return this.toBinaryString().base64encode();
+	}
+```
+
+#### Array to binary » array of bytes to Binary String
+```javascript
+	Array.prototype.toBinaryString = function () {
+		return this.toBytesBinary().join('');
+	}
+```
+
+#### Array to binary array » array of bytes to array of binary string
+```javascript
+	Array.prototype.toBytesBinary = function () {
+		return this.map(function (byte) { return unescape('%' + ( v < 16 ? '0' : '' ) + v.toString(16)); });
+	}
+```
+
+#### Array to array escaped » array of bytes to array of binary string escaped
+```javascript
+	Array.prototype.toBytesEscaped = function () {
+		return this.map(function (byte) { return '%' + ( v < 16 ? '0' : '' ) + v.toString(16); });
+	}
+```
+
+#### Array to array of hex » array of bytes to array of hex strings
+```javascript
+	Array.prototype.bytesToHex = function() {
+	return this.map(function (byte) { return ( v < 16 ? '0' : '' ) + v.toString(16); });
+}
 ```
 
 #### Convert a Array to an parameter object

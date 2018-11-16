@@ -1529,6 +1529,28 @@ var i;for(i in o) {
 		"splitSect"		: function(elem, num) {
 			return this.split(elem, (num || 0), "indexOfSect");
 		},
+		"toBlob" : function (mimetype, sliceSize) {
+			return _public.fn.base64toBlob(
+				this.base64encode(),
+				mimetype || this.type || "application/octet-binary",
+				sliceSize
+			);
+		},
+		"base64encode" : function () {
+			return this.toBinaryString().base64encode();
+		},
+		"toBinaryString" : function () {
+			return this.toBytesBinary().join('');
+		},
+		"toBytesBinary" : function () {
+			return this.map(function (byte) { return unescape('%' + ( v < 16 ? '0' : '' ) + v.toString(16)); });
+		},
+		"toBytesEscaped" : function () {
+			return this.map(function (byte) { return '%' + ( v < 16 ? '0' : '' ) + v.toString(16); });
+		},
+		"bytesToHex"    : function() {
+			return this.map(function (byte) { return ( v < 16 ? '0' : '' ) + v.toString(16); });
+		},
 		"toParamObj"	: function() { var o = {};this.forEach(function(e,i,a) { if( i % 2 == 0 ) o[e] = ( i == a.length-1 ? null : a[i+1] ); });return o; },
 		"resetArray"	: function() {return this.filter(function(v) { return ( typeof(v) != "undefined" ); })},
 		"indexOf" : function (searchElement, fromIndex) {
@@ -1734,6 +1756,18 @@ if (typeof(Blob) !== "undefined")
 						cb(er);
 					} catch (er) {};
 				}
+			},
+			writable: false,
+			configurable: true,
+			enumerable: false
+		}
+	);
+	Object.defineProperty(
+		Blob.prototype,
+		'toURL',
+		{
+			value : function (options) {
+				return URL.createObjectURL(this, options || { type: this.type || "application/octet-binary"})
 			},
 			writable: false,
 			configurable: true,

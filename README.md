@@ -55,6 +55,10 @@ sudo npm install -g application-prototype
 ## Contribution
 if you find code interesting you may participate by updating documentation using pull request or mail messages to [sergiu.gordienco@gmail.com](mailto:sergiu.gordienco@gmail.com)
 
+### Typedarray polyfill
+
+Used typedarray polyfill from
+[inexorabletash/polyfill](https://github.com/inexorabletash/polyfill)
 
 ## License
 
@@ -64,3 +68,4 @@ Creative Commons License [Creative Commons Attribution-NonCommercial 4.0 Interna
 *JS Application Builder* by [JavaScript Application Builder](http://sgapps.io) is licensed under a [Creative Commons Attribution-NonCommercial 4.0 International License](http://creativecommons.org/licenses/by-nc/4.0/).
 Based on a work at [http://sgapps.io](http://sgapps.io).
 Permissions beyond the scope of this license may be available at [http://sgapps.io](http://sgapps.io).
+
