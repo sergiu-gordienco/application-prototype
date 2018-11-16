@@ -1543,13 +1543,13 @@ var i;for(i in o) {
 			return this.toBytesBinary().join('');
 		},
 		"toBytesBinary" : function () {
-			return this.map(function (byte) { return unescape('%' + ( v < 16 ? '0' : '' ) + v.toString(16)); });
+			return this.map(function (v) { return unescape('%' + ( v < 16 ? '0' : '' ) + v.toString(16)); });
 		},
 		"toBytesEscaped" : function () {
-			return this.map(function (byte) { return '%' + ( v < 16 ? '0' : '' ) + v.toString(16); });
+			return this.map(function (v) { return '%' + ( v < 16 ? '0' : '' ) + v.toString(16); });
 		},
 		"bytesToHex"    : function() {
-			return this.map(function (byte) { return ( v < 16 ? '0' : '' ) + v.toString(16); });
+			return this.map(function (v) { return ( v < 16 ? '0' : '' ) + v.toString(16); });
 		},
 		"toParamObj"	: function() { var o = {};this.forEach(function(e,i,a) { if( i % 2 == 0 ) o[e] = ( i == a.length-1 ? null : a[i+1] ); });return o; },
 		"resetArray"	: function() {return this.filter(function(v) { return ( typeof(v) != "undefined" ); })},

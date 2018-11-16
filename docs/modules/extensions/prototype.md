@@ -475,21 +475,21 @@ Example:
 #### Array to binary array » array of bytes to array of binary string
 ```javascript
 	Array.prototype.toBytesBinary = function () {
-		return this.map(function (byte) { return unescape('%' + ( v < 16 ? '0' : '' ) + v.toString(16)); });
+		return this.map(function (v) { return unescape('%' + ( v < 16 ? '0' : '' ) + v.toString(16)); });
 	}
 ```
 
 #### Array to array escaped » array of bytes to array of binary string escaped
 ```javascript
 	Array.prototype.toBytesEscaped = function () {
-		return this.map(function (byte) { return '%' + ( v < 16 ? '0' : '' ) + v.toString(16); });
+		return this.map(function (v) { return '%' + ( v < 16 ? '0' : '' ) + v.toString(16); });
 	}
 ```
 
 #### Array to array of hex » array of bytes to array of hex strings
 ```javascript
 	Array.prototype.bytesToHex = function() {
-	return this.map(function (byte) { return ( v < 16 ? '0' : '' ) + v.toString(16); });
+	return this.map(function (v) { return ( v < 16 ? '0' : '' ) + v.toString(16); });
 }
 ```
 
