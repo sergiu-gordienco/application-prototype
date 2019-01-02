@@ -33,6 +33,8 @@ loader.list = [
 			'js-template',
 			'lib',
 			'request',
+			'request/http-interceptor',
+			'reqeust/http-cache',
 			'request/params-parser',
 			'uri-load'
 		]
