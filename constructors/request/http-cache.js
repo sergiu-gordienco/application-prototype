@@ -40,19 +40,19 @@ var HTTPCache = function (interceptor, tableName) {
 
 	var database = new databaseStragedy({
 		dbName : "httpCache",
-		tableName : "files"
+		table  : "files"
 	});
 
 	app.bind("urlMatch", function (url, pattern, callback) {
 		if (
 			typeof(pattern) === "string"
 		) {
-			return callback(undefined, !!((
+			return callback(undefined, !!(url.replace(/\?.*$/, '').match((
 				"^" + pattern.toHex()
 					.replace(/(.{2})/g, '\\x$1')
 					.replace(/\\x2a\\x2a/g, '.*')
 					.replace(/\\x2a/g, '.')
-			).toRegexp().match(url)));
+			).toRegexp())));
 		} else if (pattern instanceof RegExp) {
 			callback(undefined, !!pattern.match(url));
 		} else if (typeof(pattern) === "function") {
@@ -93,7 +93,8 @@ var HTTPCache = function (interceptor, tableName) {
 
 		return Application.Promise(function (resolve, reject) {
 			database.initialization.then(function () {
-				database.getItem(url).then(function (content) {
+				database.getItem(url).then(function (ev) {
+					var content = ((((ev || {}).target || {}).result || {}).v || null);
 					if (typeof(content) !== "string") {
 						reject(Error("Incorrect file content"));
 					} else {
@@ -112,14 +113,14 @@ var HTTPCache = function (interceptor, tableName) {
 	app.on("intercept:http:matched", function (xhrProxy, method, url, pattern) {
 		app.findUrl(url).then(function (newUrl) {
 			xhrProxy.transform({ url: newUrl });
-			xhrProxy.replay(false);
+			xhrProxy.replay(true);
 		}, function (err) {
 			app.emit("error:url-find", [err]);
 			xhrProxy.addEventListener("load", function () {
 				if (xhrProxy.responseText) {
 					database.initialization.then(function () {
-						database.getItem(url, xhrProxy.responseText).then(function (content) {
-							app,emit("database:cache:url", [url, xhrProxy.responseText]);
+						database.setItem(url, xhrProxy.responseText).then(function (content) {
+							app.emit("database:cache:url", [url, xhrProxy.responseText]);
 						}, function (err) {
 							app.emit("error:cache-content", [err]);
 						})
@@ -144,7 +145,7 @@ var HTTPCache = function (interceptor, tableName) {
 						} else {
 							if (status) {
 								app.emit("intercept:http:matched", [
-									xhrProxy, method, url, pattern
+									xhrProxy, method, url, cache[method][i-1]
 								]);
 							} else {
 								_next();
@@ -152,17 +153,18 @@ var HTTPCache = function (interceptor, tableName) {
 						}
 					}
 				);
+			} else {
+				xhrProxy.replay(false);
 			}
 		};
 
 		_next();
-		xhrProxy.replay();
 	});
 
-	app.interceptor().on("http:open", function (xhr, method, url) {
-		if (method in cache) {
-			xhr.interupted = true;
-			app.emit("intercept:http", [xhr, method, url]);
+	app.interceptor().on("http:send", function (xhr, data) {
+		if (xhr._method in cache) {
+			xhr.interupt = true;
+			app.emit("intercept:http", [xhr, xhr._method, xhr.requestURL]);
 			return false;
 		}
 	});
@@ -171,14 +173,16 @@ var HTTPCache = function (interceptor, tableName) {
 		app.interceptor().start();
 	}
 
-	app;
+	return app;
 };
 
-Application.require("browser-session/stratey/indexed-db", function () {
-	databaseStragedy = arguments[0];
+Application.require("extensions/prototype", function () {
+	Application.require("browser-session/strategy/indexed-db", function () {
+		databaseStragedy = arguments[0];
 
-	Application.require("request/http-interceptor").then(function (_XMLHttpRequestInterceptor) {
-		XMLHttpRequestInterceptor = _XMLHttpRequestInterceptor.XMLHttpRequestInterceptor();
-		module.exports = HTTPCache;
-	}, console.error);
+		Application.require("request/http-interceptor").then(function (_XMLHttpRequestInterceptor) {
+			XMLHttpRequestInterceptor = _XMLHttpRequestInterceptor.XMLHttpRequestInterceptor();
+			module.exports = HTTPCache;
+		}, console.error);
+	});
 });

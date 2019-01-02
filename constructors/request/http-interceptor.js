@@ -25,6 +25,33 @@ var XMLHttpRequestInterceptor = function () {
 		};
 
 		var _addEventListenerEvents = {};
+
+		[
+			"onload",
+			"onloadend",
+			"onloadstart",
+			"onloadprogress",
+			"ontimeout",
+			"onprogress",
+			"onerror",
+			"onreadystatechange"
+		].forEach(function (str) {
+			var eventName = str.replace(/^on/, '');
+			_addEventListenerEvents[eventName] = [
+				[eventName, (xhr[str] || function () {})]
+			];
+
+			Object.defineProperty(xhr, str, {
+				get() {
+					return _addEventListenerEvents[eventName][0][1];
+				},
+				set(value) {
+					console.log(xhr, eventName, value);
+					_addEventListenerEvents[eventName][0][1] = value;
+				}
+			});
+		});
+
 		var _addEventListener = xhr.addEventListener;
 		xhr.addEventListener = function (eventName, listener) {
 			if (app.emit("http:" + eventName, _args(arguments)) === false) return;
@@ -50,6 +77,31 @@ var XMLHttpRequestInterceptor = function () {
 		var _sendData  = undefined;
 		var _sendState = false;
 
+
+		[
+			"onload",
+			"onloadend",
+			"onloadstart",
+			"onloadprogress",
+			"ontimeout",
+			"onprogress",
+			"onerror",
+			"onreadystatechange"
+		].forEach(function (str) {
+			var eventName = str.replace(/^on/, '');
+			_addEventListenerUploadEvents[eventName] = [
+				[eventName, (xhr.upload[str] || function () {})]
+			];
+
+			Object.defineProperty(xhr.upload, str, {
+				get() {
+					return _addEventListenerUploadEvents[eventName][0][1];
+				},
+				set(value) {
+					_addEventListenerUploadEvents[eventName][0][1] = value;
+				}
+			});
+		});
 		[
 			"loadstart",
 			"progress",
@@ -84,6 +136,8 @@ var XMLHttpRequestInterceptor = function () {
 		};
 
 		xhr.transform = function (config) {
+			_openArgs = _openArgs || ["get", ""];
+
 			if (typeof(config.url) === "string") {
 				_openArgs[1] = config.url;
 			}
@@ -114,10 +168,29 @@ var XMLHttpRequestInterceptor = function () {
 				_xhr = new _XMLHttpRequestProxy(paramsDictionary);
 			}
 
-			_xhr.responseType       = xhr.responseType;
+			_xhr.responseType       = xhr.responseType || "text";
 			_xhr.timeout            = xhr.timeout || 0;
 			_xhr.withCredentials    = xhr.withCredentials;
-			_xhr.onreadystatechange = xhr.onreadystatechange || function () {};
+			// _xhr.onerror            = xhr.onerror || function () {};
+			// _xhr.onload             = xhr.onload || function () {};
+			// _xhr.onreadystatechange = xhr.onreadystatechange || function () {};
+
+			if (raw !== false) {
+				_xhr.onreadystatechange = function () {
+					[
+						"responseType",
+						"response",
+						"responseText",
+						"status",
+						"statusText",
+						"timeout",
+						"readyState"
+					].forEach(function (prop) {
+						Object.defineProperty(xhr, prop, { writable: true });
+						xhr[prop] = _xhr[prop];
+					});
+				};
+			}
 
 			var eventName;
 			for (eventName in _addEventListenerEvents) {
@@ -133,7 +206,7 @@ var XMLHttpRequestInterceptor = function () {
 				});
 			}
 
-			if (_openArgs) {
+			if ((_openArgs || raw !== false) && _xhr.readyState === 0) {
 				if (raw === false) {
 					_open.apply(_xhr, _openArgs);
 				} else {
@@ -141,16 +214,18 @@ var XMLHttpRequestInterceptor = function () {
 				}
 			}
 
-			if (_sendState) {
-				if (raw === false) {
-					_send.apply(_xhr, _sendData);
-				} else {
-					_xhr.send.apply(_xhr, _sendData);
+			if (raw === false) {
+				if ((_sendState && _xhr.readyState === 1) || _xhr.interupt) {
+					_send.apply(_xhr, _sendData || []);
 				}
+			} else {
+				_xhr.send.apply(_xhr, _sendData || []);
 			}
 
 			return _xhr;
 		}
+
+		return xhr;
 	};
 
 	app.bind("start", function () {

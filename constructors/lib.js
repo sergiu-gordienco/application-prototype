@@ -34,7 +34,7 @@ loader.list = [
 			'lib',
 			'request',
 			'request/http-interceptor',
-			'reqeust/http-cache',
+			'request/http-cache',
 			'request/params-parser',
 			'uri-load'
 		]
