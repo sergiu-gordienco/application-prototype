@@ -3,6 +3,20 @@ var databaseStragedy = null;
 var HTTPCache = function (interceptor, tableName) {
 	var app = new ApplicationPrototype();
 	var cacheFiles = {};
+	var mimetypes  = {
+		"_"        : "application/octet-stream", // default
+		".txt"     : "text/plain",
+		".html"    : "text/html",
+		".tpl"    : "text/html",
+		".xml"     : "text/xml",
+		".js"      : "text/javascript",
+		".css"     : "text/css",
+		".json"    : "application/json",
+		".jpeg"    : "image/jpeg",
+		".jpg"     : "image/jpeg",
+		".gif"     : "image/gif",
+		".png"     : "image/png"
+	};
 	var methods = [
 		"post",
 		"get",
@@ -88,6 +102,63 @@ var HTTPCache = function (interceptor, tableName) {
 		return interceptor || XMLHttpRequestInterceptor;
 	});
 
+	app.bind("contentEncode", function (content, cb) {
+		var err;
+		var send;
+		var callback = function (err, data) {
+			if (send) return;
+			send = true;
+			cb(err, data);
+		};
+		try {
+			if (
+				typeof(content) === "string"
+			) {
+				callback(undefined, content.base64encode());
+			} else if ( content instanceof Blob ) {
+				content.toArrayBuffer(function (content) {
+					callback(undefined, content.toStringUtf8().base64encode());
+				});
+			} else if ( content instanceof ArrayBuffer ) {
+				callback(undefined, content.toStringUtf8().base64encode());
+			} else {
+				callback(Error("Incorrect file content"));
+			}
+		} catch (err) {
+			callback(err);
+		}
+	});
+
+	app.bind("contentDecode", function (data, cb) {
+		var err;
+		var send;
+		var callback = function (err, data) {
+			if (send) return;
+			send = true;
+			cb(err, data);
+		};
+
+		try {
+			callback(undefined, data.base64decode());
+		} catch (err) {
+			callback(err);
+		}
+	});
+
+	app.bind("mimetype", function (url, callback) {
+		if (url === undefined) return mimetypes;
+		var extension = ((url.replace(/[\?\#].*$/, '').match(/(\.[^\.]+)$/) || [])[1] || '').toLowerCase();
+		var mimetype  = mimetypes._;
+
+		if (extension in mimetypes) {
+			mimetype = mimetypes[extension];
+		} else {
+			app.emit("warn", [Error("Extension not found", url, " [",extension,"]; used fallback mimetype: ", mimetypes)]);
+		}
+
+		callback(undefined, mimetype);
+	});
+
 	app.bind("findUrl", function (url) {
 		if (url in cacheFiles) return Application.Promise.resolve(cacheFiles[url]);
 
@@ -95,14 +166,27 @@ var HTTPCache = function (interceptor, tableName) {
 			database.initialization.then(function () {
 				database.getItem(url).then(function (ev) {
 					var content = ((((ev || {}).target || {}).result || {}).v || null);
-					if (typeof(content) !== "string") {
-						reject(Error("Incorrect file content"));
-					} else {
-						cacheFiles[url] = URL.createObjectURL(
-							new Blob([content], { type: "text/plain" })
-						);
-						resolve(cacheFiles[url]);
-					}
+					var finish  = function (content) {
+						app.mimetype(url, function (err, mimetype) {
+							if (err) {
+								app.emit("error", [err]);
+								mimetype = mimetypes._;
+							}
+							cacheFiles[url] = URL.createObjectURL(
+								new Blob([content], { type: mimetype })
+							);
+							resolve(cacheFiles[url]);
+						});
+					};
+
+					app.contentDecode(
+						content,
+						function (err, content) {
+							if (err) return reject(err);
+
+							finish(content);
+						}
+					);
 				}, function (err) {
 					reject(err);
 				});
@@ -119,11 +203,25 @@ var HTTPCache = function (interceptor, tableName) {
 			xhrProxy.addEventListener("load", function () {
 				if (xhrProxy.responseText) {
 					database.initialization.then(function () {
-						database.setItem(url, xhrProxy.responseText).then(function (content) {
-							app.emit("database:cache:url", [url, xhrProxy.responseText]);
-						}, function (err) {
-							app.emit("error:cache-content", [err]);
-						})
+						app.contentEncode(xhrProxy.response, function (err, content) {
+							if (err) return app.emit("error:cache-content", [err]);
+							database.setItem(url, content).then(function (content) {
+								app.emit("database:cache:url", [url, content]);
+							}, function (err) {
+								app.emit("error:cache-content", [err]);
+
+								database.getItem(url).then(function (content) {
+									database.removeItem(url).then(function () {
+										console.info("Incorrectly cached item removed", url);
+									}, function (err) {
+										app.emit("error:cache-content", [err]);
+									});
+								}, function (err) {
+									app.emit("error:cache-content", [err]);
+								});
+							});
+						});
+						
 					});
 				}
 			});

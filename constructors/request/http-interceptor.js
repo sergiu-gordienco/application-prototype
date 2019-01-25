@@ -46,7 +46,7 @@ var XMLHttpRequestInterceptor = function () {
 					return _addEventListenerEvents[eventName][0][1];
 				},
 				set(value) {
-					console.log(xhr, eventName, value);
+					// console.log(xhr, eventName, value);
 					_addEventListenerEvents[eventName][0][1] = value;
 				}
 			});

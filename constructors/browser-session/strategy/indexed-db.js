@@ -160,7 +160,7 @@ module.exports  = function (conf) {
 					promise.reject(event);
 				};
 			} catch (er) {
-				console.error(er);
+				console.warn(er);
 				promise.resolve(event);
 			}
 		};
