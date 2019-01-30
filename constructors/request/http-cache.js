@@ -58,7 +58,11 @@ var HTTPCache = function (interceptor, tableName) {
 	});
 
 	app.bind("database", function () {
-		return database.initialization;
+		return new Application.Promise(function (resolve, reject) {
+			database.initialization.then(function () {
+				resolve(database);
+			}).catch(reject);
+		});
 	});
 
 	app.bind("urlMatch", function (url, pattern, callback) {
