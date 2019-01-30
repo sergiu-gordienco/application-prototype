@@ -22,6 +22,7 @@ var ApplicationBuilder	= function (callback) {
 	var config;
 	var module_path	= './constructors';
 	var vars;
+	var cacheSuffix = null;
 	var params	= {
 		callback_ready	: false
 	};
@@ -197,6 +198,13 @@ var ApplicationBuilder	= function (callback) {
 		if (typeof(state) === "boolean") {
 			config.cache_enabled	= state;
 		}
+		if (typeof(state) === "string") {
+			if (state) {
+				cacheSuffix = state;
+			} else {
+				cacheSuffix = null;
+			}
+		}
 		return config.cache_enabled;
 	});
 	Application.bind('debugEnabled', function (state) {
@@ -370,7 +378,7 @@ var ApplicationBuilder	= function (callback) {
 						return (Application || global || null);
 					};
 
-					var module_url = moduleMeta.url + (!Application.cacheEnabled() ? ((moduleMeta.url.indexOf('?') === -1 ? '?' : '&') + 't='+module.atime ) : '');
+					var module_url = moduleMeta.url + (!Application.cacheEnabled() ? ((moduleMeta.url.indexOf('?') === -1 ? '?' : '&') + 't='+( cacheSuffix ? cacheSuffix : module.atime ) ) : '');
 
 					var module_header = Application.debugEnabled() ? ("/**" +
 						"\n * Platform: ApplicationBuilder/ApplicationPrototype by Sergiu Gordienco Vasile" +
