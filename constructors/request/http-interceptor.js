@@ -13,13 +13,13 @@ var XMLHttpRequestInterceptor = function () {
 		var _openArgs = undefined;
 		xhr.interupt = false;
 		xhr.open = function (method, url) {
+			_openArgs   = Array.prototype.slice.call(arguments);
+			xhr._method = method.toLowerCase();
+			xhr.requestURL = url;
 			if (
 				app.emit("http:open", _args(arguments)) !== false
 			) {
 				if (xhr.interupt) return;
-				_openArgs   = Array.prototype.slice.call(arguments);
-				xhr._method = method.toLowerCase();
-				xhr.requestURL = url;
 				_open.apply(xhr, arguments);
 			}
 		};
@@ -66,9 +66,9 @@ var XMLHttpRequestInterceptor = function () {
 		xhr.setRequestHeader = function (header, value) {
 			if (app.emit("http:setHeader", _args(arguments)) === false) return;
 			_setRequestHeaderList[header] = value;
-			return _addEventListener.apply(xhr, arguments);
+			return _setRequestHeader.apply(xhr, arguments);
 		};
-		
+
 		/*
 		[
 			"loadstart",
@@ -134,11 +134,11 @@ var XMLHttpRequestInterceptor = function () {
 		});
 
 		xhr.send = function (d) {
+			_sendData  = Array.prototype.slice.call(arguments);
+			_sendState = true;
 			if (
 				app.emit("http:send", _args(arguments)) !== false
 			) {
-				_sendData  = Array.prototype.slice.call(arguments);
-				_sendState = true;
 				if (xhr.interupt) return;
 				_send.apply(xhr, arguments);
 			}
@@ -169,6 +169,7 @@ var XMLHttpRequestInterceptor = function () {
 				withCredentials
 				onreadystatechange
 			*/
+
 			var _xhr;
 			if (raw === false) {
 				_xhr = xhr;
@@ -202,24 +203,26 @@ var XMLHttpRequestInterceptor = function () {
 				};
 			}
 
-			var eventName;
-			for (eventName in _addEventListenerEvents) {
-				_addEventListenerEvents[eventName].forEach(function (args) {
-					_xhr.addEventListener.apply(_xhr, args);
-				});
-			}
+			if (raw !== false) {
+				var eventName;
+				for (eventName in _addEventListenerEvents) {
+					_addEventListenerEvents[eventName].forEach(function (args) {
+						_xhr.addEventListener.apply(_xhr, args);
+					});
+				}
 
-			var eventName;
-			for (eventName in _setRequestHeaderList) {
-				_xhr.setRequestHeader.apply(_xhr, [eventName, _setRequestHeaderList[eventName]]);
-			}
-			
+				var eventName;
+				for (eventName in _setRequestHeaderList) {
+					_xhr.setRequestHeader.apply(_xhr, [eventName, _setRequestHeaderList[eventName]]);
+				}
 
-			var eventName;
-			for (eventName in _addEventListenerUploadEvents) {
-				_addEventListenerUploadEvents[eventName].forEach(function (args) {
-					_xhr.upload.addEventListener.apply(_xhr, args);
-				});
+
+				var eventName;
+				for (eventName in _addEventListenerUploadEvents) {
+					_addEventListenerUploadEvents[eventName].forEach(function (args) {
+						_xhr.upload.addEventListener.apply(_xhr, args);
+					});
+				}
 			}
 
 			if ((_openArgs || raw !== false) && _xhr.readyState === 0) {
