@@ -59,6 +59,16 @@ var XMLHttpRequestInterceptor = function () {
 			_addEventListenerEvents[eventName].push(arguments);
 			return _addEventListener.apply(xhr, arguments);
 		};
+
+
+		var _setRequestHeader = xhr.setRequestHeader;
+		var _setRequestHeaderList = {};
+		xhr.setRequestHeader = function (header, value) {
+			if (app.emit("http:setHeader", _args(arguments)) === false) return;
+			_setRequestHeaderList[header] = value;
+			return _addEventListener.apply(xhr, arguments);
+		};
+		
 		/*
 		[
 			"loadstart",
@@ -198,6 +208,12 @@ var XMLHttpRequestInterceptor = function () {
 					_xhr.addEventListener.apply(_xhr, args);
 				});
 			}
+
+			var eventName;
+			for (eventName in _setRequestHeaderList) {
+				_xhr.setRequestHeader.apply(_xhr, [eventName, _setRequestHeaderList[eventName]]);
+			}
+			
 
 			var eventName;
 			for (eventName in _addEventListenerUploadEvents) {
