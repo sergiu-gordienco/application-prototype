@@ -57,6 +57,10 @@ var HTTPCache = function (interceptor, tableName) {
 		table  : "files"
 	});
 
+	app.bind("database", function () {
+		return database.initialization;
+	});
+
 	app.bind("urlMatch", function (url, pattern, callback) {
 		if (
 			typeof(pattern) === "string"
