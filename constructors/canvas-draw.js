@@ -101,7 +101,7 @@ module.exports = function (canvas) {
 		}, "");
 		path.bind("operationsRemoveById", function (key) {
 			config.operations = config.operations.filter(function (operation) {
-				return operation.id === key;
+				return operation.id !== key;
 			});
 			return config.operations;
 		}, "");
@@ -253,7 +253,7 @@ module.exports = function (canvas) {
 	}, "");
 	app.bind("group", function (name) {
 		return resource.paths.filter(function (path) {
-			return config.groups.indexOf(name) !== -1;
+			return path.groups().indexOf(name) !== -1;
 		});
 	}, "");
 	app.bind("imageSmoothingEnabled", function (bool) {
