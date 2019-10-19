@@ -330,6 +330,11 @@ var ApplicationBuilder	= function (callback) {
 						},
 						require	: function (moduleName, cb) {
 							var updateModuleName = function (name, path) {
+								if (path.match(/^(http|https|ws)\:\/\//)) {
+									if (!name.match(/((\.js)(\?.*|\#.*|))$/)) {
+										name += ".js"
+									}
+								}
 								if (name.indexOf("::") !== -1) {
 									name = name.split(/\s*\:\:\s*/);
 									return name[0] + " :: " + path + "/" + name[1];

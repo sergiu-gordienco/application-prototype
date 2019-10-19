@@ -36,7 +36,9 @@ loader.list = [
 			'request/http-interceptor',
 			'request/http-cache',
 			'request/params-parser',
-			'uri-load'
+			'uri-load',
+			'parsers/string/csv/parse',
+			'parsers/string/csv/encode'
 		]
 	}
 ];
