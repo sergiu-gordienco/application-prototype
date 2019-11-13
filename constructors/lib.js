@@ -36,6 +36,7 @@ loader.list = [
 			'request/http-interceptor',
 			'request/http-cache',
 			'request/params-parser',
+			'request/params-parser/cli',
 			'uri-load',
 			'parsers/string/csv/parse',
 			'parsers/string/csv/encode'
