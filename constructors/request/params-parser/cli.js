@@ -5,7 +5,8 @@ var parserArguments = function (str, options) {
 
 	var config = {
 		multipleValues : [],
-		withoutValues  : []
+		withoutValues  : [],
+		allowListValues : false
 	}
 
 	if (options) {
@@ -20,6 +21,10 @@ var parserArguments = function (str, options) {
 				if (item && typeof(item) === "string") config.withoutValues.push(item);
 			})
 		}
+		
+		if (options.allowListValues === true) {
+			config.allowListValues = options.allowListValues;
+		}
 	}
 
 	var s = str,m, parts = [];
@@ -29,12 +34,24 @@ var parserArguments = function (str, options) {
 	}
 
 	var pointer = null;
-	parts.forEach(function (part) {
+	while (parts.length) ((function (part) {
 		if (part.indexOf('--') === 0 && part.length > 2) {
 			pointer = part.substr(2);
-			args[pointer] = null;
+			var value = null;
+			if (pointer.indexOf('=') !== -1) {
+				var pointerMatch = pointer.match(/^(.+?)\=([\s\S]*)$/);
 
-			if (config.withoutValues.indexOf(pointer) !== -1) pointer = null;
+				if (pointerMatch) {
+					pointer = pointerMatch[1];
+					value   = pointerMatch[2];
+				}
+			}
+
+			args[pointer] = value;
+
+			if (config.allowListValues === true || ( Array.isArray(config.withoutValues) && config.withoutValues.indexOf(pointer) !== -1 )) {
+				pointer = value;
+			}
 		} else {
 			if (pointer) {
 				if (args[pointer]) {
@@ -56,7 +73,7 @@ var parserArguments = function (str, options) {
 				args._.push(part);
 			}
 		}
-	});
+	})(parts.shift()));
 
 	return args;
 };
