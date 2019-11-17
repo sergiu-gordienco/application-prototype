@@ -8,14 +8,16 @@ When you initialize `extensions/prototype`, new functions will be available in w
 
 Example:
 All other examples bellow will use `slDOM` variable as entry point
+
 ```js
 	var slDOM = _(document.querySelector('myDiv'));
 	// returns slDOM object
 ```
 
 #### Select another node
-`slDOM.E = slDOM.setE( node )` - creates new HTML element and selects it.
-`slDOM._ = slDOM.getE( [opt] )` - returns currently selected node
+
+- `slDOM.E = slDOM.setE( node )` - creates new HTML element and selects it.
+- `slDOM._ = slDOM.getE( [opt] )` - returns currently selected node
 ```js
 	opt = [
 		undefined // return currently selected node

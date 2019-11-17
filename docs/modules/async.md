@@ -1,5 +1,7 @@
 # Async
 
+Links: [Index](../../README.md)
+
 Async is a set of methods that lets you execute an array of operations in asynchronous mode. It implements following methods:
 ```js
 	async.flow( operations, callback[,timeout] )

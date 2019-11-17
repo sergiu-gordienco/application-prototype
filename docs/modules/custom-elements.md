@@ -1,8 +1,9 @@
 # Custom-Elements
 
-#### This module is a wrapper for `MutationObserver` API. It allows you to create custom HTML elements and continuously observe it's changes in a simple way using callback functions for each type of change.
 
-Works best with `MVC` pattern
+Links: [Index](../../README.md)
+
+This module is a wrapper for `MutationObserver` API. It allows you to create custom HTML elements and continuously observe it's changes in a simple way using callback functions for each type of change.
 
 #### Flow
 Each new tag should have a module, that will export itself when `lazyLoadModules` will be called.

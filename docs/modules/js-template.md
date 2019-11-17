@@ -1,5 +1,7 @@
 # Js-Template
 
+Links: [Index](../../README.md)
+
 This module lets you use a variable for any HTML code. It can observe variable changes and can update information in page on the fly.
 
 It implements 2 methods: rendering for node attributes and rendering for content

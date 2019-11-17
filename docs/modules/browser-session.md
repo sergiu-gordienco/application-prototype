@@ -1,5 +1,7 @@
 # Browser-Session
 
+Links: [Index](../../README.md)
+
 an alternative for localStorage implemented on IndexDB API with a memory limit approximately **200Mb**.
 
 all values that are saved in **browserSession** **_Object_** are automatically serialized with `JSON.stringify(...)` and unserialized with `JSON.parse(...)`

@@ -1,8 +1,8 @@
-# Documentation not ready
+# Documentation of **extensions/prototype**
 
-Sorry, but you may help.
+Links: [Index](../../../README.md)
 
-## Contribution
+## Contribution to documentation
 if you find code interesting you may participate by updating documentation using pull request or mail messages to [sergiu.gordienco@gmail.com](mailto:sergiu.gordienco@gmail.com)
 
 
@@ -25,6 +25,10 @@ Bellow will be explanation for each.
 
 ### fn
 
+`fn._`- represent [slDOM library](./sl-dom.md)
+
+`fn.__`- represent slDOMSet library ( **Documentation in Progress** )
+
 `fn.IframeAddContent( iframe, content )` - writes into an iframe content. returns an object with iframe `document` object and iframe `window`.
 
 `fn.base64toBlob( b64Data[,contentType, sliceSize])` - converts and returns a blob from base64 string.
@@ -37,7 +41,7 @@ Bellow will be explanation for each.
 
 `fn.insertAtCursor( myField, myValue )` - inserts `myValue` string into a text area at current cursor position.
 
-`fn.keyCapture( [,event],[key_map],[vars] )` - allows to create function handlers for keyboard shortcuts. `key_map` is an object of object pairs, where the key is the shortcut, and value is a function to be executed when the key is pressed. `vars` is an additional parameter that does not have any importance, it may be used for keypress handler functions.
+`fn.keyCapture( [,event],[key_map],[vars] )` - allows to create function handlers for keyboard shortcuts. `key_map` is an object of object pairs, where the key is the shortcut, and value is a function to be executed when the key is pressed. `vars` is an additional parameter that does not have any importance, it may be used for `keypress` handler functions.
 Key code is generated following way:
 `'k_' + ('ctrl'|'shift'|'alt'|'none') + '_' ... + another control key + '_' + keycode`
 Example:
@@ -58,7 +62,7 @@ Example:
 
 `fn.window.sizeLimit` - it's and object. It allows you to set max/min window size.
 
-`fn.window.sizeActive( )` - returns modified client area width and heigth.
+`fn.window.sizeActive( )` - returns modified client area width and height.
 
 ### object
 

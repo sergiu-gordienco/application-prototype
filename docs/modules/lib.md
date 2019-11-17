@@ -1,8 +1,11 @@
 # Lib
----
-#### Registers all default sub-modules from library
 
-#### It includes following modules by default:
+Links: [Index](../../README.md)
+
+Registers all default sub-modules from library
+
+It includes following modules by default:
+
 - async
 - browser-session
 - browser-session/strategy/indexed-db
