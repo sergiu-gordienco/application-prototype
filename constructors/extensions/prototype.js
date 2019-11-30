@@ -588,6 +588,7 @@ var slDOMset=function(v){
 };
 var __	= function (v) { return new slDOMset(v || false); };
 
+/** @type ApplicationPrototype.slDOM */
 var slDOM=function(a,b){
 if(!a)	a = null;	if(!b)	b = null;
 if(a){this.newE=slDOMlib.newE(a);var e;try{switch(typeof(b)){case "function":((b)(this,a,this.newE));break;}}catch(e){}} else {this.newE=b;}
