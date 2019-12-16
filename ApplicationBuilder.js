@@ -64,7 +64,7 @@ function ApplicationBuilder(callback) {
 		vars	= variables;
 		config.cache_enabled	= false;
 		config.debug_enabled	= false;
-		config.runModulesInFiles = true;
+		config.runModulesInFiles = false;
 		// console.log(callback.toString());
 		if (typeof(callback) === "function") {
 			callback.apply(methods, [variables, configurations]);
@@ -655,7 +655,7 @@ function ApplicationBuilder(callback) {
 							));
 
 							if (Application.debugEnabled()) {
-								if (module.meta.url[0] = '/') url = url + '?file=' + location.origin + module.meta.url;
+								if (module.meta.url[0] = '/') url = url + '#file=' + location.origin + module.meta.url;
 							}
 
 							script = document.createElement('script');
