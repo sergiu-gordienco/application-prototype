@@ -1,3 +1,5 @@
+/// <reference path="index.d.js" />
+
 var isBrowser=new Function("try {return this===window;}catch(e){ return false;}");
 var isNode=new Function("var isBrowser = false; try { isBrowser = this===window;}catch(e){ isBrowser = false;}; try {return !isBrowser && ( this ===global );}catch(e){console.error(e); return false;}");
 
@@ -10,14 +12,17 @@ var isNode=new Function("var isBrowser = false; try { isBrowser = this===window;
 		var config	= {};
 		var crudEvents	= function (methods, public_methods, private_methods) {
 			var events		= {};
+			var nextTick    = setTimeout;
+			if (typeof(setImmediate) === "function") {
+				nextTick = setImmediate;
+			}
+			if (typeof(process) === "object" && process && typeof(process.nextTick) === "function") {
+				nextTick = setImmediate;
+			}
 			var bind_method	= function (v, f, conf) {
 				var method	= "" + v;
-				var method_config	= {
-					listenedBefore	: true,
-					listenedOn		: true,
-					listenedAfter	: true,
-					allowInteruption: true
-				};
+				var methodNameCamel = (method + "").replace(/^./, function (m) { return m.toUpperCase(); });
+				var method_config;
 				if (typeof(conf) === "string" && conf !== "all" && conf !== "default") {
 					method_config	= {
 						listenedBefore	: false,
@@ -26,20 +31,35 @@ var isNode=new Function("var isBrowser = false; try { isBrowser = this===window;
 						allowInteruption: false
 					}
 					if (conf.indexOf("light") !== -1) { // on
-						method_config.listenedOn	= true;
+						method_config.listenedOn	= {
+							hookname : "on" + methodNameCamel
+						};
 						method_config.allowInteruption	= true;
 					}
 					if (conf.indexOf("af") !== -1) { // after
-						method_config.listenedAfter	= true;
+						method_config.listenedAfter	= {
+							hookname : "after" + methodNameCamel
+						};
 					}
 					if (conf.indexOf("on") !== -1) { // on
-						method_config.listenedOn	= true;
+						method_config.listenedOn	= {
+							hookname : "on" + methodNameCamel
+						};
 					}
 					if (conf.indexOf("st") !== -1) { // interupt
 						method_config.allowInteruption	= true;
 					}
 					if (conf.indexOf("before") !== -1 || conf.indexOf("bf") !== -1) { // before
-						method_config.listenedBefore	= true;
+						method_config.listenedBefore	= {
+							hookname : "before" + methodNameCamel
+						};
+					}
+				} else {
+					method_config	= {
+						listenedBefore	: { hookname : "before" + methodNameCamel },
+						listenedOn		: { hookname : "on" + methodNameCamel },
+						listenedAfter	: { hookname : "after" + methodNameCamel },
+						allowInteruption: true
 					}
 				}
 				if (conf && typeof(conf) === "object") {
@@ -53,30 +73,30 @@ var isNode=new Function("var isBrowser = false; try { isBrowser = this===window;
 					})(method_config, conf));
 				}
 				public_methods[method]	= function () {
-					var status	= true;
-					if (method_config.listenedBefore) {
-						if (methods.emit("before" + (method + "").replace(/^./, function (m) { return m.toUpperCase(); }), arguments, false, !method_config.allowInteruption) === false) {
+					if (method_config.listenedBefore !== false) {
+						if (methods.emit(method_config.listenedBefore.hookname, arguments, false, !method_config.allowInteruption) === false) {
 							return false;
 						}
 					}
-					if (method_config.listenedOn) {
-						if (!methods.emit("on" + (method + "").replace(/^./, function (m) { return m.toUpperCase(); }), arguments, false, !method_config.allowInteruption) === false) {
+					if (method_config.listenedOn !== false) {
+						if (!methods.emit(method_config.listenedOn.hookname, arguments, false, !method_config.allowInteruption) === false) {
 							return false;
 						}
 					}
 					var response	= ( f || methods[method] ).apply(public_methods, arguments);
-					if (method_config.listenedAfter) {
+					if (method_config.listenedAfter !== false) {
 						var args = arguments;
-						setTimeout(function () {
-							if (!methods.emit("after" + (method + "").replace(/^./, function (m) { return m.toUpperCase(); }), args, false, !method_config.allowInteruption) === false) {
+						nextTick(function () {
+							if (!methods.emit(method_config.listenedAfter.hookname, args, false, !method_config.allowInteruption) === false) {
 								return false;
 							}
-						}, 1);
+						}, 0);
 					}
 					return response;
 				};
 				return public_methods;
 			};
+			var handlerIdIndex = 1;
 			methods.on	= function (eventName, handler, handlerId) {
 				if (eventName.match(/\s*\,\s*/)) {
 					eventName.split(/\s*\,\s*/).forEach(function (eventName) {
@@ -95,7 +115,8 @@ var isNode=new Function("var isBrowser = false; try { isBrowser = this===window;
 					events[eventName]	= {};
 				}
 				if (!handlerId) {
-					handlerId	= "s" + (new Date().valueOf().toString(36)) + "-" + (Math.floor(Math.random() * 10000000).toString(36));
+					handlerIdIndex++;
+					handlerId	= "s-" + handlerIdIndex;
 				}
 				if (handlerId in events[eventName]) {
 					delete events[eventName][handlerId];
@@ -142,10 +163,10 @@ var isNode=new Function("var isBrowser = false; try { isBrowser = this===window;
 			};
 			methods.emit	= function (eventName, args, track, noSkipStopReturn) {
 				if (eventName in events) {
-					var i, err, status;
-					for(i in events[eventName]) {
+					var handlerId;
+					for(handlerId in events[eventName]) {
 						try {
-							if (events[eventName][i].apply(( track ? public_methods : methods ), (args || [])) === false && !noSkipStopReturn) {
+							if (events[eventName][handlerId].apply(( track ? public_methods : methods ), (args || [])) === false && !noSkipStopReturn) {
 								return false;
 							}
 						} catch(err) {

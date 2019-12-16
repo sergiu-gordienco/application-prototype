@@ -8,7 +8,20 @@ var isBrowser=new Function("try {return this===window;}catch(e){ return false;}"
 var isNode=new Function("var isBrowser = false; try { isBrowser = this===window;}catch(e){ isBrowser = false;}; try {return !isBrowser && ( this ===global );}catch(e){console.error(e); return false;}");
 // jshint +W054
 
-var ApplicationBuilder	= function (callback) {
+
+
+function ApplicationBuilder(callback) {
+
+	if (isBrowser()) {
+		if (this === window) {
+			return new ApplicationBuilder(callback);
+		}
+	} else {
+		if (this === global) {
+			return new ApplicationBuilder(callback);
+		}
+	}
+
 	var m_urlload = function (url, callback) {
 		var request = new XMLHttpRequest();
 		request.responseType = "text";
@@ -26,6 +39,7 @@ var ApplicationBuilder	= function (callback) {
 	var params	= {
 		callback_ready	: false
 	};
+	var ApplicationPrototypeJSDocs = null;
 	if (callback && typeof(callback) === "object") {
 		if (typeof(callback.onready) === "function") {
 			params.callback_ready	= callback.onready;
@@ -50,6 +64,7 @@ var ApplicationBuilder	= function (callback) {
 		vars	= variables;
 		config.cache_enabled	= false;
 		config.debug_enabled	= false;
+		config.runModulesInFiles = true;
 		// console.log(callback.toString());
 		if (typeof(callback) === "function") {
 			callback.apply(methods, [variables, configurations]);
@@ -99,7 +114,9 @@ var ApplicationBuilder	= function (callback) {
 		};
 		var p = {
 			then : function (onFullfiled, onRejected) {
-				p.catch(onRejected || function PromiseError(err) { console.error(err); });
+				p.catch(onRejected || function PromiseError(err) {
+					console.error(err);
+				});
 				return Application.Promise(function (resolve, reject) {
 					var callback = function (data) {
 						var res, err;
@@ -107,7 +124,7 @@ var ApplicationBuilder	= function (callback) {
 							res = onFullfiled(data);
 							resolve(res);
 						} catch (err) {
-							console.warn("Unchecked error in Promise");
+							console.warn("%c Unchecked error in Promise", "color: darkred;font-weight: bold;");
 							console.error(err);
 							reject(err);
 						}
@@ -207,9 +224,26 @@ var ApplicationBuilder	= function (callback) {
 		}
 		return config.cache_enabled;
 	});
+
+
+	Application.bind('runModulesInFiles', function (state) {
+		if (typeof(state) === "boolean") {
+			config.runModulesInFiles	= state;
+		}
+		return config.runModulesInFiles;
+	});
+
+	var _self = this;
 	Application.bind('debugEnabled', function (state) {
 		if (typeof(state) === "boolean") {
 			config.debug_enabled	= state;
+
+			if (config.debug_enabled) {
+				if (!ApplicationPrototypeJSDocs) {
+					ApplicationPrototypeJSDocs = _self.docs();
+					ApplicationPrototypeJSDocs.subscribe(Application);
+				}
+			}
 		}
 		return config.debug_enabled;
 	});
@@ -234,7 +268,7 @@ var ApplicationBuilder	= function (callback) {
 			}
 			return store;
 		});
-		var cached_moduleNames	= {};
+
 		Application.bind("moduleResolve", function (module_name, path) {
 			if (typeof(path) === "undefined")
 				path = module_path;
@@ -305,6 +339,8 @@ var ApplicationBuilder	= function (callback) {
 		var module_cache = {};
 		var module_requests = {};
 		var require_cache	= {};
+		var _console        = console;
+		var chunkIndex      = 0;
 		Application.bind("require", function (module_name, callback) {
 			if (typeof(module_name) === "string") {
 				var moduleMeta	= Application.moduleResolve(module_name, undefined);
@@ -357,6 +393,12 @@ var ApplicationBuilder	= function (callback) {
 						$request	: $request
 					};
 
+					if (Application.debugEnabled()) {
+						if (typeof(ApplicationPrototypeJSDocs) === "object") {
+							ApplicationPrototypeJSDocs.subscribeModule(module);
+						}
+					}
+
 					;((function () {
 						var data	= undefined;
 						Object.defineProperty(module, 'exports', {
@@ -390,6 +432,272 @@ var ApplicationBuilder	= function (callback) {
 						"\n * Module Name: " + module.meta.name +
 						"\n * Module Url: " + module.meta.url +
 						"\n */\n\n") : "";
+					var consoleArguments = function (_type, _args) {
+						var args = Array.prototype.slice.call(_args).map(function (arg, index) {
+							return arg;
+						});
+						var sint  = function (i, n) { return ('000000' + i).substr(0 - (n || 2)); };
+						var date = new Date();
+						var prefix = "%c["
+							+ sint(date.getHours())
+							+ ':' + sint(date.getMinutes())
+							+ ':' + sint(date.getSeconds())
+							+ '.' + sint(date.getSeconds(), 3)
+							+ "] %c" + _type.toUpperCase() + " %c " + module.meta.name + "%c\n";
+						if (typeof(args[0]) === "string") {
+							args[0] = prefix + args[0];
+						} else {
+							args.unshift(prefix);
+						}
+						var typeSettings = (
+							{
+								error : {
+									"background-color": "firebrick",
+									"color": "white"
+								},
+								warn : {
+									"background-color": "golderod",
+									"color": "black"
+								},
+								info : {
+									"background-color": "SkyBlue",
+									"color": "black"
+								},
+								debug : {
+									"background-color": "#232323",
+									"color": "white"
+								}
+							}
+						)[_type] || {
+							"background-color": "#28a296",
+							"color": "#000000"
+						};
+						args.splice(
+							1, 0,
+							"font-weight: normal;"
+								+ "background-color:" + typeSettings["background-color"] + ';'
+								+ "color:" + typeSettings["color"] + ';'
+						);
+						args.splice(
+							2, 0,
+							"font-weight: bold;"
+								+ "background-color:" + typeSettings["background-color"] + ';'
+								+ "color:" + typeSettings["color"] + ';'
+						);
+						args.splice(3, 0, "font-weight: bold;background-color: initial;color: initial;")
+						args.splice(4, 0, "font-weight: normal;")
+						return args;
+					}
+					var console = {
+						log : function () {
+							if (Application.debugEnabled())
+								_console.log.apply(_console, consoleArguments("log", arguments));
+						},
+						info : function () {
+							if (Application.debugEnabled())
+								_console.info.apply(_console, consoleArguments("info", arguments));
+						},
+						warn : function () {
+							if (Application.debugEnabled())
+								_console.warn.apply(_console, consoleArguments("warn", arguments));
+						},
+						error : function () {
+							if (Application.debugEnabled()) {
+								_console.log.apply(_console, consoleArguments("error", []));
+								var args = Array.prototype.slice.call(arguments);
+								if (
+									args[0]
+									&& ( args[0] instanceof Error )
+									&& typeof(args[0].stack) === "string"
+									&& args[0].name !== "ModuleError"
+									&& args[0].stack.indexOf(Application.modulePath()) !== -1
+								) {
+									args[0] = moduleError(args[0]);
+								}
+								_console.error.apply(_console, args);
+							}
+						},
+						debug : function () {
+							if (Application.debugEnabled())
+								_console.debug.apply(_console, consoleArguments("debug", arguments));
+						},
+						clear : function () {
+							_console.clear.apply(_console, arguments);
+						},
+						count : function () {
+							_console.count.apply(_console, arguments);
+						},
+						countReset : function () {
+							_console.countReset.apply(_console, arguments);
+						},
+						dir : function () {
+							_console.dir.apply(_console, arguments);
+						},
+						dirxml : function () {
+							_console.dirxml.apply(_console, arguments);
+						},
+						group : function () {
+							_console.group.apply(_console, arguments);
+						},
+						groupEnd : function () {
+							_console.groupEnd.apply(_console, arguments);
+						},
+						groupCollapsed : function () {
+							_console.groupCollapsed.apply(_console, arguments);
+						},
+						time : function () {
+							_console.time.apply(_console, arguments);
+						},
+						timeLog : function () {
+							_console.timeLog.apply(_console, arguments);
+						},
+						timeEnd : function () {
+							_console.timeEnd.apply(_console, arguments);
+						}
+					};
+					Object.defineProperty(console, 'memory', {
+						get : function () {
+							return _console.memory;
+						},
+						set : function (v) {
+							console.warn('console.memory is readonly');
+						},
+						configurable: false
+					});
+					if (Application.isBrowser()) {
+						if (!window.console.__parent) {
+							console.__parent = window.console;
+							window.console = console;
+						} else {
+							console.__parent = window.console.__parent;
+						}
+					}
+					var moduleError    = function (err, name) {
+						var prettyError = new SyntaxError(err.message, module.meta.url, err.lineNumber);
+						name = name || "ModuleError";
+						prettyError.name = name;
+						prettyError.original = err;
+						prettyError.fileName = module.meta.url;
+						var addrMatch = err.stack.match(/\:(\d+)\:(\d+)/) || [];
+						prettyError.lineNumber = err.lineNumber || addrMatch[1] || 0;
+						prettyError.columnNumber = err.columnNumber || addrMatch[2] || 0;
+						var url = module.meta.url;
+						if (url[0] = '/') url = location.origin + url;
+						prettyError.stack = name + ': ' + err.message
+							+ ' ; line ' + prettyError.lineNumber + ':' + prettyError.columnNumber + '\n' + (
+								err.stack.indexOf(Application.modulePath()) !== -1
+								? err.stack
+								: '\n    export@' + url + ':' + prettyError.lineNumber + ':' + prettyError.columnNumber
+							);
+
+						return prettyError;
+					};
+					var moduleRunner   = function _moduleRunner(body) {
+						var er, err;
+
+						try {
+							var moduleBlock = new Function(
+								'module',
+								'console',
+								'__dirname',
+								'Application',
+								'global',
+								'moduleError',
+								body
+							);
+						} catch (er) {
+							err = er;
+						}
+
+						if (err) {
+							throw moduleError(err, 'ModuleLoadSyntaxError');
+						}
+
+						moduleBlock.displayName = module.meta.name;
+
+						if (Application.runModulesInFiles() && Application.isBrowser()) {
+							var chunkID = 'chunk'
+								+ new Date().valueOf().toString(36)
+								+ '-' + Math.floor(100000000 + 100000000 * Math.random()).toString(36)
+								+ '-' + (chunkIndex++) + ':' + module.meta.name;
+							var script;
+							window[chunkID] = function (moduleInit) {
+								delete window[chunkID];
+								var err;
+								try {
+									moduleInit.apply(
+										module,
+										[
+											module,
+											console,
+											__dirname,
+											Application,
+											global,
+											moduleError
+										]
+									);
+
+									script.parentNode.removeChild(script);
+								} catch (err) {
+									throw moduleError(err);
+								}
+							};
+							var url = URL.createObjectURL(new Blob(
+								[
+									module_header,
+									'\n;(window["' + chunkID + '"](',
+									moduleBlock.toString(),
+									'));'
+								],
+								{
+									type: 'application/javascript'
+								}
+							));
+
+							if (Application.debugEnabled()) {
+								if (module.meta.url[0] = '/') url = url + '?file=' + location.origin + module.meta.url;
+							}
+
+							script = document.createElement('script');
+							script.setAttribute("type", "text/javascript");
+							script.setAttribute("async", "");
+							(
+								document.getElementsByTagName('head')[0]
+								|| document.getElementsByTagName('body')[0]
+								|| document.getElementsByTagName('html')[0]
+							).appendChild(
+								script
+							);
+							script.setAttribute("src", url);
+
+							return;
+						} else {
+							moduleBlock.toSource = function () { /* Application Prototype Module */ };
+							moduleBlock.toString = function () { /* Application Prototype Module */ };
+
+							err = null;
+							try {
+								moduleBlock.apply(
+									module,
+									[
+										module,
+										console,
+										__dirname,
+										Application,
+										global,
+										moduleError
+									]
+								);
+							} catch (er) {
+								err = er;
+							};
+
+							if (err) {
+								throw moduleError(err);
+							}
+						}
+					};
+
 					if (requireDownload) {
 						if (isNode()) {
 							fs.readFile(
@@ -401,11 +709,18 @@ var ApplicationBuilder	= function (callback) {
 								})(module_url)), 'utf8', function (err, module_text) {
 									err = undefined;
 									try {
-										eval(module_header + module_text);
+										if (Application.debugEnabled()) {
+											var runCode = function () {
+												return moduleRunner(module_text);
+											};
+											ApplicationPrototypeJSDocs.evalModule(module_text, module, module_header, runCode);
+										} else {
+											moduleRunner(module_text);
+										}
 									} catch(err) {
 										console.warn("Application Loading Module", module_url);
-										console.error(err);
-										module.$request.reject(err);
+										module.$request.reject(moduleError(err));
+										console.error(moduleError(err));
 									}
 								}
 							);
@@ -413,21 +728,29 @@ var ApplicationBuilder	= function (callback) {
 							m_urlload(module_url, function (module_url, module_text) {
 								var err;
 								try {
-									eval(module_header + module_text);
+									if (Application.debugEnabled()) {
+										var runCode = function () {
+											return moduleRunner(module_text);
+										};
+										ApplicationPrototypeJSDocs.evalModule(module_text, module, module_header, runCode);
+									} else {
+										moduleRunner(module_text);
+									}
 								} catch(err) {
 									console.warn("Application Loading Module", module_url);
-									console.error(err);
-									module.$request.reject(err);
+									module.$request.reject(moduleError(err));
+									console.error(moduleError(err));
 								}
 							});
 						}
 					} else {
 						module.$request.then(function (obj) {
-							if (callback)
+							if (callback) {
 								callback(obj || null, undefined);
-						}).catch(function (er) {
+							}
+						}).catch(function (err) {
 							console.warn("Application Loading Module", module_url);
-							console.error(er);
+							console.error(moduleError(err));
 						});
 					}
 					return module.$request;
@@ -480,6 +803,40 @@ var ApplicationBuilder	= function (callback) {
 	}
 	return Application;
 };
+
+ApplicationBuilder.prototype.docs = ((function (ApplicationPrototypeJSDocs) {
+	var _ApplicationPrototypeJSDocs = function () {
+		return ApplicationPrototypeJSDocs;
+	}
+	return _ApplicationPrototypeJSDocs;
+})((function () {
+	var ApplicationPrototypeJSDocs = {
+		subscribe : function (App) {
+
+		},
+		subscribeModule : function (module) {
+
+		},
+		evalModule: function (moduleCode, module, moduleHeaderText, runCode) {
+			var err, e;
+			try {
+				runCode();
+			} catch (e) {
+				err = e;
+			}
+
+			// module.$request.then(function () {
+			// 	console.log(module.exports.toString());
+			// }, console.error);
+
+			if (err) throw err;
+		}
+	};
+
+	return ApplicationPrototypeJSDocs;
+})()));
+
+
 
 if (isNode()) {
 	module.exports	= ApplicationBuilder;
