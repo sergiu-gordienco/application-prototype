@@ -8,13 +8,13 @@ var dbConnectionBuilder 	= false;
  * @param  {[type]} objectStoreArg name or object of strategyStore
  * @return {[type]}                session application
  */
-var browserSessionBuilder	= function (objectStoreArg) {
+var browserSessionBuilder	= function (objectStoreArg, objectStoreConf) {
 	var app	= new ApplicationPrototype();
 	var loader = Application.Promise();
 	if (typeof(objectStoreArg) === "string") {
 		var strategyName = objectStoreArg;
 		objectStoreArg	= module.require('strategy/'+strategyName).then(function (strategyStore) {
-			loader.resolve(new strategyStore());
+			loader.resolve(new strategyStore(objectStoreConf));
 		}, function (err) {
 			loader.reject(err);
 		});
@@ -184,7 +184,7 @@ module.require('strategy/indexed-db').then(function (dbConnectionBuilder) {
 	var _sessionConnection;
 	var er;
 	try {
-		_sessionConnection	= dbConnectionBuilder();
+		_sessionConnection	= dbConnectionBuilder({ name: "browserDefaultSession", table: "references" });
 	} catch (er) {}
 
 	_sessionConnection.initialization.then(function () {

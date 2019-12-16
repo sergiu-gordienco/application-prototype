@@ -19,13 +19,14 @@ module.exports  = function (conf) {
 			dbName	: "",
 			table	: "references"
 		};
+		config.dbName = config.dbName || "browserSession";
+		config.table  = config.table  || "references";
 		var transaction		= function (operation, params, s) {
 			var CONST_readwrite = "readwrite";
-			var dbName = config.dbName || "browserSession";
 			if (typeof(IDBTransaction.READ_WRITE) !== "undefined") {
 				CONST_readwrite	= IDBTransaction.READ_WRITE;
 			}
-			
+
 			var objectStore, trans;
 			if (s === false) {
 				trans = db.transaction([config.table]);
@@ -118,13 +119,13 @@ module.exports  = function (conf) {
 		};
 		// var request = indexedDB.open(config.dbName, 1.0);
 		var request = indexedDB.open(config.dbName, 4);
-		console.info("IndexDB Request", request);
+		// console.info("IndexDB Request", request);
 		request.onerror = function(event) {
-			console.log("IndexDB » error", event);
+			// console.log("IndexDB » error", event);
 			promise.reject(event);
 		};
 		request.onupgradeneeded = function(event) {
-			console.log("IndexDB » upgrade", event);
+			// console.log("IndexDB » upgrade", event);
 			db = event.target.result;
 			var er;
 			try {

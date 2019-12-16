@@ -1415,6 +1415,10 @@ sha256 : function(utf8){return Sha256.hash(this,( utf8 || typeof(utf8) == "undef
 md5	: function() { return MD5(this);},
 base64encode	: function() { return btoa(this.utf8need()); },
 base64decode	: function() { return atob(this).unicode(); },
+base64encodeBytes	: function() { return base64Binary.encodeBytes(this); },
+base64encodeBytesArray	: function() { return Array.prototype.slice.call(this.base64encodeBytes()); },
+base64decodeBytes	: function() { return base64Binary.decode(this); },
+base64decodeBytesArray	: function() { return Array.prototype.slice.call(this.base64decodeBytes()); },
 base64encodeClean	: function() { return btoa(this); },
 base64decodeClean	: function() { return atob(this); },
 encryptTea	: function(p) { return Tea.encrypt(this,p); },
@@ -1508,6 +1512,11 @@ var i;for(i in o) {
 			});
 			return max;
 		},
+		"move" : function(from, to) {
+			if (from > this.length) return this;
+			this.splice(to, 0, this.splice(from, 1)[0])
+			return this;
+		},
 		"inArray"	: function(a,comparator) {
 			if(!comparator) comparator	= '===';
 			if( typeof(comparator) === "string" )
@@ -1538,7 +1547,7 @@ var i;for(i in o) {
 			);
 		},
 		"base64encode" : function () {
-			return this.toBinaryString().base64encode();
+			return base64Binary.encode(this);
 		},
 		"toBinaryString" : function () {
 			return this.toBytesBinary().join('');
@@ -1697,6 +1706,43 @@ var i;for(i in o) {
 				enumerable: false
 			}
 		);
+		Object.defineProperty(
+			ArrayBuffer.prototype,
+			'toBytes',
+			{
+				value : function () {
+					return new Uint8Array(this);
+				},
+				writable: false,
+				configurable: true,
+				enumerable: false
+			}
+		);
+		Object.defineProperty(
+			ArrayBuffer.prototype,
+			'base64encode',
+			{
+				value : function () {
+					return base64Binary.encode(new Uint8Array(this));
+				},
+				writable: false,
+				configurable: true,
+				enumerable: false
+			}
+		);
+		Object.defineProperty(
+			ArrayBuffer.prototype,
+			'toArray',
+			{
+				value : function () {
+					return Array.prototype.slice.call(new Uint8Array(this));
+				},
+				writable: false,
+				configurable: true,
+				enumerable: false
+			}
+		);
+
 	}
 	if (typeof(Buffer) !== "undefined") {
 		Object.defineProperty(
@@ -1705,6 +1751,42 @@ var i;for(i in o) {
 			{
 				value : function () {
 					return (String.fromCharCode.apply(null, new Uint8Array(this))).utf8decode();
+				},
+				writable: false,
+				configurable: true,
+				enumerable: false
+			}
+		);
+		Object.defineProperty(
+			Buffer.prototype,
+			'toBytes',
+			{
+				value : function () {
+					return new Uint8Array(this);
+				},
+				writable: false,
+				configurable: true,
+				enumerable: false
+			}
+		);
+		Object.defineProperty(
+			Buffer.prototype,
+			'base64encode',
+			{
+				value : function () {
+					return base64Binary.encode(new Uint8Array(this));
+				},
+				writable: false,
+				configurable: true,
+				enumerable: false
+			}
+		);
+		Object.defineProperty(
+			Buffer.prototype,
+			'toArray',
+			{
+				value : function () {
+					return Array.prototype.slice.call(new Uint8Array(this));
 				},
 				writable: false,
 				configurable: true,
@@ -1906,7 +1988,7 @@ var Tea = { encrypt : function(plaintext, password) { if (plaintext.length == 0)
 _public.string.tea = Tea;
 var Aes={ cipher:function(input,w){var Nb=4;var Nr=w.length/Nb-1;var state=[[],[],[],[]];for(var i=0;i<4*Nb;i++)state[i%4][Math.floor(i/4)]=input[i];state=Aes.addRoundKey(state,w,0,Nb);for(var round=1;round<Nr;round++){state=Aes.subBytes(state,Nb);state=Aes.shiftRows(state,Nb);state=Aes.mixColumns(state,Nb);state=Aes.addRoundKey(state,w,round,Nb)}state=Aes.subBytes(state,Nb);state=Aes.shiftRows(state,Nb);state=Aes.addRoundKey(state,w,Nr,Nb);var output=new Array(4*Nb);for(var i=0;i<4*Nb;i++)output[i]=state[i% 4][Math.floor(i/4)];return output},keyExpansion:function(key){var Nb=4;var Nk=key.length/4;var Nr=Nk+6;var w=new Array(Nb*(Nr+1));var temp=new Array(4);for(var i=0;i<Nk;i++){var r=[key[4*i],key[4*i+1],key[4*i+2],key[4*i+3]];w[i]=r}for(var i=Nk;i<Nb*(Nr+1);i++){w[i]=new Array(4);for(var t=0;t<4;t++)temp[t]=w[i-1][t];if(i%Nk==0){temp=Aes.subWord(Aes.rotWord(temp));for(var t=0;t<4;t++)temp[t]^=Aes.rCon[i/Nk][t]}else if(Nk>6&&i%Nk==4)temp=Aes.subWord(temp);for(var t=0;t<4;t++)w[i][t]=w[i-Nk][t]^temp[t]}return w},subBytes:function(s,Nb){for(var r=0;r<4;r++)for(var c=0;c<Nb;c++)s[r][c]=Aes.sBox[s[r][c]];return s},shiftRows:function(s,Nb){var t=new Array(4);for(var r=1;r<4;r++){for(var c=0;c<4;c++)t[c]=s[r][(c+r)%Nb];for(var c=0;c<4;c++)s[r][c]=t[c]}return s},mixColumns:function(s,Nb){for(var c=0;c<4;c++){var a=new Array(4);var b=new Array(4);for(var i=0;i<4;i++){a[i]=s[i][c];b[i]=s[i][c]&128?s[i][c]<<1^283:s[i][c]<<1}s[0][c]=b[0]^a[1]^b[1]^a[2]^a[3];s[1][c]=a[0]^b[1]^a[2]^b[2]^a[3];s[2][c]=a[0]^a[1]^b[2]^a[3]^b[3];s[3][c]=a[0]^b[0]^a[1]^a[2]^b[3]}return s},addRoundKey:function(state,w,rnd,Nb){for(var r=0;r<4;r++)for(var c=0;c<Nb;c++)state[r][c]^=w[rnd*4+c][r];return state},subWord:function(w){for(var i=0;i<4;i++)w[i]=Aes.sBox[w[i]];return w},rotWord:function(w){var tmp=w[0];for(var i=0;i<3;i++)w[i]=w[i+1];w[3]=tmp;return w},sBox:[99,124,119,123,242,107,111,197,48,1,103,43,254,215,171,118,202,130,201,125,250,89,71,240,173,212,162,175,156,164,114,192,183,253,147,38,54,63,247,204,52,165,229,241,113,216,49,21,4,199,35,195,24,150,5,154,7,18,128,226,235,39,178,117,9,131,44,26,27,110,90,160,82,59,214,179,41,227,47,132,83,209,0,237,32,252,177,91,106,203,190,57,74,76,88,207,208,239,170,251,67,77,51,133,69,249,2,127,80,60,159,168,81,163,64,143,146,157,56,245,188,182,218,33,16,255,243,210,205,12,19,236,95,151,68,23,196,167,126,61,100,93,25,115,96,129,79,220,34,42,144,136,70,238,184,20,222,94,11,219,224,50,58,10,73,6,36,92,194,211,172,98,145,149,228,121,231,200,55,109,141,213,78,169,108,86,244,234,101,122,174,8,186,120,37,46,28,166,180,198,232,221,116,31,75,189,139,138,112,62,181,102,72,3,246,14,97,53,87,185,134,193,29,158,225,248,152,17,105,217,142,148,155,30,135,233,206,85,40,223,140,161,137,13,191,230,66,104,65,153,45,15,176,84,187,22],rCon:[[0,0,0,0],[1,0,0,0],[2,0,0,0],[4,0,0,0],[8,0,0,0],[16,0,0,0],[32,0,0,0],[64,0,0,0],[128,0,0,0],[27,0,0,0],[54,0,0,0]],Ctr:{encrypt:function(plaintext,password,nBits){var blockSize=16;if(!(nBits==128||(nBits==192||nBits==256)))return"";plaintext=(''+plaintext).utf8encode();password=(''+password).utf8encode();var nBytes=nBits/8;var pwBytes=new Array(nBytes);for(var i=0;i<nBytes;i++)pwBytes[i]=isNaN(password.charCodeAt(i))?0:password.charCodeAt(i);var key=Aes.cipher(pwBytes,Aes.keyExpansion(pwBytes));key=key.concat(key.slice(0,nBytes-16));var counterBlock=new Array(blockSize);var nonce=(new Date).getTime();var nonceMs=nonce% 1E3;var nonceSec=Math.floor(nonce/1E3);var nonceRnd=Math.floor(Math.random()*65535);for(var i=0;i<2;i++)counterBlock[i]=nonceMs>>>i*8&255;for(var i=0;i<2;i++)counterBlock[i+2]=nonceRnd>>>i*8&255;for(var i=0;i<4;i++)counterBlock[i+4]=nonceSec>>>i*8&255;var ctrTxt="";for(var i=0;i<8;i++)ctrTxt+=String.fromCharCode(counterBlock[i]);var keySchedule=Aes.keyExpansion(key);var blockCount=Math.ceil(plaintext.length/blockSize);var ciphertxt=new Array(blockCount);for(var b=0;b<blockCount;b++){for(var c=0;c< 4;c++)counterBlock[15-c]=b>>>c*8&255;for(var c=0;c<4;c++)counterBlock[15-c-4]=b/4294967296>>>c*8;var cipherCntr=Aes.cipher(counterBlock,keySchedule);var blockLength=b<blockCount-1?blockSize:(plaintext.length-1)%blockSize+1;var cipherChar=new Array(blockLength);for(var i=0;i<blockLength;i++){cipherChar[i]=cipherCntr[i]^plaintext.charCodeAt(b*blockSize+i);cipherChar[i]=String.fromCharCode(cipherChar[i])}ciphertxt[b]=cipherChar.join("")}var ciphertext=ctrTxt+ciphertxt.join("");ciphertext=(''+ciphertext).base64encodeClean(); return ciphertext},decrypt:function(ciphertext,password,nBits){var blockSize=16;if(!(nBits==128||(nBits==192||nBits==256)))return"";ciphertext=(''+ciphertext).base64decodeClean();password=(''+password).utf8encode();var nBytes=nBits/8;var pwBytes=new Array(nBytes);for(var i=0;i<nBytes;i++)pwBytes[i]=isNaN(password.charCodeAt(i))?0:password.charCodeAt(i);var key=Aes.cipher(pwBytes,Aes.keyExpansion(pwBytes));key=key.concat(key.slice(0,nBytes-16));var counterBlock=new Array(8);ctrTxt=ciphertext.slice(0,8);for(var i=0;i<8;i++)counterBlock[i]=ctrTxt.charCodeAt(i);var keySchedule=Aes.keyExpansion(key);var nBlocks=Math.ceil((ciphertext.length-8)/blockSize);var ct=new Array(nBlocks);for(var b=0;b<nBlocks;b++)ct[b]=ciphertext.slice(8+b*blockSize,8+b*blockSize+blockSize);ciphertext=ct;var plaintxt=new Array(ciphertext.length);for(var b=0;b<nBlocks;b++){for(var c=0;c<4;c++)counterBlock[15-c]=b>>>c*8&255;for(var c=0;c<4;c++)counterBlock[15-c-4]=(b+1)/4294967296-1>>>c*8&255;var cipherCntr=Aes.cipher(counterBlock,keySchedule);var plaintxtByte=new Array(ciphertext[b].length);for(var i=0;i<ciphertext[b].length;i++){plaintxtByte[i]=cipherCntr[i]^ciphertext[b].charCodeAt(i);plaintxtByte[i]=String.fromCharCode(plaintxtByte[i])}plaintxt[b]=plaintxtByte.join("")}var plaintext=plaintxt.join("");plaintext=(''+plaintext).utf8decode();return plaintext}}};
 _public.string.aes = Aes;
-
+var base64Binary=function(){var h=[65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,48,49,50,51,52,53,54,55,56,57,43,47],i=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,62,0,0,0,63,52,53,54,55,56,57,58,59,60,61,0,0,0,0,0,0,0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,0,0,0,0,0,0,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,0,0,0,0,0];function a(r){var e,n,t=r.length,o=3-(t%3||3),a=4*Math.floor((t+2)/3),c=new Uint8Array(a),f=0;for(e=0;e<t;f+=4,e+=3)n=(255&r[e])<<16|(255&r[e+1])<<8|255&r[e+2],c[f]=h[n>>18&63],c[f+1]=h[n>>12&63],c[f+2]=h[n>>6&63],c[f+3]=h[63&n];for(;o--;)c[--f]=61;return c}return{encodeBytes:a,encode:function(r){var e,n="",t=a(r),o=t.length;for(e=0;e<o;e++)n+=String.fromCharCode(t[e]);return n},decode:function(r){var e,n,t,o=r.length,a=r.slice(o-2).split("=").length-1,c=3*Math.floor((o+3)/4)-a,f=new Uint8Array(c);for(n=e=0;n<o;e+=3,n+=4)t=i[r[n].charCodeAt(0)]<<18|i[r[n+1].charCodeAt(0)]<<12|i[r[n+2].charCodeAt(0)]<<6|i[r[n+3].charCodeAt(0)],f[e]=t>>16&255,f[e+1]=t>>8&255,f[e+2]=255&t;return f}}}();
 var base64 = {
 	PADCHAR : '=',
 	ALPHA : 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/',

@@ -41,7 +41,7 @@
  */
 
 /**
- * @typedef {object} ApplicationPrototype - configuration for binded listeners
+ * @typedef {object} ApplicationPrototypeInstance - configuration for binded listeners
  * @property {ApplicationPrototypeBind} bind - attach a new Method
  * @property {ApplicationPrototypeListener} on - listen an event
  * @property {ApplicationPrototypeListener} once - listen an event once
@@ -50,7 +50,7 @@
  */
 
 /**
- * @typedef {object} ApplicationBuilder - load Application Framework
+ * @typedef {object} ApplicationBuilderInstance - load Application Framework
  * @property {ApplicationPrototypeBind} bind - attach a new Method
  * @property {ApplicationPrototypeListener} on - listen an event
  * @property {ApplicationPrototypeListener} once - listen an event once
@@ -62,17 +62,19 @@
 /** @typedef {{ prop1: string, prop2: string, prop3?: number }} XXXSpecialType */
 /** @typedef {(data: string, index?: number) => boolean} XXXPredicate */
 
+/** @typedef {() => ApplicationPrototype} ApplicationPrototypeConstructor */
+
 
 
 // property {*} _i 	= function(i,n){return ((n + (i % n))%n); };
 
-/** @typedef {ApplicationPrototype.slDOM} slDOM */
-/** @typedef {ApplicationPrototype.slDOM.env} slDOM.env */
+/** @typedef {ApplicationPrototype_slDOM} slDOM */
+/** @typedef {ApplicationPrototype_slDOM_env} slDOM_env */
 
 
 
 /**
- * @typedef ApplicationPrototype.slDOM.env
+ * @typedef ApplicationPrototype_slDOM_env
  * @property {Boolean} gecko
  * @property {Boolean} old_ie
  * @property {Boolean} ie_lt8
@@ -105,55 +107,55 @@
 
 
 /**
- * @typedef ApplicationPrototype.slDOM returns a pointer that walks over DOM and applying needed operations
- * @property {ApplicationPrototype.slDOM.env} env Environment Flags
+ * @typedef ApplicationPrototype_slDOM returns a pointer that walks over DOM and applying needed operations
+ * @property {ApplicationPrototype_slDOM_env} env Environment Flags
  * @property {function (Boolean): HTMLElement} __ if params is `true` then return document otherwise current HTMLElement
- * @property {function(Object): ApplicationPrototype.slDOM} a2D apply Css Transforms on elements
- * @property {function(number): ApplicationPrototype.slDOM} opacity ( short form **o** ) change element opacity
- * @property {function((HTMLElement | String)): ApplicationPrototype.slDOM} setE ( short form **e** ) set a HTMLElement or Create Element for slDOM Pointer
- * @property {function((Array<String> | String), String?, number?): ApplicationPrototype.slDOM | Boolean} sClass =slDOMlib.sClass;
- * @property {function(String,String,...): ApplicationPrototype.slDOM()} setArg ( short form **A** ) set Attributes to HTMLElement, arguments order: `[ attribute, value, attribute, value ... ]`
- * @property {function(HTMLElement): ApplicationPrototype.slDOM} adEto add current HTMLElement to other HTMLElement;
- * @property {function(HTMLElement): ApplicationPrototype.slDOM} putBfto insert current HTMLElement before other HTMLElement
- * @property {function(HTMLElement): ApplicationPrototype.slDOM} putAfto insert current HTMLElement after other HTMLElement
- * @property {function((HTMLElement | String), string?, function?): ApplicationPrototype.slDOM} putBf =slDOMlib.putBf;
- * @property {function(HTMLElement): ApplicationPrototype.slDOM} putAf =slDOMlib.putAf;
- * @property {function((HTMLElement | String), string?, function?): ApplicationPrototype.slDOM} addE =slDOMlib.addE;
- * @property {function((HTMLElement | String), string?, function?): ApplicationPrototype.slDOM} addB =slDOMlib.addB;
- * @property {function(String): ApplicationPrototype.slDOM} addT ( short form **t** ) add text node to HTMLElement;
- * @property {function(number=1): ApplicationPrototype.slDOM} nextTo ( short form **N** ) moving pointer forward to N neighbors
- * @property {function(number=1): ApplicationPrototype.slDOM} backTo ( short form **B** ) moving pointer backward to N neighbors
- * @property {function(number?): ApplicationPrototype.slDOM} nUP ( short form is U ) goes up on level in doom
- * @property {function(number?): ApplicationPrototype.slDOM} nChild ( short form is **C** ) select the *N th* child element
- * @property {function(number?): ApplicationPrototype.slDOM} getParentN ( short form is **P** ) select the *N th* parent element 
- * @property {function(): ApplicationPrototype.slDOM} clearE ( short form is **d** ) remove all childObjects from node
- * @property {function(): ApplicationPrototype.slDOM} delE remove HTMLElement from its Parent
- * @property {function(Boolean): ApplicationPrototype.slDOM} copyE =slDOMlib.copyE;
- * @property {function(String): ApplicationPrototype.slDOM} getParentTag =slDOMlib.getParentTag;
- * @property {function(String, number, Boolean, Boolean): ApplicationPrototype.slDOM} getByTag =slDOMlib.getByTag;
- * @property {function(String, number, Boolean, Boolean): ApplicationPrototype.slDOM} getByQuery =slDOMlib.getByQuery;
- * @property {function(String): ApplicationPrototype.slDOM} getById =slDOMlib.getById;
+ * @property {function(Object): ApplicationPrototype_slDOM} a2D apply Css Transforms on elements
+ * @property {function(number): ApplicationPrototype_slDOM} opacity ( short form **o** ) change element opacity
+ * @property {function((HTMLElement | String)): ApplicationPrototype_slDOM} setE ( short form **e** ) set a HTMLElement or Create Element for slDOM Pointer
+ * @property {function((Array<String> | String), String?, number?): ApplicationPrototype_slDOM | Boolean} sClass =slDOMlib.sClass;
+ * @property {function(String,String,...): ApplicationPrototype_slDOM()} setArg ( short form **A** ) set Attributes to HTMLElement, arguments order: `[ attribute, value, attribute, value ... ]`
+ * @property {function(HTMLElement): ApplicationPrototype_slDOM} adEto add current HTMLElement to other HTMLElement;
+ * @property {function(HTMLElement): ApplicationPrototype_slDOM} putBfto insert current HTMLElement before other HTMLElement
+ * @property {function(HTMLElement): ApplicationPrototype_slDOM} putAfto insert current HTMLElement after other HTMLElement
+ * @property {function((HTMLElement | String), string?, function?): ApplicationPrototype_slDOM} putBf =slDOMlib.putBf;
+ * @property {function(HTMLElement): ApplicationPrototype_slDOM} putAf =slDOMlib.putAf;
+ * @property {function((HTMLElement | String), string?, function?): ApplicationPrototype_slDOM} addE =slDOMlib.addE;
+ * @property {function((HTMLElement | String), string?, function?): ApplicationPrototype_slDOM} addB =slDOMlib.addB;
+ * @property {function(String): ApplicationPrototype_slDOM} addT ( short form **t** ) add text node to HTMLElement;
+ * @property {function(number=1): ApplicationPrototype_slDOM} nextTo ( short form **N** ) moving pointer forward to N neighbors
+ * @property {function(number=1): ApplicationPrototype_slDOM} backTo ( short form **B** ) moving pointer backward to N neighbors
+ * @property {function(number?): ApplicationPrototype_slDOM} nUP ( short form is U ) goes up on level in doom
+ * @property {function(number?): ApplicationPrototype_slDOM} nChild ( short form is **C** ) select the *N th* child element
+ * @property {function(number?): ApplicationPrototype_slDOM} getParentN ( short form is **P** ) select the *N th* parent element
+ * @property {function(): ApplicationPrototype_slDOM} clearE ( short form is **d** ) remove all childObjects from node
+ * @property {function(): ApplicationPrototype_slDOM} delE remove HTMLElement from its Parent
+ * @property {function(Boolean): ApplicationPrototype_slDOM} copyE =slDOMlib.copyE;
+ * @property {function(String): ApplicationPrototype_slDOM} getParentTag =slDOMlib.getParentTag;
+ * @property {function(String, number, Boolean, Boolean): ApplicationPrototype_slDOM} getByTag =slDOMlib.getByTag;
+ * @property {function(String, number, Boolean, Boolean): ApplicationPrototype_slDOM} getByQuery =slDOMlib.getByQuery;
+ * @property {function(String): ApplicationPrototype_slDOM} getById =slDOMlib.getById;
  * @property {function(String, Boolean): Array<HTMLElement>} getTags =slDOMlib.getTags;
  * @property {function(String, Boolean): Array<HTMLElement>} getTagsByQuery =slDOMlib.getTagsByQuery;
- * @property {function(String): ApplicationPrototype.slDOM} triger ( short form **T** ) trigger / emit an event on HTMLElement
- * @property {function(String?): ApplicationPrototype.slDOM | HTMLElement | String} getE ( short form **_** ) return HTMLElement ;
+ * @property {function(String): ApplicationPrototype_slDOM} triger ( short form **T** ) trigger / emit an event on HTMLElement
+ * @property {function(String?): ApplicationPrototype_slDOM | HTMLElement | String} getE ( short form **_** ) return HTMLElement ;
  * * if argument[0] is ".tag" return HTMLElement's tagname ;
  * * if argument[0] is ".html" return HTML Content ;
  * * if argument[0] is ".text" return Text Content ;
  * * if argument[0] is "-attributeName" return HTMLElement's Attribute ;
  * * if argument[0] is "!attributeName" remove HTMLElement's Attribute
- * @property {function(slDOM.ObjectCSSProperties): ApplicationPrototype.slDOM} setStyle ( short form **f** ) setting css proprieties to HTMLElement
- * @property {function((slDOM.ObjectAttributes | String[])): ApplicationPrototype.slDOM} setVar ( short form **V** ) set dot property on HTMLElement
- * @property {function(... slDOM.ObjectAttributes): ApplicationPrototype.slDOM} setObjVar ( short form **v** ) setting attributes to HTMLElement
- * @property {function(slDOM.ObjectCSSProperties): ApplicationPrototype.slDOM} setStyleSPEED ( short form **F** ) setting css proprieties to HTMLElement with normalizing values by adding units
+ * @property {function(slDOM.ObjectCSSProperties): ApplicationPrototype_slDOM} setStyle ( short form **f** ) setting css proprieties to HTMLElement
+ * @property {function((slDOM.ObjectAttributes | String[])): ApplicationPrototype_slDOM} setVar ( short form **V** ) set dot property on HTMLElement
+ * @property {function(... slDOM.ObjectAttributes): ApplicationPrototype_slDOM} setObjVar ( short form **v** ) setting attributes to HTMLElement
+ * @property {function(slDOM.ObjectCSSProperties): ApplicationPrototype_slDOM} setStyleSPEED ( short form **F** ) setting css proprieties to HTMLElement with normalizing values by adding units
  * @property {function(): { x: number, y: number }} pagePXY ( short form **PXY** ) get element position on page
  * @property {function(): Boolean} in_e check if HTMLElement is still attached to DOM ( Document Object Manager )
  * @property {function(): { w: number, h: number }} g_wh returns width and height of HTMLElement
- * @property {function((Object | String), Boolean, Function, Object): ApplicationPrototype.slDOM} getLIST =slDOMlib.getLIST;
- * @property {function(function(HTMLElement, Object, ApplicationPrototype.slDOM), Object): ApplicationPrototype.slDOM} toFunction =slDOMlib.toFunction;
- * @property {function(): ApplicationPrototype.slDOM} removeFromDOM ( short form **free** ) remove elements from DOM
- * @property {function(number): ApplicationPrototype.slDOM} o ( short form **opacity** ) change element opacity
- * @property {function((HTMLElement | String)): ApplicationPrototype.slDOM} E ( long form **setE** ) set a HTMLElement or Create Element for slDOM Pointer
+ * @property {function((Object | String), Boolean, Function, Object): ApplicationPrototype_slDOM} getLIST =slDOMlib.getLIST;
+ * @property {function(function(HTMLElement, Object, ApplicationPrototype_slDOM), Object): ApplicationPrototype_slDOM} toFunction =slDOMlib.toFunction;
+ * @property {function(): ApplicationPrototype_slDOM} removeFromDOM ( short form **free** ) remove elements from DOM
+ * @property {function(number): ApplicationPrototype_slDOM} o ( short form **opacity** ) change element opacity
+ * @property {function((HTMLElement | String)): ApplicationPrototype_slDOM} E ( long form **setE** ) set a HTMLElement or Create Element for slDOM Pointer
  * @property {*} c =slDOMlib.sClass;
  * @property {function(string): Object} attrs 	= slDOMlib.attrs;
  * @property {*} A =slDOMlib.setArg;
@@ -192,7 +194,7 @@
  * @property {*} i =slDOMlib.in_e;
  * @property {*} r =slDOMlib.g_wh;
  * @property {*} x =slDOMlib.toFunction;
- * @property {function(): ApplicationPrototype.slDOM} free 	= slDOMlib.removeFromDOM;
+ * @property {function(): ApplicationPrototype_slDOM} free 	= slDOMlib.removeFromDOM;
  * @property {function(): Boolean} is_free 	= slDOMlib.is_free;
  * @property {function(): Boolean} is_focused 	= slDOMlib.is_focused;
  * @property {function(): Boolean} is_inview 	= slDOMlib.elementInViewport;
@@ -202,3 +204,50 @@
  * @property {*} off 	= slDOMlib.off;
  * @property {function(): Object} eventsCache 	= slDOMlib.eventsCache;
  */
+
+/** @namespace */
+/** @class */
+/** @type {ApplicationPrototypeInstance} */
+function ApplicationPrototype() {
+	/** @type {ApplicationPrototypeBind} */
+	this.bind = function (event, callback, specifiedEventId) { return String };
+	/** @type {ApplicationPrototypeListener} */
+	this.on = function (event, callback, specifiedEventId) { return String };
+	/** @type {ApplicationPrototypeListener} */
+	this.once = function (event, callback, specifiedEventId) { return String };
+	/** @type {ApplicationPrototypeListenerRemove} */
+	this.off = function (event, specifiedEventId) { return String };
+	/** @type {ApplicationPrototypeCrudEvents} */
+	this.crudEvents = function (context, publicMethods, privateMethods) {
+		return new ApplicationPrototype();
+	}
+}
+
+/** @namespace */
+/** @class */
+/** @type {ApplicationBuilderInstance} */
+function ApplicationBuilder() {
+	/** @type {ApplicationPrototypeBind} */
+	this.bind = function (event, callback, specifiedEventId) { return String };
+	/** @type {ApplicationPrototypeListener} */
+	this.on = function (event, callback, specifiedEventId) { return String };
+	/** @type {ApplicationPrototypeListener} */
+	this.once = function (event, callback, specifiedEventId) { return String };
+	/** @type {ApplicationPrototypeListenerRemove} */
+	this.off = function (event, specifiedEventId) { return String };
+	/** @type {ApplicationPrototypeCrudEvents} */
+	this.crudEvents = function (context, publicMethods, privateMethods) {
+		return new ApplicationPrototype();
+	}
+	/** @type {ApplicationBuilderRequire} */
+	this.require = function (events, callback) {
+		return new Promise();
+	}
+
+	/** @type {Promise} */
+	this.Promise;
+}
+
+/** @namespace */
+var Application = new ApplicationBuilder();
+

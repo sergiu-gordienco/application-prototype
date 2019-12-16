@@ -1,5 +1,8 @@
 /* jshint -W002 */
 Application.require("extensions/prototype", function (epro) {
+    /**
+     * @module request
+     */
     module.exports  = function () {
         var app     = new ApplicationPrototype();
         var httpRequest = new XMLHttpRequest();
