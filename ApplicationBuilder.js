@@ -8,9 +8,15 @@ var isBrowser=new Function("try {return this===window;}catch(e){ return false;}"
 var isNode=new Function("var isBrowser = false; try { isBrowser = this===window;}catch(e){ isBrowser = false;}; try {return !isBrowser && ( this ===global );}catch(e){console.error(e); return false;}");
 // jshint +W054
 
-
-
 function ApplicationBuilder(callback) {
+	var __requireNode, __globalNode;
+	if (isNode()) {
+		__requireNode = function (moduleName) {
+			return require(moduleName)
+		}
+
+		__globalNode = global;
+	}
 
 	if (isBrowser()) {
 		if (this === window) {
@@ -22,12 +28,162 @@ function ApplicationBuilder(callback) {
 		}
 	}
 
+	var consoleArguments = function (_type, _args, module) {
+		if (isNode()) {
+			return consoleArgumentsNode(_type, _args, module);
+		} else {
+			return consoleArgumentsBrowser(_type, _args, module);
+		}
+	};
+	var getExecInfo = function () {
+		var err;
+		try { throw Error("debugg error"); } catch (err) {
+			return err.stack.replace(/^[^\n]+\n[^\n]+\n/, '').replace(/^\n+/, '');
+		}
+		return null;
+	};
+	var consoleArgumentsNode    = function (_type, _args, module) {
+		var args = Array.prototype.slice.call(_args);
+		var typeColors = {
+			log : 36,
+			warn: 33,
+			info: 34,
+			error: 31
+		};
+		var typeColor = 31;
+
+		if (_type in typeColors) typeColor = typeColors[_type];
+
+		var path, info = ( getExecInfo() + '' );
+		path = info;
+
+
+		info = ([
+			/\n\s*.*?(\S{0,23}\.\([^\)]+\)\s+\[as\s+[^\]]+\])/,
+			/\n\s*.*\[as\s+([^\]]+)\]/,
+			/\n\s*at\s+(\S*?)\s+.*_moduleRunner.*\<anonymous\>/,
+			/\n\s*at\s+(process\._\S+)\s+\([^\)\n]+/,
+			/\n\s*at\s+(process\.\S+)\s+\([^\)\n]+/
+		].map(function (item) {
+			return info.match(item);
+		}).filter(function (item) {
+			return !!item;
+		})[0] || [])[1] || 'unknown'
+
+		path = ([
+			[ /\n\s*at\s+(\.{0,1}\/.*)/ ],
+			[ /\n\s*at\s+(\S*?)\s+.*_moduleRunner.*\<anonymous\>\:\d+\:\d+/, function (item) {
+				var url = ((module || {}).meta || {}).url;
+				return item.replace('<anonymous>', url);
+			} ],
+			[ /\n\s*at\s+process\._\S+\s+\(([^\)\n]+)/ ],
+			[ /\n\s*at\s+process\.\S+\s+\(([^\)\n]+)/ ]
+		].map(function (item) {
+			var value = path.match(item[0]);
+			if (!value) return;
+
+			if (item[1]) return item[1](value[1]);
+
+			return value[1];
+		}).filter(function (item) {
+			return !!item;
+		}))[0] || ((module || {}).meta || {}).url || 'unknown';
+
+		var cwd = process.cwd();
+
+		if (path.indexOf(cwd) === 0 && path.substr(0, cwd.length)) {
+			path = './' + path.substr(cwd.length + 1);
+		}
+
+		var sint  = function (i, n) { return ('000000' + i).substr(0 - (n || 2)); };
+		var date = new Date();
+
+		args.unshift(
+			'\033[2m'
+				+ sint(date.getHours())
+				+ ':' + sint(date.getMinutes())
+				+ ':' + sint(date.getSeconds())
+				+ '.' + sint(date.getSeconds(), 3) + ' \033[1;'
+				+ typeColor + 'm' + _type.toUpperCase() + '\t\033[22m ' + info + '\033[37m\t(' + path + ') '
+		);
+		args.push('\033[0m');
+
+		return args;
+	};
+	var consoleArgumentsBrowser = function (_type, _args, module) {
+		var args = Array.prototype.slice.call(_args).map(function (arg, index) {
+			return arg;
+		});
+		var info = (getExecInfo() || '');
+		info = ([
+			/\n.*module.exports.*blob\:.*\#file=(.*)/,
+			/\n\s*at\s+(\S+.*blob\:(http|https|\/\/)[^\)\n]+)\s*\)/,
+			/\n\s*at\s+(\S+).*blob\:(http|https|\/\/)/
+		].map(function (item) {
+			return info.match(item);
+		}).filter(function (item) {
+			return !!item;
+		})[0] || [])[1] || 'unknown';
+		var sint  = function (i, n) { return ('000000' + i).substr(0 - (n || 2)); };
+		var date = new Date();
+		var prefix = "%c["
+			+ sint(date.getHours())
+			+ ':' + sint(date.getMinutes())
+			+ ':' + sint(date.getSeconds())
+			+ '.' + sint(date.getSeconds(), 3)
+			+ "] %c" + _type.toUpperCase() + " %c " + ((((module || {}).meta || {}).name + (info.replace(/^.*(\:\d+\:\d+)\s*$/, ' line$1'))) || info || '?...') + "%c\n";
+		if (typeof(args[0]) === "string") {
+			args[0] = prefix + args[0];
+		} else {
+			args.unshift(prefix);
+		}
+		var typeSettings = (
+			{
+				error : {
+					"background-color": "firebrick",
+					"color": "white"
+				},
+				warn : {
+					"background-color": "golderod",
+					"color": "black"
+				},
+				info : {
+					"background-color": "SkyBlue",
+					"color": "black"
+				},
+				debug : {
+					"background-color": "#232323",
+					"color": "white"
+				}
+			}
+		)[_type] || {
+			"background-color": "#28a296",
+			"color": "#000000"
+		};
+		args.splice(
+			1, 0,
+			"font-weight: normal;"
+				+ "background-color:" + typeSettings["background-color"] + ';'
+				+ "color:" + typeSettings["color"] + ';'
+		);
+		args.splice(
+			2, 0,
+			"font-weight: bold;"
+				+ "background-color:" + typeSettings["background-color"] + ';'
+				+ "color:" + typeSettings["color"] + ';'
+		);
+		args.splice(3, 0, "font-weight: bold;background-color: initial;color: initial;")
+		args.splice(4, 0, "font-weight: normal;")
+		return args;
+	};
+
 	var m_urlload = function (url, callback) {
 		var request = new XMLHttpRequest();
 		request.responseType = "text";
 		request.addEventListener("load", function () {
 			callback(url, request.responseText || request.response);
 		});
+		request.withCredentials = true;
 		request.open("GET", url, true);
 		request.send();
 	};
@@ -79,7 +235,7 @@ function ApplicationBuilder(callback) {
 		return isBrowser();
 	}, "");
 
-	Application.bind("Promise", function (cb) {
+	Application.bind("Promise", function (cb, module) {
 		var err		= undefined;
 		var value	= undefined;
 		var cb_resolve	= [];
@@ -108,14 +264,14 @@ function ApplicationBuilder(callback) {
 			try {
 				f(v);
 			} catch (er) {
-				console.error(er);
+				console.error.apply(console, consoleArguments("error", [er], module));
 			}
 			return er;
 		};
 		var p = {
 			then : function (onFullfiled, onRejected) {
 				p.catch(onRejected || function PromiseError(err) {
-					console.error(err);
+					console.error.apply(console, consoleArguments("error", [er], module));
 				});
 				return Application.Promise(function (resolve, reject) {
 					var callback = function (data) {
@@ -124,8 +280,7 @@ function ApplicationBuilder(callback) {
 							res = onFullfiled(data);
 							resolve(res);
 						} catch (err) {
-							console.warn("%c Unchecked error in Promise", "color: darkred;font-weight: bold;");
-							console.error(err);
+							console.error.apply(console, consoleArguments("error", [err], module));
 							reject(err);
 						}
 					};
@@ -157,8 +312,9 @@ function ApplicationBuilder(callback) {
 				cb(resolve, reject);
 			}
 		} catch (err) {
-			console.warn("Promise Exception on constructor exeution: ", cb);
-			console.error(err);
+			console.warn.apply(console, consoleArguments("warn", ["Promise Exception on constructor exeution: ", cb], module));
+
+			console.error.apply(console, consoleArguments("error", [err], module));
 			reject(err);
 		}
 		return p;
@@ -170,15 +326,15 @@ function ApplicationBuilder(callback) {
 		}
 	}
 
-	Application.Promise.reject	= function (value) {
+	Application.Promise.reject	= function (value, module) {
 		return new Application.Promise(function (resolve, reject) {
 			reject(value);
-		});
+		}, module);
 	};
-	Application.Promise.resolve	= function (value) {
+	Application.Promise.resolve	= function (value, module) {
 		return new Application.Promise(function (resolve, reject) {
 			resolve(value);
-		});
+		}, module);
 	};
 	Application.Promise.race	= function (a) {
 		var p	= new Application.Promise();
@@ -249,6 +405,8 @@ function ApplicationBuilder(callback) {
 	});
 	Application.bind('modulePath', function (path) {
 		if (path && typeof(module_path) === "string") {
+			if (isNode() && !path.match(/^([a-zA-Z][a-z0-9A-Z]*\:\/\/|\.)/))
+				path = './' + path;
 			module_path	= path;
 		}
 		return module_path;
@@ -289,6 +447,12 @@ function ApplicationBuilder(callback) {
 				return store['#' + module_name];
 			}
 
+			if (isNode() && module_name.match(/^.\//)) {
+				if (module_name.indexOf(module_path) === 0) {
+					module_name = module_name.substr(module_path.length + 1);
+				}
+			}
+
 			var moduleMeta	= {
 				store	: {},
 				$requestQuery : module_name,
@@ -298,6 +462,7 @@ function ApplicationBuilder(callback) {
 				path	: '',
 				__dirname	: ''
 			};
+
 			if (module_name.match(/^(http|https|ws)\:\/\//)) {
 				moduleMeta.url = module_name;
 			} else if (module_name.match(/^\//)) {
@@ -335,12 +500,33 @@ function ApplicationBuilder(callback) {
 		var fs = false;
 		if (isNode()) {
 			fs = require('fs');
+
+			var nodeInterface = new ApplicationPrototype();
+			nodeInterface.bind('process', function __Node_Process() {
+				return global.process;
+			});
+			nodeInterface.bind('global', function __Node_GlobalObject() {
+				return global;
+			});
+			nodeInterface.bind('require', function __Node_Require(moduleName) {
+				if (moduleName[0] === ".") {
+					moduleName = process.cwd() + '/' + moduleName
+				}
+				return __requireNode(moduleName);
+			});
+			nodeInterface.bind('globalReference', function __Node_GlobalReference(referenceName) {
+				return global[referenceName];
+			});
+			Application.bind('NodeInterface', function _NodeInterface() {
+				return nodeInterface;
+			});
 		}
 		var module_cache = {};
 		var module_requests = {};
 		var require_cache	= {};
 		var _console        = console;
 		var chunkIndex      = 0;
+
 		Application.bind("require", function (module_name, callback) {
 			if (typeof(module_name) === "string") {
 				var moduleMeta	= Application.moduleResolve(module_name, undefined);
@@ -425,85 +611,29 @@ function ApplicationBuilder(callback) {
 						return (Application || global || null);
 					};
 
-					var module_url = moduleMeta.url + (!Application.cacheEnabled() ? ((moduleMeta.url.indexOf('?') === -1 ? '?' : '&') + 't='+( cacheSuffix ? cacheSuffix : module.atime ) ) : '');
+					var module_url = moduleMeta.url + ((!Application.cacheEnabled() && !isNode()) ? ((moduleMeta.url.indexOf('?') === -1 ? '?' : '&') + 't='+( cacheSuffix ? cacheSuffix : module.atime ) ) : '');
 
 					var module_header = Application.debugEnabled() ? ("/**" +
 						"\n * Platform: ApplicationBuilder/ApplicationPrototype by Sergiu Gordienco Vasile" +
 						"\n * Module Name: " + module.meta.name +
 						"\n * Module Url: " + module.meta.url +
 						"\n */\n\n") : "";
-					var consoleArguments = function (_type, _args) {
-						var args = Array.prototype.slice.call(_args).map(function (arg, index) {
-							return arg;
-						});
-						var sint  = function (i, n) { return ('000000' + i).substr(0 - (n || 2)); };
-						var date = new Date();
-						var prefix = "%c["
-							+ sint(date.getHours())
-							+ ':' + sint(date.getMinutes())
-							+ ':' + sint(date.getSeconds())
-							+ '.' + sint(date.getSeconds(), 3)
-							+ "] %c" + _type.toUpperCase() + " %c " + module.meta.name + "%c\n";
-						if (typeof(args[0]) === "string") {
-							args[0] = prefix + args[0];
-						} else {
-							args.unshift(prefix);
-						}
-						var typeSettings = (
-							{
-								error : {
-									"background-color": "firebrick",
-									"color": "white"
-								},
-								warn : {
-									"background-color": "golderod",
-									"color": "black"
-								},
-								info : {
-									"background-color": "SkyBlue",
-									"color": "black"
-								},
-								debug : {
-									"background-color": "#232323",
-									"color": "white"
-								}
-							}
-						)[_type] || {
-							"background-color": "#28a296",
-							"color": "#000000"
-						};
-						args.splice(
-							1, 0,
-							"font-weight: normal;"
-								+ "background-color:" + typeSettings["background-color"] + ';'
-								+ "color:" + typeSettings["color"] + ';'
-						);
-						args.splice(
-							2, 0,
-							"font-weight: bold;"
-								+ "background-color:" + typeSettings["background-color"] + ';'
-								+ "color:" + typeSettings["color"] + ';'
-						);
-						args.splice(3, 0, "font-weight: bold;background-color: initial;color: initial;")
-						args.splice(4, 0, "font-weight: normal;")
-						return args;
-					}
 					var console = {
 						log : function () {
 							if (Application.debugEnabled())
-								_console.log.apply(_console, consoleArguments("log", arguments));
+								_console.log.apply(_console, consoleArguments("log", arguments, module));
 						},
 						info : function () {
 							if (Application.debugEnabled())
-								_console.info.apply(_console, consoleArguments("info", arguments));
+								_console.info.apply(_console, consoleArguments("info", arguments, module));
 						},
 						warn : function () {
 							if (Application.debugEnabled())
-								_console.warn.apply(_console, consoleArguments("warn", arguments));
+								_console.warn.apply(_console, consoleArguments("warn", arguments, module));
 						},
 						error : function () {
 							if (Application.debugEnabled()) {
-								_console.log.apply(_console, consoleArguments("error", []));
+								_console.log.apply(_console, consoleArguments("error", [], module));
 								var args = Array.prototype.slice.call(arguments);
 								if (
 									args[0]
@@ -519,7 +649,7 @@ function ApplicationBuilder(callback) {
 						},
 						debug : function () {
 							if (Application.debugEnabled())
-								_console.debug.apply(_console, consoleArguments("debug", arguments));
+								_console.debug.apply(_console, consoleArguments("debug", arguments, module));
 						},
 						clear : function () {
 							_console.clear.apply(_console, arguments);
@@ -571,6 +701,14 @@ function ApplicationBuilder(callback) {
 						} else {
 							console.__parent = window.console.__parent;
 						}
+					} else {
+						if (__globalNode && !__globalNode.console.__parent) {
+							console.__parent = __globalNode.console;
+							__globalNode.console = console;
+						} else {
+							if (__globalNode && __globalNode.console.__parent)
+								console.__parent = __globalNode.console.__parent;
+						}
 					}
 					var moduleError    = function (err, name) {
 						var prettyError = new SyntaxError(err.message, module.meta.url, err.lineNumber);
@@ -582,7 +720,7 @@ function ApplicationBuilder(callback) {
 						prettyError.lineNumber = err.lineNumber || addrMatch[1] || 0;
 						prettyError.columnNumber = err.columnNumber || addrMatch[2] || 0;
 						var url = module.meta.url;
-						if (url[0] = '/') url = location.origin + url;
+						if (url[0] = '/' && isBrowser()) url = location.origin + url;
 						prettyError.stack = name + ': ' + err.message
 							+ ' ; line ' + prettyError.lineNumber + ':' + prettyError.columnNumber + '\n' + (
 								err.stack.indexOf(Application.modulePath()) !== -1
@@ -594,7 +732,30 @@ function ApplicationBuilder(callback) {
 					};
 					var moduleRunner   = function _moduleRunner(body) {
 						var er, err;
+						var __NodeModuleRequire = function (moduleName) {
+							if (!isNode()) throw Error('require is not available in BrowserMode');
 
+							if (moduleName[0] === ".") {
+								moduleName = __dirname + '/' + moduleName;
+							}
+							return Application.NodeInterface().require(moduleName);
+						};
+
+						var Promise = function (resolve, reject) {
+							return new Application.Promise(resolve, function (err) {
+								err = moduleError(err);
+								console.error(err);
+								reject(err);
+							}, module);
+						};
+						Promise.race    = Application.Promise.race;
+						Promise.all     = Application.Promise.all;
+						Promise.resolve = function (handler, module) {
+							return Application.Promise.resolve(handler, module);
+						};
+						Promise.reject  = function (handler, module) {
+							return Application.Promise.reject(handler, module);
+						};
 						try {
 							var moduleBlock = new Function(
 								'module',
@@ -603,6 +764,9 @@ function ApplicationBuilder(callback) {
 								'Application',
 								'global',
 								'moduleError',
+								'ApplicationPrototype',
+								'require',
+								'Promise',
 								body
 							);
 						} catch (er) {
@@ -633,7 +797,10 @@ function ApplicationBuilder(callback) {
 											__dirname,
 											Application,
 											global,
-											moduleError
+											moduleError,
+											ApplicationPrototype,
+											__NodeModuleRequire,
+											Promise
 										]
 									);
 
@@ -685,7 +852,10 @@ function ApplicationBuilder(callback) {
 										__dirname,
 										Application,
 										global,
-										moduleError
+										moduleError,
+										ApplicationPrototype,
+										__NodeModuleRequire,
+										Promise
 									]
 								);
 							} catch (er) {
@@ -707,6 +877,12 @@ function ApplicationBuilder(callback) {
 									}
 									return url.replace(/\?.*/, '');
 								})(module_url)), 'utf8', function (err, module_text) {
+									if (err) {
+										console.error(err);
+										module.$request.reject(moduleError(err));
+										return;
+									}
+
 									err = undefined;
 									try {
 										if (Application.debugEnabled()) {
