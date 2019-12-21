@@ -28,6 +28,12 @@ function ApplicationBuilder(callback) {
 		}
 	}
 
+	var consoleOptions = {
+		file: true,
+		contextName: true,
+		timestamp: true,
+		logType: true
+	};
 	var consoleArguments = function (_type, _args, module) {
 		if (isNode()) {
 			return consoleArgumentsNode(_type, _args, module);
@@ -99,12 +105,21 @@ function ApplicationBuilder(callback) {
 		var date = new Date();
 
 		args.unshift(
-			'\033[2m'
-				+ sint(date.getHours())
-				+ ':' + sint(date.getMinutes())
-				+ ':' + sint(date.getSeconds())
-				+ '.' + sint(date.getSeconds(), 3) + ' \033[1;'
-				+ typeColor + 'm' + _type.toUpperCase() + '\t\033[22m ' + info + '\033[37m\t(' + path + ') '
+			(
+				consoleOptions.timestamp ?
+				( '\033[2m'
+					+ sint(date.getHours())
+					+ ':' + sint(date.getMinutes())
+					+ ':' + sint(date.getSeconds())
+					+ '.' + sint(date.getSeconds(), 3) + ' ' )
+				: ''
+			)
+			+ '\033[2;1;' + typeColor + 'm'
+			+ ( consoleOptions.logType ? ( _type.toUpperCase() + '\t' ) : '' )
+			+ '\033[22m'
+			+ ( consoleOptions.contextName ? ( ' ' + info ) : '' )
+			+ '\033[37m'
+			+ ( consoleOptions.file ? ( '\t(' + path + ') ' ) : '' )
 		);
 		args.push('\033[0m');
 
@@ -126,12 +141,21 @@ function ApplicationBuilder(callback) {
 		})[0] || [])[1] || 'unknown';
 		var sint  = function (i, n) { return ('000000' + i).substr(0 - (n || 2)); };
 		var date = new Date();
-		var prefix = "%c["
-			+ sint(date.getHours())
-			+ ':' + sint(date.getMinutes())
-			+ ':' + sint(date.getSeconds())
-			+ '.' + sint(date.getSeconds(), 3)
-			+ "] %c" + _type.toUpperCase() + " %c " + ((((module || {}).meta || {}).name + (info.replace(/^.*(\:\d+\:\d+)\s*$/, ' line$1'))) || info || '?...') + "%c\n";
+		var prefix = ( consoleOptions.timestamp ? ( "%c["
+				+ sint(date.getHours())
+				+ ':' + sint(date.getMinutes())
+				+ ':' + sint(date.getSeconds())
+				+ '.' + sint(date.getSeconds(), 3)
+				+ "] " ) : ''
+			)
+			+ ( consoleOptions.logType ? ( "%c" + _type.toUpperCase() + " " ) : '' )
+			+ (
+				( consoleOptions.contextName || consoleArguments.file )
+				? (
+					"%c " + ((((module || {}).meta || {}).name + (info.replace(/^.*(\:\d+\:\d+)\s*$/, ' line$1'))) || info || '?...')
+			+ "%c\n"
+				) : ''
+			);
 		if (typeof(args[0]) === "string") {
 			args[0] = prefix + args[0];
 		} else {
@@ -219,7 +243,7 @@ function ApplicationBuilder(callback) {
 		config	= configurations;
 		vars	= variables;
 		config.cache_enabled	= false;
-		config.debug_enabled	= false;
+		config.debug_enabled	= true;
 		config.runModulesInFiles = false;
 		// console.log(callback.toString());
 		if (typeof(callback) === "function") {
@@ -403,6 +427,20 @@ function ApplicationBuilder(callback) {
 		}
 		return config.debug_enabled;
 	});
+
+	Application.bind('consoleOptions', function (options) {
+		if (options && typeof(options) === "object") {
+			Object.keys(options)
+				.forEach(function (prop) {
+					if (prop in consoleOptions)
+					if (typeof(consoleOptions[prop]) === typeof(options[prop]))
+						consoleOptions[prop] = options[prop];
+				});
+		}
+
+		return JSON.parse(JSON.stringify(consoleOptions));
+	})
+
 	Application.bind('modulePath', function (path) {
 		if (path && typeof(module_path) === "string") {
 			if (isNode() && !path.match(/^([a-zA-Z][a-z0-9A-Z]*\:\/\/|\.)/))
