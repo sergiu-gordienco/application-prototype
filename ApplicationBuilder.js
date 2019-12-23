@@ -9,13 +9,15 @@ var isNode=new Function("var isBrowser = false; try { isBrowser = this===window;
 // jshint +W054
 
 function ApplicationBuilder(callback) {
-	var __requireNode, __globalNode;
+	var __requireNode, __globalNode, __dirnameNode;
 	if (isNode()) {
 		__requireNode = function (moduleName) {
 			return require(moduleName)
 		}
 
 		__globalNode = global;
+
+		__dirnameNode = __dirname;
 	}
 
 	if (isBrowser()) {
@@ -439,12 +441,17 @@ function ApplicationBuilder(callback) {
 		}
 
 		return JSON.parse(JSON.stringify(consoleOptions));
-	})
+	});
 
 	Application.bind('modulePath', function (path) {
-		if (path && typeof(module_path) === "string") {
-			if (isNode() && !path.match(/^([a-zA-Z][a-z0-9A-Z]*\:\/\/|\.|\/)/))
-				path = './' + path;
+		if (path && typeof(path) === "string") {
+			if (isNode()) {
+				if (path.match(/^@(constructors|core)\:\/\//)) {
+					path = path.replace(/^@(constructors|core)\:\/\//, __dirnameNode + '/constructors')
+				} else if (!path.match(/^([a-zA-Z][a-z0-9A-Z]*\:\/\/|\.|\/)/)) {
+					path = './' + path;
+				}
+			}
 			module_path	= path;
 		}
 		return module_path;
