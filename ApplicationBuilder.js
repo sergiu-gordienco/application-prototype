@@ -443,7 +443,7 @@ function ApplicationBuilder(callback) {
 
 	Application.bind('modulePath', function (path) {
 		if (path && typeof(module_path) === "string") {
-			if (isNode() && !path.match(/^([a-zA-Z][a-z0-9A-Z]*\:\/\/|\.)/))
+			if (isNode() && !path.match(/^([a-zA-Z][a-z0-9A-Z]*\:\/\/|\.|\/)/))
 				path = './' + path;
 			module_path	= path;
 		}
