@@ -1,5 +1,5 @@
 variables:
-  GIT_REPO_URL: "https://github.com/sergiu-gordienco/application-prototype.git"
+  GIT_REPO_URL: "git@github.com:sergiu-gordienco/application-prototype.git"
 
 stages:
   - reposync
