@@ -44,8 +44,8 @@ repo_sync_github:
     - git config --global user.email "noreply+opensource-bot@sgapps.io"
     - git config --global user.name "🤖 opensource-bot@sgapps.io"
   script:
-    - ssh -T git@labs.sgapps.io
-    - ssh -T git@github.com
+    - ssh -T git@labs.sgapps.io || echo "done"
+    - ssh -T git@github.com || echo "done"
     - mkdir _repo
 #    - git clone --depth 1  "$CI_REPOSITORY_URL" _repo
     - git clone "$CI_REPOSITORY_URL" _repo
