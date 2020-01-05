@@ -23,7 +23,7 @@ before_script:
 repo_sync_github:
   stage: reposync
   only:
-    - /^(master)$/
+    - /^(master|v\d.*)$/
   before_script:
     - 'which ssh-agent || ( apt-get update -y > /dev/null && apt-get install openssh-client -y > /dev/null)'
     - eval $(ssh-agent -s)
@@ -47,7 +47,6 @@ repo_sync_github:
     - ssh -T git@labs.sgapps.io || echo "done"
     - ssh -T git@github.com || echo "done"
     - mkdir _repo
-#    - git clone --depth 1  "$CI_REPOSITORY_URL" _repo
     - git clone "$CI_REPOSITORY_URL" _repo
     - cd _repo
     - git remote add origin-github "$GIT_REPO_URL"
@@ -56,7 +55,7 @@ repo_sync_github:
 npm_publish:
   stage: publish
   only:
-    - /^v.*$/
+    - /^v\d.*$/
   except:
     - branches
   before_script:
@@ -79,8 +78,8 @@ npm_publish:
     - git config --global user.email "noreply+opensource-bot@sgapps.io"
     - git config --global user.name "🤖 opensource-bot@sgapps.io"
   script:
-    - ssh -T git@labs.sgapps.io
-    - ssh -T git@github.io
+    - ssh -T git@labs.sgapps.io || echo "done"
+    - ssh -T git@github.io || echo "done"
     - mkdir _repo
 #    - git clone --depth 1  "$CI_REPOSITORY_URL" _repo
     - git clone "$CI_REPOSITORY_URL" _repo
