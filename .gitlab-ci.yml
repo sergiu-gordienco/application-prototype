@@ -56,7 +56,7 @@ repo_sync_github:
 npm_publish:
   stage: publish
   only:
-    - /^v\d.*$/
+    - /^v.*$/
   except:
     - branches
   before_script:
@@ -82,7 +82,8 @@ npm_publish:
     - ssh -T git@labs.sgapps.io
     - ssh -T git@github.io
     - mkdir _repo
-    - git clone --depth 1  "$CI_REPOSITORY_URL" _repo
+#    - git clone --depth 1  "$CI_REPOSITORY_URL" _repo
+    - git clone "$CI_REPOSITORY_URL" _repo
     - cd _repo
     - git remote add origin-github "$GIT_REPO_URL"
     - git push --tags origin-github
