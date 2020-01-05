@@ -45,7 +45,7 @@ repo_sync_github:
     - git config --global user.name "🤖 opensource-bot@sgapps.io"
   script:
     - ssh -T git@labs.sgapps.io
-    - ssh -T git@github.io
+    - ssh -T git@github.com
     - mkdir _repo
     - git clone --depth 1  "$CI_REPOSITORY_URL" _repo
     - cd _repo
