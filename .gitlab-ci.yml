@@ -47,7 +47,8 @@ repo_sync_github:
     - ssh -T git@labs.sgapps.io
     - ssh -T git@github.com
     - mkdir _repo
-    - git clone --depth 1  "$CI_REPOSITORY_URL" _repo
+#    - git clone --depth 1  "$CI_REPOSITORY_URL" _repo
+    - git clone "$CI_REPOSITORY_URL" _repo
     - cd _repo
     - git remote add origin-github "$GIT_REPO_URL"
     - git push origin-github master
