@@ -36,7 +36,7 @@ repo_sync_github:
     - chmod 600 ~/.ssh/config
     - chmod 600 ~/.ssh/id_rsa
     - chmod 644 ~/.ssh/id_rsa.pub
-    - apt install -y git > /dev/null
+    - apt install -y git wget > /dev/null
     - wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.1/install.sh | bash > /dev/null
     - export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
     - '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm'
@@ -70,7 +70,7 @@ npm_publish:
     - chmod 600 ~/.ssh/config
     - chmod 600 ~/.ssh/id_rsa
     - chmod 644 ~/.ssh/id_rsa.pub
-    - apt install -y git > /dev/null
+    - apt install -y git wget > /dev/null
     - wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.1/install.sh | bash > /dev/null
     - export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
     - '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm'
