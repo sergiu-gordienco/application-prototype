@@ -50,13 +50,72 @@
  */
 
 /**
- * @typedef {object} ApplicationBuilderInstance - load Application Framework
+ * @typedef {Object} ApplicationConsoleOptions
+ * @property {Boolean} [file] enable/disable showing filename in console log. default value is `true`
+ * @property {Boolean} [contextName] enable/disable showing context Execution info in console log. default value is `true`
+ * @property {Boolean} [timestamp] enable/disable showing current timestamp in console log. default value is `true`
+ * @property {Boolean} [logType] enable/disable showing log type in console log. default value is `true
+ */
+
+/**
+ * @typedef {Object} ApplicationModuleStore
+ * @description modules store where are indexed modules
+ */
+
+/**
+ * @callback ApplicationModuleRegister
+ * @param {String} path path that will be used as `Application.modulePath()`
+ * @param {String[]} modules list of modules names that should be registered
+ * @returns {ApplicationModuleStore}
+ */
+
+/**
+ * @typedef {Object} ApplicationModuleMeta
+ * @property {ApplicationModuleStore} store same as `module.cache()`
+ * @property {PromiseLike<String>} $requestQuery XMLHttpRequest used for obtaining Module's Content
+ * @property {String} module_path module's path
+ * @property {String} path module's internal path used as identifier of module
+ * @property {String} name module's name
+ * @property {String} __dirname module's dirname
+ */
+
+/**
+ * @callback ApplicationModuleResolve
+ * @param {String} module module name
+ * @param {String} [path] module path
+ * @returns {ApplicationModuleMeta}
+ */
+
+/**
+ * @typedef {Object} ApplicationNodeInterface
+ * @property {function():NodeJS.Process} process
+ * @property {function():NodeJS.Global} global
+ * @property {function():NodeRequire} require
+ * @property {function(string):any} globalReference returns NodeJS require reference by it's name
+ */
+
+/**
+ * @typedef {Object} ApplicationBuilderInstance - load Application Framework
  * @property {ApplicationPrototypeBind} bind - attach a new Method
  * @property {ApplicationPrototypeListener} on - listen an event
  * @property {ApplicationPrototypeListener} once - listen an event once
  * @property {ApplicationPrototypeListenerRemove} off - listen an event
  * @property {ApplicationPrototypeCrudEvents} crudEvents - listen an event once
  * @property {ApplicationBuilderRequire} require - The class to register
+ * @property {function(Function):Promise} Promise
+ * @property {function(Array<Promise>):Promise} Promise.all
+ * @property {function(Array<Promise>):Promise} Promise.race
+ * @property {function(any):Promise} Promise.resolve
+ * @property {function(any):Promise} Promise.reject
+ * @property {function():boolean} isNode - returns true if application is running in a node env
+ * @property {function():boolean} isBrowser - returns true if application is running in a browser env
+ * @property {function(boolean):boolean} runModulesInFiles enable/disable to run modules in Blob files, returns current state
+ * @property {function(boolean):boolean} debugEnabled enable/disable debug mode, returns current state
+ * @property {function(ApplicationConsoleOptions):ApplicationConsoleOptions} consoleOptions update console options.
+ * @property {function(String):String} modulePath update current modules path, default returns current module path
+ * @property {ApplicationModuleRegister} moduleRegister register new modules
+ * @property {ApplicationModuleResolve} moduleResolve resolves module's meta, and index that info in Application's store
+ * @property {ApplicationNodeInterface} NodeInterface returns interface for accessing Node Env, is defined only in node env
  */
 
 /** @typedef {{ prop1: string, prop2: string, prop3?: number }} XXXSpecialType */
@@ -251,3 +310,26 @@ function ApplicationBuilder() {
 /** @namespace */
 var Application = new ApplicationBuilder();
 
+
+/**
+ * @typedef {String} ModuleResourceUrl
+ * @description resources url is composed from `module's plath` + `resource path`
+ */
+
+/**
+ * @typedef {Object} ApplicationModule
+ * @property {PromiseLike} $request resolves module exports
+ * @property {function():any} exports module exports handler
+ * @property {Number} atime unix time in milliseconds
+ * @property {function():ApplicationBuilderInstance} Application returns current application
+ * @property {function():ApplicationModuleStore} cache returns module's reserved cache object
+ * @property {function(any):Promise} require require modules from module's folder
+ * @property {function(ModuleResourceUrl):String} resourceUrl returns module's resource URL
+ * @property {ApplicationModuleMeta} meta module's meta information
+ */
+
+/** @namespace */
+/** @type {ApplicationModule} */
+var module = {
+	exports : {}
+}

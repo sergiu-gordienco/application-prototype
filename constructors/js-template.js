@@ -452,8 +452,7 @@ Element.prototype.renderJsArgs = function (context, args, cb) {
 Application.require(["extensions/prototype"]).then(function (lib) {
     module.exports = {
         parseContent: textNodesUnder,
-        parseAttributes: attrsNodesUnder,
-
+        parseAttributes: attrsNodesUnder
     };
 });
 
