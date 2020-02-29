@@ -99,7 +99,7 @@ String.prototype.markdown	= function () {
 		});
 
 		f_match(/\!object\-(\d+\%{0,1})x(\d+\%{0,1})\[([^\]]*)]\(([^(]+)\)/g,'<object width="$1" height="$2" src="$4">$3</object>');
-		f_match(/\!iframe\-(\d+\%{0,1})x(\d+\%{0,1})\[([^\]]*)]\(([^(]+)\)/g,'<iframe width="$1" height="$2" src="$4">$3</iframe>');
+		f_match(/\!iframe\-(\d+\%{0,1})x(\d+\%{0,1})\[([^\]]*)]\(([^(]+)\)/g,'<iframe width="$1" height="$2" src="$4" frameborder="0" allowfullscreen >$3</iframe>');
 		f_match(/\!video\-(\d+\%{0,1})x(\d+\%{0,1})\[([^\]]*)]\(([^(]+)\)/g, function (match, s1, s2, s3, s4) {
 			return '<video width="'+s1+'" height="'+s2+'" controls>'+(s4 + '').split(';').filter(function (v) { return v.length; }).map(function (s) { return '<source src="'+E(s).replace('#','" type="')+'">';}).join("")+''+I(s3)+'</video>';
 		});
@@ -130,7 +130,7 @@ String.prototype.markdown	= function () {
 			return '<object width="' + s1 + '" height="' + s2 + '" src="' + references[s4] + '">' + s3 + '</object>'
 		});
 		f_match(/\!iframe\-(\d+\%{0,1})x(\d+\%{0,1})\[([^\]]*)]\[([^(]+)\]/g,  function (s0, s1, s2, s3, s4) {
-			return '<iframe width="' + s1 + '" height="' + s2 + '" src="' + references[s4] + '">' + s3 + '</iframe>';
+			return '<iframe width="' + s1 + '" height="' + s2 + '" src="' + references[s4] + '" frameborder="0" allowfullscreen >' + s3 + '</iframe>';
 		});
 		f_match(/\!video\-(\d+\%{0,1})x(\d+\%{0,1})\[([^\]]*)]\[([^(]+)\]/g, function (match, s1, s2, s3, s4) {
 			return '<video width="'+s1+'" height="'+s2+'" controls>'+(s4 + '').split(';').filter(function (v) { return v.length; }).map(function (s) { return '<source src="'+E(references[s]).replace('#','" type="')+'">';}).join("")+''+I(s3)+'</video>';
