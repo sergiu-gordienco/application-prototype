@@ -27,6 +27,17 @@
     "controller",
     "mapping"
   ],
+  "jshintConfig": {
+    "bitwise": false,
+    "freeze": false,
+    "loopfunc": true,
+    "laxbreak": true,
+    "multistr": true,
+    "-W002": true,
+    "-W014": true,
+    "-W069": true,
+    "-W032": true
+  },
   "author": "Sergiu Gordienco <sergiu.gordienco@gmail.com> (http://www.cloudwebcode.com/)",
   "license": "Creative Commons Attribution-NonCommercial 4.0 / or Granted by SGApps Labs",
   "bugs": {

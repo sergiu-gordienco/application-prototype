@@ -12,8 +12,8 @@ function ApplicationBuilder(callback) {
 	var __requireNode, __globalNode, __dirnameNode;
 	if (isNode()) {
 		__requireNode = function (moduleName) {
-			return require(moduleName)
-		}
+			return require(moduleName);
+		};
 
 		__globalNode = global;
 
@@ -76,7 +76,7 @@ function ApplicationBuilder(callback) {
 			return info.match(item);
 		}).filter(function (item) {
 			return !!item;
-		})[0] || [])[1] || 'unknown'
+		})[0] || [])[1] || 'unknown';
 
 		path = ([
 			[ /\n\s*at\s+(\.{0,1}\/.*)/ ],
@@ -135,7 +135,8 @@ function ApplicationBuilder(callback) {
 		info = ([
 			/\n.*module.exports.*blob\:.*\#file=(.*)/,
 			/\n\s*at\s+(\S+.*blob\:(http|https|\/\/)[^\)\n]+)\s*\)/,
-			/\n\s*at\s+(\S+).*blob\:(http|https|\/\/)/
+			/\n\s*at\s+(\S+).*blob\:(http|https|\/\/)/,
+			/\n.*\n.*\n\s*(\S+\@(blob\:|)((http|https)\:\/\/|).*Function\:\d+)/i			
 		].map(function (item) {
 			return info.match(item);
 		}).filter(function (item) {
@@ -154,10 +155,12 @@ function ApplicationBuilder(callback) {
 			+ (
 				( consoleOptions.contextName || consoleArguments.file )
 				? (
-					"%c " + ((((module || {}).meta || {}).name + (info.replace(/^.*(\:\d+\:\d+)\s*$/, ' line$1'))) || info || '?...')
+					"%c " + ((((module || {}).meta || {}).name + ' ' + (info.replace(/^.*(\:\d+\:\d+)\s*$/, ' line$1').replace(/(\/\<\s*|)\@.*(\:\d+\:\d+|\:\d+).*/, '()$2'))) || info || '?...')
 			+ "%c\n"
 				) : ''
-			);
+			)
+			// + '\n---------\n' + getExecInfo() + '\n---------\n'
+			;
 		if (typeof(args[0]) === "string") {
 			args[0] = prefix + args[0];
 		} else {
@@ -198,8 +201,11 @@ function ApplicationBuilder(callback) {
 				+ "background-color:" + typeSettings["background-color"] + ';'
 				+ "color:" + typeSettings["color"] + ';'
 		);
-		args.splice(3, 0, "font-weight: bold;background-color: initial;color: initial;")
-		args.splice(4, 0, "font-weight: normal;")
+		args.splice(3, 0, "font-weight: bold;background-color: initial;color: initial;");
+		args.splice(4, 0, "font-weight: normal;");
+		// if (_type === "error") {
+		// 	args.push(getExecInfo().replace(/^\n.*\n.*/, ''));
+		// }
 		return args;
 	};
 
@@ -447,7 +453,7 @@ function ApplicationBuilder(callback) {
 		if (path && typeof(path) === "string") {
 			if (isNode()) {
 				if (path.match(/^@(constructors|core)\:\/\//)) {
-					path = path.replace(/^@(constructors|core)\:\/\//, __dirnameNode + '/constructors')
+					path = path.replace(/^@(constructors|core)\:\/\//, __dirnameNode + '/constructors');
 				} else if (!path.match(/^([a-zA-Z][a-z0-9A-Z]*\:\/\/|\.|\/)/)) {
 					path = './' + path;
 				}
@@ -555,7 +561,7 @@ function ApplicationBuilder(callback) {
 			});
 			nodeInterface.bind('require', function __Node_Require(moduleName) {
 				if (moduleName[0] === ".") {
-					moduleName = process.cwd() + '/' + moduleName
+					moduleName = process.cwd() + '/' + moduleName;
 				}
 				return __requireNode(moduleName);
 			});
@@ -599,7 +605,7 @@ function ApplicationBuilder(callback) {
 							var updateModuleName = function (name, path) {
 								if (path.match(/^(http|https|ws)\:\/\//)) {
 									if (!name.match(/((\.js)(\?.*|\#.*|))$/)) {
-										name += ".js"
+										name += ".js";
 									}
 								}
 								if (name.indexOf("::") !== -1) {
@@ -723,6 +729,9 @@ function ApplicationBuilder(callback) {
 						time : function () {
 							_console.time.apply(_console, arguments);
 						},
+						trace : function () {
+							_console.trace.apply(_console, arguments);
+						},
 						timeLog : function () {
 							_console.timeLog.apply(_console, arguments);
 						},
@@ -765,7 +774,7 @@ function ApplicationBuilder(callback) {
 						prettyError.lineNumber = err.lineNumber || addrMatch[1] || 0;
 						prettyError.columnNumber = err.columnNumber || addrMatch[2] || 0;
 						var url = module.meta.url;
-						if (url[0] = '/' && isBrowser()) url = location.origin + url;
+						if (url[0] === '/' && isBrowser()) url = location.origin + url;
 						prettyError.stack = name + ': ' + err.message
 							+ ' ; line ' + prettyError.lineNumber + ':' + prettyError.columnNumber + '\n' + (
 								err.stack.indexOf(Application.modulePath()) !== -1
@@ -801,8 +810,9 @@ function ApplicationBuilder(callback) {
 						Promise.reject  = function (handler, module) {
 							return Application.Promise.reject(handler, module);
 						};
+						var moduleBlock;
 						try {
-							var moduleBlock = new Function(
+							moduleBlock = new Function(
 								'module',
 								'console',
 								'__dirname',
@@ -867,7 +877,7 @@ function ApplicationBuilder(callback) {
 							));
 
 							if (Application.debugEnabled()) {
-								if (module.meta.url[0] = '/') url = url + '#file=' + location.origin + module.meta.url;
+								if (module.meta.url[0] === '/') url = url + '#file=' + location.origin + module.meta.url;
 							}
 
 							script = document.createElement('script');
@@ -905,7 +915,7 @@ function ApplicationBuilder(callback) {
 								);
 							} catch (er) {
 								err = er;
-							};
+							}
 
 							if (err) {
 								throw moduleError(err);
@@ -1028,7 +1038,7 @@ function ApplicationBuilder(callback) {
 ApplicationBuilder.prototype.docs = ((function (ApplicationPrototypeJSDocs) {
 	var _ApplicationPrototypeJSDocs = function () {
 		return ApplicationPrototypeJSDocs;
-	}
+	};
 	return _ApplicationPrototypeJSDocs;
 })((function () {
 	var ApplicationPrototypeJSDocs = {
