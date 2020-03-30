@@ -158,6 +158,7 @@ textParser.update = function (item, val, cb) {
 		});
 	}
 	if (equalNodesArr) {
+		cb(null);
 		return;
 	}
 	var nodes = item.data.nodes;
@@ -627,10 +628,16 @@ attrParser.update = function (item, value, config, cb) {
 					item.data.node.addEventListener(
 						item.data.name,
 						function (event) {
-							value.apply(
-								config.context,
-								[event]
-							);
+							attrParser.value(item, config, function (err, value) {
+								if (err) {
+									console.error(err);
+									return;
+								}
+								value.apply(
+									config.context,
+									[event]
+								);
+							});
 						}
 					);
 				} else if (
@@ -714,6 +721,7 @@ attrParser.value = function (item, config, cb) {
 				)
 			);
 		} catch (er) {
+			console.error("JSTemplate::expressionBuilder", er, item);
 			expressionCall = function () {
 				return [
 					//@ts-ignore
@@ -774,7 +782,7 @@ var nodeParser = function (nodeElement, cb, config) {
 	})(config.args));
 
 	/**
-	 * @param {(HTMLElement|Node)} nodeElement 
+	 * @param {(HTMLElement)} nodeElement 
 	 * @returns {jsTemplateAttrData}
 	 */
 	var ate = function (nodeElement) {
@@ -807,6 +815,9 @@ var nodeParser = function (nodeElement, cb, config) {
 				__JS_TEMPLATE.nodes.push(attrResult);
 			}
 		}
+		__JS_TEMPLATE.nodes.forEach(function (item) {
+			nodeElement.removeAttribute(item.attr.name);
+		});
 
 		/**
 		 * Allowed Types
@@ -837,6 +848,7 @@ var nodeParser = function (nodeElement, cb, config) {
 			});
 		
 		children.forEach(function (node) {
+			//@ts-ignore
 			__JS_TEMPLATE.children.push(ate(node));
 		});
 
@@ -874,11 +886,14 @@ var nodeParser = function (nodeElement, cb, config) {
 	var _methods = {
 		items  : ate(nodeElement),
 		redraw :function (cb, context, args) {
+			var DEBUG_MODE = 1;
+
 			if (typeof(context) !== "undefined") {
 				config.context = context;
 			}
 			if (typeof(args) === "object" && args) {
 				config.args = args;
+				console.info(config.args);
 			}
 
 			if (!cb) cb = function () {
@@ -912,12 +927,15 @@ var nodeParser = function (nodeElement, cb, config) {
 					var renderStop = false;
 					var renderChildren = true;
 					var handleError = function (instance) {
-						if (Array.isArray(instance.errors) && instance.errors.length) {
+						if (instance && Array.isArray(instance.errors) && instance.errors.length) {
 							instance.errors.forEach(function (err) {
 								console.error('JSTemplate::itemChild error: ', err);
 							});
 						}
 					};
+					if (DEBUG_MODE >= 2) {
+						console.log("    ⬇ Render Items");
+					}
 					libs.async.forEach(
 						item.nodes,
 						function (next, itemNode) {
@@ -926,6 +944,9 @@ var nodeParser = function (nodeElement, cb, config) {
 								return;
 							}
 							
+							if (DEBUG_MODE >= 3) {
+								console.log("      ➡ Item", itemNode);
+							}
 							attrParser.value(
 								itemNode,
 								config,
@@ -946,8 +967,14 @@ var nodeParser = function (nodeElement, cb, config) {
 													err.item = itemNode;
 													next(err);
 													renderStop = true;
+													if (DEBUG_MODE >= 3) {
+														console.log("❌ renderStop = ", true);
+													}
 												} else {
 													if (!state) {
+														if (DEBUG_MODE >= 3) {
+															console.log("❌ renderChildren = ", false);
+														}
 														renderChildren = false;
 													}
 													next();
@@ -963,9 +990,15 @@ var nodeParser = function (nodeElement, cb, config) {
 							if (!renderChildren || renderStop) {
 								cb();
 							} else {
+								if (DEBUG_MODE >= 2) {
+									console.log("    ⬇ Render Texts");
+								}
 								libs.async.forEach(
 									item.texts,
 									function (next, itemText) {
+										if (DEBUG_MODE >= 3) {
+											console.log("      ➡ Text", itemText);
+										}
 										textParser.value(
 											itemText,
 											config,
@@ -997,9 +1030,15 @@ var nodeParser = function (nodeElement, cb, config) {
 										if (!renderChildren || renderStop) {
 											cb();
 										} else {
+											if (DEBUG_MODE >= 2) {
+												console.log("    ⬇ Render Children");
+											}
 											libs.async.forEach(
 												item.children,
 												function (next, itemChild) {
+													if (DEBUG_MODE >= 3) {
+														console.log("      ➡ Child", itemChild);
+													}
 													renderItem(itemChild, next);
 												},
 												function () {
@@ -1022,12 +1061,16 @@ var nodeParser = function (nodeElement, cb, config) {
 				};
 
 
-				// console.info("🎨 JSTemplate::Start delay: ", _delay, { node: nodeElement });
+				if (DEBUG_MODE) {
+					console.info("🎨 JSTemplate::Start delay: ", _delay, { node: nodeElement });
+				}
 				var sTime = new Date().valueOf();
 				renderItem(
 					_methods.items,
 					function () {
-						console.info("🎨 JSTemplate::Finish delay: ", (Math.floor(_delay * 100) / 100), "; time: ", (new Date().valueOf() - sTime),"ms;", { node: nodeElement });
+						if (DEBUG_MODE) {
+							console.info("🎨 JSTemplate::Finish delay: ", (Math.floor(_delay * 100) / 100), "; time: ", (new Date().valueOf() - sTime),"ms;", { node: nodeElement });
+						}
 					}
 				);
 
