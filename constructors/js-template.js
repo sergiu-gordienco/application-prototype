@@ -356,6 +356,7 @@ var parseTextNodes = function (textNode, cb, config) {
  * @property {HTMLElement} node node element
  * @property {any} [buffer] ( technical property )
  * @property {Boolean} [inline=false] should be value be parsed
+ * @property {Boolean} [postProcess=false] should be value be parsed
  */
 
 /**
@@ -370,6 +371,8 @@ var parseTextNodes = function (textNode, cb, config) {
  * @property {Array<jsTemplate_attrResult>} nodes
  * @property {Array<jsTemplate_textResult>} texts
  * @property {Array<jsTemplateAttrData>} children
+ * @property {Object<string,jsTemplate_attrResult>} _macro
+ * @property {boolean} [HAS_POST_PROCESS=false]
  */
 
 
@@ -423,6 +426,10 @@ var attrParser = function (attr, node) {
 			code: attr.value,
 			node: node
 		};
+
+		if (['for', 'template'].indexOf(attrResult.data.name) !== -1) {
+			attrResult.data.postProcess = true;
+		}
 	} else if (attr.name.match(/^js-.+$/)) {
 		attrResult.type = 'attribute';
 		attrResult.data = {
@@ -580,35 +587,57 @@ attrParser.update = function (item, value, config, cb) {
 									value = [
 										null
 									];
-								} else {
-									value = value.map(function (value, index) {
-										if (value === null) return document.createTextNode('');
-
-										var args = {};
-										args[item.data.node.getAttribute('data-ref-name') || 'item'] = {
-											value : value,
-											index : index
-										};
-										//@ts-ignore
-										return item.data.node.cloneNode(true).renderJs(
-											config.context,
-											Object.assign({}, config.args, args)
-										);
-									});
 								}
+								value = value.map(function (value, index) {
+									if (value === null) return document.createTextNode('');
+
+									var args = {};
+									args[
+										(
+											//@ts-ignore
+											item.data.node.attrdata.__JS_TEMPLATE._macro['key'] ||
+											{
+												data: { code: 'key '}
+											}
+										).data.code || 'key'
+									] = index;
+
+									args[
+										(
+											//@ts-ignore
+											item.data.node.attrdata.__JS_TEMPLATE._macro['ref'] ||
+											{
+												data: { code: 'item'}
+											}
+										).data.code || 'item'
+									] = value;
+
+									var node = item.data.node.cloneNode(true);
+									//@ts-ignore
+									node.renderJs(
+										config.context,
+										Object.assign({}, config.args, args)
+									);
+									return node;
+								});
 								var i;
+								console.log("🚀 ", value);
 								var ref = item.data.buffer.current[0];
 								var parent = ref.parentNode;
 								for (i = 0; i < value.length; i++) {
 									parent.insertBefore(value[i], ref);
 								}
+								item.data.buffer.current.forEach(function (node) {
+									node.parentNode.removeChild(node);
+								});
+								item.data.buffer.current = value;
 							}
 						};
 						item.data.buffer.current = [
-							item.data.buffer.emptyNode
+							document.createTextNode('')
 						];
 						item.data.node.parentElement.insertBefore(
-							item.data.buffer.emptyNode,
+							item.data.buffer.current[0],
 							item.data.node
 						);
 						item.data.node.parentElement.removeChild(
@@ -790,7 +819,9 @@ var nodeParser = function (nodeElement, cb, config) {
 		nodeElement.attrdata.__JS_TEMPLATE = nodeElement.attrdata.__JS_TEMPLATE || {
 			nodes: [],
 			texts: [],
-			children: []
+			children: [],
+			_macro: {},
+			HAS_POST_PROCESS: false
 		};
 		
 		//@ts-ignore
@@ -813,11 +844,24 @@ var nodeParser = function (nodeElement, cb, config) {
 				attrResult
 			) {
 				__JS_TEMPLATE.nodes.push(attrResult);
+
+				if (attrResult.type === 'macro') {
+					__JS_TEMPLATE._macro[attrResult.data.name] = attrResult;
+				}
+
+				if (attrResult.data.postProcess) {
+					__JS_TEMPLATE.HAS_POST_PROCESS = true;
+				}
 			}
 		}
 		__JS_TEMPLATE.nodes.forEach(function (item) {
 			nodeElement.removeAttribute(item.attr.name);
 		});
+
+		if (__JS_TEMPLATE.HAS_POST_PROCESS) {
+			cb(null, __JS_TEMPLATE);
+			return __JS_TEMPLATE;
+		}
 
 		/**
 		 * Allowed Types
@@ -923,6 +967,11 @@ var nodeParser = function (nodeElement, cb, config) {
 					}
 				})(config.args));
 
+				/**
+				 * 
+				 * @param {jsTemplateAttrData} item 
+				 * @param {function():void} cb 
+				 */
 				var renderItem = function (item, cb) {
 					var renderStop = false;
 					var renderChildren = true;
@@ -936,16 +985,20 @@ var nodeParser = function (nodeElement, cb, config) {
 					if (DEBUG_MODE >= 2) {
 						console.log("    ⬇ Render Items");
 					}
+
+					if (item.HAS_POST_PROCESS) {
+						renderChildren = false;
+					};
+
 					libs.async.forEach(
 						item.nodes,
 						function (next, itemNode) {
-							if (renderStop) {
-								next();
-								return;
-							}
-							
 							if (DEBUG_MODE >= 3) {
 								console.log("      ➡ Item", itemNode);
+							}
+							if (renderStop || (item.HAS_POST_PROCESS && !itemNode.data.postProcess)) {
+								next();
+								return;
 							}
 							attrParser.value(
 								itemNode,
