@@ -1,8 +1,15 @@
 /* jshint -W002 */
 
 /**
+ * @memberof module:request
  * @class
  * @name RequestModule 
+ */
+
+/**
+ * @memberof module:request
+ * @callback RequestModuleConstructor
+ * @returns {RequestModule}
  */
 
 /**
@@ -17,7 +24,8 @@
  *		 }, console.error);
  * }, console.error);
  * @module request
- * @augments RequestModule
+ * @returns {RequestModuleConstructor}
+ * @see module:request.RequestModule
  */
 
 Application.require("extensions/prototype", function (epro) {
@@ -28,7 +36,7 @@ Application.require("extensions/prototype", function (epro) {
 
 
 		/**
-		 * @typedef {Object} RequestModule.RequestConfig
+		 * @typedef {Object} module:request.RequestModule.RequestConfig
 		 * @inner
 		 * @property {boolean} [method="GET"]
 		 * @property {boolean} [url="#"]
@@ -52,7 +60,7 @@ Application.require("extensions/prototype", function (epro) {
 
 
 		/**
-		 * @typedef {object} RequestModule.readyStateType
+		 * @typedef {object} module:request.RequestModule.readyStateType
 		 * @property {number} [READY_STATE_UNSENT=0]
 		 * @property {number} [READY_STATE_OPENED=1]
 		 * @property {number} [READY_STATE_HEADERS_RECEIVED=2]
@@ -89,7 +97,7 @@ Application.require("extensions/prototype", function (epro) {
 
 		/**
 		 * @method config
-		 * @memberof RequestModule#
+		 * @memberof module:request.RequestModule#
 		 * @returns {RequestModule.RequestConfig}
 		 */
 		app.bind("config", function () {
@@ -98,7 +106,7 @@ Application.require("extensions/prototype", function (epro) {
 
 		/**
 		 * @method configurator
-		 * @memberof RequestModule#
+		 * @memberof module:request.RequestModule#
 		 * @param {('multipart'|'blob'|'binary'|'POST'|'prepare-multipart'|'retrieve-blob'|'retrieve-binary-string'|'prepare-post'|'check-status-code'|'ignore-status-code')} template configuration name
 		 * @returns {RequestModule}
 		 */
@@ -167,28 +175,28 @@ Application.require("extensions/prototype", function (epro) {
 
 		/**
 		 * @method request
-		 * @memberof RequestModule#
+		 * @memberof module:request.RequestModule#
 		 * @returns {XMLHttpRequest}
 		 */
 		app.bind("request", function () { return httpRequest; }, "");
 
 		/**
 		 * @method response
-		 * @memberof RequestModule#
+		 * @memberof module:request.RequestModule#
 		 * @returns {XMLHttpRequest.response}
 		 */
 
 
 		/**
 		 * @method response
-		 * @memberof RequestModule#
+		 * @memberof module:request.RequestModule#
 		 * @param {'request'} type
 		 * @returns {Promise<RequestModule>}
 		 */
 
 		/**
 		 * @method response
-		 * @memberof RequestModule#
+		 * @memberof module:request.RequestModule#
 		 * @param {'blob'} type
 		 * @param {{ type: string }} [params={type: 'application/octet-stream'}] Blob constructor's params
 		 * @returns {Promise<Blob>}
@@ -196,21 +204,21 @@ Application.require("extensions/prototype", function (epro) {
 
 		/**
 		 * @method response
-		 * @memberof RequestModule#
+		 * @memberof module:request.RequestModule#
 		 * @param {'arraybuffer'} type
 		 * @returns {Promise<ArrayBuffer>}
 		 */
 
 		/**
 		 * @method response
-		 * @memberof RequestModule#
+		 * @memberof module:request.RequestModule#
 		 * @param {('text'|'json')} type
 		 * @returns {Promise<string>}
 		 */
 
 		/**
 		 * @method response
-		 * @memberof RequestModule#
+		 * @memberof module:request.RequestModule#
 		 * @param {'document'} type
 		 * @returns {HTMLElement}
 		 */
@@ -383,14 +391,14 @@ Application.require("extensions/prototype", function (epro) {
 		/**
 		 * current XMLHttpRequest timeout in seconds
 		 * @method timeout
-		 * @memberof RequestModule#
+		 * @memberof module:request.RequestModule#
 		 * @returns {number}
 		 */
 
 		/**
 		 * update XMLHttpRequest timeout in seconds
 		 * @method timeout
-		 * @memberof RequestModule#
+		 * @memberof module:request.RequestModule#
 		 * @param {number} seconds set 0 to unlimited
 		 * @returns {RequestModule}
 		 */
@@ -405,14 +413,14 @@ Application.require("extensions/prototype", function (epro) {
 		/**
 		 * current XMLHttpRequest withCredentials status
 		 * @method withCredentials
-		 * @memberof RequestModule#
+		 * @memberof module:request.RequestModule#
 		 * @returns {boolean}
 		 */
 		
 		/**
 		 * update XMLHttpRequest withCredentials flag
 		 * @method withCredentials
-		 * @memberof RequestModule#
+		 * @memberof module:request.RequestModule#
 		 * @param {boolean} status
 		 * @returns {RequestModule}
 		 */
@@ -426,35 +434,35 @@ Application.require("extensions/prototype", function (epro) {
 
 		/**
 		 * Client has been created. open() not called yet.
-		 * @alias RequestModule.READY_STATE_UNSENT
+		 * @alias module:request.RequestModule.READY_STATE_UNSENT
 		 * @type {number}
 		 * @default 0
 		 */
 		app.READY_STATE_UNSENT = 0;
 		/**
 		 * open() has been called.
-		 * @alias RequestModule.READY_STATE_OPENED
+		 * @alias module:request.RequestModule.READY_STATE_OPENED
 		 * @type {number}
 		 * @default 1
 		 */
 		app.READY_STATE_OPENED = 1;
 		/**
 		 * send() has been called, and headers and status are available.
-		 * @alias RequestModule.READY_STATE_HEADERS_RECEIVED
+		 * @alias module:request.RequestModule.READY_STATE_HEADERS_RECEIVED
 		 * @type {number}
 		 * @default 2
 		 */
 		app.READY_STATE_HEADERS_RECEIVED = 2;
 		/**
 		 * Downloading; responseText holds partial data.
-		 * @alias RequestModule.READY_STATE_LOADING
+		 * @alias module:request.RequestModule.READY_STATE_LOADING
 		 * @type {number}
 		 * @default 3
 		 */
 		app.READY_STATE_LOADING = 3;
 		/**
 		 * Downloading is done
-		 * @alias RequestModule.READY_STATE_DONE
+		 * @alias module:request.RequestModule.READY_STATE_DONE
 		 * @type {number}
 		 * @default 4
 		 */
@@ -463,7 +471,7 @@ Application.require("extensions/prototype", function (epro) {
 
 		/**
 		 * @method readyState
-		 * @memberof RequestModule#
+		 * @memberof module:request.RequestModule#
 		 * @returns {RequestModule.readyStateType}
 		 */
 		app.bind("readyState", function (int) {
@@ -476,7 +484,7 @@ Application.require("extensions/prototype", function (epro) {
 
 		/**
 		 * @method status
-		 * @memberof RequestModule#
+		 * @memberof module:request.RequestModule#
 		 * @returns {XMLHttpRequest.status}
 		 */
 		app.bind("status", function (int) {
@@ -485,7 +493,7 @@ Application.require("extensions/prototype", function (epro) {
 
 		/**
 		 * @method statusText
-		 * @memberof RequestModule#
+		 * @memberof module:request.RequestModule#
 		 * @returns {XMLHttpRequest.statusText}
 		 */
 		app.bind("statusText", function (int) {
@@ -495,13 +503,13 @@ Application.require("extensions/prototype", function (epro) {
 
 		/**
 		 * @method async
-		 * @memberof RequestModule#
+		 * @memberof module:request.RequestModule#
 		 * @returns {RequestModule.RequestConfig.async}
-		 * @see RequestModule.RequestConfig
+		 * @see module:request.RequestModule.RequestConfig
 		 */
 		/**
 		 * @method async
-		 * @memberof RequestModule#
+		 * @memberof module:request.RequestModule#
 		 * @param {boolean} status enable/disable XMLHttpRequest async mode
 		 * @returns {RequestModule}
 		 */
@@ -515,13 +523,13 @@ Application.require("extensions/prototype", function (epro) {
 
 		/**
 		 * @method method
-		 * @memberof RequestModule#
+		 * @memberof module:request.RequestModule#
 		 * @returns {RequestModule.RequestConfig.method}
-		 * @see RequestModule.RequestConfig
+		 * @see module:request.RequestModule.RequestConfig
 		 */
 		/**
 		 * @method method
-		 * @memberof RequestModule#
+		 * @memberof module:request.RequestModule#
 		 * @param {string} status XMLHttpRequest method name, default is `"GET"`
 		 * @returns {RequestModule}
 		 */
@@ -535,11 +543,11 @@ Application.require("extensions/prototype", function (epro) {
 
 		/**
 		 * @method url
-		 * @memberof RequestModule#
+		 * @memberof module:request.RequestModule#
 		 * @returns {RequestModule.RequestConfig.url}
-		 * @see RequestModule.RequestConfig
+		 * @see module:request.RequestModule.RequestConfig
 		 *//**
-		 * @memberof RequestModule#
+		 * @memberof module:request.RequestModule#
 		 * @method url
 		 * @param {string} url setup the url that should be processed
 		 * @returns {RequestModule}
@@ -554,7 +562,7 @@ Application.require("extensions/prototype", function (epro) {
 
 		/**
 		 * @method open
-		 * @memberof RequestModule#
+		 * @memberof module:request.RequestModule#
 		 * @param {string} [method="GET"]
 		 * @param {string} [url]
 		 * @param {boolean} [async]
@@ -574,7 +582,7 @@ Application.require("extensions/prototype", function (epro) {
 
 		/**
 		 * @method send
-		 * @memberof RequestModule#
+		 * @memberof module:request.RequestModule#
 		 * @param {string|FormData|MediaStream} [data='']
 		 * @param {("asFormData"|"json")} [type=null]
 		 * @returns {RequestModule}
@@ -606,7 +614,7 @@ Application.require("extensions/prototype", function (epro) {
 
 		/**
 		 * @method headers
-		 * @memberof RequestModule#
+		 * @memberof module:request.RequestModule#
 		 * @returns {string}
 		 */
 		app.bind("headers", function () {
@@ -616,7 +624,7 @@ Application.require("extensions/prototype", function (epro) {
 		/**
 		 * set a new header
 		 * @method headers
-		 * @memberof RequestModule#
+		 * @memberof module:request.RequestModule#
 		 * @param {string} name
 		 * @param {string} value
 		 * @returns {RequestModule}
