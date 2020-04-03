@@ -1,4 +1,112 @@
 /**
+ * Module used processing data asynchronous
+ * @example
+ * Application.require('request').then(function (request) {
+ *	 request()
+ *		 .url('/data.json')
+ *		 .response('json')
+ *		 .then(function (data) {
+ *			 console.log(data);
+ *		 }, console.error);
+ * }, console.error);
+ * @module async
+ * @returns {module:async.AsyncConstructor}
+ * @see module:async~async
+ */
+declare module "async" {
+    /**
+     * @memberof module:async
+     * @callback AsyncConstructor
+     * @returns {module:async.Async}
+     */
+    type AsyncConstructor = () => module;
+    /**
+     * @memberof module:async
+     * @class
+     * @name Async
+     */
+    class Async {
+        /**
+         * return unique index identifier for an operation
+         * @method index
+         * @memberof module:async.Async#
+         * @returns {string}
+         */
+        index(): string;
+        /**
+         * method used for return result for an operation,
+         * returns `true` if value was accepted.
+         * if operation already obtained a value
+         * then value is not accepted and it returns `false`
+         * @method receive
+         * @memberof module:async.Async#
+         * @param {string} id obtained from {@link module:async.Async#index}
+         * @param {any} args
+         * @returns {boolean}
+         */
+        receive(id: string, args: any): boolean;
+        /**
+         * require to wait an additional operation
+         * @method wait
+         * @memberof module:async.Async#
+         */
+        wait(): void;
+        /**
+         * require to reserve index {@link module:async.Async#index} for an additional operation
+         * @method reserve
+         * @memberof module:async.Async#
+         * @returns {string}
+         */
+        reserve(): string;
+        /**
+         * require to run an operation
+         * @method run
+         * @memberof module:async.Async#
+         * @param {function():void} func function that should be executed
+         * @param {any[]} args
+         * @param {object} context
+         * @returns {string}
+         */
+        run(func: (...params: any[]) => any, args: any[], context: any): string;
+        /**
+         * reset operation processing
+         * @method flush
+         * @memberof module:async.Async#
+         */
+        flush(): void;
+        /**
+         * return how many operations are processing right now
+         * @method processing
+         * @memberof module:async.Async#
+         * @returns {number}
+         */
+        processing(): number;
+        /**
+         * return operations' responses
+         * @method responses
+         * @memberof module:async.Async#
+         * @param {boolean} [returnUnknownResponses=false]
+         * @returns {any[][]}
+         */
+        responses(returnUnknownResponses?: boolean): any[][];
+        /**
+         * return all errors found in responses
+         * @method errors
+         * @memberof module:async.Async#
+         * @returns {Error[]}
+         */
+        errors(): Error[];
+        /**
+         * register a callback to be called when processing is done
+         * @method done
+         * @memberof module:async.Async#
+         * @param {function():void} cb
+         */
+        done(cb: (...params: any[]) => any): void;
+    }
+}
+
+/**
  * browserSessionBuilder description
  * @callback BrowserSessionModule
  * @param  {string|object} objectStoreArg name or object of strategyStore
@@ -12,131 +120,175 @@ declare type BrowserSessionModule = (objectStoreArg: string | any, objectStoreCo
 declare function browserSessionBuilder(): void;
 
 /**
- * @typedef {Object} jsTemplate_textResult
- * @property {string} [type='text']
- * @property {jsTemplate_textResultData} data
+ * Module used for template rendering
+ * @example
+ * Application.require('js-template').then(function (jsTemplate) {
+ * 	jsTemplate.parseContent(
+ * 		document.body,
+ * 		function (err, config) { console.log(config) },
+ * 		{ context: {}, args: { item: 'sample reference' }}
+ * 	);
+ * }, console.error);
+ * @module js-template
+ * @returns {module:js-template.JSTemplateModule}
  */
-declare type jsTemplate_textResult = {
-    type?: string;
-    data: jsTemplate_textResultData;
-};
-
-/**
- * @typedef {Object} jsTemplate_textResultData
- * @property {Array<Text>} nodes
- * @property {Array<Text>} initialNodes
- * @property {String} code
- */
-declare type jsTemplate_textResultData = {
-    nodes: Text[];
-    initialNodes: Text[];
-    code: string;
-};
-
-/**
- * @typedef {Object} parseTextNodesConfig
- * @property {object} [args={}] arguments
- * @property {object} [context={}] execution context
- * @property {String} [start='{{'] start token
- * @property {String} [end='}}'] end token
- * @property {Array<jsTemplate_textResult>} [textNodes] array of TextNodes
- * @property {Array<Text>} [buffer] (technical property) buffer
- * @property {boolean} [opened=false] (technical property)
- * @property {Array<string>} [__argsNames] (technical property)
- * @property {Array<any>} [__argsValues] (technical property)
- */
-declare type parseTextNodesConfig = {
-    args?: any;
-    context?: any;
-    start?: string;
-    end?: string;
-    textNodes?: jsTemplate_textResult[];
-    buffer?: Text[];
-    opened?: boolean;
-    __argsNames?: string[];
-    __argsValues?: any[];
-};
-
-/**
- *
- * @param {Array<Text>} bf
- * @param {parseTextNodesConfig} config
- * @returns {jsTemplate_textResult}
- */
-declare function textParser(bf: Text[], config: parseTextNodesConfig): jsTemplate_textResult;
-
-/**
- * @param {HTMLElement|Node|Text} textNode
- * @param {function (Error, parseTextNodesConfig): void} cb
- * @param {parseTextNodesConfig} config
- */
-declare function parseTextNodes(textNode: HTMLElement | Node | Text, cb: (...params: any[]) => any, config: parseTextNodesConfig): void;
-
-/**
- * @typedef {Object} jsTemplate_Attribute
- * @property {String} name
- * @property {String} value
- */
-declare type jsTemplate_Attribute = {
-    name: string;
-    value: string;
-};
-
-/**
- * @typedef {Object} jsTemplate_attrResultAttributeData
- * @property {String} name attribute name
- * @property {String} code executable code
- * @property {HTMLElement} node node element
- * @property {any} [buffer] ( technical property )
- * @property {Boolean} [inline=false] should be value be parsed
- * @property {Boolean} [postProcess=false] should be value be parsed
- */
-declare type jsTemplate_attrResultAttributeData = {
-    name: string;
-    code: string;
-    node: HTMLElement;
-    buffer?: any;
-    inline?: boolean;
-    postProcess?: boolean;
-};
-
-/**
- * @typedef {Object} jsTemplate_attrResult
- * @property {('event'|'attribute'|'binding'|'macro')} type
- * @property {jsTemplate_Attribute} attr
- * @property {jsTemplate_attrResultAttributeData} data
- */
-declare type jsTemplate_attrResult = {
-    type: 'event' | 'attribute' | 'binding' | 'macro';
-    attr: jsTemplate_Attribute;
-    data: jsTemplate_attrResultAttributeData;
-};
-
-/**
- * @typedef {Object} jsTemplateAttrData
- * @property {Array<jsTemplate_attrResult>} nodes
- * @property {Array<jsTemplate_textResult>} texts
- * @property {Array<jsTemplateAttrData>} children
- * @property {Object<string,jsTemplate_attrResult>} _macro
- * @property {boolean} [HAS_POST_PROCESS=false]
- */
-declare type jsTemplateAttrData = {
-    nodes: jsTemplate_attrResult[];
-    texts: jsTemplate_textResult[];
-    children: jsTemplateAttrData[];
-    _macro: {
-        [key: string]: jsTemplate_attrResult;
+declare module "js-template" {
+    /**
+     * @memberof module:js-template
+     * @typedef {Object} JSTemplateModule
+     * @property {module:js-template~nodeParser} parseContent
+     * @property {object} config
+     * @property {number} [config.RENDER_FPS=15]
+     * @property {number} [config.REMOVE_EMPTY_NODES=true]
+     */
+    type JSTemplateModule = {
+        parseContent: module;
+        config: {
+            RENDER_FPS?: number;
+            REMOVE_EMPTY_NODES?: number;
+        };
     };
-    HAS_POST_PROCESS?: boolean;
-};
-
-/**
- * Parsing NodeElement Attribute
- * @param {jsTemplate_Attribute} attr
- *
- * @returns {jsTemplate_attrResult}
- */
-declare function attrParser(attr: jsTemplate_Attribute): jsTemplate_attrResult;
+    /**
+     * @typedef {Object} jsTemplate_textResult
+     * @property {string} [type='text']
+     * @property {module:js-template~jsTemplate_textResultData} data
+     */
+    type jsTemplate_textResult = {
+        type?: string;
+        data: module;
+    };
+    /**
+     * @typedef {Object} jsTemplate_textResultData
+     * @property {Array<Text>} nodes
+     * @property {Array<Text>} initialNodes
+     * @property {String} code
+     */
+    type jsTemplate_textResultData = {
+        nodes: Text[];
+        initialNodes: Text[];
+        code: string;
+    };
+    /**
+     * @typedef {Object} parseTextNodesConfig
+     * @property {object} [args={}] arguments
+     * @property {object} [context={}] execution context
+     * @property {String} [start='{{'] start token
+     * @property {String} [end='}}'] end token
+     * @property {Array<module:js-template~jsTemplate_textResult>} [textNodes] array of TextNodes
+     * @property {Array<Text>} [buffer] (technical property) buffer
+     * @property {boolean} [opened=false] (technical property)
+     * @property {Array<string>} [__argsNames] (technical property)
+     * @property {Array<any>} [__argsValues] (technical property)
+     */
+    type parseTextNodesConfig = {
+        args?: any;
+        context?: any;
+        start?: string;
+        end?: string;
+        textNodes?: module[];
+        buffer?: Text[];
+        opened?: boolean;
+        __argsNames?: string[];
+        __argsValues?: any[];
+    };
+    /**
+     * Expression Builder
+     * @param {string} code
+     * @param {module:js-template~parseTextNodesConfig} config
+     */
+    function expressionBuilder(code: string, config: module): void;
+    /**
+     * @callback parseTextNodesCallback
+     * @param {Error} err
+     * @param {module:js-template~parseTextNodesConfig} config
+     */
+    type parseTextNodesCallback = (err: Error, config: module) => void;
+    /**
+     * @param {HTMLElement|Node|Text} textNode
+     * @param {module:js-template.parseTextNodesCallback} cb
+     * @param {module:js-template~parseTextNodesConfig} config
+     */
+    function parseTextNodes(textNode: HTMLElement | Node | Text, cb: module, config: module): void;
+    /** @type {string}
+     */
+    var text: string;
+    /**
+     * @typedef {Object} jsTemplate_Attribute
+     * @property {String} name
+     * @property {String} value
+     */
+    type jsTemplate_Attribute = {
+        name: string;
+        value: string;
+    };
+    /**
+     * @typedef {Object} jsTemplate_attrResultAttributeData
+     * @property {String} name attribute name
+     * @property {String} code executable code
+     * @property {HTMLElement} node node element
+     * @property {any} [buffer] ( technical property )
+     * @property {Boolean} [inline=false] should be value be parsed
+     * @property {Boolean} [postProcess=false] should be value be parsed
+     */
+    type jsTemplate_attrResultAttributeData = {
+        name: string;
+        code: string;
+        node: HTMLElement;
+        buffer?: any;
+        inline?: boolean;
+        postProcess?: boolean;
+    };
+    /**
+     * @typedef {Object} jsTemplate_attrResult
+     * @property {('event'|'attribute'|'binding'|'macro')} type
+     * @property {module:js-template~jsTemplate_Attribute} attr
+     * @property {module:js-template~jsTemplate_attrResultAttributeData} data
+     */
+    type jsTemplate_attrResult = {
+        type: 'event' | 'attribute' | 'binding' | 'macro';
+        attr: module;
+        data: module;
+    };
+    /**
+     * @typedef {Object} jsTemplateAttrData
+     * @property {Array<module:js-template~jsTemplate_attrResult>} nodes
+     * @property {Array<module:js-template~jsTemplate_textResult>} texts
+     * @property {Array<module:js-template~jsTemplateAttrData>} children
+     * @property {Object<string,module:js-template~jsTemplate_attrResult>} _macro
+     * @property {boolean} [HAS_POST_PROCESS=false]
+     */
+    type jsTemplateAttrData = {
+        nodes: module[];
+        texts: module[];
+        children: module[];
+        _macro: {
+            [key: string]: module;
+        };
+        HAS_POST_PROCESS?: boolean;
+    };
+    /**
+     * Parsing NodeElement Attribute
+     * @param {module:js-template~jsTemplate_Attribute} attr
+     * @returns {module:js-template~jsTemplate_attrResult}
+     */
+    function attrParser(attr: module): module;
+    /**
+     * @protected
+     * @memberof module:js-template
+     * @callback nodeParserCallback
+     * @param {Error} err
+     * @param {module:js-template~parseTextNodesConfig} config
+     * @returns {module:js-template~parseTextNodesConfig}
+     */
+    type nodeParserCallback = (err: Error, config: module) => module;
+    /**
+     * @param {HTMLElement} nodeElement
+     * @param {module:js-template.nodeParserCallback} cb
+     * @param {module:js-template~parseTextNodesConfig} config
+     * @returns {module:js-template~parseTextNodesConfig}
+     */
+    function nodeParser(nodeElement: HTMLElement, cb: module, config: module): module;
+}
 
 /**
  * Module used for retrieving date using XMLHttpRequest
@@ -419,21 +571,26 @@ declare namespace request {
     }
 }
 
-/**
- * loadScript - is a function for adding scripts into the header
- * @param  {string|string[]}   url      url/urls of scripts
- * @param  {Function} callback [description]
- * @param  {object}   opts     settings with info related to the script tags
+/** @module uri-load
  */
-declare function loadScript(url: string | string[], callback: (...params: any[]) => any, opts: any): void;
-
-/**
- * loadLink - is a function for adding link tags into the header
- * @param  {string|string[]}   url      url/urls of link tags
- * @param  {Function} callback [description]
- * @param  {object}   opts     settings with info related to the link tags
- */
-declare function loadLink(url: string | string[], callback: (...params: any[]) => any, opts: any): void;
+declare module "uri-load" {
+    /**
+     * loadScript - is a function for adding scripts into the header
+     * @alias module:uri-load.script
+     * @param  {string|string[]}   url      url/urls of scripts
+     * @param  {Function} callback [description]
+     * @param  {object}   opts     settings with info related to the script tags
+     */
+    function script(url: string | string[], callback: (...params: any[]) => any, opts: any): void;
+    /**
+     * loadLink - is a function for adding link tags into the header
+     * @alias module:uri-load.link
+     * @param  {string|string[]}   url      url/urls of link tags
+     * @param  {Function} callback [description]
+     * @param  {object}   opts     settings with info related to the link tags
+     */
+    function link(url: string | string[], callback: (...params: any[]) => any, opts: any): void;
+}
 
 /**
  * @callback ApplicationBuilderRequire

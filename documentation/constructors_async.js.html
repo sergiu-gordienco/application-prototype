@@ -1,4 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>constructors/async.js - Application Prototype - Framework</title>
+    
+    <meta name="description" content="Application Prototype Framework based on Module Pattern" />
+    
+        <meta name="keywords" content="javascript, js, application-prototype, prototype" />
+        <meta name="keyword" content="javascript, js, application-prototype, prototype" />
+    
+    
+    
+    <meta property="og:title" content="Application Prototype - Framework"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:image" content=""/>
+    
+    <meta property="og:url" content="https://labs.sgapps.io/open-source/application-prototype"/>
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
 
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav class="wrap">
+    
+    <input type="text" id="nav-search" placeholder="Search" />
+    
+    <h2><a href="index.html">Home</a></h2><h2><a href="https://labs.sgapps.io/open-source/application-prototype" target="_blank" class="menu-item" id="website_link" >Project Website</a></h2><h2><a href="https://github.com/sergiu-gordienco/application-prototype" target="_blank" class="menu-item" id="github_link" >GitHub</a></h2><h3>Modules</h3><ul><li><a href="module-async.html">async</a></li><li><a href="module-js-template.html">js-template</a><ul class='methods'><li data-type='method' style='display: none;'><a href="module-js-template.html#~attrParser">attrParser</a></li><li data-type='method' style='display: none;'><a href="module-js-template.html#~expressionBuilder">expressionBuilder</a></li><li data-type='method' style='display: none;'><a href="module-js-template.html#~nodeParser">nodeParser</a></li><li data-type='method' style='display: none;'><a href="module-js-template.html#~parseTextNodes">parseTextNodes</a></li></ul></li><li><a href="module-request.html">request</a></li><li><a href="module-uri-load.html">uri-load</a><ul class='methods'><li data-type='method' style='display: none;'><a href="module-uri-load.html#.link">link</a></li><li data-type='method' style='display: none;'><a href="module-uri-load.html#.script">script</a></li></ul></li></ul><h3>Classes</h3><ul><li><a href="module-async.Async.html">Async</a><ul class='methods'><li data-type='method' style='display: none;'><a href="module-async.Async.html#done">done</a></li><li data-type='method' style='display: none;'><a href="module-async.Async.html#errors">errors</a></li><li data-type='method' style='display: none;'><a href="module-async.Async.html#flush">flush</a></li><li data-type='method' style='display: none;'><a href="module-async.Async.html#index">index</a></li><li data-type='method' style='display: none;'><a href="module-async.Async.html#processing">processing</a></li><li data-type='method' style='display: none;'><a href="module-async.Async.html#receive">receive</a></li><li data-type='method' style='display: none;'><a href="module-async.Async.html#reserve">reserve</a></li><li data-type='method' style='display: none;'><a href="module-async.Async.html#responses">responses</a></li><li data-type='method' style='display: none;'><a href="module-async.Async.html#run">run</a></li><li data-type='method' style='display: none;'><a href="module-async.Async.html#wait">wait</a></li></ul></li><li><a href="module-request.RequestModule.html">RequestModule</a><ul class='members'><li data-type='member' style='display: none;'><a href="module-request.RequestModule.html#.READY_STATE_DONE">READY_STATE_DONE</a></li><li data-type='member' style='display: none;'><a href="module-request.RequestModule.html#.READY_STATE_HEADERS_RECEIVED">READY_STATE_HEADERS_RECEIVED</a></li><li data-type='member' style='display: none;'><a href="module-request.RequestModule.html#.READY_STATE_LOADING">READY_STATE_LOADING</a></li><li data-type='member' style='display: none;'><a href="module-request.RequestModule.html#.READY_STATE_OPENED">READY_STATE_OPENED</a></li><li data-type='member' style='display: none;'><a href="module-request.RequestModule.html#.READY_STATE_UNSENT">READY_STATE_UNSENT</a></li></ul><ul class='methods'><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#async">async</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#async">async</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#config">config</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#configurator">configurator</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#headers">headers</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#headers">headers</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#method">method</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#method">method</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#open">open</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#readyState">readyState</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#request">request</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#response">response</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#response">response</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#response">response</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#response">response</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#response">response</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#response">response</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#send">send</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#status">status</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#statusText">statusText</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#timeout">timeout</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#timeout">timeout</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#url">url</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#url">url</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#withCredentials">withCredentials</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#withCredentials">withCredentials</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#ApplicationBuilderConstructor">ApplicationBuilderConstructor</a></li><li><a href="global.html#ApplicationBuilderExports">ApplicationBuilderExports</a></li><li><a href="global.html#ApplicationBuilderInstance">ApplicationBuilderInstance</a></li><li><a href="global.html#ApplicationBuilderRequire">ApplicationBuilderRequire</a></li><li><a href="global.html#ApplicationConsoleOptions">ApplicationConsoleOptions</a></li><li><a href="global.html#ApplicationModule">ApplicationModule</a></li><li><a href="global.html#ApplicationModuleMeta">ApplicationModuleMeta</a></li><li><a href="global.html#ApplicationModuleRegister">ApplicationModuleRegister</a></li><li><a href="global.html#ApplicationModuleResolve">ApplicationModuleResolve</a></li><li><a href="global.html#ApplicationModuleStore">ApplicationModuleStore</a></li><li><a href="global.html#ApplicationNodeInterface">ApplicationNodeInterface</a></li><li><a href="global.html#ApplicationPrototype_slDOM">ApplicationPrototype_slDOM</a></li><li><a href="global.html#ApplicationPrototype_slDOM_env">ApplicationPrototype_slDOM_env</a></li><li><a href="global.html#ApplicationPrototypeBind">ApplicationPrototypeBind</a></li><li><a href="global.html#ApplicationPrototypeConstructor">ApplicationPrototypeConstructor</a></li><li><a href="global.html#ApplicationPrototypeCrudEvents">ApplicationPrototypeCrudEvents</a></li><li><a href="global.html#ApplicationPrototypeInstance">ApplicationPrototypeInstance</a></li><li><a href="global.html#ApplicationPrototypeListener">ApplicationPrototypeListener</a></li><li><a href="global.html#ApplicationPrototypeListenerRemove">ApplicationPrototypeListenerRemove</a></li><li><a href="global.html#BindListenerConfig">BindListenerConfig</a></li><li><a href="global.html#browserSessionBuilder">browserSessionBuilder</a></li><li><a href="global.html#BrowserSessionModule">BrowserSessionModule</a></li><li><a href="global.html#ModuleResourceUrl">ModuleResourceUrl</a></li><li><a href="global.html#slDOM">slDOM</a></li><li><a href="global.html#slDOM_env">slDOM_env</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">constructors/async.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>
 /**
  * @memberof module:async
  * @callback AsyncConstructor
@@ -165,7 +223,7 @@ var async	= function () {
 				errs.push(r);
 			} else {
 				var i;
-				for (i=0;i<r.length;i++) {
+				for (i=0;i&lt;r.length;i++) {
 					if (r[i] instanceof Error) {
 						errs.push(r[i]);
 					}
@@ -184,7 +242,7 @@ var async	= function () {
 	app.bind('done', function (cb) {
 		if (typeof(cb) === "function") {
 			app.on('done', cb);
-			if (received === waited && received) {
+			if (received === waited &amp;&amp; received) {
 				cb.apply(app, []);
 			}
 		}
@@ -197,7 +255,7 @@ var async	= function () {
  * @TODO
  */
 async.flow	= function (ops, cb, timeout) {
-	if (typeof(ops) !== "undefined" && Array.isArray(ops)) {
+	if (typeof(ops) !== "undefined" &amp;&amp; Array.isArray(ops)) {
 		var app = new async();
 		app.done(cb);
 		var c = {};
@@ -207,7 +265,7 @@ async.flow	= function (ops, cb, timeout) {
 			app.emit('done');
 		}
 		var tick	= function () {
-			if ( i < ops.length) {
+			if ( i &lt; ops.length) {
 				var op	= ops[i++];
 				if (op) {
 					var ar	= op[1] || [];
@@ -239,7 +297,7 @@ async.flow	= function (ops, cb, timeout) {
 };
 
 async.waterfall	= function (ops, cb, parralel, timeout) {
-	if (typeof(ops) !== "undefined" && Array.isArray(ops)) {
+	if (typeof(ops) !== "undefined" &amp;&amp; Array.isArray(ops)) {
 		var app = new async();
 		app.done(cb);
 		var c = {};
@@ -252,7 +310,7 @@ async.waterfall	= function (ops, cb, parralel, timeout) {
 			app.emit('done');
 		}
 		var tick	= function () {
-			if ( i < ops.length) {
+			if ( i &lt; ops.length) {
 				var op	= ops[i++];
 				if (op) {
 					var ar	= op[1] || [];
@@ -277,7 +335,7 @@ async.waterfall	= function (ops, cb, parralel, timeout) {
 		};
 		app.on('onRecieve', function () {
 			// console.log("tick");
-			while (( parralel === 0 || parralel > app.processing()) && tick()) {
+			while (( parralel === 0 || parralel > app.processing()) &amp;&amp; tick()) {
 				// true;
 			}
 		});
@@ -289,7 +347,7 @@ async.waterfall	= function (ops, cb, parralel, timeout) {
 
 
 async.map = async.flow.map	= function (ops, ev, cb, timeout) {
-	if (typeof(ops) !== "undefined" && Array.isArray(ops)) {
+	if (typeof(ops) !== "undefined" &amp;&amp; Array.isArray(ops)) {
 		var app = new async();
 		var c = {};
 		timeout		= timeout || 0;
@@ -304,7 +362,7 @@ async.map = async.flow.map	= function (ops, ev, cb, timeout) {
 			app.emit('done');
 		}
 		var tick	= function () {
-			if ( i < ops.length) {
+			if ( i &lt; ops.length) {
 				var op	= ops[i++];
 				var id	= app.reserve();
 				var ri	= i-1;
@@ -338,7 +396,7 @@ async.map = async.flow.map	= function (ops, ev, cb, timeout) {
 };
 
 async.waterfall.map	= function (ops, ev, cb, parralel, timeout) {
-	if (typeof(ops) !== "undefined" && Array.isArray(ops)) {
+	if (typeof(ops) !== "undefined" &amp;&amp; Array.isArray(ops)) {
 		var app = new async();
 		var c = {};
 		timeout		= timeout || 0;
@@ -356,7 +414,7 @@ async.waterfall.map	= function (ops, ev, cb, parralel, timeout) {
 			app.emit('done');
 		}
 		var tick	= function () {
-			if ( i < ops.length) {
+			if ( i &lt; ops.length) {
 				var op	= ops[i++];
 				var id	= app.reserve();
 				var ri	= i-1;
@@ -381,7 +439,7 @@ async.waterfall.map	= function (ops, ev, cb, parralel, timeout) {
 			}
 		};
 		app.on('onRecieve', function () {
-			while (( parralel === 0 || parralel > app.processing()) && tick()) {
+			while (( parralel === 0 || parralel > app.processing()) &amp;&amp; tick()) {
 				// true;
 			}
 		});
@@ -393,7 +451,7 @@ async.waterfall.map	= function (ops, ev, cb, parralel, timeout) {
 
 
 async.filter = async.flow.filter	= function (ops, ev, cb, timeout) {
-	if (typeof(ops) !== "undefined" && Array.isArray(ops)) {
+	if (typeof(ops) !== "undefined" &amp;&amp; Array.isArray(ops)) {
 		var app = new async();
 		var c = {};
 		timeout		= timeout || 0;
@@ -407,7 +465,7 @@ async.filter = async.flow.filter	= function (ops, ev, cb, timeout) {
 			app.emit('done');
 		}
 		var tick	= function () {
-			if ( i < ops.length) {
+			if ( i &lt; ops.length) {
 				var op	= ops[i++];
 				var id	= app.reserve();
 				var ri	= i-1;
@@ -441,7 +499,7 @@ async.filter = async.flow.filter	= function (ops, ev, cb, timeout) {
 };
 
 async.waterfall.filter	= function (ops, ev, cb, parralel, timeout) {
-	if (typeof(ops) !== "undefined" && Array.isArray(ops)) {
+	if (typeof(ops) !== "undefined" &amp;&amp; Array.isArray(ops)) {
 		var app = new async();
 		var c = {};
 		timeout		= timeout || 0;
@@ -458,7 +516,7 @@ async.waterfall.filter	= function (ops, ev, cb, parralel, timeout) {
 			app.emit('done');
 		}
 		var tick	= function () {
-			if ( i < ops.length) {
+			if ( i &lt; ops.length) {
 				var op	= ops[i++];
 				var id	= app.reserve();
 				var ri	= i-1;
@@ -486,7 +544,7 @@ async.waterfall.filter	= function (ops, ev, cb, parralel, timeout) {
 		};
 		app.on('onRecieve', function () {
 			// debugger;
-			while (( parralel === 0 || parralel > app.processing()) && tick()) {
+			while (( parralel === 0 || parralel > app.processing()) &amp;&amp; tick()) {
 				// true;
 			}
 		});
@@ -499,7 +557,7 @@ async.waterfall.filter	= function (ops, ev, cb, parralel, timeout) {
 
 
 async.forEach = async.flow.forEach	= function (ops, ev, cb, timeout) {
-	if (typeof(ops) !== "undefined" && Array.isArray(ops)) {
+	if (typeof(ops) !== "undefined" &amp;&amp; Array.isArray(ops)) {
 		var app = new async();
 		var c = {};
 		timeout		= timeout || 0;
@@ -512,7 +570,7 @@ async.forEach = async.flow.forEach	= function (ops, ev, cb, timeout) {
 			app.emit('done');
 		}
 		var tick	= function () {
-			if ( i < ops.length) {
+			if ( i &lt; ops.length) {
 				var op	= ops[i++];
 				var id	= app.reserve();
 				var ri	= i-1;
@@ -547,7 +605,7 @@ async.forEach = async.flow.forEach	= function (ops, ev, cb, timeout) {
 };
 
 async.waterfall.forEach	= function (ops, ev, cb, parralel, timeout) {
-	if (typeof(ops) !== "undefined" && Array.isArray(ops)) {
+	if (typeof(ops) !== "undefined" &amp;&amp; Array.isArray(ops)) {
 		var app = new async();
 		var c = {};
 		timeout		= timeout || 0;
@@ -563,7 +621,7 @@ async.waterfall.forEach	= function (ops, ev, cb, parralel, timeout) {
 			app.emit('done');
 		}
 		var tick	= function () {
-			if ( i < ops.length) {
+			if ( i &lt; ops.length) {
 				var op	= ops[i++];
 				var id	= app.reserve();
 				var ri	= i-1;
@@ -589,7 +647,7 @@ async.waterfall.forEach	= function (ops, ev, cb, parralel, timeout) {
 			return false;
 		};
 		app.on('onRecieve', function () {
-			while (( parralel === 0 || parralel > app.processing()) && tick()) {
+			while (( parralel === 0 || parralel > app.processing()) &amp;&amp; tick()) {
 				// true;
 			}
 		});
@@ -609,7 +667,7 @@ async.test.flow	= function (n) {
 		if (typeof(n) !== "number") n = 1000;
 		var ops = [];
 		var i = 0;
-		while (i++ < n) {
+		while (i++ &lt; n) {
 			ops.push([(function (k) {
 				return function (cb) {
 					cb(k);
@@ -638,7 +696,7 @@ async.test.waterfall	= function (n) {
 		if (typeof(n) !== "number") n = 1000;
 		var ops = [];
 		var i = 0;
-		while (i++ < n) {
+		while (i++ &lt; n) {
 			ops.push([(function (k) {
 				return function (cb) {
 					cb(k);
@@ -761,3 +819,43 @@ async.test.waterfall.forEach	= function (n) {
 
 
 module.exports	= async;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+    <div id="disqus_thread"></div>
+    <script>
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = '//application prototype by SGApps.IO.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Fri Apr 03 2020 05:02:14 GMT+0300 (Eastern European Summer Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+<script src="scripts/search.js" defer></script>
+
+
+<script src="scripts/collapse.js" defer></script>
+
+
+</body>
+</html>

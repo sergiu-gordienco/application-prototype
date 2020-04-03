@@ -1,0 +1,1506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>Async - Application Prototype - Framework</title>
+    
+    <meta name="description" content="Application Prototype Framework based on Module Pattern" />
+    
+        <meta name="keywords" content="javascript, js, application-prototype, prototype" />
+        <meta name="keyword" content="javascript, js, application-prototype, prototype" />
+    
+    
+    
+    <meta property="og:title" content="Application Prototype - Framework"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:image" content=""/>
+    
+    <meta property="og:url" content="https://labs.sgapps.io/open-source/application-prototype"/>
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav class="wrap">
+    
+    <input type="text" id="nav-search" placeholder="Search" />
+    
+    <h2><a href="index.html">Home</a></h2><h2><a href="https://labs.sgapps.io/open-source/application-prototype" target="_blank" class="menu-item" id="website_link" >Project Website</a></h2><h2><a href="https://github.com/sergiu-gordienco/application-prototype" target="_blank" class="menu-item" id="github_link" >GitHub</a></h2><h3>Modules</h3><ul><li><a href="module-async.html">async</a></li><li><a href="module-js-template.html">js-template</a><ul class='methods'><li data-type='method' style='display: none;'><a href="module-js-template.html#~attrParser">attrParser</a></li><li data-type='method' style='display: none;'><a href="module-js-template.html#~expressionBuilder">expressionBuilder</a></li><li data-type='method' style='display: none;'><a href="module-js-template.html#~nodeParser">nodeParser</a></li><li data-type='method' style='display: none;'><a href="module-js-template.html#~parseTextNodes">parseTextNodes</a></li></ul></li><li><a href="module-request.html">request</a></li><li><a href="module-uri-load.html">uri-load</a><ul class='methods'><li data-type='method' style='display: none;'><a href="module-uri-load.html#.link">link</a></li><li data-type='method' style='display: none;'><a href="module-uri-load.html#.script">script</a></li></ul></li></ul><h3>Classes</h3><ul><li><a href="module-async.Async.html">Async</a><ul class='methods'><li data-type='method' style='display: none;'><a href="module-async.Async.html#done">done</a></li><li data-type='method' style='display: none;'><a href="module-async.Async.html#errors">errors</a></li><li data-type='method' style='display: none;'><a href="module-async.Async.html#flush">flush</a></li><li data-type='method' style='display: none;'><a href="module-async.Async.html#index">index</a></li><li data-type='method' style='display: none;'><a href="module-async.Async.html#processing">processing</a></li><li data-type='method' style='display: none;'><a href="module-async.Async.html#receive">receive</a></li><li data-type='method' style='display: none;'><a href="module-async.Async.html#reserve">reserve</a></li><li data-type='method' style='display: none;'><a href="module-async.Async.html#responses">responses</a></li><li data-type='method' style='display: none;'><a href="module-async.Async.html#run">run</a></li><li data-type='method' style='display: none;'><a href="module-async.Async.html#wait">wait</a></li></ul></li><li><a href="module-request.RequestModule.html">RequestModule</a><ul class='members'><li data-type='member' style='display: none;'><a href="module-request.RequestModule.html#.READY_STATE_DONE">READY_STATE_DONE</a></li><li data-type='member' style='display: none;'><a href="module-request.RequestModule.html#.READY_STATE_HEADERS_RECEIVED">READY_STATE_HEADERS_RECEIVED</a></li><li data-type='member' style='display: none;'><a href="module-request.RequestModule.html#.READY_STATE_LOADING">READY_STATE_LOADING</a></li><li data-type='member' style='display: none;'><a href="module-request.RequestModule.html#.READY_STATE_OPENED">READY_STATE_OPENED</a></li><li data-type='member' style='display: none;'><a href="module-request.RequestModule.html#.READY_STATE_UNSENT">READY_STATE_UNSENT</a></li></ul><ul class='methods'><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#async">async</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#async">async</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#config">config</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#configurator">configurator</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#headers">headers</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#headers">headers</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#method">method</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#method">method</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#open">open</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#readyState">readyState</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#request">request</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#response">response</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#response">response</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#response">response</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#response">response</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#response">response</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#response">response</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#send">send</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#status">status</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#statusText">statusText</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#timeout">timeout</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#timeout">timeout</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#url">url</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#url">url</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#withCredentials">withCredentials</a></li><li data-type='method' style='display: none;'><a href="module-request.RequestModule.html#withCredentials">withCredentials</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#ApplicationBuilderConstructor">ApplicationBuilderConstructor</a></li><li><a href="global.html#ApplicationBuilderExports">ApplicationBuilderExports</a></li><li><a href="global.html#ApplicationBuilderInstance">ApplicationBuilderInstance</a></li><li><a href="global.html#ApplicationBuilderRequire">ApplicationBuilderRequire</a></li><li><a href="global.html#ApplicationConsoleOptions">ApplicationConsoleOptions</a></li><li><a href="global.html#ApplicationModule">ApplicationModule</a></li><li><a href="global.html#ApplicationModuleMeta">ApplicationModuleMeta</a></li><li><a href="global.html#ApplicationModuleRegister">ApplicationModuleRegister</a></li><li><a href="global.html#ApplicationModuleResolve">ApplicationModuleResolve</a></li><li><a href="global.html#ApplicationModuleStore">ApplicationModuleStore</a></li><li><a href="global.html#ApplicationNodeInterface">ApplicationNodeInterface</a></li><li><a href="global.html#ApplicationPrototype_slDOM">ApplicationPrototype_slDOM</a></li><li><a href="global.html#ApplicationPrototype_slDOM_env">ApplicationPrototype_slDOM_env</a></li><li><a href="global.html#ApplicationPrototypeBind">ApplicationPrototypeBind</a></li><li><a href="global.html#ApplicationPrototypeConstructor">ApplicationPrototypeConstructor</a></li><li><a href="global.html#ApplicationPrototypeCrudEvents">ApplicationPrototypeCrudEvents</a></li><li><a href="global.html#ApplicationPrototypeInstance">ApplicationPrototypeInstance</a></li><li><a href="global.html#ApplicationPrototypeListener">ApplicationPrototypeListener</a></li><li><a href="global.html#ApplicationPrototypeListenerRemove">ApplicationPrototypeListenerRemove</a></li><li><a href="global.html#BindListenerConfig">BindListenerConfig</a></li><li><a href="global.html#browserSessionBuilder">browserSessionBuilder</a></li><li><a href="global.html#BrowserSessionModule">BrowserSessionModule</a></li><li><a href="global.html#ModuleResourceUrl">ModuleResourceUrl</a></li><li><a href="global.html#slDOM">slDOM</a></li><li><a href="global.html#slDOM_env">slDOM_env</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">Async</h1>
+    
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>
+            <span class="ancestors"><a href="module-async.html">async</a>.</span>
+        
+        Async
+        </h2>
+        
+    
+</header>
+
+<article>
+    
+        <div class="container-overview">
+        
+            
+
+    
+
+    <h4 class="name" id="Async"><span class="type-signature"></span>new Async<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="constructors_async.js.html">constructors/async.js</a>, <a href="constructors_async.js.html#line24">line 24</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+        </div>
+    
+
+    
+
+    
+
+    
+    
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="done"><span class="type-signature"></span>done<span class="signature">(cb)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="constructors_async.js.html">constructors/async.js</a>, <a href="constructors_async.js.html#line178">line 178</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    <p>register a callback to be called when processing is done</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>cb</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="errors"><span class="type-signature"></span>errors<span class="signature">()</span><span class="type-signature"> &rarr; {Array.&lt;Error>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="constructors_async.js.html">constructors/async.js</a>, <a href="constructors_async.js.html#line154">line 154</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    <p>return all errors found in responses</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array.&lt;Error></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="flush"><span class="type-signature"></span>flush<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="constructors_async.js.html">constructors/async.js</a>, <a href="constructors_async.js.html#line115">line 115</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    <p>reset operation processing</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="index"><span class="type-signature"></span>index<span class="signature">()</span><span class="type-signature"> &rarr; {string}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="constructors_async.js.html">constructors/async.js</a>, <a href="constructors_async.js.html#line39">line 39</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    <p>return unique index identifier for an operation</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="processing"><span class="type-signature"></span>processing<span class="signature">()</span><span class="type-signature"> &rarr; {number}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="constructors_async.js.html">constructors/async.js</a>, <a href="constructors_async.js.html#line128">line 128</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    <p>return how many operations are processing right now</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="receive"><span class="type-signature"></span>receive<span class="signature">(id, args)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="constructors_async.js.html">constructors/async.js</a>, <a href="constructors_async.js.html#line53">line 53</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    <p>method used for return result for an operation,
+returns <code>true</code> if value was accepted.
+if operation already obtained a value
+then value is not accepted and it returns <code>false</code></p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>obtained from <a href="module-async.Async.html#index"><code>module:async.Async#index</code></a></p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>args</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">any</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="reserve"><span class="type-signature"></span>reserve<span class="signature">()</span><span class="type-signature"> &rarr; {string}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="constructors_async.js.html">constructors/async.js</a>, <a href="constructors_async.js.html#line87">line 87</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    <p>require to reserve index <a href="module-async.Async.html#index"><code>module:async.Async#index</code></a> for an additional operation</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="responses"><span class="type-signature"></span>responses<span class="signature">(returnUnknownResponses<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Array.&lt;Array.&lt;any>>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="constructors_async.js.html">constructors/async.js</a>, <a href="constructors_async.js.html#line138">line 138</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    <p>return operations' responses</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>returnUnknownResponses</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array.&lt;Array.&lt;any>></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="run"><span class="type-signature"></span>run<span class="signature">(func, args, context)</span><span class="type-signature"> &rarr; {string}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="constructors_async.js.html">constructors/async.js</a>, <a href="constructors_async.js.html#line98">line 98</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    <p>require to run an operation</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>func</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>function that should be executed</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>args</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;any></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>context</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="wait"><span class="type-signature"></span>wait<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="constructors_async.js.html">constructors/async.js</a>, <a href="constructors_async.js.html#line78">line 78</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    <p>require to wait an additional operation</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+    
+    
+    <div id="disqus_thread"></div>
+    <script>
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = '//application prototype by SGApps.IO.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Fri Apr 03 2020 05:02:14 GMT+0300 (Eastern European Summer Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+<script src="scripts/search.js" defer></script>
+
+
+<script src="scripts/collapse.js" defer></script>
+
+
+</body>
+</html>

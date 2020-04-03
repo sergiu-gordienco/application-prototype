@@ -1,6 +1,8 @@
 /* jshint -W002 */
 /* jshint -W084 */
 
+/** @module uri-load */
+
 var callbackOnce = function (cb) {
 	var executed = false;
 	return function (a, b) {
@@ -15,6 +17,7 @@ var callbackOnce = function (cb) {
 
 /**
  * loadScript - is a function for adding scripts into the header
+ * @alias module:uri-load.script
  * @param  {string|string[]}   url      url/urls of scripts
  * @param  {Function} callback [description]
  * @param  {object}   opts     settings with info related to the script tags
@@ -107,6 +110,7 @@ function loadScript(url, callback, opts, document){
 
 /**
  * loadLink - is a function for adding link tags into the header
+ * @alias module:uri-load.link
  * @param  {string|string[]}   url      url/urls of link tags
  * @param  {Function} callback [description]
  * @param  {object}   opts     settings with info related to the link tags
