@@ -4,10 +4,13 @@ var sessionDbConnection = false;
 var dbConnectionBuilder 	= false;
 
 /**
- * [browserSessionBuilder description]
- * @param  {[type]} objectStoreArg name or object of strategyStore
- * @return {[type]}                session application
+ * browserSessionBuilder description
+ * @callback BrowserSessionModule
+ * @param  {string|object} objectStoreArg name or object of strategyStore
+ * @param {object} [objectStoreConf]
+ * @return {Promise<ApplicationPrototypeInstance>}                session application
  */
+/** @type {BrowserSessionModule} */
 var browserSessionBuilder	= function (objectStoreArg, objectStoreConf) {
 	var app	= new ApplicationPrototype();
 	var loader = Application.Promise();

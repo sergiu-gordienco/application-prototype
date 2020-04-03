@@ -1,0 +1,76 @@
+{
+	"tags": {
+		"allowUnknownTags": false
+	},
+	"source": {
+		"include": "./",
+		"includePattern": "\\.js$",
+		"excludePattern": "(node_modules/|docs)"
+	},
+	"plugins": [
+		"plugins/markdown"
+	],
+	"opts": {
+		"template": "node_modules/docdash",
+		"encoding": "utf8",
+		"destination": "documentation/",
+		"recurse": true,
+		"verbose": true
+	},
+	"templates": {
+		"cleverLinks": true,
+		"monospaceLinks": true
+	},
+	"docdash": {
+		"static": true,
+		"sort": true,
+		"search": true,
+		"collapse": true,
+		"sectionOrder": [
+			"Modules",
+			"Classes",
+			"Externals",
+			"Events",
+			"Namespaces",
+			"Mixins",
+			"Tutorials",
+			"Interfaces"
+		],
+		"disqus": "application prototype by SGApps.IO",
+		"openGraph": {
+			"title": "Application Prototype - Framework",
+			"type": "website",
+			"image": "",
+			"site_name": "",
+			"url": "https://labs.sgapps.io/open-source/application-prototype"
+		},
+		"meta": {
+			"title": "Application Prototype - Framework",
+			"description": "Application Prototype Framework based on Module Pattern",
+			"keyword": "javascript, js, application-prototype, prototype"
+		},
+		"wrap": true,
+		"typedefs": true,
+		"navLevel": 1,
+		"private": false,
+		"removeQuotes": "none",
+		"scripts": [],
+		"menu": {
+			"Project Website": {
+				"href":"https://labs.sgapps.io/open-source/application-prototype",
+				"target":"_blank",
+				"class":"menu-item",
+				"id":"website_link"
+			},
+			"GitHub": {
+				"href":"https://github.com/sergiu-gordienco/application-prototype",
+				"target":"_blank",
+				"class":"menu-item",
+				"id":"github_link"
+			}
+		},
+		"scopeInOutputPath": true,
+		"nameInOutputPath": true,
+		"versionInOutputPath": true
+	}
+}

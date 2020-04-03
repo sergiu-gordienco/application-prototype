@@ -33,11 +33,12 @@
  * @returns {String}
  */
 
-/** @callback ApplicationPrototypeCrudEvents returns listner Id
+/**
+ * @callback ApplicationPrototypeCrudEvents returns listner Id
  * @param {Object<any>} context will be used as a base for ApplicationPrototype instance that will be returned
  * @param {Object<Function>} publicMethods list of public methods avaiable from returned instance
  * @param {Object<Function>} privateMethods list of private methods available only for instance's methods
- * @returns {ApplicationPrototype}
+ * @returns {ApplicationPrototypeInstance}
  */
 
 /**
@@ -118,10 +119,11 @@
  * @property {ApplicationNodeInterface} NodeInterface returns interface for accessing Node Env, is defined only in node env
  */
 
-/** @typedef {{ prop1: string, prop2: string, prop3?: number }} XXXSpecialType */
-/** @typedef {(data: string, index?: number) => boolean} XXXPredicate */
+// /** @typedef {{ prop1: string, prop2: string, prop3?: number }} XXXSpecialType */
+// /** @typedef {(data: string, index?: number) => boolean} XXXPredicate */
 
-/** @typedef {() => ApplicationPrototype} ApplicationPrototypeConstructor */
+/** @typedef {function (): ApplicationPrototypeInstance} ApplicationPrototypeConstructor */
+/** @typedef {function (): ApplicationBuilderInstance} ApplicationBuilderConstructor */
 
 
 
@@ -161,29 +163,29 @@
  * @property {String|false} android_version
  */
 
-/** @typedef {{cssprop?: cssvalue, cssprop2?: value ... }} slDOM.ObjectCSSProperties a list of proprietes mapped in a object, example: { fontSize: "10px", "white-space": "nowrap" } */
-/** @typedef {{attribute?: cssvalue, attribute2?: value ... }} slDOM.ObjectAttributes a list of proprietes mapped in a object, example: { fontSize: "10px", "white-space": "nowrap" } */
+/** @typedef {Object<string, (string|number)>} slDOM.ObjectCSSProperties a list of proprieties mapped in a object, example: { fontSize: "10px", "white-space": "nowrap" } */
+/** @typedef {Object<string, (string|number)>} slDOM.ObjectAttributes a list of proprieties mapped in a object, example: { fontSize: "10px", "white-space": "nowrap" } */
 
 
 /**
- * @typedef ApplicationPrototype_slDOM returns a pointer that walks over DOM and applying needed operations
+ * @typedef {object} ApplicationPrototype_slDOM returns a pointer that walks over DOM and applying needed operations
  * @property {ApplicationPrototype_slDOM_env} env Environment Flags
  * @property {function (Boolean): HTMLElement} __ if params is `true` then return document otherwise current HTMLElement
  * @property {function(Object): ApplicationPrototype_slDOM} a2D apply Css Transforms on elements
  * @property {function(number): ApplicationPrototype_slDOM} opacity ( short form **o** ) change element opacity
- * @property {function((HTMLElement | String)): ApplicationPrototype_slDOM} setE ( short form **e** ) set a HTMLElement or Create Element for slDOM Pointer
- * @property {function((Array<String> | String), String?, number?): ApplicationPrototype_slDOM | Boolean} sClass =slDOMlib.sClass;
- * @property {function(String,String,...): ApplicationPrototype_slDOM()} setArg ( short form **A** ) set Attributes to HTMLElement, arguments order: `[ attribute, value, attribute, value ... ]`
+ * @property {function((HTMLElement|string)): ApplicationPrototype_slDOM} setE ( short form **e** ) set a HTMLElement or Create Element for slDOM Pointer
+ * @property {function((string|string[]), String?, number?): ApplicationPrototype_slDOM | Boolean} sClass =slDOMlib.sClass;
+ * @property {function(...string): ApplicationPrototype_slDOM()} setArg ( short form **A** ) set Attributes to HTMLElement, arguments order: `[ attribute, value, attribute, value ... ]`
  * @property {function(HTMLElement): ApplicationPrototype_slDOM} adEto add current HTMLElement to other HTMLElement;
  * @property {function(HTMLElement): ApplicationPrototype_slDOM} putBfto insert current HTMLElement before other HTMLElement
  * @property {function(HTMLElement): ApplicationPrototype_slDOM} putAfto insert current HTMLElement after other HTMLElement
- * @property {function((HTMLElement | String), string?, function?): ApplicationPrototype_slDOM} putBf =slDOMlib.putBf;
+ * @property {function((HTMLElement | string), string?, function?): ApplicationPrototype_slDOM} putBf =slDOMlib.putBf;
  * @property {function(HTMLElement): ApplicationPrototype_slDOM} putAf =slDOMlib.putAf;
- * @property {function((HTMLElement | String), string?, function?): ApplicationPrototype_slDOM} addE =slDOMlib.addE;
- * @property {function((HTMLElement | String), string?, function?): ApplicationPrototype_slDOM} addB =slDOMlib.addB;
- * @property {function(String): ApplicationPrototype_slDOM} addT ( short form **t** ) add text node to HTMLElement;
- * @property {function(number=1): ApplicationPrototype_slDOM} nextTo ( short form **N** ) moving pointer forward to N neighbors
- * @property {function(number=1): ApplicationPrototype_slDOM} backTo ( short form **B** ) moving pointer backward to N neighbors
+ * @property {function((HTMLElement | string), string?, function?): ApplicationPrototype_slDOM} addE =slDOMlib.addE;
+ * @property {function((HTMLElement | string), string?, function?): ApplicationPrototype_slDOM} addB =slDOMlib.addB;
+ * @property {function(string): ApplicationPrototype_slDOM} addT ( short form **t** ) add text node to HTMLElement;
+ * @property {function(number): ApplicationPrototype_slDOM} [nextTo=1] ( short form **N** ) moving pointer forward to N neighbors
+ * @property {function(number): ApplicationPrototype_slDOM} [backTo=1] ( short form **B** ) moving pointer backward to N neighbors
  * @property {function(number?): ApplicationPrototype_slDOM} nUP ( short form is U ) goes up on level in doom
  * @property {function(number?): ApplicationPrototype_slDOM} nChild ( short form is **C** ) select the *N th* child element
  * @property {function(number?): ApplicationPrototype_slDOM} getParentN ( short form is **P** ) select the *N th* parent element
@@ -205,7 +207,7 @@
  * * if argument[0] is "!attributeName" remove HTMLElement's Attribute
  * @property {function(slDOM.ObjectCSSProperties): ApplicationPrototype_slDOM} setStyle ( short form **f** ) setting css proprieties to HTMLElement
  * @property {function((slDOM.ObjectAttributes | String[])): ApplicationPrototype_slDOM} setVar ( short form **V** ) set dot property on HTMLElement
- * @property {function(... slDOM.ObjectAttributes): ApplicationPrototype_slDOM} setObjVar ( short form **v** ) setting attributes to HTMLElement
+ * @property {function(...slDOM.ObjectAttributes): ApplicationPrototype_slDOM} setObjVar ( short form **v** ) setting attributes to HTMLElement
  * @property {function(slDOM.ObjectCSSProperties): ApplicationPrototype_slDOM} setStyleSPEED ( short form **F** ) setting css proprieties to HTMLElement with normalizing values by adding units
  * @property {function(): { x: number, y: number }} pagePXY ( short form **PXY** ) get element position on page
  * @property {function(): Boolean} in_e check if HTMLElement is still attached to DOM ( Document Object Manager )
@@ -242,7 +244,7 @@
  * @property {*} q =slDOMlib.getTagsByQuery;
  * @property {*} T =slDOMlib.triger;
  * @property {*} _ =slDOMlib.getE;
- * @property {*} $= slDOMlib.getLIST;
+ * @property {*} $ =slDOMlib.getLIST;
  * @property {*} F =slDOMlib.setStyleSPEED;
  * @property {*} f =slDOMlib.setStyle;
  * @property {*} L =slDOMlib.getLIST;
@@ -264,51 +266,49 @@
  * @property {function(): Object} eventsCache 	= slDOMlib.eventsCache;
  */
 
-/** @namespace */
-/** @class */
-/** @type {ApplicationPrototypeInstance} */
-function ApplicationPrototype() {
-	/** @type {ApplicationPrototypeBind} */
-	this.bind = function (event, callback, specifiedEventId) { return String };
-	/** @type {ApplicationPrototypeListener} */
-	this.on = function (event, callback, specifiedEventId) { return String };
-	/** @type {ApplicationPrototypeListener} */
-	this.once = function (event, callback, specifiedEventId) { return String };
-	/** @type {ApplicationPrototypeListenerRemove} */
-	this.off = function (event, specifiedEventId) { return String };
-	/** @type {ApplicationPrototypeCrudEvents} */
-	this.crudEvents = function (context, publicMethods, privateMethods) {
-		return new ApplicationPrototype();
-	}
-}
+// /** @class */
+// /** @type {ApplicationPrototypeInstance} */
+// function ApplicationPrototype() {
+// 	/** @type {ApplicationPrototypeBind} */
+// 	this.bind = function (event, callback, specifiedEventId) { return String };
+// 	/** @type {ApplicationPrototypeListener} */
+// 	this.on = function (event, callback, specifiedEventId) { return String };
+// 	/** @type {ApplicationPrototypeListener} */
+// 	this.once = function (event, callback, specifiedEventId) { return String };
+// 	/** @type {ApplicationPrototypeListenerRemove} */
+// 	this.off = function (event, specifiedEventId) { return String };
+// 	/** @type {ApplicationPrototypeCrudEvents} */
+// 	this.crudEvents = function (context, publicMethods, privateMethods) {
+// 		return new ApplicationPrototype();
+// 	}
+// }
 
-/** @namespace */
-/** @class */
-/** @type {ApplicationBuilderInstance} */
-function ApplicationBuilder() {
-	/** @type {ApplicationPrototypeBind} */
-	this.bind = function (event, callback, specifiedEventId) { return String };
-	/** @type {ApplicationPrototypeListener} */
-	this.on = function (event, callback, specifiedEventId) { return String };
-	/** @type {ApplicationPrototypeListener} */
-	this.once = function (event, callback, specifiedEventId) { return String };
-	/** @type {ApplicationPrototypeListenerRemove} */
-	this.off = function (event, specifiedEventId) { return String };
-	/** @type {ApplicationPrototypeCrudEvents} */
-	this.crudEvents = function (context, publicMethods, privateMethods) {
-		return new ApplicationPrototype();
-	}
-	/** @type {ApplicationBuilderRequire} */
-	this.require = function (events, callback) {
-		return new Promise();
-	}
+// /** @class */
+// /** @type {ApplicationBuilderInstance} */
+// function ApplicationBuilder() {
+// 	/** @type {ApplicationPrototypeBind} */
+// 	this.bind = function (event, callback, specifiedEventId) { return String };
+// 	/** @type {ApplicationPrototypeListener} */
+// 	this.on = function (event, callback, specifiedEventId) { return String };
+// 	/** @type {ApplicationPrototypeListener} */
+// 	this.once = function (event, callback, specifiedEventId) { return String };
+// 	/** @type {ApplicationPrototypeListenerRemove} */
+// 	this.off = function (event, specifiedEventId) { return String };
+// 	/** @type {ApplicationPrototypeCrudEvents} */
+// 	this.crudEvents = function (context, publicMethods, privateMethods) {
+// 		return new ApplicationPrototype();
+// 	}
+// 	/** @type {ApplicationBuilderRequire} */
+// 	this.require = function (events, callback) {
+// 		return new Promise();
+// 	}
 
-	/** @type {Promise} */
-	this.Promise;
-}
+// 	/** @type {Promise} */
+// 	this.Promise;
+// }
 
-/** @namespace */
-var Application = new ApplicationBuilder();
+// /** @namespace */
+// var Application = new ApplicationBuilder();
 
 
 /**
@@ -328,8 +328,17 @@ var Application = new ApplicationBuilder();
  * @property {ApplicationModuleMeta} meta module's meta information
  */
 
-/** @namespace */
-/** @type {ApplicationModule} */
-var module = {
-	exports : {}
-}
+// /** @namespace */
+// /** @type {ApplicationModule} */
+// var module = {
+// 	exports : {}
+// };
+
+
+/**
+ * @typedef ApplicationBuilderExports
+ * @property {ApplicationPrototypeConstructor} application
+ * @property {ApplicationBuilderConstructor} builder
+ */
+
+/// <reference path="constructors/request.js" />

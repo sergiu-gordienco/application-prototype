@@ -109,21 +109,21 @@ function ApplicationBuilder(callback) {
 		args.unshift(
 			(
 				consoleOptions.timestamp ?
-				( '\033[2m'
+				( '\x1b[2m'
 					+ sint(date.getHours())
 					+ ':' + sint(date.getMinutes())
 					+ ':' + sint(date.getSeconds())
 					+ '.' + sint(date.getSeconds(), 3) + ' ' )
 				: ''
 			)
-			+ '\033[2;1;' + typeColor + 'm'
+			+ '\x1b[2;1;' + typeColor + 'm'
 			+ ( consoleOptions.logType ? ( _type.toUpperCase() + '\t' ) : '' )
-			+ '\033[22m'
+			+ '\x1b[22m'
 			+ ( consoleOptions.contextName ? ( ' ' + info ) : '' )
-			+ '\033[37m'
+			+ '\x1b[37m'
 			+ ( consoleOptions.file ? ( '\t(' + path + ') ' ) : '' )
 		);
-		args.push('\033[0m');
+		args.push('\x1b[0m');
 
 		return args;
 	};

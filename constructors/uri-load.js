@@ -15,7 +15,7 @@ var callbackOnce = function (cb) {
 
 /**
  * loadScript - is a function for adding scripts into the header
- * @param  {string,Array}   url      url/urls of scripts
+ * @param  {string|string[]}   url      url/urls of scripts
  * @param  {Function} callback [description]
  * @param  {object}   opts     settings with info related to the script tags
  */
@@ -107,7 +107,7 @@ function loadScript(url, callback, opts, document){
 
 /**
  * loadLink - is a function for adding link tags into the header
- * @param  {string,Array}   url      url/urls of link tags
+ * @param  {string|string[]}   url      url/urls of link tags
  * @param  {Function} callback [description]
  * @param  {object}   opts     settings with info related to the link tags
  */

@@ -2,9 +2,14 @@
   "name": "application-prototype",
   "version": "1.24.9",
   "description": "Application builder - prototype",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "docs": "rm -rf ./documentation/* ; jsdoc -c jsdoc.json ; ",
+    "docs-dictionary": "jsdoc -c jsdoc.json -t node_modules/tsd-jsdoc/dist -r -d . ; rm index.d.ts ; mv types.d.ts index.d.ts",
+    "docs-dictionary-dev": "npm run docs-dictionary; while true; do find . -not -path './documentation' | entr -pd npm run docs-dictionary; done",
+    "docs-dev": "npm run docs; while true; do find . -not -path './documentation' | entr -pd npm run docs; done",
+    "docs-preview": "live-server --wait=2500 --no-browser documentation"
   },
   "repository": {
     "type": "git",
@@ -44,5 +49,10 @@
     "url": "https://github.com/sergiu-gordienco/application-prototype/issues"
   },
   "homepage": "https://github.com/sergiu-gordienco/application-prototype",
-  "dependencies"	: {}
+  "devDependencies": {
+    "docdash": "^1.2.0",
+    "minami": "^1.2.3",
+    "jsdoc": "^3.6.3",
+    "tsd-jsdoc": "^2.4.0"
+  }
 }

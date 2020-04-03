@@ -1,6 +1,6 @@
 module.exports = function (canvas) {
 	/**
- 	* create an eviroriment for canvas drawing
+ 	* create an environment for canvas drawing
  	*/
 	if (!canvas) {
 		canvas  = document.createElement('canvas');
