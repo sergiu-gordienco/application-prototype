@@ -1,4 +1,3 @@
-
 /**
  * @memberof module:async
  * @callback AsyncConstructor
@@ -8,13 +7,8 @@
 /**
  * Module used processing data asynchronous
  * @example
- * Application.require('request').then(function (request) {
- *	 request()
- *		 .url('/data.json')
- *		 .response('json')
- *		 .then(function (data) {
- *			 console.log(data);
- *		 }, console.error);
+ * Application.require('async').then(function (asyncOperations) {
+ *	// @TODO
  * }, console.error);
  * @module async
  * @returns {module:async.AsyncConstructor}
@@ -194,21 +188,75 @@ var async	= function () {
 };
 
 /**
- * @TODO
+ * @typedef {Array} module:async.Async~Operation
+ * @property {module:async.Async~OperationCallback} 0
+ * @property {module:async.Async~OperationArgs} 1
+ * @property {module:async.Async~OperationContext} 2
+ * @property {module:async.Async~OperationCallbackIndex} 3 
  */
-async.flow	= function (ops, cb, timeout) {
-	if (typeof(ops) !== "undefined" && Array.isArray(ops)) {
+
+/**
+ * @typedef {[function():void, any[], object, number]} module:async.Async~Operation
+ */
+
+/**
+ * a function that represents the operation itself, it have as argument `next` callback, by default it is first.
+ * @typedef {function(): void} module:async.Async~OperationCallback
+ */
+
+/**
+ * list if arguments passed to `OperationCallback`.
+ * @typedef {any[]} module:async.Async~OperationArgs
+ */
+
+/**
+ * context that should be used in `OperationCallback`. Default value is `{}`.
+ * @typedef {object} module:async.Async~OperationContext
+ */
+
+/**
+ * index of `next()` callback in list of `OperationCallback`'s arguments. Default value is `0`.
+ * @typedef {number} module:async.Async~OperationCallbackIndex
+ */
+
+/**
+ * @typedef {module:async.Async~Operation[]} module:async.Async~Operations
+ */
+
+/**
+ * @callback module:async.processCallback
+ * @param {function(Error?): void} next
+ * @param {any} item
+ * @param {number} index
+ * @param {any[]} items
+ */
+
+/**
+ * @callback module:async.doneCallback
+ * @this module:async.Async
+ */
+
+/**
+ * @method flow
+ * @memberof module:async.
+ * @param {module:async.Async~Operations} operations
+ * @param {module:async.doneCallback} cb
+ * @param {number} [timeout=0] timeout between operations
+ * @returns {module:async.Async}
+ */
+async.flow	= function (operations, cb, timeout) {
+	if (typeof(operations) !== "undefined" && Array.isArray(operations)) {
 		var app = new async();
 		app.done(cb);
 		var c = {};
 		timeout		= timeout || 0;
 		var i = 0;
-		if (ops.length === 0) {
+		if (operations.length === 0) {
 			app.emit('done');
 		}
 		var tick	= function () {
-			if ( i < ops.length) {
-				var op	= ops[i++];
+			if ( i < operations.length) {
+				var op	= operations[i++];
 				if (op) {
 					var ar	= op[1] || [];
 					var ai	= op[3] || 0;
@@ -228,7 +276,7 @@ async.flow	= function (ops, cb, timeout) {
 				}
 			}
 		};
-		app.on('onRecieve', function () {
+		app.on('onReceive', function () {
 			// console.log("tick");
 			tick();
 		});
@@ -238,14 +286,24 @@ async.flow	= function (ops, cb, timeout) {
 	return;
 };
 
-async.waterfall	= function (ops, cb, parralel, timeout) {
+
+/**
+ * @method waterfall
+ * @memberof module:async.
+ * @param {module:async.Async~Operations} operations
+ * @param {module:async.doneCallback} cb
+ * @param {number} [parallel=27] number of operations that can be done in parallel
+ * @param {number} [timeout=0] timeout between operations
+ * @returns {module:async.Async}
+ */
+async.waterfall	= function (ops, cb, parallel, timeout) {
 	if (typeof(ops) !== "undefined" && Array.isArray(ops)) {
 		var app = new async();
 		app.done(cb);
 		var c = {};
 		timeout		= timeout || 0;
-		if (typeof(parralel) !== "number") {
-			parralel	= 27;
+		if (typeof(parallel) !== "number") {
+			parallel	= 27;
 		}
 		var i = 0;
 		if (ops.length === 0) {
@@ -275,9 +333,9 @@ async.waterfall	= function (ops, cb, parralel, timeout) {
 			}
 			return false;
 		};
-		app.on('onRecieve', function () {
+		app.on('onReceive', function () {
 			// console.log("tick");
-			while (( parralel === 0 || parralel > app.processing()) && tick()) {
+			while (( parallel === 0 || parallel > app.processing()) && tick()) {
 				// true;
 			}
 		});
@@ -287,6 +345,27 @@ async.waterfall	= function (ops, cb, parralel, timeout) {
 	return;
 };
 
+
+
+
+/**
+ * @method map
+ * @memberof module:async.
+ * @param {any[]} operations
+ * @param {module:async.processCallback}
+ * @param {module:async.doneCallback} cb
+ * @param {number} [timeout=0] timeout between operations
+ * @returns {module:async.Async}
+ */
+/**
+ * @method flow·map
+ * @memberof module:async.
+ * @param {any[]} operations
+ * @param {module:async.processCallback}
+ * @param {module:async.doneCallback} cb
+ * @param {number} [timeout=0] timeout between operations
+ * @returns {module:async.Async}
+ */
 
 async.map = async.flow.map	= function (ops, ev, cb, timeout) {
 	if (typeof(ops) !== "undefined" && Array.isArray(ops)) {
@@ -328,7 +407,7 @@ async.map = async.flow.map	= function (ops, ev, cb, timeout) {
 				}, timeout);
 			}
 		};
-		app.on('onRecieve', function () {
+		app.on('onReceive', function () {
 			tick();
 		});
 		tick();
@@ -337,13 +416,25 @@ async.map = async.flow.map	= function (ops, ev, cb, timeout) {
 	return;
 };
 
-async.waterfall.map	= function (ops, ev, cb, parralel, timeout) {
+
+/**
+ * @method waterfall·map
+ * @memberof module:async.
+ * @param {any[]} operations
+ * @param {module:async.processCallback}
+ * @param {module:async.doneCallback} cb
+ * @param {number} [parallel=27] number of operations that can be done in parallel
+ * @param {number} [timeout=0] timeout between operations
+ * @returns {module:async.Async}
+ */
+
+async.waterfall.map	= function (ops, ev, cb, parallel, timeout) {
 	if (typeof(ops) !== "undefined" && Array.isArray(ops)) {
 		var app = new async();
 		var c = {};
 		timeout		= timeout || 0;
-		if (typeof(parralel) !== "number") {
-			parralel	= 27;
+		if (typeof(parallel) !== "number") {
+			parallel	= 27;
 		}
 		var i = 0;
 		var ret		= [];
@@ -380,8 +471,8 @@ async.waterfall.map	= function (ops, ev, cb, parralel, timeout) {
 				}, timeout);
 			}
 		};
-		app.on('onRecieve', function () {
-			while (( parralel === 0 || parralel > app.processing()) && tick()) {
+		app.on('onReceive', function () {
+			while (( parallel === 0 || parallel > app.processing()) && tick()) {
 				// true;
 			}
 		});
@@ -431,7 +522,7 @@ async.filter = async.flow.filter	= function (ops, ev, cb, timeout) {
 				}, timeout);
 			}
 		};
-		app.on('onRecieve', function () {
+		app.on('onReceive', function () {
 			tick();
 		});
 		tick();
@@ -484,7 +575,7 @@ async.waterfall.filter	= function (ops, ev, cb, parralel, timeout) {
 			}
 			return false;
 		};
-		app.on('onRecieve', function () {
+		app.on('onReceive', function () {
 			// debugger;
 			while (( parralel === 0 || parralel > app.processing()) && tick()) {
 				// true;
@@ -537,7 +628,7 @@ async.forEach = async.flow.forEach	= function (ops, ev, cb, timeout) {
 			}
 			return false;
 		};
-		app.on('onRecieve', function () {
+		app.on('onReceive', function () {
 			tick();
 		});
 		tick();
@@ -588,7 +679,7 @@ async.waterfall.forEach	= function (ops, ev, cb, parralel, timeout) {
 			}
 			return false;
 		};
-		app.on('onRecieve', function () {
+		app.on('onReceive', function () {
 			while (( parralel === 0 || parralel > app.processing()) && tick()) {
 				// true;
 			}
@@ -625,7 +716,7 @@ async.test.flow	= function (n) {
 		a1.on('onError', function (err) {
 			console.error(err);
 		});
-		a1.on('onRecieve', function () {
+		a1.on('onReceive', function () {
 			console.log(k++);
 		});
 		window.a1 = a1;
@@ -654,7 +745,7 @@ async.test.waterfall	= function (n) {
 		a1.on('onError', function (err) {
 			console.error(err);
 		});
-		a1.on('onRecieve', function () {
+		a1.on('onReceive', function () {
 			console.log(k++);
 		});
 		window.a1 = a1;

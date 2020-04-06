@@ -1,13 +1,8 @@
 /**
  * Module used processing data asynchronous
  * @example
- * Application.require('request').then(function (request) {
- *	 request()
- *		 .url('/data.json')
- *		 .response('json')
- *		 .then(function (data) {
- *			 console.log(data);
- *		 }, console.error);
+ * Application.require('async').then(function (asyncOperations) {
+ *	// @TODO
  * }, console.error);
  * @module async
  * @returns {module:async.AsyncConstructor}
@@ -103,6 +98,106 @@ declare module "async" {
          * @param {function():void} cb
          */
         done(cb: (...params: any[]) => any): void;
+    }
+    /**
+     * @callback module:async.processCallback
+     * @param {function(Error?): void} next
+     * @param {any} item
+     * @param {number} index
+     * @param {any[]} items
+     */
+    type processCallback = (next: (...params: any[]) => any, item: any, index: number, items: any[]) => void;
+    /**
+     * @callback module:async.doneCallback
+     * @this module:async.Async
+     */
+    type doneCallback = () => void;
+    /**
+     * @method flow
+     * @memberof module:async.
+     * @param {module:async.Async~Operations} operations
+     * @param {module:async.doneCallback} cb
+     * @param {number} [timeout=0] timeout between operations
+     * @returns {module:async.Async}
+     */
+    function flow(operations: module, cb: module, timeout?: number): module;
+    /**
+     * @method waterfall
+     * @memberof module:async.
+     * @param {module:async.Async~Operations} operations
+     * @param {module:async.doneCallback} cb
+     * @param {number} [parallel=27] number of operations that can be done in parallel
+     * @param {number} [timeout=0] timeout between operations
+     * @returns {module:async.Async}
+     */
+    function waterfall(operations: module, cb: module, parallel?: number, timeout?: number): module;
+    /**
+     * @method map
+     * @memberof module:async.
+     * @param {any[]} operations
+     * @param {module:async.processCallback}
+     * @param {module:async.doneCallback} cb
+     * @param {number} [timeout=0] timeout between operations
+     * @returns {module:async.Async}
+     */
+    function map(operations: any[], cb: module, timeout?: number): module;
+    /**
+     * @method flow·map
+     * @memberof module:async.
+     * @param {any[]} operations
+     * @param {module:async.processCallback}
+     * @param {module:async.doneCallback} cb
+     * @param {number} [timeout=0] timeout between operations
+     * @returns {module:async.Async}
+     */
+    function flow·map(operations: any[], cb: module, timeout?: number): module;
+    /**
+     * @method waterfall·map
+     * @memberof module:async.
+     * @param {any[]} operations
+     * @param {module:async.processCallback}
+     * @param {module:async.doneCallback} cb
+     * @param {number} [parallel=27] number of operations that can be done in parallel
+     * @param {number} [timeout=0] timeout between operations
+     * @returns {module:async.Async}
+     */
+    function waterfall·map(operations: any[], cb: module, parallel?: number, timeout?: number): module;
+}
+
+declare namespace async {
+    namespace Async {
+        /**
+         * @typedef {Array} module:async.Async~Operation
+         * @property {module:async.Async~OperationCallback} 0
+         * @property {module:async.Async~OperationArgs} 1
+         * @property {module:async.Async~OperationContext} 2
+         * @property {module:async.Async~OperationCallbackIndex} 3
+         */
+        type Operation = any[];
+        /**
+         * a function that represents the operation itself, it have as argument `next` callback, by default it is first.
+         * @typedef {function(): void} module:async.Async~OperationCallback
+         */
+        type OperationCallback = () => void;
+        /**
+         * list if arguments passed to `OperationCallback`.
+         * @typedef {any[]} module:async.Async~OperationArgs
+         */
+        type OperationArgs = any[];
+        /**
+         * context that should be used in `OperationCallback`. Default value is `{}`.
+         * @typedef {object} module:async.Async~OperationContext
+         */
+        type OperationContext = any;
+        /**
+         * index of `next()` callback in list of `OperationCallback`'s arguments. Default value is `0`.
+         * @typedef {number} module:async.Async~OperationCallbackIndex
+         */
+        type OperationCallbackIndex = number;
+        /**
+         * @typedef {module:async.Async~Operation[]} module:async.Async~Operations
+         */
+        type Operations = module[];
     }
 }
 
