@@ -19,7 +19,10 @@
 	},
 	"templates": {
 		"cleverLinks": true,
-		"monospaceLinks": true
+		"monospaceLinks": true,
+		"default": {
+			"includeDate": false
+		}
 	},
 	"docdash": {
 		"static": true,
