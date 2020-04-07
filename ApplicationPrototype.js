@@ -1,4 +1,4 @@
-/// <reference path="index.d.js" />
+/// <reference path="index.d.ts" />
 
 var isBrowser=new Function("try {return this===window;}catch(e){ return false;}");
 var isNode=new Function("var isBrowser = false; try { isBrowser = this===window;}catch(e){ isBrowser = false;}; try {return !isBrowser && ( this ===global );}catch(e){console.error(e); return false;}");
@@ -12,12 +12,13 @@ var isNode=new Function("var isBrowser = false; try { isBrowser = this===window;
 		var config	= {};
 		var crudEvents	= function (methods, public_methods, private_methods) {
 			var events		= {};
-			var nextTick    = setTimeout;
+			var nextTick;
 			if (typeof(setImmediate) === "function") {
 				nextTick = setImmediate;
-			}
-			if (typeof(process) === "object" && process && typeof(process.nextTick) === "function") {
+			} else if (typeof(process) === "object" && process && typeof(process.nextTick) === "function") {
 				nextTick = setImmediate;
+			} else {
+				nextTick = setTimeout;
 			}
 			var bind_method	= function (v, f, conf) {
 				var method	= "" + v;
@@ -73,6 +74,11 @@ var isNode=new Function("var isBrowser = false; try { isBrowser = this===window;
 					})(method_config, conf));
 				}
 				public_methods[method]	= function () {
+					if (
+						method === 'on' || method === 'once' || method === 'off' || method === 'emit' || method === 'bind'
+					) {
+						return ( f || methods[method] ).apply(public_methods, arguments);
+					}
 					if (method_config.listenedBefore !== false) {
 						if (methods.emit(method_config.listenedBefore.hookname, arguments, false, !method_config.allowInteruption) === false) {
 							return false;
