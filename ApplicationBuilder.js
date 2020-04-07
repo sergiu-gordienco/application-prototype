@@ -839,7 +839,7 @@ function ApplicationBuilder(callback) {
 								+ new Date().valueOf().toString(36)
 								+ '-' + Math.floor(100000000 + 100000000 * Math.random()).toString(36)
 								+ '-' + (chunkIndex++) + ':' + module.meta.name;
-							var script;
+							var script, url;
 							window[chunkID] = function (moduleInit) {
 								delete window[chunkID];
 								var err;
@@ -860,11 +860,12 @@ function ApplicationBuilder(callback) {
 									);
 
 									script.parentNode.removeChild(script);
+									URL.revokeObjectURL(url);
 								} catch (err) {
 									throw moduleError(err);
 								}
 							};
-							var url = URL.createObjectURL(new Blob(
+							url = URL.createObjectURL(new Blob(
 								[
 									module_header,
 									'\n;(window["' + chunkID + '"](',
