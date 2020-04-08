@@ -270,7 +270,7 @@ var HTTPCache = function (interceptor, tableName) {
 	app.interceptor().on("http:send", function (xhr, data) {
 		if (xhr._method in cache) {
 			if (cache[xhr._method].length) {
-				xhr.interupt = true;
+				xhr.interrupt = true;
 				app.emit("intercept:http", [xhr, xhr._method, xhr.requestURL]);
 				return false;
 			}

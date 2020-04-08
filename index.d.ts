@@ -700,13 +700,13 @@ declare type ApplicationBuilderRequire = (events: string | string[], callback?: 
  * @property {Boolean} [listenedBefore=true] allow listners before method call
  * @property {Boolean} [listenedOn=true] allow listners on method call ( is after )
  * @property {Boolean} [listenedAfter=true] allow listners after method call ( is after small delay )
- * @property {Boolean} [allowInteruption=true]
+ * @property {Boolean} [allowInterruption=true]
  */
 declare type BindListenerConfig = {
     listenedBefore?: boolean;
     listenedOn?: boolean;
     listenedAfter?: boolean;
-    allowInteruption?: boolean;
+    allowInterruption?: boolean;
 };
 
 /** @callback ApplicationPrototypeListener returns listner Id

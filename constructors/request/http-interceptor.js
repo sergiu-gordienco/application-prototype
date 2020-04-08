@@ -11,7 +11,7 @@ var XMLHttpRequestInterceptor = function () {
 		};
 		var _open = xhr.open;
 		var _openArgs = undefined;
-		xhr.interupt = false;
+		xhr.interrupt = false;
 		xhr.open = function (method, url) {
 			_openArgs   = Array.prototype.slice.call(arguments);
 			xhr._method = method.toLowerCase();
@@ -19,7 +19,7 @@ var XMLHttpRequestInterceptor = function () {
 			if (
 				app.emit("http:open", _args(arguments)) !== false
 			) {
-				if (xhr.interupt) return;
+				if (xhr.interrupt) return;
 				_open.apply(xhr, arguments);
 			}
 		};
@@ -139,7 +139,7 @@ var XMLHttpRequestInterceptor = function () {
 			if (
 				app.emit("http:send", _args(arguments)) !== false
 			) {
-				if (xhr.interupt) return;
+				if (xhr.interrupt) return;
 				_send.apply(xhr, arguments);
 			}
 
@@ -234,7 +234,7 @@ var XMLHttpRequestInterceptor = function () {
 			}
 
 			if (raw === false) {
-				if ((_sendState && _xhr.readyState === 1) || _xhr.interupt) {
+				if ((_sendState && _xhr.readyState === 1) || _xhr.interrupt) {
 					_send.apply(_xhr, _sendData || []);
 				}
 			} else {

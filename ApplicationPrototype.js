@@ -29,13 +29,13 @@ var isNode=new Function("var isBrowser = false; try { isBrowser = this===window;
 						listenedBefore	: false,
 						listenedOn		: false,
 						listenedAfter	: false,
-						allowInteruption: false
+						allowInterruption: false
 					}
 					if (conf.indexOf("light") !== -1) { // on
 						method_config.listenedOn	= {
 							hookname : "on" + methodNameCamel
 						};
-						method_config.allowInteruption	= true;
+						method_config.allowInterruption	= true;
 					}
 					if (conf.indexOf("af") !== -1) { // after
 						method_config.listenedAfter	= {
@@ -47,8 +47,8 @@ var isNode=new Function("var isBrowser = false; try { isBrowser = this===window;
 							hookname : "on" + methodNameCamel
 						};
 					}
-					if (conf.indexOf("st") !== -1) { // interupt
-						method_config.allowInteruption	= true;
+					if (conf.indexOf("st") !== -1) { // interrupt
+						method_config.allowInterruption	= true;
 					}
 					if (conf.indexOf("before") !== -1 || conf.indexOf("bf") !== -1) { // before
 						method_config.listenedBefore	= {
@@ -60,7 +60,7 @@ var isNode=new Function("var isBrowser = false; try { isBrowser = this===window;
 						listenedBefore	: { hookname : "before" + methodNameCamel },
 						listenedOn		: { hookname : "on" + methodNameCamel },
 						listenedAfter	: { hookname : "after" + methodNameCamel },
-						allowInteruption: true
+						allowInterruption: true
 					}
 				}
 				if (conf && typeof(conf) === "object") {
@@ -80,12 +80,12 @@ var isNode=new Function("var isBrowser = false; try { isBrowser = this===window;
 						return ( f || methods[method] ).apply(public_methods, arguments);
 					}
 					if (method_config.listenedBefore !== false) {
-						if (methods.emit(method_config.listenedBefore.hookname, arguments, false, !method_config.allowInteruption) === false) {
+						if (methods.emit(method_config.listenedBefore.hookname, arguments, false, !method_config.allowInterruption) === false) {
 							return false;
 						}
 					}
 					if (method_config.listenedOn !== false) {
-						if (!methods.emit(method_config.listenedOn.hookname, arguments, false, !method_config.allowInteruption) === false) {
+						if (!methods.emit(method_config.listenedOn.hookname, arguments, false, !method_config.allowInterruption) === false) {
 							return false;
 						}
 					}
@@ -93,7 +93,7 @@ var isNode=new Function("var isBrowser = false; try { isBrowser = this===window;
 					if (method_config.listenedAfter !== false) {
 						var args = arguments;
 						nextTick(function () {
-							if (!methods.emit(method_config.listenedAfter.hookname, args, false, !method_config.allowInteruption) === false) {
+							if (!methods.emit(method_config.listenedAfter.hookname, args, false, !method_config.allowInterruption) === false) {
 								return false;
 							}
 						}, 0);

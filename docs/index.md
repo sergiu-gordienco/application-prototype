@@ -15,14 +15,14 @@ returns an object ApplicationPrototype
 				listenedBefore	: true, // enable event beforeMethod
 				listenedOn		: true, // enable event onMethod
 				listenedAfter	: true, // enable event afterMethod
-				allowInteruption: true // enable interruption by returning false in method
+				allowInterruption: true // enable interruption by returning false in method
 			}
 			```
 			- if is `string` options from object are `false` and if it contains some substrings it enables specific options from object
-				- `"light"` - enables `listenedOn` and `allowInteruption`
+				- `"light"` - enables `listenedOn` and `allowInterruption`
 				- `"on"` » `listenedOn = true`
 				- `"af"` » `listenedAfter = true`
-				- `"st"` » `allowInteruption = true`
+				- `"st"` » `allowInterruption = true`
 				- `"bf"` » `listenedBefore = true`
 				- `"before"` » `listenedBefore = true`
 

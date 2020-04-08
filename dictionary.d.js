@@ -10,7 +10,7 @@
  * @property {Boolean} [listenedBefore=true] allow listners before method call
  * @property {Boolean} [listenedOn=true] allow listners on method call ( is after )
  * @property {Boolean} [listenedAfter=true] allow listners after method call ( is after small delay )
- * @property {Boolean} [allowInteruption=true]
+ * @property {Boolean} [allowInterruption=true]
  */
 
 /** @callback ApplicationPrototypeListener returns listner Id
