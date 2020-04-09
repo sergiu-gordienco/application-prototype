@@ -265,9 +265,9 @@ var parseTextNodes = function (textNode, cb, config) {
 	 */
 	var ate = function (textNode) {
 		//@ts-ignore
-		var text = ( textNode ? ( textNode.data || '' ) : '' ) + '';
+		var text = (textNode ? (textNode.data || '') : '') + '';
 		var firstNode, nextNode, index, cNode;
-		
+
 		if (textNode && textNode.nodeType === Node.TEXT_NODE) {
 			/** @type {string} */
 			//@ts-ignore
@@ -283,9 +283,9 @@ var parseTextNodes = function (textNode, cb, config) {
 					!textNode ||
 					!textNode.previousSibling ||
 					textNode.previousSibling.nodeType !== Node.TEXT_NODE
-					) {
-						config.buffer = [];
-						config.opened = false;
+				) {
+					config.buffer = [];
+					config.opened = false;
 				} else {
 					//@ts-ignore
 					if (textNode !== null) {
@@ -308,7 +308,9 @@ var parseTextNodes = function (textNode, cb, config) {
 				if (firstNode) {
 					textNode.parentNode.insertBefore(firstNode, textNode);
 				}
-				cNode = textParser(config.buffer.map(function (v) { return v; }), {
+				cNode = textParser(config.buffer.map(function (v) {
+					return v;
+				}), {
 					start: config.start,
 					end: config.end
 				});
@@ -354,7 +356,7 @@ var parseTextNodes = function (textNode, cb, config) {
 			}
 		}
 	};
-	
+
 	if (textNode.nodeType === Node.ELEMENT_NODE) {
 		if (textNode.childNodes[0]) {
 			ate(textNode.childNodes[0]);
@@ -365,7 +367,7 @@ var parseTextNodes = function (textNode, cb, config) {
 		ate(textNode);
 	}
 
-	if (typeof(cb) === "function") {
+	if (typeof (cb) === "function") {
 		cb(null, config);
 	}
 
@@ -514,15 +516,15 @@ attrParser.update = function (item, value, config, cb) {
 					);
 				}
 			}
-		break;
+			break;
 		case "macro":
 			switch (item.data.name) {
 				case "if":
 					if (item.data.buffer === null) {
 						item.data.buffer = {
 							current: item.data.node,
-							empty  : document.createTextNode(''),
-							valid  : item.data.node
+							empty: document.createTextNode(''),
+							valid: item.data.node
 						};
 					}
 					if (value) {
@@ -549,7 +551,7 @@ attrParser.update = function (item, value, config, cb) {
 							item.data.buffer.current = item.data.buffer.empty;
 						}
 					}
-				break;
+					break;
 				case "class":
 					if (value === null) {
 						if (item.data.buffer !== value) {
@@ -560,12 +562,12 @@ attrParser.update = function (item, value, config, cb) {
 								item.data.node.removeAttribute(item.data.name);
 							}
 						}
-					} else if (typeof(value) === "string") {
+					} else if (typeof (value) === "string") {
 						if (item.data.buffer !== value) {
 							item.data.buffer = value;
 							item.data.node.setAttribute(item.data.name, value);
 						}
-					} else if (typeof(value) === "object") {
+					} else if (typeof (value) === "object") {
 						var name, result = [];
 						for (name in value) {
 							if (value[name]) {
@@ -585,91 +587,115 @@ attrParser.update = function (item, value, config, cb) {
 							}
 						}
 					} else {
-						console.warn("🐛 Incorrect value for JSTemplate:class:item ", item,"; value: ", value);
+						console.warn("🐛 Incorrect value for JSTemplate:class:item ", item, "; value: ", value);
 					}
-				break;
+					break;
 				case "for":
 					if (item.data.buffer === null) {
+						var _key = (
+							//@ts-ignore
+							item.data.node.attrdata.__JS_TEMPLATE._macro['key'] || {
+								data: {
+									code: 'key '
+								}
+							}
+						).data.code || 'key';
+						var _ref = (
+							//@ts-ignore
+							item.data.node.attrdata.__JS_TEMPLATE._macro['ref'] || {
+								data: {
+									code: 'item'
+								}
+							}
+						).data.code || 'item';
 						item.data.buffer = {
-							template : item.data.node,
-							current : [],
-							nodes: [],
-							update: function (value) {
-								if (value === undefined) {
-									return;
-								}
-								if (!Array.isArray(value)) {
-									if (
-										window.NodeList &&
-										value instanceof NodeList
-									) {
-										value = Array.prototype.slice.call(value);
-
-										if (!value.length) {
-											value = [];
-										}
-									} else if (value === null) {
-										value = [];
-									} else {
-										value = [value];
-									}
-								}
-								
-								if (value.length === 0) {
-									value = [
-										null
-									];
-								}
-								value = value.map(function (value, index) {
-									if (value === null) return document.createTextNode('');
-
-									var args = {};
-									args[
-										(
-											//@ts-ignore
-											item.data.node.attrdata.__JS_TEMPLATE._macro['key'] ||
-											{
-												data: { code: 'key '}
-											}
-										).data.code || 'key'
-									] = index;
-
-									args[
-										(
-											//@ts-ignore
-											item.data.node.attrdata.__JS_TEMPLATE._macro['ref'] ||
-											{
-												data: { code: 'item'}
-											}
-										).data.code || 'item'
-									] = value;
-
-									var node = item.data.node.cloneNode(true);
-									//@ts-ignore
-									node.renderJs(
-										config.context,
-										Object.assign({}, config.args, args)
+							template: item.data.node,
+							current: [],
+							reference: document.createTextNode(''),
+							cache: [],
+							createNode: function (args) {
+								var _item = {
+									node: item.data.node.cloneNode(true),
+									args: Object.assign({}, config.args, args)
+								};
+								//@ts-ignore
+								_item.node.renderJs(
+									config.context,
+									_item.args
+								);
+								item.data.buffer.reference.parentNode.insertBefore(
+									_item.node,
+									item.data.buffer.reference
+								);
+								return _item;
+							},
+							allocNode: function (args) {
+								var _item;
+								if (item.data.buffer.cache.length) {
+									_item = item.data.buffer.cache.shift();
+									Object.assign(item.args, args);
+									_item.node.renderJs(function (err) {
+										if (err) console.error(err);
+									});
+									item.data.buffer.reference.parentNode.insertBefore(
+										_item.node,
+										item.data.buffer.reference
 									);
-									return node;
-								});
-								var i;
-								console.log("🚀 ", value);
-								var ref = item.data.buffer.current[0];
-								var parent = ref.parentNode;
-								for (i = 0; i < value.length; i++) {
-									parent.insertBefore(value[i], ref);
+								} else {
+									_item = item.data.buffer.createNode(args);
 								}
-								item.data.buffer.current.forEach(function (node) {
-									node.parentNode.removeChild(node);
-								});
-								item.data.buffer.current = value;
+								item.data.buffer.current.push(_item);
+								return _item;
+							},
+							cacheCurrent: function (length) {
+								var _item;
+								while (item.data.buffer.current.length > length) {
+									_item = item.data.buffer.current.pop();
+									item.data.buffer.cache.push(
+										_item
+									);
+									_item.node.parentElement.removeChild(_item.node);
+								}
+							},
+							update: function (value) {
+								if (Array.isArray(value)) {
+									value.forEach(function (_item, index) {
+										var args = {};
+										args[_key] = index;
+										args[_ref] = _item;
+										if (!item.data.buffer.current[index]) {
+											item.data.buffer.allocNode(args);
+										} else {
+											Object.assign(
+												item.data.buffer.current[index].args,
+												args
+											);
+											item.data.buffer.current[index].node.renderJs();
+										}
+									});
+								} else if (value && typeof (value) === "object") {
+									var _keys = Object.keys(value);
+									_keys.sort().forEach(function (index) {
+										var args = {};
+										args[_key] = index;
+										args[_ref] = value[index];
+										if (!item.data.buffer.current[index]) {
+											item.data.buffer.allocNode(args);
+										} else {
+											Object.assign(
+												item.data.buffer.current[index].args,
+												args
+											);
+											item.data.buffer.current[index].node.renderJs();
+										}
+									});
+									item.data.buffer.cacheCurrent(_keys.length);
+								}
 							}
 						};
-						item.data.buffer.current = [
-							document.createTextNode('')
-						];
+						item.data.buffer.current = [];
 						item.data.node.parentElement.insertBefore(
-							item.data.buffer.current[0],
+							item.data.buffer.reference,
 							item.data.node
 						);
 						item.data.node.parentElement.removeChild(
@@ -678,13 +704,13 @@ attrParser.update = function (item, value, config, cb) {
 					}
 
 					item.data.buffer.update(value);
-				break;
+					break;
 			}
-		break;
+			break;
 		case "event":
 			if (!item.data.buffer) {
 				item.data.buffer = value;
-				if (typeof(value) === "function") {
+				if (typeof (value) === "function") {
 					//@ts-ignore
 					item.data.node.addEventListener(
 						item.data.name,
@@ -703,7 +729,7 @@ attrParser.update = function (item, value, config, cb) {
 					);
 				} else if (
 					//@ts-ignore
-					value && typeof(value) === "object" && typeof(value.emit) === "function"
+					value && typeof (value) === "object" && typeof (value.emit) === "function"
 				) {
 					item.data.node.addEventListener(
 						item.data.name,
@@ -719,7 +745,7 @@ attrParser.update = function (item, value, config, cb) {
 					);
 				}
 			}
-		break;
+			break;
 		case "binding":
 			if (!item.data.buffer) {
 				item.data.buffer = true;
@@ -728,7 +754,7 @@ attrParser.update = function (item, value, config, cb) {
 					"; for value: ", value
 				);
 			}
-		break;
+			break;
 	}
 
 	cb(null, status);
@@ -754,7 +780,7 @@ attrParser.value = function (item, config, cb) {
 			.forEach(function (part) {
 				parts.push.apply(parts, part.split(config.end));
 			});
-		
+
 		value = parts.map(function (part, index) {
 			if (index % 2) {
 				return expressionBuilder(part, config)
@@ -769,13 +795,12 @@ attrParser.value = function (item, config, cb) {
 		/* jshint -W054 */
 		try {
 			expressionCall = (
-				Function.apply(
-					{},
+				Function.apply({},
 					config.__argsNames.concat(
 						[
 							"return (" +
-								//@ts-ignore
-								item.data.code +
+							//@ts-ignore
+							item.data.code +
 							" );"
 						]
 					)
@@ -796,9 +821,9 @@ attrParser.value = function (item, config, cb) {
 
 		if (
 			value &&
-			typeof(value) === "object" &&
-			typeof(value.then) === "function" &&
-			typeof(value.catch) === "function"
+			typeof (value) === "object" &&
+			typeof (value.then) === "function" &&
+			typeof (value.catch) === "function"
 		) {
 			value.then(function (result) {
 				cb(null, result);
@@ -827,7 +852,7 @@ attrParser.value = function (item, config, cb) {
  * @returns {module:js-template~parseTextNodesConfig}
  */
 var nodeParser = function (nodeElement, cb, config) {
-	if (typeof (cb) !== "function") cb = function () { };
+	if (typeof (cb) !== "function") cb = function () {};
 	if (!config) {
 		config = {
 			args: {},
@@ -840,14 +865,14 @@ var nodeParser = function (nodeElement, cb, config) {
 		config.context = (config.context || {});
 		config.RENDER_FPS = config.RENDER_FPS || module.exports.config.RENDER_FPS || 15;
 		config.REMOVE_EMPTY_NODES = (
-			typeof(config.REMOVE_EMPTY_NODES) === "boolean" ?
-				config.REMOVE_EMPTY_NODES : module.exports.config.REMOVE_EMPTY_NODES
+			typeof (config.REMOVE_EMPTY_NODES) === "boolean" ?
+			config.REMOVE_EMPTY_NODES : module.exports.config.REMOVE_EMPTY_NODES
 		);
 	}
 
 	var argsNames = [];
-	var argsValues = [];
-	; ((function (o) {
+	var argsValues = [];;
+	((function (o) {
 		if (o && typeof (o) === "object") {
 			var i;
 			for (i in o) {
@@ -870,12 +895,12 @@ var nodeParser = function (nodeElement, cb, config) {
 			_macro: {},
 			HAS_POST_PROCESS: false
 		};
-		
+
 		//@ts-ignore
 		nodeElement.attrdata.__JS_TEMPLATE.nodes = nodeElement.attrdata.__JS_TEMPLATE.nodes || [];
 		//@ts-ignore
 		nodeElement.attrdata.__JS_TEMPLATE.texts = nodeElement.attrdata.__JS_TEMPLATE.texts || [];
-		
+
 		/** @type {module:js-template~jsTemplateAttrData} */
 		//@ts-ignore
 		var __JS_TEMPLATE = nodeElement.attrdata.__JS_TEMPLATE;
@@ -924,7 +949,7 @@ var nodeParser = function (nodeElement, cb, config) {
 		 */
 		/** @type {NodeList} */
 		var children = Array.prototype.slice.call(nodeElement.childNodes)
-			.filter(function (/** @type {Node} */ node) {
+			.filter(function ( /** @type {Node} */ node) {
 				if (
 					node.nodeType === Node.TEXT_NODE ||
 					node.nodeType === Node.CDATA_SECTION_NODE ||
@@ -937,7 +962,7 @@ var nodeParser = function (nodeElement, cb, config) {
 				}
 				return false;
 			});
-		
+
 		children.forEach(function (node) {
 			//@ts-ignore
 			__JS_TEMPLATE.children.push(ate(node));
@@ -955,7 +980,7 @@ var nodeParser = function (nodeElement, cb, config) {
 			if (config.REMOVE_EMPTY_NODES) {
 				__JS_TEMPLATE.children = __JS_TEMPLATE.children.filter(
 					function (item) {
-						return ( item.children.length || item.nodes.length || item.texts.length );
+						return (item.children.length || item.nodes.length || item.texts.length);
 					}
 				);
 			}
@@ -964,7 +989,7 @@ var nodeParser = function (nodeElement, cb, config) {
 				cb(null, __JS_TEMPLATE);
 			}
 		}, config);
-		
+
 		// console.log("🚀", __JS_TEMPLATE);
 
 		return __JS_TEMPLATE;
@@ -972,17 +997,17 @@ var nodeParser = function (nodeElement, cb, config) {
 
 
 
-	var _time    = new Date().valueOf();
-	var _timer   = null;
+	var _time = new Date().valueOf();
+	var _timer = null;
 	var _methods = {
-		items  : ate(nodeElement),
-		redraw :function (cb, context, args) {
+		items: ate(nodeElement),
+		redraw: function (cb, context, args) {
 			var DEBUG_MODE = 1;
 
-			if (typeof(context) !== "undefined") {
+			if (typeof (context) !== "undefined") {
 				config.context = context;
 			}
-			if (typeof(args) === "object" && args) {
+			if (typeof (args) === "object" && args) {
 				config.args = args;
 				console.info(config.args);
 			}
@@ -1001,11 +1026,12 @@ var nodeParser = function (nodeElement, cb, config) {
 				clearTimeout(_timer);
 				_timer = null;
 
-				config.__argsNames   = [];
-				config.__argsValues  = [];
+				config.__argsNames = [];
+				config.__argsValues = [];
 
-				;((function (o) {
-					if (o && typeof(o) === "object") {
+				;
+				((function (o) {
+					if (o && typeof (o) === "object") {
 						var i;
 						for (i in o) {
 							config.__argsNames.push(i);
@@ -1162,14 +1188,18 @@ var nodeParser = function (nodeElement, cb, config) {
 
 
 				if (DEBUG_MODE) {
-					console.info("🎨 JSTemplate::Start delay: ", _delay, { node: nodeElement });
+					console.info("🎨 JSTemplate::Start delay: ", _delay, {
+						node: nodeElement
+					});
 				}
 				var sTime = new Date().valueOf();
 				renderItem(
 					_methods.items,
 					function () {
 						if (DEBUG_MODE) {
-							console.info("🎨 JSTemplate::Finish delay: ", (Math.floor(_delay * 100) / 100), "; time: ", (new Date().valueOf() - sTime),"ms;", { node: nodeElement });
+							console.info("🎨 JSTemplate::Finish delay: ", (Math.floor(_delay * 100) / 100), "; time: ", (new Date().valueOf() - sTime), "ms;", {
+								node: nodeElement
+							});
 						}
 					}
 				);
