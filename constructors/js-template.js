@@ -439,17 +439,17 @@ var attrParser = function (attr, node) {
 			code: 'function (event) { ' + attr.value + ' }',
 			node: node
 		};
-	} else if (attr.name.match(/^\[(.+)\]$/)) {
-		attrResult.type = 'attribute';
-		attrResult.data = {
-			name: attr.name.match(/^\[(.+)\]$/)[1],
-			code: attr.value,
-			node: node
-		};
 	} else if (attr.name.match(/^\[\((.+)\)\]$/)) {
 		attrResult.type = 'binding';
 		attrResult.data = {
 			name: attr.name.match(/^\[\((.+)\)\]$/)[1],
+			code: 'function (event) { if (event.__args) with (event.__args) { ' + attr.value + ' = event.__value; }; return ( ' + attr.value + ' ); }',
+			node: node
+		};
+	} else if (attr.name.match(/^\[(.+)\]$/)) {
+		attrResult.type = 'attribute';
+		attrResult.data = {
+			name: attr.name.match(/^\[(.+)\]$/)[1],
 			code: attr.value,
 			node: node
 		};
@@ -727,17 +727,17 @@ attrParser.update = function (item, value, config, cb) {
 							});
 						}
 					);
-				} else if (
-					//@ts-ignore
-					value && typeof (value) === "object" && typeof (value.emit) === "function"
-				) {
-					item.data.node.addEventListener(
-						item.data.name,
-						function (event, node) {
-							//@ts-ignore
-							value.emit(item.data.name, [event, node]);
-						}
-					);
+				// } else if (
+				// 	//@ts-ignore
+				// 	value && typeof (value) === "object" && typeof (value.emit) === "function"
+				// ) {
+				// 	item.data.node.addEventListener(
+				// 		item.data.name,
+				// 		function (event, node) {
+				// 			//@ts-ignore
+				// 			value.emit(item.data.name, [event, node]);
+				// 		}
+				// 	);
 				} else {
 					console.warn(
 						"🐛 Unknown JSTemplate:event:item destination: ", item,
@@ -747,12 +747,104 @@ attrParser.update = function (item, value, config, cb) {
 			}
 			break;
 		case "binding":
-			if (!item.data.buffer) {
-				item.data.buffer = true;
-				console.warn(
-					"🚧 In Construction JSTemplate:binding:item  ", item,
-					"; for value: ", value
-				);
+			switch (item.data.name) {
+				case "model":
+					if (!item.data.buffer) {
+						item.data.buffer = value;
+						if (typeof (value) === "function") {
+							/** @type {HTMLTextAreaElement} */
+							var node = item.data.node;
+							switch (node.tagName.toLowerCase()) {
+								case "input":
+									/** @var {HTMLInputElement} node */
+									var inputType = node.getAttribute('type').toLowerCase();
+
+									if (inputType === "radio") {
+										console.warn(
+											"🐛 Input[type=\"radio\"] JSTemplate:binding:item not supported: ", item
+										);
+										break;
+									} else if (inputType === "checkbox") {
+										//@ts-ignore
+										node.checked = value({});
+										node.addEventListener('mouseup', function (event) {
+											//@ts-ignore
+											event.__args = config.args;
+											//@ts-ignore
+											event.__value = !!event.target.checked;
+											value(event);
+
+											config.__redraw();
+										});
+										break;
+									} else if (inputType === "file") {
+										//@ts-ignore
+										node.addEventListener('change', function (event) {
+											//@ts-ignore
+											event.__args = config.args;
+											//@ts-ignore
+											event.__value = event.target.files;
+											value(event);
+
+											config.__redraw();
+										});
+										break;
+									};
+								case "textarea":
+									/** @var {HTMLTextAreaElement} node */
+									node.value = value({});
+									node.addEventListener('keyup', function (event) {
+										//@ts-ignore
+										event.__args = config.args;
+										//@ts-ignore
+										event.__value = event.target.value;
+										value(event);
+
+										config.__redraw();
+									});
+								break;
+								case "select":
+									/** @var {HTMLSelectElement} node */
+									node.value = value({});
+									node.addEventListener('change', function (event) {
+										//@ts-ignore
+										event.__args = config.args;
+										//@ts-ignore
+										event.__value = event.target.value;
+										value(event);
+
+										config.__redraw();
+									});
+								break;
+							}
+							//@ts-ignore
+							item.data.node.addEventListener(
+								item.data.name,
+								function (event) {
+									attrParser.value(item, config, function (err, value) {
+										if (err) {
+											console.error(err);
+											return;
+										}
+										value.apply(
+											config.context,
+											[event]
+										);
+									});
+								}
+							);
+						}
+					}
+				break;
+				default:
+					if (!item.data.buffer) {
+						item.data.buffer = true;
+						console.warn(
+							"🚧 In Construction JSTemplate:binding:item  ", item,
+							"; for value: ", value
+						);
+					}
+				break;
 			}
 			break;
 	}
@@ -1206,6 +1298,10 @@ var nodeParser = function (nodeElement, cb, config) {
 
 			}, _delay);
 		}
+	};
+
+	config.__redraw = function () {
+		_methods.redraw();
 	};
 
 	_methods.redraw();
