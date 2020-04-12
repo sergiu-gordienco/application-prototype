@@ -176,7 +176,7 @@ declare namespace async {
         type Operation = any[];
         /**
          * a function that represents the operation itself, it have as argument `next` callback, by default it is first.
-         * @typedef {function(): void} module:async.Async~OperationCallback
+         * @typedef {Function} module:async.Async~OperationCallback
          */
         type OperationCallback = () => void;
         /**
@@ -367,6 +367,15 @@ declare module "js-template" {
      * @returns {module:js-template~jsTemplate_attrResult}
      */
     function attrParser(attr: module): module;
+    /** @var {HTMLInputElement} node
+     */
+    var node: HTMLInputElement;
+    /** @var {HTMLInputElement} node
+     */
+    var node: HTMLInputElement;
+    /** @var {HTMLInputElement} node
+     */
+    var node: HTMLInputElement;
     /**
      * @protected
      * @memberof module:js-template
@@ -878,13 +887,17 @@ declare type ApplicationBuilderInstance = {
     NodeInterface: ApplicationNodeInterface;
 };
 
-/** @typedef {function (): ApplicationPrototypeInstance} ApplicationPrototypeConstructor
+/**
+ * @callback ApplicationPrototypeConstructor
+ * @returns {ApplicationPrototypeInstance}
  */
-declare type ApplicationPrototypeConstructor = () => void;
+declare type ApplicationPrototypeConstructor = () => ApplicationPrototypeInstance;
 
-/** @typedef {function (): ApplicationBuilderInstance} ApplicationBuilderConstructor
+/**
+ * @callback ApplicationBuilderConstructor
+ * @returns {ApplicationBuilderInstance}
  */
-declare type ApplicationBuilderConstructor = () => void;
+declare type ApplicationBuilderConstructor = () => ApplicationBuilderInstance;
 
 /** @typedef {ApplicationPrototype_slDOM} slDOM
  */

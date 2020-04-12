@@ -122,8 +122,14 @@
 // /** @typedef {{ prop1: string, prop2: string, prop3?: number }} XXXSpecialType */
 // /** @typedef {(data: string, index?: number) => boolean} XXXPredicate */
 
-/** @typedef {function (): ApplicationPrototypeInstance} ApplicationPrototypeConstructor */
-/** @typedef {function (): ApplicationBuilderInstance} ApplicationBuilderConstructor */
+/**
+ * @callback ApplicationPrototypeConstructor
+ * @returns {ApplicationPrototypeInstance}
+ */
+/**
+ * @callback ApplicationBuilderConstructor
+ * @returns {ApplicationBuilderInstance}
+ */
 
 
 

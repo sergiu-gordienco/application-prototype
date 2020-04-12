@@ -196,12 +196,12 @@ var async	= function () {
  */
 
 /**
- * @typedef {[function():void, any[], object, number]} module:async.Async~Operation
+ * @typedef {[Function, any[], object, number]} module:async.Async~Operation
  */
 
 /**
  * a function that represents the operation itself, it have as argument `next` callback, by default it is first.
- * @typedef {function(): void} module:async.Async~OperationCallback
+ * @typedef {Function} module:async.Async~OperationCallback
  */
 
 /**
