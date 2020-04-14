@@ -673,6 +673,7 @@ attrParser.update = function (item, value, config, cb) {
 											item.data.buffer.current[index].node.renderJs();
 										}
 									});
+									item.data.buffer.cacheCurrent(value.length);
 								} else if (value && typeof (value) === "object") {
 									var _keys = Object.keys(value);
 									_keys.sort().forEach(function (index) {
@@ -1092,6 +1093,7 @@ var nodeParser = function (nodeElement, cb, config) {
 	var _time = new Date().valueOf();
 	var _timer = null;
 	var _methods = {
+		__renderStarted: false,
 		items: ate(nodeElement),
 		redraw: function (cb, context, args) {
 			var DEBUG_MODE = 1;
@@ -1114,14 +1116,28 @@ var nodeParser = function (nodeElement, cb, config) {
 
 			var _delay = Math.max(1000 / config.RENDER_FPS - (time - _time), 0);
 
-			_timer = setTimeout(function () {
+
+			if (_methods.__renderStarted) {
+				if (DEBUG_MODE) {
+					console.warn("🎨 JSTemplate::Redraw Omitted: ", _delay, {
+						node: nodeElement
+					});
+				}
+				// @TODO Check
+				// return;
+			}
+
+			if (_timer) {
 				clearTimeout(_timer);
+				_timer = null;
+			}
+
+			_timer = setTimeout(function () {
+				_methods.__renderStarted = true;
 				_timer = null;
 
 				config.__argsNames = [];
 				config.__argsValues = [];
-
-				;
 				((function (o) {
 					if (o && typeof (o) === "object") {
 						var i;
@@ -1278,7 +1294,6 @@ var nodeParser = function (nodeElement, cb, config) {
 					});
 				};
 
-
 				if (DEBUG_MODE) {
 					console.info("🎨 JSTemplate::Start delay: ", _delay, {
 						node: nodeElement
@@ -1288,6 +1303,7 @@ var nodeParser = function (nodeElement, cb, config) {
 				renderItem(
 					_methods.items,
 					function () {
+						_methods.__renderStarted = false;
 						if (DEBUG_MODE) {
 							console.info("🎨 JSTemplate::Finish delay: ", (Math.floor(_delay * 100) / 100), "; time: ", (new Date().valueOf() - sTime), "ms;", {
 								node: nodeElement

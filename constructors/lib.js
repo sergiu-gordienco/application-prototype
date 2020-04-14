@@ -39,7 +39,8 @@ loader.list = [
 			'request/params-parser/cli',
 			'uri-load',
 			'parsers/string/csv/parse',
-			'parsers/string/csv/encode'
+			'parsers/string/csv/encode',
+			'parsers/string/markdown/convert/html'
 		]
 	}
 ];
