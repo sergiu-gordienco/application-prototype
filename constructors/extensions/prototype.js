@@ -2065,7 +2065,7 @@ if (typeof(Event) !== "undefined")
 })());
 
 _public.string.Utf8ArrayToStr = function (a) {
-	var s = "", i = 0, l = a.length, c;var c2, c3;while (i < len) { c = a[i++]; switch (c >> 4) {
+	var s = "", i = 0, l = a.length, c;var c2, c3;while (i < l) { c = a[i++]; switch (c >> 4) {
 		case 0: case 1: case 2: case 3: case 4: case 5: case 6: case 7: s += String.fromCharCode(c); break;
 		case 12: case 13: c2 = a[i++]; s += String.fromCharCode(((c & 0x1F) << 6) | (c2 & 0x3F)); break;
 		case 14: c2 = a[i++]; c3 = a[i++]; s += String.fromCharCode(((c & 0x0F) << 12) | ((c2 & 0x3F) << 6) | ((c3 & 0x3F) << 0)); break;
