@@ -23,7 +23,7 @@
 /** @callback ApplicationPrototypeBind returns listner Id
  * @param {String | Function} event event name of function with name
  * @param {Function | BindListenerConfig} [callback] function that will listen data
- * @param {BindListenerConfig} [listenersConfig] of lis event name of function with name
+ * @param {BindListenerConfig|string} [listenersConfig] of lis event name of function with name
  * @returns {String}
  */
 
@@ -135,13 +135,175 @@
 
 // property {*} _i 	= function(i,n){return ((n + (i % n))%n); };
 
-/** @typedef {ApplicationPrototype_slDOM} slDOM */
-/** @typedef {ApplicationPrototype_slDOM_env} slDOM_env */
+/**
+ * @var {module:extensions/prototype.slDOM} slDOM
+ * @memberof module:extensions/prototype
+ */
+/**
+ * @var {module:extensions/prototype.slDOM_env} slDOM_env
+ * @memberof module:extensions/prototype
+ */
+/**
+ * @var {module:extensions/prototype.slDOM} _
+ * @memberof module:extensions/prototype
+ */
+/**
+ * @var {module:extensions/prototype.slDOMSet} __
+ * @memberof module:extensions/prototype
+ */
+
+/**
+ * @class
+ * @name slDOMSet
+ * @memberof module:extensions/prototype
+ * @param {string} [cssSelector]
+ */
+/**
+ * @method config
+ * @memberof module:extensions/prototype.slDOMSet
+ * @param {string} key 
+ * @param {any} value
+ * @returns {module:extensions/prototype.slDOMSet}
+ */
+/**
+ * @method config
+ * @memberof module:extensions/prototype.slDOMSet
+ * @param {string} key 
+ * @returns {any}
+ */
+/**
+ * @method unique
+ * @memberof module:extensions/prototype.slDOMSet
+ * @returns {module:extensions/prototype.slDOMSet}
+ */
+/**
+ * @method set
+ * @memberof module:extensions/prototype.slDOMSet
+ * @param {string} v css selector applied over document
+ * @returns {module:extensions/prototype.slDOMSet}
+ */
+/**
+ * @method set
+ * @memberof module:extensions/prototype.slDOMSet
+ * @param {(NodeList|any[])} v array of Nodes or HTMLElements
+ * @returns {module:extensions/prototype.slDOMSet}
+ */
+/**
+ * @method add
+ * @memberof module:extensions/prototype.slDOMSet
+ * @param {(NodeList|any)} ...v array of Nodes or HTMLElements
+ * @returns {module:extensions/prototype.slDOMSet}
+ */
+/**
+ * @method env
+ * @memberof module:extensions/prototype.slDOMSet
+ * @returns {module:extensions/prototype.slDOM_env}
+ */
+/**
+ * @method get
+ * @memberof module:extensions/prototype.slDOMSet
+ * @returns {(Node[])}
+ */
+/**
+ * @method get
+ * @memberof module:extensions/prototype.slDOMSet
+ * @param {number} index
+ * @returns {(Node)}
+ */
+/**
+ * @method eq
+ * @memberof module:extensions/prototype.slDOMSet
+ * @param {number} index
+ * @returns {module:extensions/prototype.slDOMSet}
+ */
+/**
+ * @method find
+ * @memberof module:extensions/prototype.slDOMSet
+ * @param {string} cssSelector
+ * @returns {module:extensions/prototype.slDOMSet}
+ */
+
+
+/**
+ * @callback itemHandler
+ * @memberof module:extensions/prototype.slDOMSet
+ * @param {Node} node
+ * @param {number} index
+ * @param {module:extensions/prototype.slDOMSet} context
+ * @param {module:extensions/prototype.slDOM} p
+ */
+/**
+ * @callback itemHandlerFilter
+ * @memberof module:extensions/prototype.slDOMSet
+ * @param {Node} node
+ * @param {number} index
+ * @param {module:extensions/prototype.slDOMSet} context
+ * @param {module:extensions/prototype.slDOM} p
+ * @returns {boolean}
+ */
+/**
+ * @callback itemHandlerMap
+ * @memberof module:extensions/prototype.slDOMSet
+ * @param {Node} node
+ * @param {number} index
+ * @param {module:extensions/prototype.slDOMSet} context
+ * @param {module:extensions/prototype.slDOM} p
+ * @returns {Node}
+ */
+/**
+ * @method filter
+ * @memberof module:extensions/prototype.slDOMSet
+ * @param {module:extensions/prototype.slDOMSet.itemHandlerFilter} filterCallback
+ * @returns {module:extensions/prototype.slDOMSet}
+ */
+/**
+ * @method each
+ * @memberof module:extensions/prototype.slDOMSet
+ * @param {module:extensions/prototype.slDOMSet.itemHandler} filterCallback
+ * @returns {module:extensions/prototype.slDOMSet}
+ */
+/**
+ * @method map
+ * @memberof module:extensions/prototype.slDOMSet
+ * @param {module:extensions/prototype.slDOMSet.itemHandlerMap} filterCallback
+ * @returns {module:extensions/prototype.slDOMSet}
+ */
+
+/**
+ * @method attr
+ * @memberof module:extensions/prototype.slDOMSet
+ * @returns {external:NamedNodeMap}
+ */
+/**
+ * @method attr
+ * @memberof module:extensions/prototype.slDOMSet
+ * @param {string} attribute
+ * @returns {string}
+ */
+/**
+ * @method attr
+ * @memberof module:extensions/prototype.slDOMSet
+ * @param {string} attribute
+ * @param {any} value
+ * @returns {module:extensions/prototype.slDOMSet}
+ */
+/**
+ * @method attr
+ * @memberof module:extensions/prototype.slDOMSet
+ * @param {any} ...attr_value
+ * @returns {module:extensions/prototype.slDOMSet}
+ */
+
+	// ["toFunction", "x" ].forEach(function (method) {
+	// ["sClass", "c" ].forEach(function (method) {
+	// [ "g_wh", "r", "pagePXY", "PXY", "eventsCache", "in_e", "i", "is_free", "is_focused", "is_inview", "is_visible" ].forEach(function (method) {
+	// [ "on", "off", "opacity", "a2D", "triger", "setVar", "T", "setStyle", "setStyleSPEED", "F", "f", "o", "removeFromDOM", "free", "d", "D", "clearE", "delE", "setVar", "setObjVar", "setObjProto", "V", "v", "p", "adEto", "putBfto", "putAfto", "putBf", "putAf", "Et", "Bt", "At", "pB", "pA", "addE", "addB", "addT", "e", "b", "t", "getTagsByQuery", "getTags", "s", "q", "nextTo", "backTo", "nUP", "nChild", "getParentN", "copyE", "getParentTag", "getByTag", "getByQuery", "getById", "N", "B", "U", "C", "P", "X", "p", "S", "Q", "I" ].forEach(function (method) {
 
 
 
 /**
- * @typedef ApplicationPrototype_slDOM_env
+ * @typedef slDOM_env
+ * @memberof module:extensions/prototype
  * @property {Boolean} gecko
  * @property {Boolean} old_ie
  * @property {Boolean} ie_lt8
@@ -174,55 +336,56 @@
 
 
 /**
- * @typedef {object} ApplicationPrototype_slDOM returns a pointer that walks over DOM and applying needed operations
- * @property {ApplicationPrototype_slDOM_env} env Environment Flags
+ * @typedef {object} slDOM returns a pointer that walks over DOM and applying needed operations
+ * @memberof module:extensions/prototype
+ * @property {slDOM_env} env Environment Flags
  * @property {function (Boolean): HTMLElement} __ if params is `true` then return document otherwise current HTMLElement
- * @property {function(Object): ApplicationPrototype_slDOM} a2D apply Css Transforms on elements
- * @property {function(number): ApplicationPrototype_slDOM} opacity ( short form **o** ) change element opacity
- * @property {function((HTMLElement|string)): ApplicationPrototype_slDOM} setE ( short form **e** ) set a HTMLElement or Create Element for slDOM Pointer
- * @property {function((string|string[]), String?, number?): ApplicationPrototype_slDOM | Boolean} sClass =slDOMlib.sClass;
- * @property {function(...string): ApplicationPrototype_slDOM()} setArg ( short form **A** ) set Attributes to HTMLElement, arguments order: `[ attribute, value, attribute, value ... ]`
- * @property {function(HTMLElement): ApplicationPrototype_slDOM} adEto add current HTMLElement to other HTMLElement;
- * @property {function(HTMLElement): ApplicationPrototype_slDOM} putBfto insert current HTMLElement before other HTMLElement
- * @property {function(HTMLElement): ApplicationPrototype_slDOM} putAfto insert current HTMLElement after other HTMLElement
- * @property {function((HTMLElement | string), string?, function?): ApplicationPrototype_slDOM} putBf =slDOMlib.putBf;
- * @property {function(HTMLElement): ApplicationPrototype_slDOM} putAf =slDOMlib.putAf;
- * @property {function((HTMLElement | string), string?, function?): ApplicationPrototype_slDOM} addE =slDOMlib.addE;
- * @property {function((HTMLElement | string), string?, function?): ApplicationPrototype_slDOM} addB =slDOMlib.addB;
- * @property {function(string): ApplicationPrototype_slDOM} addT ( short form **t** ) add text node to HTMLElement;
- * @property {function(number): ApplicationPrototype_slDOM} [nextTo=1] ( short form **N** ) moving pointer forward to N neighbors
- * @property {function(number): ApplicationPrototype_slDOM} [backTo=1] ( short form **B** ) moving pointer backward to N neighbors
- * @property {function(number?): ApplicationPrototype_slDOM} nUP ( short form is U ) goes up on level in doom
- * @property {function(number?): ApplicationPrototype_slDOM} nChild ( short form is **C** ) select the *N th* child element
- * @property {function(number?): ApplicationPrototype_slDOM} getParentN ( short form is **P** ) select the *N th* parent element
- * @property {function(): ApplicationPrototype_slDOM} clearE ( short form is **d** ) remove all childObjects from node
- * @property {function(): ApplicationPrototype_slDOM} delE remove HTMLElement from its Parent
- * @property {function(Boolean): ApplicationPrototype_slDOM} copyE =slDOMlib.copyE;
- * @property {function(String): ApplicationPrototype_slDOM} getParentTag =slDOMlib.getParentTag;
- * @property {function(String, number, Boolean, Boolean): ApplicationPrototype_slDOM} getByTag =slDOMlib.getByTag;
- * @property {function(String, number, Boolean, Boolean): ApplicationPrototype_slDOM} getByQuery =slDOMlib.getByQuery;
- * @property {function(String): ApplicationPrototype_slDOM} getById =slDOMlib.getById;
+ * @property {function(Object): slDOM} a2D apply Css Transforms on elements
+ * @property {function(number): slDOM} opacity ( short form **o** ) change element opacity
+ * @property {function((HTMLElement|string)): slDOM} setE ( short form **e** ) set a HTMLElement or Create Element for slDOM Pointer
+ * @property {function((string|string[]), String?, number?): slDOM | Boolean} sClass =slDOMlib.sClass;
+ * @property {function(...string): slDOM()} setArg ( short form **A** ) set Attributes to HTMLElement, arguments order: `[ attribute, value, attribute, value ... ]`
+ * @property {function(HTMLElement): slDOM} adEto add current HTMLElement to other HTMLElement;
+ * @property {function(HTMLElement): slDOM} putBfto insert current HTMLElement before other HTMLElement
+ * @property {function(HTMLElement): slDOM} putAfto insert current HTMLElement after other HTMLElement
+ * @property {function((HTMLElement | string), string?, function?): slDOM} putBf =slDOMlib.putBf;
+ * @property {function(HTMLElement): slDOM} putAf =slDOMlib.putAf;
+ * @property {function((HTMLElement | string), string?, function?): slDOM} addE =slDOMlib.addE;
+ * @property {function((HTMLElement | string), string?, function?): slDOM} addB =slDOMlib.addB;
+ * @property {function(string): slDOM} addT ( short form **t** ) add text node to HTMLElement;
+ * @property {function(number): slDOM} [nextTo=1] ( short form **N** ) moving pointer forward to N neighbors
+ * @property {function(number): slDOM} [backTo=1] ( short form **B** ) moving pointer backward to N neighbors
+ * @property {function(number?): slDOM} nUP ( short form is U ) goes up on level in doom
+ * @property {function(number?): slDOM} nChild ( short form is **C** ) select the *N th* child element
+ * @property {function(number?): slDOM} getParentN ( short form is **P** ) select the *N th* parent element
+ * @property {function(): slDOM} clearE ( short form is **d** ) remove all childObjects from node
+ * @property {function(): slDOM} delE remove HTMLElement from its Parent
+ * @property {function(Boolean): slDOM} copyE =slDOMlib.copyE;
+ * @property {function(String): slDOM} getParentTag =slDOMlib.getParentTag;
+ * @property {function(String, number, Boolean, Boolean): slDOM} getByTag =slDOMlib.getByTag;
+ * @property {function(String, number, Boolean, Boolean): slDOM} getByQuery =slDOMlib.getByQuery;
+ * @property {function(String): slDOM} getById =slDOMlib.getById;
  * @property {function(String, Boolean): Array<HTMLElement>} getTags =slDOMlib.getTags;
  * @property {function(String, Boolean): Array<HTMLElement>} getTagsByQuery =slDOMlib.getTagsByQuery;
- * @property {function(String): ApplicationPrototype_slDOM} triger ( short form **T** ) trigger / emit an event on HTMLElement
- * @property {function(String?): ApplicationPrototype_slDOM | HTMLElement | String} getE ( short form **_** ) return HTMLElement ;
+ * @property {function(String): slDOM} triger ( short form **T** ) trigger / emit an event on HTMLElement
+ * @property {function(String?): slDOM | HTMLElement | String} getE ( short form **_** ) return HTMLElement ;
  * * if argument[0] is ".tag" return HTMLElement's tagname ;
  * * if argument[0] is ".html" return HTML Content ;
  * * if argument[0] is ".text" return Text Content ;
  * * if argument[0] is "-attributeName" return HTMLElement's Attribute ;
  * * if argument[0] is "!attributeName" remove HTMLElement's Attribute
- * @property {function(slDOM.ObjectCSSProperties): ApplicationPrototype_slDOM} setStyle ( short form **f** ) setting css proprieties to HTMLElement
- * @property {function((slDOM.ObjectAttributes | String[])): ApplicationPrototype_slDOM} setVar ( short form **V** ) set dot property on HTMLElement
- * @property {function(...slDOM.ObjectAttributes): ApplicationPrototype_slDOM} setObjVar ( short form **v** ) setting attributes to HTMLElement
- * @property {function(slDOM.ObjectCSSProperties): ApplicationPrototype_slDOM} setStyleSPEED ( short form **F** ) setting css proprieties to HTMLElement with normalizing values by adding units
+ * @property {function(slDOM.ObjectCSSProperties): slDOM} setStyle ( short form **f** ) setting css proprieties to HTMLElement
+ * @property {function((slDOM.ObjectAttributes | String[])): slDOM} setVar ( short form **V** ) set dot property on HTMLElement
+ * @property {function(...slDOM.ObjectAttributes): slDOM} setObjVar ( short form **v** ) setting attributes to HTMLElement
+ * @property {function(slDOM.ObjectCSSProperties): slDOM} setStyleSPEED ( short form **F** ) setting css proprieties to HTMLElement with normalizing values by adding units
  * @property {function(): { x: number, y: number }} pagePXY ( short form **PXY** ) get element position on page
  * @property {function(): Boolean} in_e check if HTMLElement is still attached to DOM ( Document Object Manager )
  * @property {function(): { w: number, h: number }} g_wh returns width and height of HTMLElement
- * @property {function((Object | String), Boolean, Function, Object): ApplicationPrototype_slDOM} getLIST =slDOMlib.getLIST;
- * @property {function(function(HTMLElement, Object, ApplicationPrototype_slDOM), Object): ApplicationPrototype_slDOM} toFunction =slDOMlib.toFunction;
- * @property {function(): ApplicationPrototype_slDOM} removeFromDOM ( short form **free** ) remove elements from DOM
- * @property {function(number): ApplicationPrototype_slDOM} o ( short form **opacity** ) change element opacity
- * @property {function((HTMLElement | String)): ApplicationPrototype_slDOM} E ( long form **setE** ) set a HTMLElement or Create Element for slDOM Pointer
+ * @property {function((Object | String), Boolean, Function, Object): slDOM} getLIST =slDOMlib.getLIST;
+ * @property {function(function(HTMLElement, Object, slDOM), Object): slDOM} toFunction =slDOMlib.toFunction;
+ * @property {function(): slDOM} removeFromDOM ( short form **free** ) remove elements from DOM
+ * @property {function(number): slDOM} o ( short form **opacity** ) change element opacity
+ * @property {function((HTMLElement | String)): slDOM} E ( long form **setE** ) set a HTMLElement or Create Element for slDOM Pointer
  * @property {*} c =slDOMlib.sClass;
  * @property {function(string): Object} attrs 	= slDOMlib.attrs;
  * @property {*} A =slDOMlib.setArg;
@@ -261,7 +424,7 @@
  * @property {*} i =slDOMlib.in_e;
  * @property {*} r =slDOMlib.g_wh;
  * @property {*} x =slDOMlib.toFunction;
- * @property {function(): ApplicationPrototype_slDOM} free 	= slDOMlib.removeFromDOM;
+ * @property {function(): slDOM} free 	= slDOMlib.removeFromDOM;
  * @property {function(): Boolean} is_free 	= slDOMlib.is_free;
  * @property {function(): Boolean} is_focused 	= slDOMlib.is_focused;
  * @property {function(): Boolean} is_inview 	= slDOMlib.elementInViewport;
