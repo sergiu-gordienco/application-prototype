@@ -4,6 +4,19 @@ variables:
 stages:
   - reposync
   - publish
+  - deploy
+
+pages:
+  stage: deploy
+  script:
+    - mkdir .public
+    - cp -r documentation/* .public
+    - mv .public public
+  artifacts:
+    paths:
+      - public
+  only:
+    - master
 
 
 image:
