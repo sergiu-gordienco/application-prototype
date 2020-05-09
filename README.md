@@ -8,6 +8,11 @@
 [![email sergiu.gordienco@gmail.com](https://img.shields.io/badge/email-sergiu.gordienco@gmail.com-blue?logo=email)](mailto:sergiu.gordienco@gmail.com)
 
 
+[![npm](https://img.shields.io/npm/v/application-prototype)](https://www.npmjs.com/package/application-prototype)
+[![GitHub package.json version (branch)](https://img.shields.io/github/package-json/v/sergiu-gordienco/application-prototype/master)](https://github.com/sergiu-gordienco/application-prototype)
+[![GitHub issues](https://img.shields.io/github/issues/sergiu-gordienco/application-prototype)](https://github.com/sergiu-gordienco/application-prototype/issues)
+[![GitHub pull requests](https://img.shields.io/github/issues-pr/sergiu-gordienco/application-prototype)](https://github.com/sergiu-gordienco/application-prototype/pulls)
+
 A JavaScript Application Builder
 
 available for front-end ( browsers or applications like electron.atom.io, or another cool stuff )
