@@ -13,6 +13,8 @@
 	"opts": {
 		"template": "node_modules/docdash",
 		"encoding": "utf8",
+		"readme": "README.md",
+		"mainpagetitle": "Application Prototype - by Sergiu Gordienco",
 		"destination": "documentation/",
 		"recurse": true,
 		"verbose": true
@@ -39,7 +41,7 @@
 			"Tutorials",
 			"Interfaces"
 		],
-		"disqus": "application prototype by SGApps.IO",
+		"disqus": "",
 		"openGraph": {
 			"title": "Application Prototype - Framework",
 			"type": "website",
@@ -59,8 +61,14 @@
 		"removeQuotes": "none",
 		"scripts": [],
 		"menu": {
-			"Project Website": {
+			"Project Page ( Git Lab )": {
 				"href":"https://labs.sgapps.io/open-source/application-prototype",
+				"target":"_blank",
+				"class":"menu-item",
+				"id":"website_link"
+			},
+			"About Me": {
+				"href":"http://gordienco.net/",
 				"target":"_blank",
 				"class":"menu-item",
 				"id":"website_link"
