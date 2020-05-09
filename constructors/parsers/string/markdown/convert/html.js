@@ -26,9 +26,10 @@ String.prototype.markdown	= function () {
 			.replace(/\&\#x02\;/gi,'\x02')
 	}
 
+	var nodes	= {};
+	var node_k	= 0;
+
 	function I(s){
-		var nodes	= {};
-		var node_k	= 0;
 		var f_match	= function (str, upd) {
 			if (typeof(str) === "string") {
 				node_k++;
@@ -94,6 +95,7 @@ String.prototype.markdown	= function () {
 
 
 		f_match(/\!image\-(\d+\%{0,1})x(\d+\%{0,1})\[([^\]]*)]\(([^(]+)\)/g,'<img width="$1" height="$2" src="$4" title="$3" />');
+		
 		f_match(/\!\[([^\]]*)]\(([^(]+)\)/g, function (s0, s1, s2) {
 			return "<img src=\""+E(s2)+"\" title=\""+E(s1)+"\" alt=\""+E(s1)+"\">";
 		});
@@ -106,19 +108,7 @@ String.prototype.markdown	= function () {
 		f_match(/!audio\[([^\]]*)]\(([^()]+)\)/g, function (match, s3, s4) {
 			return '<audio controls>'+(s4 + '').split(';').filter(function (v) { return v.length; }).map(function (s) { return '<source src="'+E(s).replace('#','" type="')+'">';}).join("")+''+I(s3)+'</audio>';
 		});
-		f_match(/\[([^\]]+)]\(([^()]+)\)\[blank\]/g, function (s0, s1, s2) {
-			return "<a href=\""+E(s2)+"\" target=\"_blank\">"+I(s1)+"</a>";
-		});
-		f_match(/\[([^\]]+)]\(([^()]+)\)\[download\=([^\]]+)\]/g, function (s0, s1, s2, s3) {
-			return "<a href=\""+E(s2)+"\" download=\""+E(s3)+"\">"+I(s1)+"</a>";
-		});
-		f_match(/\[([^\]]+)]\(([^()]+)\)\[([^\]]+)\]/g, function (s0, s1, s2, s3) {
-			return "<a href=\""+E(s2)+"\" name=\""+E(s3)+"\">"+I(s1)+"</a>";
-		});
-		f_match(/\[([^\]]+)]\(([^()]+)\)/g, function (s0, s1, s2) {
-			return "<a href=\""+E(s2)+"\">"+I(s1)+"</a>";
-		});
-
+		
 		f_match(/\!image\-(\d+\%{0,1})x(\d+\%{0,1})\[([^\]]*)]\[([^(]+)\]/g, function (s0, s1, s2, s3, s4) {
 			return '<img width="' + s1 + '" height="' + s2 + '" src="' + references[s4] + '" title="' + s3 + '" />';
 		});
@@ -138,6 +128,21 @@ String.prototype.markdown	= function () {
 		f_match(/!audio\[([^\]]*)]\[([^()]+)\]/g, function (match, s3, s4) {
 			return '<audio controls>'+(s4 + '').split(';').filter(function (v) { return v.length; }).map(function (s) { return '<source src="'+E(references[s]).replace('#','" type="')+'">';}).join("")+''+I(s3)+'</audio>';
 		});
+
+		f_match(/\[([^\]]+)]\(([^()]+)\)\[blank\]/g, function (s0, s1, s2) {
+			return "<a href=\""+E(s2)+"\" target=\"_blank\">"+I(s1)+"</a>";
+		});
+		f_match(/\[([^\]]+)]\(([^()]+)\)\[download\=([^\]]+)\]/g, function (s0, s1, s2, s3) {
+			return "<a href=\""+E(s2)+"\" download=\""+E(s3)+"\">"+I(s1)+"</a>";
+		});
+		f_match(/\[([^\]]+)]\(([^()]+)\)\[([^\]]+)\]/g, function (s0, s1, s2, s3) {
+			return "<a href=\""+E(s2)+"\" name=\""+E(s3)+"\">"+I(s1)+"</a>";
+		});
+		f_match(/\[([^\]]+)]\(([^()]+)\)/g, function (s0, s1, s2) {
+			debugger;
+			return "<a href=\""+E(s2)+"\">"+I(s1)+"</a>";
+		});
+
 		f_match(/\[([^\]]+)]\[([^()]+)\]\[blank\]/g, function (s0, s1, s2) {
 			return "<a href=\""+E(references[s2])+"\" target=\"_blank\">"+I(s1)+"</a>";
 		});
