@@ -139,7 +139,6 @@ String.prototype.markdown	= function () {
 			return "<a href=\""+E(s2)+"\" name=\""+E(s3)+"\">"+I(s1)+"</a>";
 		});
 		f_match(/\[([^\]]+)]\(([^()]+)\)/g, function (s0, s1, s2) {
-			debugger;
 			return "<a href=\""+E(s2)+"\">"+I(s1)+"</a>";
 		});
 
