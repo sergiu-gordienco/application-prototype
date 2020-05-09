@@ -26,10 +26,10 @@ String.prototype.markdown	= function () {
 			.replace(/\&\#x02\;/gi,'\x02')
 	}
 
-	var nodes	= {};
-	var node_k	= 0;
-
-	function I(s){
+	
+	function I(s, nodes, node_k){
+		nodes	= nodes || {};
+		node_k	= node_k || 0;
 		var f_match	= function (str, upd) {
 			if (typeof(str) === "string") {
 				node_k++;
@@ -103,10 +103,10 @@ String.prototype.markdown	= function () {
 		f_match(/\!object\-(\d+\%{0,1})x(\d+\%{0,1})\[([^\]]*)]\(([^(]+)\)/g,'<object width="$1" height="$2" src="$4">$3</object>');
 		f_match(/\!iframe\-(\d+\%{0,1})x(\d+\%{0,1})\[([^\]]*)]\(([^(]+)\)/g,'<iframe width="$1" height="$2" src="$4" frameborder="0" allowfullscreen >$3</iframe>');
 		f_match(/\!video\-(\d+\%{0,1})x(\d+\%{0,1})\[([^\]]*)]\(([^(]+)\)/g, function (match, s1, s2, s3, s4) {
-			return '<video width="'+s1+'" height="'+s2+'" controls>'+(s4 + '').split(';').filter(function (v) { return v.length; }).map(function (s) { return '<source src="'+E(s).replace('#','" type="')+'">';}).join("")+''+I(s3)+'</video>';
+			return '<video width="'+s1+'" height="'+s2+'" controls>'+(s4 + '').split(';').filter(function (v) { return v.length; }).map(function (s) { return '<source src="'+E(s).replace('#','" type="')+'">';}).join("")+''+I(s3, nodes, node_k)+'</video>';
 		});
 		f_match(/!audio\[([^\]]*)]\(([^()]+)\)/g, function (match, s3, s4) {
-			return '<audio controls>'+(s4 + '').split(';').filter(function (v) { return v.length; }).map(function (s) { return '<source src="'+E(s).replace('#','" type="')+'">';}).join("")+''+I(s3)+'</audio>';
+			return '<audio controls>'+(s4 + '').split(';').filter(function (v) { return v.length; }).map(function (s) { return '<source src="'+E(s).replace('#','" type="')+'">';}).join("")+''+I(s3, nodes, node_k)+'</audio>';
 		});
 		
 		f_match(/\!image\-(\d+\%{0,1})x(\d+\%{0,1})\[([^\]]*)]\[([^(]+)\]/g, function (s0, s1, s2, s3, s4) {
@@ -123,49 +123,49 @@ String.prototype.markdown	= function () {
 			return '<iframe width="' + s1 + '" height="' + s2 + '" src="' + references[s4] + '" frameborder="0" allowfullscreen >' + s3 + '</iframe>';
 		});
 		f_match(/\!video\-(\d+\%{0,1})x(\d+\%{0,1})\[([^\]]*)]\[([^(]+)\]/g, function (match, s1, s2, s3, s4) {
-			return '<video width="'+s1+'" height="'+s2+'" controls>'+(s4 + '').split(';').filter(function (v) { return v.length; }).map(function (s) { return '<source src="'+E(references[s]).replace('#','" type="')+'">';}).join("")+''+I(s3)+'</video>';
+			return '<video width="'+s1+'" height="'+s2+'" controls>'+(s4 + '').split(';').filter(function (v) { return v.length; }).map(function (s) { return '<source src="'+E(references[s]).replace('#','" type="')+'">';}).join("")+''+I(s3, nodes, node_k)+'</video>';
 		});
 		f_match(/!audio\[([^\]]*)]\[([^()]+)\]/g, function (match, s3, s4) {
-			return '<audio controls>'+(s4 + '').split(';').filter(function (v) { return v.length; }).map(function (s) { return '<source src="'+E(references[s]).replace('#','" type="')+'">';}).join("")+''+I(s3)+'</audio>';
+			return '<audio controls>'+(s4 + '').split(';').filter(function (v) { return v.length; }).map(function (s) { return '<source src="'+E(references[s]).replace('#','" type="')+'">';}).join("")+''+I(s3, nodes, node_k)+'</audio>';
 		});
 
 		f_match(/\[([^\]]+)]\(([^()]+)\)\[blank\]/g, function (s0, s1, s2) {
-			return "<a href=\""+E(s2)+"\" target=\"_blank\">"+I(s1)+"</a>";
+			return "<a href=\""+E(s2)+"\" target=\"_blank\">"+I(s1, nodes, node_k)+"</a>";
 		});
 		f_match(/\[([^\]]+)]\(([^()]+)\)\[download\=([^\]]+)\]/g, function (s0, s1, s2, s3) {
-			return "<a href=\""+E(s2)+"\" download=\""+E(s3)+"\">"+I(s1)+"</a>";
+			return "<a href=\""+E(s2)+"\" download=\""+E(s3)+"\">"+I(s1, nodes, node_k)+"</a>";
 		});
 		f_match(/\[([^\]]+)]\(([^()]+)\)\[([^\]]+)\]/g, function (s0, s1, s2, s3) {
-			return "<a href=\""+E(s2)+"\" name=\""+E(s3)+"\">"+I(s1)+"</a>";
+			return "<a href=\""+E(s2)+"\" name=\""+E(s3)+"\">"+I(s1, nodes, node_k)+"</a>";
 		});
 		f_match(/\[([^\]]+)]\(([^()]+)\)/g, function (s0, s1, s2) {
-			return "<a href=\""+E(s2)+"\">"+I(s1)+"</a>";
+			return "<a href=\""+E(s2)+"\">"+I(s1, nodes, node_k)+"</a>";
 		});
 
 		f_match(/\[([^\]]+)]\[([^()]+)\]\[blank\]/g, function (s0, s1, s2) {
-			return "<a href=\""+E(references[s2])+"\" target=\"_blank\">"+I(s1)+"</a>";
+			return "<a href=\""+E(references[s2])+"\" target=\"_blank\">"+I(s1, nodes, node_k)+"</a>";
 		});
 		f_match(/\[([^\]]+)]\[([^()]+)\]\[download\=([^\]]+)\]/g, function (s0, s1, s2, s3) {
-			return "<a href=\""+E(references[s2])+"\" download=\""+E(s3)+"\">"+I(s1)+"</a>";
+			return "<a href=\""+E(references[s2])+"\" download=\""+E(s3)+"\">"+I(s1, nodes, node_k)+"</a>";
 		});
 		f_match(/\[([^\]]+)]\[([^()]+)\]\[([^\]]+)\]/g, function (s0, s1, s2, s3) {
-			return "<a href=\""+E(references[s2])+"\" name=\""+E(s3)+"\">"+I(s1)+"</a>";
+			return "<a href=\""+E(references[s2])+"\" name=\""+E(s3)+"\">"+I(s1, nodes, node_k)+"</a>";
 		});
 		f_match(/\[([^\]]+)]\[([^()]+)\]/g, function (s0, s1, s2) {
-			return "<a href=\""+E(references[s2])+"\">"+I(s1)+"</a>";
+			return "<a href=\""+E(references[s2])+"\">"+I(s1, nodes, node_k)+"</a>";
 		});
 
 		f_match(/(\_\_\_)([^\<\>]+?)\1/g, function (s0, s1, s2) {
-			return '<u>'+I(s2)+'</u>';
+			return '<u>'+I(s2, nodes, node_k)+'</u>';
 		});
 		f_match(/(\*\*|\_\_)([^\<\>]+?)\1/g, function (s0, s1, s2) {
-			return '<strong>'+I(s2)+'</strong>';
+			return '<strong>'+I(s2, nodes, node_k)+'</strong>';
 		});
 		f_match(/(\*|\_)([^\<\>]+?)\1/g, function (s0, s1, s2) {
-			return '<em>'+I(s2)+'</em>';
+			return '<em>'+I(s2, nodes, node_k)+'</em>';
 		});
 		f_match(/(\~)([^\<\>]+?)\1/g, function (s0, s1, s2) {
-			return '<s>'+I(s2)+'</s>';
+			return '<s>'+I(s2, nodes, node_k)+'</s>';
 		});
 
 		f_match(/(http|https|ftp|ftps|mailto|tel)\:[^\s\n]+/g, function (s0, s1, s2) {
@@ -290,7 +290,7 @@ String.prototype.markdown	= function () {
 					status	= 'p';
 				}
 				if (['p','quote','h1','h2','h3','h4','h5','h6'].indexOf(status) !== -1 && line.match(/^\040\040\040\040/)) {
-					status	= 'code'
+					status	= 'code';
 				}
 				if (current.type !== status) {
 					data.push(current);
@@ -343,13 +343,14 @@ String.prototype.markdown	= function () {
 				}
 			});
 			if (current.type) {
-				data.push(current)
+				data.push(current);
 			}
 			// console.log(data);
 			if (data.length) {
-				if (data[0].type === "p")
-				if (data[0].rows.length === 0) {
-					data.shift();
+				if (data[0].type === "p") {
+					if (data[0].rows.length === 0) {
+						data.shift();
+					}
 				}
 			}
 			h += data.map(function (node) {
