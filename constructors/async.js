@@ -1,6 +1,6 @@
 /**
- * @memberof module:async
  * @callback AsyncConstructor
+ * @memberof module:async
  * @returns {module:async.Async}
  */
 
@@ -196,7 +196,7 @@ var async	= function () {
  */
 
 /**
- * @typedef {[Function, any[], object, number]} module:async.Async~Operation
+ * @typedef {Array<Array<Function, any[], object, number>>} module:async.Async~Operation
  */
 
 /**

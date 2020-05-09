@@ -1,4 +1,13 @@
 # application-builder
+
+[![pipeline status](https://labs.sgapps.io/open-source/application-prototype/badges/master/pipeline.svg)](https://labs.sgapps.io/open-source/application-prototype/-/commits/master)
+[![License » Creative Commons Attribution-NonCommercial 4.0 / or Granted by SGApps Labs](https://img.shields.io/badge/License-CC--BY--NC--4.0-crimson)](https://labs.sgapps.io/open-source/application-prototype/-/blob/master/LICENSE)
+[![Repository - GitLab](https://img.shields.io/badge/Repository-GitLab-blue?logo=gitlab)](https://labs.sgapps.io/open-source/application-prototype/)
+[![Documentation](https://img.shields.io/badge/Documentation-Api-blue?logo=html5)](http://open-source.gordienco.net/application-prototype/)
+[![Sergiu Gordienco](https://img.shields.io/badge/author-Sergiu_Gordienco-blue?logo=linkedin)](https://www.linkedin.com/in/sergiu-gordienco/)
+[![email sergiu.gordienco@gmail.com](https://img.shields.io/badge/email-sergiu.gordienco@gmail.com-blue?logo=email)](mailto:sergiu.gordienco@gmail.com)
+
+
 A JavaScript Application Builder
 
 available for front-end ( browsers or applications like electron.atom.io, or another cool stuff )
