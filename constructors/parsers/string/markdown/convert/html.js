@@ -263,14 +263,15 @@ String.prototype.markdown	= function () {
 				'h3'   : function () { return { type: 'h3', rows: [] } },
 				'h4'   : function () { return { type: 'h4', rows: [] } },
 				'h5'   : function () { return { type: 'h5', rows: [] } },
-				'h6'   : function () { return { type: 'h6', rows: [] } }
+				'h6'   : function () { return { type: 'h6', rows: [] } },
+				'hr'   : function () { return { type: 'hr', rows: [] } }
 			};
 			var data	= [];
 			var current	= statuses.p();
 			s.split("\n").forEach(function (line, k, lines) {
 				var status	= current.type;
 				var m;
-				if (/*k > 0 && lines[k-1] === '' && */line === '') {
+				if (/*k > 0 && lines[k-1] === '' && */line === '' || status === 'hr') {
 					status	= 'p';
 				}
 				if (line.match(/^\x23{1}\s/))	status	= 'h1';
@@ -282,7 +283,15 @@ String.prototype.markdown	= function () {
 				if (line.match(/^\>\s/))	status	= 'quote';
 				if (['p','quote'].indexOf(status) !== -1) {
 					if (['-','*'].indexOf(line[0] || '') !== -1 && [' ','\t'].indexOf(line[1] || '') !== -1) {
-						status	= 'ul';
+						if (
+							line.match(/^\*\s*\*+\s*\*\s*$/)
+							||
+							line.match(/^\-\s*\-+\s*\-\s*$/)
+						) {
+							status = 'hr';
+						} else {
+							status	= 'ul';
+						}
 					} else if (line.match(/^\d+\.\s/)) {
 						status	= 'ol';
 					}
@@ -315,6 +324,9 @@ String.prototype.markdown	= function () {
 					break;
 					case 'code':
 						current.rows.push(line.replace(/^\040\040\040\040/,''));
+					break;
+					case 'hr':
+						current.rows.push('<hr />');
 					break;
 					case 'ol':
 					case 'ul':
@@ -355,30 +367,34 @@ String.prototype.markdown	= function () {
 			}
 			h += data.map(function (node) {
 				if (node.type === 'h1') {
-					return '<h1>'+I(node.rows.join('\n'))+'</h1>'
+					return '<h1>'+I(node.rows.join('\n'))+'</h1>';
 				} else if (node.type === 'h2') {
-					return '<h2>'+I(node.rows.join('\n'))+'</h2>'
+					return '<h2>'+I(node.rows.join('\n'))+'</h2>';
 				} else if (node.type === 'h3') {
-					return '<h3>'+I(node.rows.join('\n'))+'</h3>'
+					return '<h3>'+I(node.rows.join('\n'))+'</h3>';
 				} else if (node.type === 'h4') {
-					return '<h4>'+I(node.rows.join('\n'))+'</h4>'
+					return '<h4>'+I(node.rows.join('\n'))+'</h4>';
 				} else if (node.type === 'h5') {
-					return '<h5>'+I(node.rows.join('\n'))+'</h5>'
+					return '<h5>'+I(node.rows.join('\n'))+'</h5>';
 				} else if (node.type === 'h6') {
-					return '<h6>'+I(node.rows.join('\n'))+'</h6>'
+					return '<h6>'+I(node.rows.join('\n'))+'</h6>';
+				} else if (node.type === 'hr') {
+					return '<hr />';
 				} else if (node.type === 'p') {
-					return '<p>'+node.rows.map(function (row) {
-						if (row === '') return '\x03';
-						return I(row);
-					}).join('')
-						.replace(/^[\x03]+/, '')
-						.replace(/[\x03]+$/, '')
-						.replace(/[\x03]{2,}/g, '</p><p>')
-						.replace(/[\x03]{1}/g, '<br>')+'</p>'
+					return (
+						'<p>'+node.rows.map(function (row) {
+							if (row === '') return '\x03';
+							return I(row);
+						}).join('')
+							.replace(/^[\x03]+/, '')
+							.replace(/[\x03]+$/, '')
+							.replace(/[\x03]{2,}/g, '</p><p>')
+							.replace(/[\x03]{1}/g, '<br>')+'</p>'
+					).replace(/<p><\/p>/, '');
 				} else if (node.type === 'quote') {
 					return '<blockquote>'+I(node.rows.join('\n').replace(/^\n+/,'').replace(/\n+$/,''))+'</blockquote>'
 				} else if (node.type === 'code') {
-					return '<pre><code>'+node.rows.join('\n')+'</code></pre>'
+					return '<pre><code>'+node.rows.join('\n')+'</code></pre>';
 				} else if (['ol', 'ul'].indexOf(node.type) != -1) {
 					var code	= [];
 					var index	= -1;
