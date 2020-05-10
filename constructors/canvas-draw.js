@@ -1,4 +1,4 @@
-module.exports = function (canvas) {
+module.exports = function (canvas, _config) {
 	/**
  	* create an environment for canvas drawing
  	*/
@@ -7,6 +7,21 @@ module.exports = function (canvas) {
 	}
 	var context2d   = canvas.getContext('2d');
 	var context	 = context2d;
+
+	var now;
+
+	if (window.performance && typeof(window.performance.now) === "function") {
+		now = function () {
+			return window.performance.now();
+		};
+	} else if (typeof(Date.now) === "function") {
+		return Date.now();
+	} else {
+		now = function () {
+			return new Date().valueOf();
+		};
+	}
+
 	var app = new ApplicationPrototype();
 	var keyGenerator= ((function () {
 		var i = 0;
@@ -15,8 +30,18 @@ module.exports = function (canvas) {
 			return i.toString(36) + '_' + Math.floor(Math.random() * 1000000000).toString(36);
 		};
 	})());
+	_config = _config || {};
 	var config      = {
-		debug : false
+		fps   : _config.fps || 40,
+		fpsInterval : 1000 / ( _config.fps || 40 ),
+		debug : _config.debug || false,
+		animationFlags : {
+			startTime: null,
+			now: null,
+			then: null,
+			elapsed: null,
+			drawing: false
+		}
 	};
 
 	var resource	= {
@@ -29,12 +54,12 @@ module.exports = function (canvas) {
 		animationRequest: false
 	};
 
-	app.bind("debug", function (status) {
+	app.debug = function (status) {
 		if (typeof(status) !== "undefined") {
 			config.debug = !!status;
 		}
 		return config.debug;
-	})
+	};
 
 	app.bind("context", function () {
 		return context;
@@ -141,7 +166,6 @@ module.exports = function (canvas) {
 				});
 				return path;
 			}
-			return config.operations;
 		}, "");
 		path.bind("coords", function (x,y) {
 			if (typeof(x) === "number" && typeof(y) === "number") {
@@ -183,23 +207,27 @@ module.exports = function (canvas) {
 				return path;
 			}
 		}, "");
-		path.bind("isReady", function (bool) {
+		path.isReady = function (bool) {
+			path.emit("onIsReady", [bool]);
+
 			if (typeof(bool) !== "undefined") {
 				config.isReady  = !!bool;
 			}
 			return config.isReady;
-		}, "on");
-		path.bind("render", function () {
+		};
+		path.render = function (cb) {
+			path.emit("onRender", []);
 			var context = app.context();
 			context.save();
 			var er;
+			var debug = app.debug();
 			config.operations.forEach(function (operation) {
 				try {
 					var params = typeof(operation.params) === "function" ? (
 						operation.params(path, operation, app)
 					) : operation.params;
 					if (typeof(operation.operation) === "function") {
-						if (app.debug()) {
+						if (debug) {
 							console.log("Operation: operations[" + operation.id + "](", (
 								typeof(operation.params) === "function" ? (
 									"@Function"
@@ -211,7 +239,7 @@ module.exports = function (canvas) {
 							params || []
 						);
 					} else if (typeof(context[operation.operation]) === "function") {
-						if (app.debug()) {
+						if (debug) {
 							console.log("Operation: Context." + operation.operation + "(", (
 								typeof(operation.params) === "function" ? (
 									"@Function"
@@ -223,7 +251,7 @@ module.exports = function (canvas) {
 							params || []
 						);
 					} else {
-						if (app.debug()) {
+						if (debug) {
 							console.log("Operation: Context." + operation.operation + " = ", (
 								typeof(operation.params) === "function" ? (
 									"@Function"
@@ -237,10 +265,11 @@ module.exports = function (canvas) {
 				}
 			});
 			context.restore();
-		});
+			if (cb) cb();
+		};
 		app.emit("path-created", [path]);
 		return path;
-	});
+	}, "on");
 	app.bind("path", function (conf) {
 		var path = app.createPath(conf);
 		resource.paths.push(path);
@@ -259,11 +288,14 @@ module.exports = function (canvas) {
 	app.bind("imageSmoothingEnabled", function (bool) {
 		if (typeof(bool) !== "undefined") {
 			config.smoothing	= !!bool;
-			var context = app.context();
-			context.imageSmoothingEnabled	   = config.smoothing;
-			context.mozImageSmoothingEnabled	= config.smoothing;
-			context.webkitImageSmoothingEnabled = config.smoothing;
-			context.msImageSmoothingEnabled	 = config.smoothing;
+			[
+				app.context()
+			].forEach(function (context) {
+				context.imageSmoothingEnabled	   = config.smoothing;
+				context.mozImageSmoothingEnabled	= config.smoothing;
+				context.webkitImageSmoothingEnabled = config.smoothing;
+				context.msImageSmoothingEnabled	 = config.smoothing;
+			});
 		}
 		return config.smoothing;
 	}, "on");
@@ -280,38 +312,131 @@ module.exports = function (canvas) {
 	// CanvasRenderingContext2D.strokeText()
 	// CanvasRenderingContext2D.measureText()
 	// createCircle
+
+	if (canvas.attrdata) {
+		canvas.attrdata.CanvasDraw = app;
+	}
+
 	app.bind("canvas", function () {
 		return canvas;
 	}, "");
-	app.bind("render", function () {
-		resource.paths.forEach(function (path) {
-			if (path.isReady()) {
-				path.render();
-			}
-		});
-	});
-
-	app.bind("animate", function (state) {
-		if (typeof(state) === "undefined") {
-			resource.animationStatus = true;
-			app.animate(true);
-		} else if (state === true) {
+	app.bind("height", function (value) {
+		if (typeof(value) === "number") {
+			if (parseInt(canvas.height) !== parseInt(value)) {
+				canvas.height = value;
 				app.render();
-				resource.animationRequest	= requestAnimationFrame(function () {
-					if (resource.animationStatus !== false) {
-						app.animate(true);
-					}
-				});
-		} else if (state === false) {
-			var er;
-			try {
-				cancelAnimationFrame(resource.animationRequest);
-			} catch (er) {
-				console.error(er);
 			}
-			resource.animationStatus = false;
+		}
+		return canvas.height;
+	}, "");
+	app.bind("width", function (value) {
+		if (typeof(value) === "number") {
+			if (parseInt(canvas.width) !== parseInt(value)) {
+				canvas.width = value;
+				app.render();
+			}
+		}
+		return canvas.width;
+	}, "");
+
+	app.render = function (cb) {
+		app.emit("onRender", []);
+		var index = 0;
+		var _tick = function () {
+			var path = resource.paths[index++];
+
+			if (!path) {
+				if (cb) cb();
+				return;
+			}
+
+			if (path.isReady()) {
+				path.render(_tick);
+			} else {
+				_tick();
+			}
+		};
+
+		_tick();
+	};
+
+
+	var animateRequest = function () {
+		resource.animationRequest	= requestAnimationFrame(function () {
+			animate(resource.animationStatus);
+			resource.animationRequest	= null;
+		});
+	};
+	var animateRender = function () {
+		config.animationFlags.drawing = false;
+
+		animateRequest();
+	};
+	var animate = function (state) {
+		if (state === undefined) {
+			return resource.animationStatus || false;
+		}
+
+		var time = now();
+
+		if (typeof(state) === "boolean") {
+			if (resource.animationRequest) {
+				var er;
+				try {
+					cancelAnimationFrame(resource.animationRequest);
+				} catch (er) {
+					console.error(er);
+				}
+			}
+
+			if (state && !resource.animationStatus) {
+				config.animationFlags.then = time;
+
+				resource.animationStatus = state;
+
+				animateRequest();
+				return;
+			}
+
+			resource.animationStatus = state;
+		}
+
+		
+
+		if (state === true) {
+			resource.animationStatus = state;
+			
+			config.animationFlags.now = time;
+			config.animationFlags.elapsed = config.animationFlags.now - config.animationFlags.then;
+			
+			if (config.animationFlags.elapsed > config.fpsInterval) {
+				config.animationFlags.then = config.animationFlags.now - (
+					config.animationFlags.elapsed % config.fpsInterval
+				);
+				if (!config.animationFlags.drawing) {
+					config.animationFlags.drawing = true;
+					app.render(animateRender);
+				} else {
+					animate(resource.animationStatus);
+				}
+			} else {
+				animateRequest();
+			}
+		}
+	};
+
+	app.bind("animate", animate);
+
+	app.bind("fps", function (fps) {
+		if (typeof(fps) === "number") {
+			config.fps = Math.max(0.01, fps);
+			config.fpsInterval = 1000 / config.fps;
 		}
 	});
+
+	if (_config.animate || _config.animate === undefined) {
+		animate(true);
+	}
 
 	return app;
 };
