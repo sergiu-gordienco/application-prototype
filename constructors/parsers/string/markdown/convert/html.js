@@ -89,9 +89,39 @@ String.prototype.markdown	= function () {
 		f_match("\x5c~","~");
 		f_match("\x5c&","&");
 
-		f_match(/```([a-z\-0-9\.\/])\n([\s\S]+?)```/g,'<code-pretty language="$1"><pre class="language-$1"><code lang="$1">$2</code></pre></code-pretty>');
-		f_match(/``([\s\S]+?)``/g,'<pre><code>$1</code></pre>');
-		f_match(/`([^`]+)`/g,'<code>$1</code>');
+		f_match(
+			/```([a-z\-0-9\.\/])\s*\n([\s\S]+?)```/g,
+			function (s0, s1, s2) {
+				return '<code-pretty language="'+ s1 +'"><pre class="language-'+ s1 +'"><code lang="'+ s1 +'">' + (
+					s2
+						.replace(/\&/g, '&amp;')
+						.replace(/\>/g, '&gt;')
+						.replace(/</g, '&lt;')
+				) + '</code></pre></code-pretty>';
+			}
+		);
+		f_match(
+			/``([\s\S]+?)``/g,
+			function (s0, s1) {
+				return '<pre><code>' + (
+					s1
+						.replace(/\&/g, '&amp;')
+						.replace(/\>/g, '&gt;')
+						.replace(/</g, '&lt;')
+				) + '</code></pre>';
+			}
+		);
+		f_match(
+			/`([^`]+)`/g,
+			function (s0, s1) {
+				return '<code>' + (
+					s1
+						.replace(/\&/g, '&amp;')
+						.replace(/\>/g, '&gt;')
+						.replace(/</g, '&lt;')
+				) + '</code>';
+			}
+		);
 
 
 		f_match(/\!image\-(\d+\%{0,1})x(\d+\%{0,1})\[([^\]]*)]\(([^(]+)\)/g,'<img width="$1" height="$2" src="$4" title="$3" />');

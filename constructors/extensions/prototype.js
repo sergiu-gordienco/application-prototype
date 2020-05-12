@@ -1337,7 +1337,7 @@ toHtml : function(){return escape(this).replace(/\%u([0-9a-f]{4})/gi,'&#x$1;').r
 fromHtml : function(){var e = document.createElement('div');e.innerHTML = '<textarea>'+this.replace(/\</g,'&lt;').replace(/\>/g,'&gt;')+'</textarea>';return e.getElementsByTagName('textarea')[0].value;},
 cleanTags	: function() {
 	return this.replace(/\<\!\-\-[\s\S]*?\-\-\>/g,' ').replace(/\<(script|iframe|style|object|noscript|frame|frameset)[^\>]*?\>[\s\S]*?\<\/\1.*?\>/gi,'').replace(/\<[^\>]*\>/g,' ').replace(/\s{2,}/g,' ').fromHtml()
-				},
+},
 add_Class : function(x){
 	var c	= (x + '');
 	var cl	= c.toLowerCase();
