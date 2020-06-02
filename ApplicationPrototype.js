@@ -189,6 +189,75 @@ var isNode=new Function("var isBrowser = false; try { isBrowser = this===window;
 				}
 				return bind_method(method, callback, conf);
 			};
+
+			methods.property = function (propName, getter, setter, config) {
+				if (typeof(propName) === "function") {
+					config = setter || getter;
+					getter = propName;
+					setter = propName || getter;
+					propName = propName.name || null;
+				}
+
+				config = config || {};
+
+				if (propName) {
+					var _lastValue = null;
+					if (!setter && getter) {
+						setter = getter;
+					}
+					if (!getter) getter = function () {
+						return _lastValue;
+					};
+					if (!setter) setter = function ( newValue) {
+						_lastValue = newValue;
+						return _lastValue;
+					};
+					[
+						methods,
+						public_methods
+					].forEach(function (methods) {
+						Object.defineProperty(
+							methods,
+							propName,
+							Object.assign(
+								{
+									configurable: ( typeof(config.configurable) === "boolean" ? config.configurable : true ),
+									enumerable: ( typeof(config.enumerable) === "boolean" ? config.enumerable : true )
+								},
+								getter ? {
+									get: function () {
+										var value = getter.apply(methods, [ undefined, _lastValue, false ]);
+										var validate = methods.emit('__onGet', [ propName, value, _lastValue ]);
+										if (validate !== undefined) value = validate;
+										validate = methods.emit('__onGet::' + propName, [ value, _lastValue ]);
+										if (validate !== undefined) value = validate;
+										
+										
+										methods.emit('__afterGet', [propName, value, _lastValue]);
+										methods.emit('__afterGet::' + propName, [value, _lastValue]);
+										
+										return value;
+									}
+								} : {},
+								setter ? {
+									set: function (newValue) {
+										var value = setter.apply(methods, [ newValue, _lastValue, true ]);
+										var validate = methods.emit('__onSet', [ propName, value, _lastValue ]);
+										if (validate !== undefined) value = validate;
+										validate = methods.emit('__onSet::' + propName, [ value, _lastValue ]);
+										if (validate !== undefined) value = validate;
+										var _lastValue2 = _lastValue;
+										_lastValue = value;
+										methods.emit('__afterSet', [propName, value, _lastValue2]);
+										methods.emit('__afterSet::' + propName, [value, _lastValue2]);
+										return value;
+									}
+								} : {}
+							)
+						);
+					});
+				}
+			};
 			var method;
 			for (method in methods) {
 				if (private_methods.indexOf(method) === -1) {

@@ -1,122 +1,310 @@
 /**
- * @callback ApplicationBuilderRequire
- * @param {string | Array<string>} events List of Events Names or Array of Events Mapping like [ "uriLoad :: uri-load", "ePrototype :: extensions/prototype" ]
- * @param {Function} [callback] Callback that will receive Module
+ * @module ApplicationPrototype
+ */
+
+/**
+ * @class
+ * @name Instance
+ * @memberof module:ApplicationPrototype
+ */
+
+/**
+ * @typedef {object} BindListenerConfig - configuration for bind listeners
+ * @memberof module:ApplicationPrototype.Instance
+ * @property {boolean} [listenedBefore=true] allow listeners before method call
+ * @property {boolean} [listenedOn=true] allow listeners on method call ( is after )
+ * @property {boolean} [listenedAfter=true] allow listeners after method call ( is after small delay )
+ * @property {boolean} [allowInterruption=true]
+ */
+
+/**
+ * returns listener Id
+ * @method on
+ * @memberof module:ApplicationPrototype.Instance
+ * @param {string|function} event event name of function with name
+ * @param {function} [callback] function that will listen data
+ * @param {string} specifiedEventId event name of function with name
+ * @returns {string}
+ */
+
+/**
+ * returns listener Id
+ * @method once
+ * @memberof module:ApplicationPrototype.Instance
+ * @param {string|function} event event name of function with name
+ * @param {function} [callback] function that will listen data
+ * @param {string} specifiedEventId event name of function with name
+ * @returns {string}
+ */
+
+/**
+ * returns listener Id
+ * @method bind
+ * @memberof module:ApplicationPrototype.Instance
+ * @param {string|function} event event name of function with name
+ * @param {function|module:ApplicationPrototype.Instance.BindListenerConfig} [callback] function that will listen data
+ * @param {module:ApplicationPrototype.Instance.BindListenerConfig|string} [listenersConfig] of lis event name of function with name
+ * @returns {string}
+ */
+
+/**
+ * remove all event listeners
+ * @method off
+ * @memberof module:ApplicationPrototype.Instance
+ * @param {string} event event or events names separated by comma
+ * @param {string} [specifiedEventId] event name of function with name
+ * @returns {boolean}
+ */
+
+/**
+ * returns listener Id
+ * @method crudEvents
+ * @memberof module:ApplicationPrototype.Instance
+ * @param {Object<any>} context will be used as a base for ApplicationPrototype instance that will be returned
+ * @param {Object<Function>} publicMethods list of public methods available from returned instance
+ * @param {Object<Function>} privateMethods list of private methods available only for instance's methods
+ * @returns {module:ApplicationPrototype.Instance}
+ */
+
+/**
+ * returns listener Id
+ * @callback PropertyHandler
+ * @memberof module:ApplicationPrototype.Instance
+ * @param {any} value is undefined when `isSetter = true`
+ * @param {any} lastValue
+ * @param {boolean} isSetter
+ */
+
+/**
+ * @method property
+ * @memberof module:ApplicationPrototype.Instance
+ * @param {string} propertyName
+ * @param {module:ApplicationPrototype.Instance.PropertyHandler} getter
+ * @param {module:ApplicationPrototype.Instance.PropertyHandler} [setter]
+ * @param {object} [config]
+ * @param {boolean} [config.configurable=true]
+ * @param {boolean} [config.enumerable=true]
+ * @fires module:ApplicationPrototype.Instance.__onSet
+ * @fires module:ApplicationPrototype.Instance.__onGet
+ * @fires module:ApplicationPrototype.Instance.__afterGet
+ * @fires module:ApplicationPrototype.Instance.__afterGet
+ * @fires module:ApplicationPrototype.Instance.__onSet::propName
+ * @fires module:ApplicationPrototype.Instance.__onGet::propName
+ * @fires module:ApplicationPrototype.Instance.__afterGet::propName
+ * @fires module:ApplicationPrototype.Instance.__afterGet::propName
+ *//**
+ * @method property
+ * @memberof module:ApplicationPrototype.Instance
+ * @param {module:ApplicationPrototype.PropertyHandler} getter function with name
+ * @param {module:ApplicationPrototype.PropertyHandler} [setter]
+ * @param {object} [config]
+ * @param {boolean} [config.configurable=true]
+ * @param {boolean} [config.enumerable=true]
+ */
+
+/**
+ * @event __onGet
+ * @memberof module:ApplicationPrototype.Instance
+ * @type {object}
+ * @property {string} propName
+ * @property {any} value
+ * @property {any} lastValue
+ */
+/**
+ * @event __onSet
+ * @memberof module:ApplicationPrototype.Instance
+ * @type {object}
+ * @property {string} propName
+ * @property {any} value
+ * @property {any} lastValue
+ */
+/**
+ * @event __afterGet
+ * @memberof module:ApplicationPrototype.Instance
+ * @type {object}
+ * @property {string} propName
+ * @property {any} value
+ * @property {any} lastValue
+ */
+/**
+ * @event __afterSet
+ * @memberof module:ApplicationPrototype.Instance
+ * @type {object}
+ * @property {string} propName
+ * @property {any} value
+ * @property {any} lastValue
+ */
+
+/**
+ * @event __onGet::propName
+ * @memberof module:ApplicationPrototype.Instance
+ * @type {object}
+ * @property {any} value
+ * @property {any} lastValue
+ */
+/**
+ * @event __onSet::propName
+ * @memberof module:ApplicationPrototype.Instance
+ * @type {object}
+ * @property {any} value
+ * @property {any} lastValue
+ */
+/**
+ * @event __afterGet::propName
+ * @memberof module:ApplicationPrototype.Instance
+ * @type {object}
+ * @property {any} value
+ * @property {any} lastValue
+ */
+/**
+ * @event __afterSet::propName
+ * @memberof module:ApplicationPrototype.Instance
+ * @type {object}
+ * @property {any} value
+ * @property {any} lastValue
+ */
+
+/**
+ * @class
+ * @name Builder
+ * @memberof module:ApplicationPrototype
+ * @augments module:ApplicationPrototype.Instance
+ */
+
+/**
+ * @method require
+ * @memberof module:ApplicationPrototype.Builder
+ * @param {string|string[]} events List of Events Names or Array of Events Mapping like [ "uriLoad :: uri-load", "ePrototype :: extensions/prototype" ]
+ * @param {function} [callback] Callback that will receive Module
  * @returns {PromiseLike<any>}
  */
 
 /**
- * @typedef {object} BindListenerConfig - configuration for binded listeners
- * @property {Boolean} [listenedBefore=true] allow listners before method call
- * @property {Boolean} [listenedOn=true] allow listners on method call ( is after )
- * @property {Boolean} [listenedAfter=true] allow listners after method call ( is after small delay )
- * @property {Boolean} [allowInterruption=true]
- */
-
-/** @callback ApplicationPrototypeListener returns listner Id
- * @param {String | Function} event event name of function with name
- * @param {Function} [callback] function that will listen data
- * @param {String} specifiedEventId event name of function with name
- * @returns {String}
- */
-
-/** @callback ApplicationPrototypeBind returns listner Id
- * @param {String | Function} event event name of function with name
- * @param {Function | BindListenerConfig} [callback] function that will listen data
- * @param {BindListenerConfig|string} [listenersConfig] of lis event name of function with name
- * @returns {String}
- */
-
-/** @callback ApplicationPrototypeListenerRemove returns listner Id
- * @param {String} event event or events names sepparated by comma
- * @param {String} specifiedEventId event name of function with name
- * @returns {String}
+ * @class
+ * @name Promise
+ * @memberof module:ApplicationPrototype.Builder
+ * @param {function} handler
+ * @returns {PromiseLike}
  */
 
 /**
- * @callback ApplicationPrototypeCrudEvents returns listner Id
- * @param {Object<any>} context will be used as a base for ApplicationPrototype instance that will be returned
- * @param {Object<Function>} publicMethods list of public methods avaiable from returned instance
- * @param {Object<Function>} privateMethods list of private methods available only for instance's methods
- * @returns {ApplicationPrototypeInstance}
+ * @method all
+ * @memberof module:ApplicationPrototype.Builder.Promise
+ * @param {Promise[]} items
+ * @returns {PromiseLike}
  */
 
 /**
- * @typedef {object} ApplicationPrototypeInstance - configuration for binded listeners
- * @property {ApplicationPrototypeBind} bind - attach a new Method
- * @property {ApplicationPrototypeListener} on - listen an event
- * @property {ApplicationPrototypeListener} once - listen an event once
- * @property {ApplicationPrototypeListenerRemove} off - listen an event
- * @property {ApplicationPrototypeCrudEvents} crudEvents - listen an event once
+ * @method race
+ * @memberof module:ApplicationPrototype.Builder.Promise
+ * @param {Promise[]} items
+ * @returns {PromiseLike}
  */
 
 /**
- * @typedef {Object} ApplicationConsoleOptions
- * @property {Boolean} [file] enable/disable showing filename in console log. default value is `true`
- * @property {Boolean} [contextName] enable/disable showing context Execution info in console log. default value is `true`
- * @property {Boolean} [timestamp] enable/disable showing current timestamp in console log. default value is `true`
- * @property {Boolean} [logType] enable/disable showing log type in console log. default value is `true
+ * @method resolve
+ * @memberof module:ApplicationPrototype.Builder.Promise
+ * @param {any} value
+ * @returns {PromiseLike}
  */
 
 /**
- * @typedef {Object} ApplicationModuleStore
+ * @method reject
+ * @memberof module:ApplicationPrototype.Builder.Promise
+ * @param {any} value
+ * @returns {PromiseLike}
+ */
+
+/**
+ * @method isNode
+ * @memberof module:ApplicationPrototype.Builder
+ * @returns {boolean}
+ */
+
+/**
+ * @method isBrowser
+ * @memberof module:ApplicationPrototype.Builder
+ * @returns {boolean}
+ */
+
+/**
+ * @method debugEnabled
+ * @memberof module:ApplicationPrototype.Builder
+ * @param {boolean} [status]
+ * @returns {boolean}
+ */
+
+/**
+ * @method runModulesInFiles
+ * @memberof module:ApplicationPrototype.Builder
+ * @param {boolean} [status]
+ * @returns {boolean}
+ */
+
+/**
+ * @method consoleOptions
+ * @memberof module:ApplicationPrototype.Builder
+ * @param {module:ApplicationPrototype.Builder.ConsoleOptions} [options]
+ * @returns {module:ApplicationPrototype.Builder.ConsoleOptions}
+ */
+
+/**
+ * @method modulePath
+ * @param {string} [path]
+ * @returns {string}
+ */
+
+/**
+ * @typedef {object} ConsoleOptions
+ * @memberof module:ApplicationPrototype.Builder
+ * @property {boolean} [file] enable/disable showing filename in console log. default value is `true`
+ * @property {boolean} [contextName] enable/disable showing context Execution info in console log. default value is `true`
+ * @property {boolean} [timestamp] enable/disable showing current timestamp in console log. default value is `true`
+ * @property {boolean} [logType] enable/disable showing log type in console log. default value is `true
+ */
+
+
+/**
+ * @typedef {object} ModuleStore
+ * @memberof module:ApplicationPrototype.Builder
  * @description modules store where are indexed modules
  */
 
 /**
- * @callback ApplicationModuleRegister
- * @param {String} path path that will be used as `Application.modulePath()`
- * @param {String[]} modules list of modules names that should be registered
- * @returns {ApplicationModuleStore}
+ * @method moduleRegister
+ * @memberof module:ApplicationPrototype.Builder
+ * @param {string} path path that will be used as `Application.modulePath()`
+ * @param {string[]} modules list of modules names that should be registered
+ * @returns {module:ApplicationPrototype.Builder.ModuleStore}
  */
 
 /**
- * @typedef {Object} ApplicationModuleMeta
- * @property {ApplicationModuleStore} store same as `module.cache()`
- * @property {PromiseLike<String>} $requestQuery XMLHttpRequest used for obtaining Module's Content
- * @property {String} module_path module's path
- * @property {String} path module's internal path used as identifier of module
- * @property {String} name module's name
- * @property {String} __dirname module's dirname
+ * @typedef {object} ModuleMeta
+ * @memberof module:ApplicationPrototype.Builder
+ * @property {module:ApplicationPrototype.Builder.ModuleStore} store same as `module.cache()`
+ * @property {PromiseLike<string>} $requestQuery XMLHttpRequest used for obtaining Module's Content
+ * @property {string} module_path module's path
+ * @property {string} path module's internal path used as identifier of module
+ * @property {string} name module's name
+ * @property {string} __dirname module's dirname
  */
 
 /**
- * @callback ApplicationModuleResolve
- * @param {String} module module name
- * @param {String} [path] module path
- * @returns {ApplicationModuleMeta}
+ * @callback moduleResolve
+ * @memberof module:ApplicationPrototype.Builder
+ * @param {string} module module name
+ * @param {string} [path] module path
+ * @returns {module:ApplicationPrototype.Builder.ModuleMeta}
  */
 
 /**
- * @typedef {Object} ApplicationNodeInterface
+ * returns interface for accessing Node Env, is defined only in node env
+ * @var NodeInterface
+ * @type {object}
  * @property {function():NodeJS.Process} process
  * @property {function():NodeJS.Global} global
  * @property {function():NodeRequire} require
  * @property {function(string):any} globalReference returns NodeJS require reference by it's name
- */
-
-/**
- * @typedef {Object} ApplicationBuilderInstance - load Application Framework
- * @property {ApplicationPrototypeBind} bind - attach a new Method
- * @property {ApplicationPrototypeListener} on - listen an event
- * @property {ApplicationPrototypeListener} once - listen an event once
- * @property {ApplicationPrototypeListenerRemove} off - listen an event
- * @property {ApplicationPrototypeCrudEvents} crudEvents - listen an event once
- * @property {ApplicationBuilderRequire} require - The class to register
- * @property {function(Function):Promise} Promise
- * @property {function(Array<Promise>):Promise} Promise.all
- * @property {function(Array<Promise>):Promise} Promise.race
- * @property {function(any):Promise} Promise.resolve
- * @property {function(any):Promise} Promise.reject
- * @property {function():boolean} isNode - returns true if application is running in a node env
- * @property {function():boolean} isBrowser - returns true if application is running in a browser env
- * @property {function(boolean):boolean} runModulesInFiles enable/disable to run modules in Blob files, returns current state
- * @property {function(boolean):boolean} debugEnabled enable/disable debug mode, returns current state
- * @property {function(ApplicationConsoleOptions):ApplicationConsoleOptions} consoleOptions update console options.
- * @property {function(String):String} modulePath update current modules path, default returns current module path
- * @property {ApplicationModuleRegister} moduleRegister register new modules
- * @property {ApplicationModuleResolve} moduleResolve resolves module's meta, and index that info in Application's store
- * @property {ApplicationNodeInterface} NodeInterface returns interface for accessing Node Env, is defined only in node env
  */
 
 // /** @typedef {{ prop1: string, prop2: string, prop3?: number }} XXXSpecialType */
@@ -124,11 +312,12 @@
 
 /**
  * @callback ApplicationPrototypeConstructor
- * @returns {ApplicationPrototypeInstance}
+ * @returns {module:ApplicationPrototype.Instance}
  */
+
 /**
  * @callback ApplicationBuilderConstructor
- * @returns {ApplicationBuilderInstance}
+ * @returns {module:ApplicationPrototype.Builder}
  */
 
 
@@ -328,7 +517,7 @@
  * @property {Boolean} flipCtrlCmd
  * @property {Boolean} captureMiddleClick
  * @property {Boolean} android
- * @property {String|false} android_version
+ * @property {string|false} android_version
  */
 
 /** @typedef {Object<string, (string|number)>} slDOM.ObjectCSSProperties a list of proprieties mapped in a object, example: { fontSize: "10px", "white-space": "nowrap" } */

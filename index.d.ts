@@ -10,8 +10,8 @@
  */
 declare module "async" {
     /**
-     * @memberof module:async
      * @callback AsyncConstructor
+     * @memberof module:async
      * @returns {module:async.Async}
      */
     type AsyncConstructor = () => module;
@@ -175,6 +175,14 @@ declare namespace async {
          */
         type Operation = any[];
         /**
+         * @typedef {Array} module:async.Async~Operation
+         * @property {module:async.Async~OperationCallback} 0
+         * @property {module:async.Async~OperationArgs} 1
+         * @property {module:async.Async~OperationContext} 2
+         * @property {module:async.Async~OperationCallbackIndex} 3
+         */
+        type Operation = any[];
+        /**
          * a function that represents the operation itself, it have as argument `next` callback, by default it is first.
          * @typedef {Function} module:async.Async~OperationCallback
          */
@@ -213,6 +221,327 @@ declare type BrowserSessionModule = (objectStoreArg: string | any, objectStoreCo
 /** @type {BrowserSessionModule}
  */
 declare function browserSessionBuilder(): void;
+
+/**
+ * @module extensions/prototype
+ */
+declare module "extensions/prototype" {
+    /**
+     * @var {object} fn
+     * @memberof module:extensions/prototype
+     * @property {module:extensions/prototype~WindowFunctions} window
+     * @property {module:extensions/prototype~MouseFunctions} mouse
+     * @property {(module:extensions/prototype~getRandId_1|module:extensions/prototype~getRandId_2)} getRandId
+     */
+    var fn: {
+        window: module;
+        mouse: module;
+        getRandId: module | module;
+    };
+    /**
+     * @typedef {object} WindowFunctions
+     * @property {object} sizeLimit
+     * @property {module:extensions/prototype~windowSizeCache} sizeLimit.min
+     * @property {module:extensions/prototype~windowSizeCache} sizeLimit.max
+     * @property {number} [refreshRate=200] how often to recalculate window size
+     * @property {module:extensions/prototype~windowSizeActive} sizeActive
+     * @property {module:extensions/prototype~windowSize} size
+     */
+    type WindowFunctions = {
+        sizeLimit: {
+            min: module;
+            max: module;
+        };
+        refreshRate?: number;
+        sizeActive: module;
+        size: module;
+    };
+    /**
+     * @typedef {object} MouseFunctions
+     * @property {external:MouseEvent} event
+     * @property {module:extensions/prototype~MousePosition} position
+     * @property {object} config
+     * @property {boolean} config.tracking
+     */
+    type MouseFunctions = {
+        event: external;
+        position: module;
+        config: {
+            tracking: boolean;
+        };
+    };
+    /**
+     * @var {object} object
+     * @property {(module:extensions/prototype~ObjectExtend_1|module:extensions/prototype~ObjectExtend_2)} extend
+     * @memberof module:extensions/prototype
+     */
+    var object: {
+        extend: module | module;
+    };
+    /**
+     * @var {object} string
+     * @memberof module:extensions/prototype
+     */
+    var string: any;
+    /**
+     * @var {any} WindowExtend
+     * @memberof module:extensions/prototype
+     * @example
+     * window.addEvent(elem, type, handler);
+     * window.removeEvent(elem, type, handlerId);
+     *
+     * window.addEventListener(eventName, function (event) {});
+     */
+    var WindowExtend: any;
+    /**
+     * @callback getRandId_1
+     * @memberof module:extensions/prototype~
+     * @param {string} prefix
+     * @param {boolean} minimize
+     */
+    type getRandId_1 = (prefix: string, minimize: boolean) => void;
+    /**
+     * @callback getRandId_2
+     * @memberof module:extensions/prototype~
+     * @param {boolean} minimize
+     */
+    type getRandId_2 = (minimize: boolean) => void;
+    /**
+     * @typedef {object} windowSizeCache
+     * @property {number} w
+     * @property {number} h
+     */
+    type windowSizeCache = {
+        w: number;
+        h: number;
+    };
+    /**
+     * @callback windowSizeActive
+     * @property {boolean} refreshed
+     * @returns {module:extensions/prototype~windowSizeCache}
+     */
+    type windowSizeActive = () => module;
+    /**
+     * @callback windowSize
+     * @property {boolean} refreshed
+     * @returns {module:extensions/prototype~windowSizeCache}
+     */
+    type windowSize = () => module;
+    /**
+     * @typedef {object} MousePositionCache
+     * @property {number} x
+     * @property {number} y
+     * @property {number} xmax
+     * @property {number} ymax
+     */
+    type MousePositionCache = {
+        x: number;
+        y: number;
+        xmax: number;
+        ymax: number;
+    };
+    /**
+     * @callback MousePosition
+     * @param {MouseEvent} [eventMouseMove]
+     * @param {object} [context]
+     * @param {object} [context.window]
+     * @param {object} [context.document]
+     * @returns {module:extensions/prototype~MousePositionCache}
+     */
+    type MousePosition = (eventMouseMove?: MouseEvent, context?: {
+        window?: any;
+        document?: any;
+    }) => module;
+    /**
+     * @callback ObjectExtend_1
+     * @param {object} object
+     * @param {object} options
+     * @param {any} options.value
+     * @param {boolean} [options.readonly=false]
+     * @param {boolean} [options.visible=false]
+     * @param {boolean} [options.config=false]
+     */
+    type ObjectExtend_1 = (object: any, options: {
+        value: any;
+        readonly?: boolean;
+        visible?: boolean;
+        config?: boolean;
+    }) => void;
+    /**
+     * @callback ObjectExtend_2
+     * @param {object} object
+     * @param {object} options
+     * @param {function():void} [options.get]
+     * @param {function(any):void} [options.set]
+     * @param {boolean} [options.visible=false]
+     * @param {boolean} [options.config=false]
+     */
+    type ObjectExtend_2 = (object: any, options: {
+        get?: (...params: any[]) => any;
+        set?: (...params: any[]) => any;
+        visible?: boolean;
+        config?: boolean;
+    }) => void;
+    /**
+     * @var {module:extensions/prototype.slDOM} slDOM
+     * @memberof module:extensions/prototype
+     */
+    var slDOM: module;
+    /**
+     * @var {module:extensions/prototype.slDOM_env} slDOM_env
+     * @memberof module:extensions/prototype
+     */
+    var slDOM_env: module;
+    /**
+     * @var {module:extensions/prototype.slDOM} _
+     * @memberof module:extensions/prototype
+     */
+    var _: module;
+    /**
+     * @var {module:extensions/prototype.slDOMSet} __
+     * @memberof module:extensions/prototype
+     */
+    var __: module;
+    /**
+     * @class
+     * @name slDOMSet
+     * @memberof module:extensions/prototype
+     * @param {string} [cssSelector]
+     */
+    class slDOMSet {
+        constructor(cssSelector?: string);
+        /**
+         * @method config
+         * @memberof module:extensions/prototype.slDOMSet
+         * @param {string} key
+         * @param {any} value
+         * @returns {module:extensions/prototype.slDOMSet}
+         */
+        static config(key: string, value: any): module;
+        /**
+         * @method config
+         * @memberof module:extensions/prototype.slDOMSet
+         * @param {string} key
+         * @param {any} value
+         * @returns {module:extensions/prototype.slDOMSet}
+         */
+        static config(key: string, value: any): module;
+        /**
+         * @method unique
+         * @memberof module:extensions/prototype.slDOMSet
+         * @returns {module:extensions/prototype.slDOMSet}
+         */
+        static unique(): module;
+        /**
+         * @method set
+         * @memberof module:extensions/prototype.slDOMSet
+         * @param {string} v css selector applied over document
+         * @returns {module:extensions/prototype.slDOMSet}
+         */
+        static set(v: string): module;
+        /**
+         * @method set
+         * @memberof module:extensions/prototype.slDOMSet
+         * @param {string} v css selector applied over document
+         * @returns {module:extensions/prototype.slDOMSet}
+         */
+        static set(v: string): module;
+        /**
+         * @method add
+         * @memberof module:extensions/prototype.slDOMSet
+         * @param {(NodeList|any)} ...v array of Nodes or HTMLElements
+         * @returns {module:extensions/prototype.slDOMSet}
+         */
+        static add(): module;
+        /**
+         * @method env
+         * @memberof module:extensions/prototype.slDOMSet
+         * @returns {module:extensions/prototype.slDOM_env}
+         */
+        static env(): module;
+        /**
+         * @method get
+         * @memberof module:extensions/prototype.slDOMSet
+         * @returns {(Node[])}
+         */
+        static get(): Node[];
+        /**
+         * @method get
+         * @memberof module:extensions/prototype.slDOMSet
+         * @returns {(Node[])}
+         */
+        static get(): Node[];
+        /**
+         * @method eq
+         * @memberof module:extensions/prototype.slDOMSet
+         * @param {number} index
+         * @returns {module:extensions/prototype.slDOMSet}
+         */
+        static eq(index: number): module;
+        /**
+         * @method find
+         * @memberof module:extensions/prototype.slDOMSet
+         * @param {string} cssSelector
+         * @returns {module:extensions/prototype.slDOMSet}
+         */
+        static find(cssSelector: string): module;
+        /**
+         * @method filter
+         * @memberof module:extensions/prototype.slDOMSet
+         * @param {module:extensions/prototype.slDOMSet.itemHandlerFilter} filterCallback
+         * @returns {module:extensions/prototype.slDOMSet}
+         */
+        static filter(filterCallback: module): module;
+        /**
+         * @method each
+         * @memberof module:extensions/prototype.slDOMSet
+         * @param {module:extensions/prototype.slDOMSet.itemHandler} filterCallback
+         * @returns {module:extensions/prototype.slDOMSet}
+         */
+        static each(filterCallback: module): module;
+        /**
+         * @method map
+         * @memberof module:extensions/prototype.slDOMSet
+         * @param {module:extensions/prototype.slDOMSet.itemHandlerMap} filterCallback
+         * @returns {module:extensions/prototype.slDOMSet}
+         */
+        static map(filterCallback: module): module;
+        /**
+         * @method attr
+         * @memberof module:extensions/prototype.slDOMSet
+         * @returns {external:NamedNodeMap}
+         */
+        static attr(): external;
+        /**
+         * @method attr
+         * @memberof module:extensions/prototype.slDOMSet
+         * @returns {external:NamedNodeMap}
+         */
+        static attr(): external;
+        /**
+         * @method attr
+         * @memberof module:extensions/prototype.slDOMSet
+         * @returns {external:NamedNodeMap}
+         */
+        static attr(): external;
+        /**
+         * @method attr
+         * @memberof module:extensions/prototype.slDOMSet
+         * @returns {external:NamedNodeMap}
+         */
+        static attr(): external;
+    }
+    /**
+     * @var {module:extensions/prototype.slDOM_env} slDOM_env
+     * @memberof module:extensions/prototype
+     */
+    var slDOM_env: module;
+    /**
+     * @var {module:extensions/prototype.slDOM} slDOM
+     * @memberof module:extensions/prototype
+     */
+    var slDOM: module;
+}
 
 /**
  * Module used for template rendering
@@ -697,498 +1026,385 @@ declare module "uri-load" {
 }
 
 /**
- * @callback ApplicationBuilderRequire
- * @param {string | Array<string>} events List of Events Names or Array of Events Mapping like [ "uriLoad :: uri-load", "ePrototype :: extensions/prototype" ]
- * @param {Function} [callback] Callback that will receive Module
- * @returns {PromiseLike<any>}
+ * @module ApplicationPrototype
  */
-declare type ApplicationBuilderRequire = (events: string | string[], callback?: (...params: any[]) => any) => PromiseLike<any>;
-
-/**
- * @typedef {object} BindListenerConfig - configuration for binded listeners
- * @property {Boolean} [listenedBefore=true] allow listners before method call
- * @property {Boolean} [listenedOn=true] allow listners on method call ( is after )
- * @property {Boolean} [listenedAfter=true] allow listners after method call ( is after small delay )
- * @property {Boolean} [allowInterruption=true]
- */
-declare type BindListenerConfig = {
-    listenedBefore?: boolean;
-    listenedOn?: boolean;
-    listenedAfter?: boolean;
-    allowInterruption?: boolean;
-};
-
-/** @callback ApplicationPrototypeListener returns listner Id
- * @param {String | Function} event event name of function with name
- * @param {Function} [callback] function that will listen data
- * @param {String} specifiedEventId event name of function with name
- * @returns {String}
- */
-declare type ApplicationPrototypeListener = (event: string | ((...params: any[]) => any), callback?: (...params: any[]) => any, specifiedEventId: string) => string;
-
-/** @callback ApplicationPrototypeBind returns listner Id
- * @param {String | Function} event event name of function with name
- * @param {Function | BindListenerConfig} [callback] function that will listen data
- * @param {BindListenerConfig} [listenersConfig] of lis event name of function with name
- * @returns {String}
- */
-declare type ApplicationPrototypeBind = (event: string | ((...params: any[]) => any), callback?: ((...params: any[]) => any) | BindListenerConfig, listenersConfig?: BindListenerConfig) => string;
-
-/** @callback ApplicationPrototypeListenerRemove returns listner Id
- * @param {String} event event or events names sepparated by comma
- * @param {String} specifiedEventId event name of function with name
- * @returns {String}
- */
-declare type ApplicationPrototypeListenerRemove = (event: string, specifiedEventId: string) => string;
-
-/**
- * @callback ApplicationPrototypeCrudEvents returns listner Id
- * @param {Object<any>} context will be used as a base for ApplicationPrototype instance that will be returned
- * @param {Object<Function>} publicMethods list of public methods avaiable from returned instance
- * @param {Object<Function>} privateMethods list of private methods available only for instance's methods
- * @returns {ApplicationPrototypeInstance}
- */
-declare type ApplicationPrototypeCrudEvents = (context: {
-    [key: string]: any;
-}, publicMethods: {
-    [key: string]: any;
-}, privateMethods: {
-    [key: string]: any;
-}) => ApplicationPrototypeInstance;
-
-/**
- * @typedef {object} ApplicationPrototypeInstance - configuration for binded listeners
- * @property {ApplicationPrototypeBind} bind - attach a new Method
- * @property {ApplicationPrototypeListener} on - listen an event
- * @property {ApplicationPrototypeListener} once - listen an event once
- * @property {ApplicationPrototypeListenerRemove} off - listen an event
- * @property {ApplicationPrototypeCrudEvents} crudEvents - listen an event once
- */
-declare type ApplicationPrototypeInstance = {
-    bind: ApplicationPrototypeBind;
-    on: ApplicationPrototypeListener;
-    once: ApplicationPrototypeListener;
-    off: ApplicationPrototypeListenerRemove;
-    crudEvents: ApplicationPrototypeCrudEvents;
-};
-
-/**
- * @typedef {Object} ApplicationConsoleOptions
- * @property {Boolean} [file] enable/disable showing filename in console log. default value is `true`
- * @property {Boolean} [contextName] enable/disable showing context Execution info in console log. default value is `true`
- * @property {Boolean} [timestamp] enable/disable showing current timestamp in console log. default value is `true`
- * @property {Boolean} [logType] enable/disable showing log type in console log. default value is `true
- */
-declare type ApplicationConsoleOptions = {
-    file?: boolean;
-    contextName?: boolean;
-    timestamp?: boolean;
-    logType?: boolean;
-};
-
-/**
- * @typedef {Object} ApplicationModuleStore
- * @description modules store where are indexed modules
- */
-declare type ApplicationModuleStore = any;
-
-/**
- * @callback ApplicationModuleRegister
- * @param {String} path path that will be used as `Application.modulePath()`
- * @param {String[]} modules list of modules names that should be registered
- * @returns {ApplicationModuleStore}
- */
-declare type ApplicationModuleRegister = (path: string, modules: String[]) => ApplicationModuleStore;
-
-/**
- * @typedef {Object} ApplicationModuleMeta
- * @property {ApplicationModuleStore} store same as `module.cache()`
- * @property {PromiseLike<String>} $requestQuery XMLHttpRequest used for obtaining Module's Content
- * @property {String} module_path module's path
- * @property {String} path module's internal path used as identifier of module
- * @property {String} name module's name
- * @property {String} __dirname module's dirname
- */
-declare type ApplicationModuleMeta = {
-    store: ApplicationModuleStore;
-    $requestQuery: PromiseLike<String>;
-    module_path: string;
-    path: string;
-    name: string;
-    __dirname: string;
-};
-
-/**
- * @callback ApplicationModuleResolve
- * @param {String} module module name
- * @param {String} [path] module path
- * @returns {ApplicationModuleMeta}
- */
-declare type ApplicationModuleResolve = (module: string, path?: string) => ApplicationModuleMeta;
-
-/**
- * @typedef {Object} ApplicationNodeInterface
- * @property {function():NodeJS.Process} process
- * @property {function():NodeJS.Global} global
- * @property {function():NodeRequire} require
- * @property {function(string):any} globalReference returns NodeJS require reference by it's name
- */
-declare type ApplicationNodeInterface = {
-    process: (...params: any[]) => any;
-    global: (...params: any[]) => any;
-    require: (...params: any[]) => any;
-    globalReference: (...params: any[]) => any;
-};
-
-/**
- * @typedef {Object} ApplicationBuilderInstance - load Application Framework
- * @property {ApplicationPrototypeBind} bind - attach a new Method
- * @property {ApplicationPrototypeListener} on - listen an event
- * @property {ApplicationPrototypeListener} once - listen an event once
- * @property {ApplicationPrototypeListenerRemove} off - listen an event
- * @property {ApplicationPrototypeCrudEvents} crudEvents - listen an event once
- * @property {ApplicationBuilderRequire} require - The class to register
- * @property {function(Function):Promise} Promise
- * @property {function(Array<Promise>):Promise} Promise.all
- * @property {function(Array<Promise>):Promise} Promise.race
- * @property {function(any):Promise} Promise.resolve
- * @property {function(any):Promise} Promise.reject
- * @property {function():boolean} isNode - returns true if application is running in a node env
- * @property {function():boolean} isBrowser - returns true if application is running in a browser env
- * @property {function(boolean):boolean} runModulesInFiles enable/disable to run modules in Blob files, returns current state
- * @property {function(boolean):boolean} debugEnabled enable/disable debug mode, returns current state
- * @property {function(ApplicationConsoleOptions):ApplicationConsoleOptions} consoleOptions update console options.
- * @property {function(String):String} modulePath update current modules path, default returns current module path
- * @property {ApplicationModuleRegister} moduleRegister register new modules
- * @property {ApplicationModuleResolve} moduleResolve resolves module's meta, and index that info in Application's store
- * @property {ApplicationNodeInterface} NodeInterface returns interface for accessing Node Env, is defined only in node env
- */
-declare type ApplicationBuilderInstance = {
-    bind: ApplicationPrototypeBind;
-    on: ApplicationPrototypeListener;
-    once: ApplicationPrototypeListener;
-    off: ApplicationPrototypeListenerRemove;
-    crudEvents: ApplicationPrototypeCrudEvents;
-    require: ApplicationBuilderRequire;
-    Promise: {
-        all: (...params: any[]) => any;
-        race: (...params: any[]) => any;
-        resolve: (...params: any[]) => any;
-        reject: (...params: any[]) => any;
+declare module "ApplicationPrototype" {
+    /**
+     * @class
+     * @name Instance
+     * @memberof module:ApplicationPrototype
+     */
+    class Instance {
+        /**
+         * returns listener Id
+         * @method on
+         * @memberof module:ApplicationPrototype.Instance
+         * @param {string|function} event event name of function with name
+         * @param {function} [callback] function that will listen data
+         * @param {string} specifiedEventId event name of function with name
+         * @returns {string}
+         */
+        static on(event: string | ((...params: any[]) => any), callback?: (...params: any[]) => any, specifiedEventId: string): string;
+        /**
+         * returns listener Id
+         * @method once
+         * @memberof module:ApplicationPrototype.Instance
+         * @param {string|function} event event name of function with name
+         * @param {function} [callback] function that will listen data
+         * @param {string} specifiedEventId event name of function with name
+         * @returns {string}
+         */
+        static once(event: string | ((...params: any[]) => any), callback?: (...params: any[]) => any, specifiedEventId: string): string;
+        /**
+         * returns listener Id
+         * @method bind
+         * @memberof module:ApplicationPrototype.Instance
+         * @param {string|function} event event name of function with name
+         * @param {function|module:ApplicationPrototype.Instance.BindListenerConfig} [callback] function that will listen data
+         * @param {module:ApplicationPrototype.Instance.BindListenerConfig|string} [listenersConfig] of lis event name of function with name
+         * @returns {string}
+         */
+        static bind(event: string | ((...params: any[]) => any), callback?: ((...params: any[]) => any) | module, listenersConfig?: module | string): string;
+        /**
+         * remove all event listeners
+         * @method off
+         * @memberof module:ApplicationPrototype.Instance
+         * @param {string} event event or events names separated by comma
+         * @param {string} [specifiedEventId] event name of function with name
+         * @returns {boolean}
+         */
+        static off(event: string, specifiedEventId?: string): boolean;
+        /**
+         * returns listener Id
+         * @method crudEvents
+         * @memberof module:ApplicationPrototype.Instance
+         * @param {Object<any>} context will be used as a base for ApplicationPrototype instance that will be returned
+         * @param {Object<Function>} publicMethods list of public methods available from returned instance
+         * @param {Object<Function>} privateMethods list of private methods available only for instance's methods
+         * @returns {module:ApplicationPrototype.Instance}
+         */
+        static crudEvents(context: {
+            [key: string]: any;
+        }, publicMethods: {
+            [key: string]: any;
+        }, privateMethods: {
+            [key: string]: any;
+        }): module;
+        /**
+         * @method property
+         * @memberof module:ApplicationPrototype.Instance
+         * @param {string} propertyName
+         * @param {module:ApplicationPrototype.Instance.PropertyHandler} getter
+         * @param {module:ApplicationPrototype.Instance.PropertyHandler} [setter]
+         * @param {object} [config]
+         * @param {boolean} [config.configurable=true]
+         * @param {boolean} [config.enumerable=true]
+         * @fires module:ApplicationPrototype.Instance.__onSet
+         * @fires module:ApplicationPrototype.Instance.__onGet
+         * @fires module:ApplicationPrototype.Instance.__afterGet
+         * @fires module:ApplicationPrototype.Instance.__afterGet
+         * @fires module:ApplicationPrototype.Instance.__onSet::propName
+         * @fires module:ApplicationPrototype.Instance.__onGet::propName
+         * @fires module:ApplicationPrototype.Instance.__afterGet::propName
+         * @fires module:ApplicationPrototype.Instance.__afterGet::propName
+         */
+        static property(propertyName: string, getter: module, setter?: module, config?: {
+            configurable?: boolean;
+            enumerable?: boolean;
+        }): void;
+        /**
+         * @method property
+         * @memberof module:ApplicationPrototype.Instance
+         * @param {string} propertyName
+         * @param {module:ApplicationPrototype.Instance.PropertyHandler} getter
+         * @param {module:ApplicationPrototype.Instance.PropertyHandler} [setter]
+         * @param {object} [config]
+         * @param {boolean} [config.configurable=true]
+         * @param {boolean} [config.enumerable=true]
+         * @fires module:ApplicationPrototype.Instance.__onSet
+         * @fires module:ApplicationPrototype.Instance.__onGet
+         * @fires module:ApplicationPrototype.Instance.__afterGet
+         * @fires module:ApplicationPrototype.Instance.__afterGet
+         * @fires module:ApplicationPrototype.Instance.__onSet::propName
+         * @fires module:ApplicationPrototype.Instance.__onGet::propName
+         * @fires module:ApplicationPrototype.Instance.__afterGet::propName
+         * @fires module:ApplicationPrototype.Instance.__afterGet::propName
+         */
+        static property(propertyName: string, getter: module, setter?: module, config?: {
+            configurable?: boolean;
+            enumerable?: boolean;
+        }): void;
+    }
+    /**
+     * @class
+     * @name Builder
+     * @memberof module:ApplicationPrototype
+     * @augments module:ApplicationPrototype.Instance
+     */
+    class Builder extends module:ApplicationPrototype.Instance {
+        /**
+         * @method require
+         * @memberof module:ApplicationPrototype.Builder
+         * @param {string|string[]} events List of Events Names or Array of Events Mapping like [ "uriLoad :: uri-load", "ePrototype :: extensions/prototype" ]
+         * @param {function} [callback] Callback that will receive Module
+         * @returns {PromiseLike<any>}
+         */
+        static require(events: string | string[], callback?: (...params: any[]) => any): PromiseLike<any>;
+        /**
+         * @method isNode
+         * @memberof module:ApplicationPrototype.Builder
+         * @returns {boolean}
+         */
+        static isNode(): boolean;
+        /**
+         * @method isBrowser
+         * @memberof module:ApplicationPrototype.Builder
+         * @returns {boolean}
+         */
+        static isBrowser(): boolean;
+        /**
+         * @method debugEnabled
+         * @memberof module:ApplicationPrototype.Builder
+         * @param {boolean} [status]
+         * @returns {boolean}
+         */
+        static debugEnabled(status?: boolean): boolean;
+        /**
+         * @method runModulesInFiles
+         * @memberof module:ApplicationPrototype.Builder
+         * @param {boolean} [status]
+         * @returns {boolean}
+         */
+        static runModulesInFiles(status?: boolean): boolean;
+        /**
+         * @method consoleOptions
+         * @memberof module:ApplicationPrototype.Builder
+         * @param {module:ApplicationPrototype.Builder.ConsoleOptions} [options]
+         * @returns {module:ApplicationPrototype.Builder.ConsoleOptions}
+         */
+        static consoleOptions(options?: module): module;
+        /**
+         * @method moduleRegister
+         * @memberof module:ApplicationPrototype.Builder
+         * @param {string} path path that will be used as `Application.modulePath()`
+         * @param {string[]} modules list of modules names that should be registered
+         * @returns {module:ApplicationPrototype.Builder.ModuleStore}
+         */
+        static moduleRegister(path: string, modules: string[]): module;
+    }
+    /**
+     * @method modulePath
+     * @param {string} [path]
+     * @returns {string}
+     */
+    function modulePath(path?: string): string;
+    /**
+     * returns interface for accessing Node Env, is defined only in node env
+     * @var NodeInterface
+     * @type {object}
+     * @property {function():NodeJS.Process} process
+     * @property {function():NodeJS.Global} global
+     * @property {function():NodeRequire} require
+     * @property {function(string):any} globalReference returns NodeJS require reference by it's name
+     */
+    var NodeInterface: {
+        process: (...params: any[]) => any;
+        global: (...params: any[]) => any;
+        require: (...params: any[]) => any;
+        globalReference: (...params: any[]) => any;
     };
-    isNode: (...params: any[]) => any;
-    isBrowser: (...params: any[]) => any;
-    runModulesInFiles: (...params: any[]) => any;
-    debugEnabled: (...params: any[]) => any;
-    consoleOptions: (...params: any[]) => any;
-    modulePath: (...params: any[]) => any;
-    moduleRegister: ApplicationModuleRegister;
-    moduleResolve: ApplicationModuleResolve;
-    NodeInterface: ApplicationNodeInterface;
-};
+    /**
+     * @callback ApplicationPrototypeConstructor
+     * @returns {module:ApplicationPrototype.Instance}
+     */
+    type ApplicationPrototypeConstructor = () => module;
+    /**
+     * @callback ApplicationBuilderConstructor
+     * @returns {module:ApplicationPrototype.Builder}
+     */
+    type ApplicationBuilderConstructor = () => module;
+    /**
+     * @typedef {String} ModuleResourceUrl
+     * @description resources url is composed from `module's plath` + `resource path`
+     */
+    type ModuleResourceUrl = string;
+    /**
+     * @typedef {Object} ApplicationModule
+     * @property {PromiseLike} $request resolves module exports
+     * @property {function():any} exports module exports handler
+     * @property {Number} atime unix time in milliseconds
+     * @property {function():ApplicationBuilderInstance} Application returns current application
+     * @property {function():ApplicationModuleStore} cache returns module's reserved cache object
+     * @property {function(any):Promise} require require modules from module's folder
+     * @property {function(ModuleResourceUrl):String} resourceUrl returns module's resource URL
+     * @property {ApplicationModuleMeta} meta module's meta information
+     */
+    type ApplicationModule = {
+        $request: PromiseLike;
+        exports: (...params: any[]) => any;
+        atime: number;
+        Application: (...params: any[]) => any;
+        cache: (...params: any[]) => any;
+        require: (...params: any[]) => any;
+        resourceUrl: (...params: any[]) => any;
+        meta: ApplicationModuleMeta;
+    };
+    /**
+     * @typedef ApplicationBuilderExports
+     * @property {ApplicationPrototypeConstructor} application
+     * @property {ApplicationBuilderConstructor} builder
+     */
+    type ApplicationBuilderExports = {
+        application: ApplicationPrototypeConstructor;
+        builder: ApplicationBuilderConstructor;
+    };
+}
 
-/**
- * @callback ApplicationPrototypeConstructor
- * @returns {ApplicationPrototypeInstance}
- */
-declare type ApplicationPrototypeConstructor = () => ApplicationPrototypeInstance;
+declare namespace ApplicationPrototype {
+    namespace Instance {
+        /**
+         * @typedef {object} BindListenerConfig - configuration for bind listeners
+         * @memberof module:ApplicationPrototype.Instance
+         * @property {boolean} [listenedBefore=true] allow listeners before method call
+         * @property {boolean} [listenedOn=true] allow listeners on method call ( is after )
+         * @property {boolean} [listenedAfter=true] allow listeners after method call ( is after small delay )
+         * @property {boolean} [allowInterruption=true]
+         */
+        type BindListenerConfig = {
+            listenedBefore?: boolean;
+            listenedOn?: boolean;
+            listenedAfter?: boolean;
+            allowInterruption?: boolean;
+        };
+        /**
+         * returns listener Id
+         * @callback PropertyHandler
+         * @memberof module:ApplicationPrototype.Instance
+         * @param {any} value is undefined when `isSetter = true`
+         * @param {any} lastValue
+         * @param {boolean} isSetter
+         */
+        type PropertyHandler = (value: any, lastValue: any, isSetter: boolean) => void;
+    }
+    namespace Builder {
+        /**
+         * @class
+         * @name Promise
+         * @memberof module:ApplicationPrototype.Builder
+         * @param {function} handler
+         * @returns {PromiseLike}
+         */
+        class Promise {
+            constructor(handler: (...params: any[]) => any);
+            /**
+             * @method all
+             * @memberof module:ApplicationPrototype.Builder.Promise
+             * @param {Promise[]} items
+             * @returns {PromiseLike}
+             */
+            static all(items: Promise[]): PromiseLike;
+            /**
+             * @method race
+             * @memberof module:ApplicationPrototype.Builder.Promise
+             * @param {Promise[]} items
+             * @returns {PromiseLike}
+             */
+            static race(items: Promise[]): PromiseLike;
+            /**
+             * @method resolve
+             * @memberof module:ApplicationPrototype.Builder.Promise
+             * @param {any} value
+             * @returns {PromiseLike}
+             */
+            static resolve(value: any): PromiseLike;
+            /**
+             * @method reject
+             * @memberof module:ApplicationPrototype.Builder.Promise
+             * @param {any} value
+             * @returns {PromiseLike}
+             */
+            static reject(value: any): PromiseLike;
+        }
+        /**
+         * @typedef {object} ConsoleOptions
+         * @memberof module:ApplicationPrototype.Builder
+         * @property {boolean} [file] enable/disable showing filename in console log. default value is `true`
+         * @property {boolean} [contextName] enable/disable showing context Execution info in console log. default value is `true`
+         * @property {boolean} [timestamp] enable/disable showing current timestamp in console log. default value is `true`
+         * @property {boolean} [logType] enable/disable showing log type in console log. default value is `true
+         */
+        type ConsoleOptions = {
+            file?: boolean;
+            contextName?: boolean;
+            timestamp?: boolean;
+            logType?: boolean;
+        };
+        /**
+         * @typedef {object} ModuleStore
+         * @memberof module:ApplicationPrototype.Builder
+         * @description modules store where are indexed modules
+         */
+        type ModuleStore = any;
+        /**
+         * @typedef {object} ModuleMeta
+         * @memberof module:ApplicationPrototype.Builder
+         * @property {module:ApplicationPrototype.Builder.ModuleStore} store same as `module.cache()`
+         * @property {PromiseLike<string>} $requestQuery XMLHttpRequest used for obtaining Module's Content
+         * @property {string} module_path module's path
+         * @property {string} path module's internal path used as identifier of module
+         * @property {string} name module's name
+         * @property {string} __dirname module's dirname
+         */
+        type ModuleMeta = {
+            store: module;
+            $requestQuery: PromiseLike<string>;
+            module_path: string;
+            path: string;
+            name: string;
+            __dirname: string;
+        };
+        /**
+         * @callback moduleResolve
+         * @memberof module:ApplicationPrototype.Builder
+         * @param {string} module module name
+         * @param {string} [path] module path
+         * @returns {module:ApplicationPrototype.Builder.ModuleMeta}
+         */
+        type moduleResolve = (module: string, path?: string) => module;
+    }
+}
 
-/**
- * @callback ApplicationBuilderConstructor
- * @returns {ApplicationBuilderInstance}
- */
-declare type ApplicationBuilderConstructor = () => ApplicationBuilderInstance;
-
-/** @typedef {ApplicationPrototype_slDOM} slDOM
- */
-declare type slDOM = ApplicationPrototype_slDOM;
-
-/** @typedef {ApplicationPrototype_slDOM_env} slDOM_env
- */
-declare type slDOM_env = ApplicationPrototype_slDOM_env;
-
-/**
- * @typedef ApplicationPrototype_slDOM_env
- * @property {Boolean} gecko
- * @property {Boolean} old_ie
- * @property {Boolean} ie_lt8
- * @property {Boolean} ie_lt9
- * @property {Boolean} ie_gt10
- * @property {Boolean} ie
- * @property {Boolean} webkit
- * @property {Boolean} qtwebkit
- * @property {Boolean} chrome
- * @property {Boolean} opera
- * @property {Boolean} firefox
- * @property {Boolean} safari
- * @property {Boolean} khtml
- * @property {Boolean} mac_geLion
- * @property {Boolean} mac_geMountainLion
- * @property {Boolean} phantom
- * @property {Boolean} ios
- * @property {Boolean} mobile
- * @property {Boolean} mac
- * @property {Boolean} windows
- * @property {Array|null} opera_version
- * @property {Boolean} flipCtrlCmd
- * @property {Boolean} captureMiddleClick
- * @property {Boolean} android
- * @property {String|false} android_version
- */
-declare type ApplicationPrototype_slDOM_env = {
-    gecko: boolean;
-    old_ie: boolean;
-    ie_lt8: boolean;
-    ie_lt9: boolean;
-    ie_gt10: boolean;
-    ie: boolean;
-    webkit: boolean;
-    qtwebkit: boolean;
-    chrome: boolean;
-    opera: boolean;
-    firefox: boolean;
-    safari: boolean;
-    khtml: boolean;
-    mac_geLion: boolean;
-    mac_geMountainLion: boolean;
-    phantom: boolean;
-    ios: boolean;
-    mobile: boolean;
-    mac: boolean;
-    windows: boolean;
-    opera_version: any[] | null;
-    flipCtrlCmd: boolean;
-    captureMiddleClick: boolean;
-    android: boolean;
-    android_version: string | false;
-};
-
-/**
- * @typedef {object} ApplicationPrototype_slDOM returns a pointer that walks over DOM and applying needed operations
- * @property {ApplicationPrototype_slDOM_env} env Environment Flags
- * @property {function (Boolean): HTMLElement} __ if params is `true` then return document otherwise current HTMLElement
- * @property {function(Object): ApplicationPrototype_slDOM} a2D apply Css Transforms on elements
- * @property {function(number): ApplicationPrototype_slDOM} opacity ( short form **o** ) change element opacity
- * @property {function((HTMLElement|string)): ApplicationPrototype_slDOM} setE ( short form **e** ) set a HTMLElement or Create Element for slDOM Pointer
- * @property {function((string|string[]), String?, number?): ApplicationPrototype_slDOM | Boolean} sClass =slDOMlib.sClass;
- * @property {function(...string): ApplicationPrototype_slDOM()} setArg ( short form **A** ) set Attributes to HTMLElement, arguments order: `[ attribute, value, attribute, value ... ]`
- * @property {function(HTMLElement): ApplicationPrototype_slDOM} adEto add current HTMLElement to other HTMLElement;
- * @property {function(HTMLElement): ApplicationPrototype_slDOM} putBfto insert current HTMLElement before other HTMLElement
- * @property {function(HTMLElement): ApplicationPrototype_slDOM} putAfto insert current HTMLElement after other HTMLElement
- * @property {function((HTMLElement | string), string?, function?): ApplicationPrototype_slDOM} putBf =slDOMlib.putBf;
- * @property {function(HTMLElement): ApplicationPrototype_slDOM} putAf =slDOMlib.putAf;
- * @property {function((HTMLElement | string), string?, function?): ApplicationPrototype_slDOM} addE =slDOMlib.addE;
- * @property {function((HTMLElement | string), string?, function?): ApplicationPrototype_slDOM} addB =slDOMlib.addB;
- * @property {function(string): ApplicationPrototype_slDOM} addT ( short form **t** ) add text node to HTMLElement;
- * @property {function(number): ApplicationPrototype_slDOM} [nextTo=1] ( short form **N** ) moving pointer forward to N neighbors
- * @property {function(number): ApplicationPrototype_slDOM} [backTo=1] ( short form **B** ) moving pointer backward to N neighbors
- * @property {function(number?): ApplicationPrototype_slDOM} nUP ( short form is U ) goes up on level in doom
- * @property {function(number?): ApplicationPrototype_slDOM} nChild ( short form is **C** ) select the *N th* child element
- * @property {function(number?): ApplicationPrototype_slDOM} getParentN ( short form is **P** ) select the *N th* parent element
- * @property {function(): ApplicationPrototype_slDOM} clearE ( short form is **d** ) remove all childObjects from node
- * @property {function(): ApplicationPrototype_slDOM} delE remove HTMLElement from its Parent
- * @property {function(Boolean): ApplicationPrototype_slDOM} copyE =slDOMlib.copyE;
- * @property {function(String): ApplicationPrototype_slDOM} getParentTag =slDOMlib.getParentTag;
- * @property {function(String, number, Boolean, Boolean): ApplicationPrototype_slDOM} getByTag =slDOMlib.getByTag;
- * @property {function(String, number, Boolean, Boolean): ApplicationPrototype_slDOM} getByQuery =slDOMlib.getByQuery;
- * @property {function(String): ApplicationPrototype_slDOM} getById =slDOMlib.getById;
- * @property {function(String, Boolean): Array<HTMLElement>} getTags =slDOMlib.getTags;
- * @property {function(String, Boolean): Array<HTMLElement>} getTagsByQuery =slDOMlib.getTagsByQuery;
- * @property {function(String): ApplicationPrototype_slDOM} triger ( short form **T** ) trigger / emit an event on HTMLElement
- * @property {function(String?): ApplicationPrototype_slDOM | HTMLElement | String} getE ( short form **_** ) return HTMLElement ;
- * * if argument[0] is ".tag" return HTMLElement's tagname ;
- * * if argument[0] is ".html" return HTML Content ;
- * * if argument[0] is ".text" return Text Content ;
- * * if argument[0] is "-attributeName" return HTMLElement's Attribute ;
- * * if argument[0] is "!attributeName" remove HTMLElement's Attribute
- * @property {function(slDOM.ObjectCSSProperties): ApplicationPrototype_slDOM} setStyle ( short form **f** ) setting css proprieties to HTMLElement
- * @property {function((slDOM.ObjectAttributes | String[])): ApplicationPrototype_slDOM} setVar ( short form **V** ) set dot property on HTMLElement
- * @property {function(...slDOM.ObjectAttributes): ApplicationPrototype_slDOM} setObjVar ( short form **v** ) setting attributes to HTMLElement
- * @property {function(slDOM.ObjectCSSProperties): ApplicationPrototype_slDOM} setStyleSPEED ( short form **F** ) setting css proprieties to HTMLElement with normalizing values by adding units
- * @property {function(): { x: number, y: number }} pagePXY ( short form **PXY** ) get element position on page
- * @property {function(): Boolean} in_e check if HTMLElement is still attached to DOM ( Document Object Manager )
- * @property {function(): { w: number, h: number }} g_wh returns width and height of HTMLElement
- * @property {function((Object | String), Boolean, Function, Object): ApplicationPrototype_slDOM} getLIST =slDOMlib.getLIST;
- * @property {function(function(HTMLElement, Object, ApplicationPrototype_slDOM), Object): ApplicationPrototype_slDOM} toFunction =slDOMlib.toFunction;
- * @property {function(): ApplicationPrototype_slDOM} removeFromDOM ( short form **free** ) remove elements from DOM
- * @property {function(number): ApplicationPrototype_slDOM} o ( short form **opacity** ) change element opacity
- * @property {function((HTMLElement | String)): ApplicationPrototype_slDOM} E ( long form **setE** ) set a HTMLElement or Create Element for slDOM Pointer
- * @property {*} c =slDOMlib.sClass;
- * @property {function(string): Object} attrs 	= slDOMlib.attrs;
- * @property {*} A =slDOMlib.setArg;
- * @property {*} Et =slDOMlib.adEto;
- * @property {*} Bt =slDOMlib.putBfto;
- * @property {*} At =slDOMlib.putAfto;
- * @property {*} pB =slDOMlib.putBf;
- * @property {*} pA =slDOMlib.putAf;
- * @property {*} e =slDOMlib.addE;
- * @property {*} b =slDOMlib.addB;
- * @property {*} t =slDOMlib.addT;
- * @property {*} N =slDOMlib.nextTo;
- * @property {*} B =slDOMlib.backTo;
- * @property {*} U =slDOMlib.nUP;
- * @property {*} C =slDOMlib.nChild;
- * @property {*} P =slDOMlib.getParentN;
- * @property {*} d =slDOMlib.clearE;
- * @property {*} D =slDOMlib.delE;
- * @property {*} X =slDOMlib.copyE;
- * @property {*} p =slDOMlib.getParentTag;
- * @property {*} S =slDOMlib.getByTag;
- * @property {*} Q =slDOMlib.getByQuery;
- * @property {*} I =slDOMlib.getById;
- * @property {*} s =slDOMlib.getTags;
- * @property {*} q =slDOMlib.getTagsByQuery;
- * @property {*} T =slDOMlib.triger;
- * @property {*} _ =slDOMlib.getE;
- * @property {*} $ =slDOMlib.getLIST;
- * @property {*} F =slDOMlib.setStyleSPEED;
- * @property {*} f =slDOMlib.setStyle;
- * @property {*} L =slDOMlib.getLIST;
- * @property {*} V =slDOMlib.setVar;
- * @property {*} v =slDOMlib.setObjVar;
- * @property {*} p =slDOMlib.setObjProto;
- * @property {*} PXY =slDOMlib.pagePosXY;
- * @property {*} i =slDOMlib.in_e;
- * @property {*} r =slDOMlib.g_wh;
- * @property {*} x =slDOMlib.toFunction;
- * @property {function(): ApplicationPrototype_slDOM} free 	= slDOMlib.removeFromDOM;
- * @property {function(): Boolean} is_free 	= slDOMlib.is_free;
- * @property {function(): Boolean} is_focused 	= slDOMlib.is_focused;
- * @property {function(): Boolean} is_inview 	= slDOMlib.elementInViewport;
- * @property {function(): Boolean} is_visible 	= slDOMlib.elementIsVisible;
- * @property {*} _normalizeCssValues 	= slDOMlib._normalizeCssValues;
- * @property {*} on 	= slDOMlib.on;
- * @property {*} off 	= slDOMlib.off;
- * @property {function(): Object} eventsCache 	= slDOMlib.eventsCache;
- */
-declare type ApplicationPrototype_slDOM = {
-    env: ApplicationPrototype_slDOM_env;
-    __: (...params: any[]) => any;
-    a2D: (...params: any[]) => any;
-    opacity: (...params: any[]) => any;
-    setE: (...params: any[]) => any;
-    sClass: (...params: any[]) => any;
-    setArg: (...params: any[]) => any;
-    adEto: (...params: any[]) => any;
-    putBfto: (...params: any[]) => any;
-    putAfto: (...params: any[]) => any;
-    putBf: (...params: any[]) => any;
-    putAf: (...params: any[]) => any;
-    addE: (...params: any[]) => any;
-    addB: (...params: any[]) => any;
-    addT: (...params: any[]) => any;
-    nextTo?: (...params: any[]) => any;
-    backTo?: (...params: any[]) => any;
-    nUP: (...params: any[]) => any;
-    nChild: (...params: any[]) => any;
-    getParentN: (...params: any[]) => any;
-    clearE: (...params: any[]) => any;
-    delE: (...params: any[]) => any;
-    copyE: (...params: any[]) => any;
-    getParentTag: (...params: any[]) => any;
-    getByTag: (...params: any[]) => any;
-    getByQuery: (...params: any[]) => any;
-    getById: (...params: any[]) => any;
-    getTags: (...params: any[]) => any;
-    getTagsByQuery: (...params: any[]) => any;
-    triger: (...params: any[]) => any;
-    getE: (...params: any[]) => any;
-    setStyle: (...params: any[]) => any;
-    setVar: (...params: any[]) => any;
-    setObjVar: (...params: any[]) => any;
-    setStyleSPEED: (...params: any[]) => any;
-    pagePXY: (...params: any[]) => any;
-    in_e: (...params: any[]) => any;
-    g_wh: (...params: any[]) => any;
-    getLIST: (...params: any[]) => any;
-    toFunction: (...params: any[]) => any;
-    removeFromDOM: (...params: any[]) => any;
-    o: (...params: any[]) => any;
-    E: (...params: any[]) => any;
-    c: any;
-    attrs: (...params: any[]) => any;
-    A: any;
-    Et: any;
-    Bt: any;
-    At: any;
-    pB: any;
-    pA: any;
-    e: any;
-    b: any;
-    t: any;
-    N: any;
-    B: any;
-    U: any;
-    C: any;
-    P: any;
-    d: any;
-    D: any;
-    X: any;
-    p: any;
-    S: any;
-    Q: any;
-    I: any;
-    s: any;
-    q: any;
-    T: any;
-    _: any;
-    $: any;
-    F: any;
-    f: any;
-    L: any;
-    V: any;
-    v: any;
-    p: any;
-    PXY: any;
-    i: any;
-    r: any;
-    x: any;
-    free: (...params: any[]) => any;
-    is_free: (...params: any[]) => any;
-    is_focused: (...params: any[]) => any;
-    is_inview: (...params: any[]) => any;
-    is_visible: (...params: any[]) => any;
-    _normalizeCssValues: any;
-    on: any;
-    off: any;
-    eventsCache: (...params: any[]) => any;
-};
-
-/**
- * @typedef {String} ModuleResourceUrl
- * @description resources url is composed from `module's plath` + `resource path`
- */
-declare type ModuleResourceUrl = string;
-
-/**
- * @typedef {Object} ApplicationModule
- * @property {PromiseLike} $request resolves module exports
- * @property {function():any} exports module exports handler
- * @property {Number} atime unix time in milliseconds
- * @property {function():ApplicationBuilderInstance} Application returns current application
- * @property {function():ApplicationModuleStore} cache returns module's reserved cache object
- * @property {function(any):Promise} require require modules from module's folder
- * @property {function(ModuleResourceUrl):String} resourceUrl returns module's resource URL
- * @property {ApplicationModuleMeta} meta module's meta information
- */
-declare type ApplicationModule = {
-    $request: PromiseLike;
-    exports: (...params: any[]) => any;
-    atime: number;
-    Application: (...params: any[]) => any;
-    cache: (...params: any[]) => any;
-    require: (...params: any[]) => any;
-    resourceUrl: (...params: any[]) => any;
-    meta: ApplicationModuleMeta;
-};
-
-/**
- * @typedef ApplicationBuilderExports
- * @property {ApplicationPrototypeConstructor} application
- * @property {ApplicationBuilderConstructor} builder
- */
-declare type ApplicationBuilderExports = {
-    application: ApplicationPrototypeConstructor;
-    builder: ApplicationBuilderConstructor;
-};
+declare namespace extensions/prototype {
+    namespace slDOMSet {
+        /**
+         * @callback itemHandler
+         * @memberof module:extensions/prototype.slDOMSet
+         * @param {Node} node
+         * @param {number} index
+         * @param {module:extensions/prototype.slDOMSet} context
+         * @param {module:extensions/prototype.slDOM} p
+         */
+        type itemHandler = (node: Node, index: number, context: module, p: module) => void;
+        /**
+         * @callback itemHandlerFilter
+         * @memberof module:extensions/prototype.slDOMSet
+         * @param {Node} node
+         * @param {number} index
+         * @param {module:extensions/prototype.slDOMSet} context
+         * @param {module:extensions/prototype.slDOM} p
+         * @returns {boolean}
+         */
+        type itemHandlerFilter = (node: Node, index: number, context: module, p: module) => boolean;
+        /**
+         * @callback itemHandlerMap
+         * @memberof module:extensions/prototype.slDOMSet
+         * @param {Node} node
+         * @param {number} index
+         * @param {module:extensions/prototype.slDOMSet} context
+         * @param {module:extensions/prototype.slDOM} p
+         * @returns {Node}
+         */
+        type itemHandlerMap = (node: Node, index: number, context: module, p: module) => Node;
+    }
+}
 

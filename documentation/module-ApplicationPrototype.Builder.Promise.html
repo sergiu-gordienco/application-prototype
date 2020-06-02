@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>uri-load - Application Prototype - Framework</title>
+    <title>Promise - Application Prototype - Framework</title>
     
     <meta name="description" content="Application Prototype Framework based on Module Pattern" />
     
@@ -46,7 +46,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">uri-load</h1>
+    <h1 class="page-title">Promise</h1>
     
 
     
@@ -58,6 +58,11 @@
 
 <header>
     
+        <h2>
+            <span class="ancestors"><a href="module-ApplicationPrototype.html">ApplicationPrototype</a><a href="module-ApplicationPrototype.Builder.html">.Builder</a>.</span>
+        
+        Promise
+        </h2>
         
     
 </header>
@@ -68,7 +73,153 @@
         
             
 
+    
+
+    <h4 class="name" id="Promise"><span class="type-signature"></span>new Promise<span class="signature">(handler)</span><span class="type-signature"> &rarr; {PromiseLike}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="dictionary.d.js.html">dictionary.d.js</a>, <a href="dictionary.d.js.html#line182">line 182</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
             
+                <td class="name"><code>handler</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">PromiseLike</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
         
         </div>
     
@@ -95,7 +246,7 @@
 
     
 
-    <h4 class="name" id=".link"><span class="type-signature">(static) </span>link<span class="signature">(url, callback, opts)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".all"><span class="type-signature">(static) </span>all<span class="signature">(items)</span><span class="type-signature"> &rarr; {PromiseLike}</span></h4>
 
     
 
@@ -107,7 +258,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="constructors_uri-load.js.html">constructors/uri-load.js</a>, <a href="constructors_uri-load.js.html#line118">line 118</a>
+        <a href="dictionary.d.js.html">dictionary.d.js</a>, <a href="dictionary.d.js.html#line190">line 190</a>
     </li></ul></dd>
     
 
@@ -146,10 +297,6 @@
 
 
 
-<div class="description usertext">
-    <p>loadLink - is a function for adding link tags into the header</p>
-</div>
-
 
 
 
@@ -185,16 +332,13 @@
 
         <tr>
             
-                <td class="name"><code>url</code></td>
+                <td class="name"><code>items</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
-|
-
-<span class="param-type">Array.&lt;string></span>
+<span class="param-type">Array.&lt;Promise></span>
 
 
             
@@ -204,53 +348,7 @@
 
             
 
-            <td class="description last"><p>url/urls of link tags</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>callback</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>[description]</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>opts</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>settings with info related to the link tags</p></td>
+            <td class="description last"></td>
         </tr>
 
     
@@ -272,6 +370,24 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">PromiseLike</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -280,7 +396,7 @@
 
     
 
-    <h4 class="name" id=".script"><span class="type-signature">(static) </span>script<span class="signature">(url, callback, opts)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".race"><span class="type-signature">(static) </span>race<span class="signature">(items)</span><span class="type-signature"> &rarr; {PromiseLike}</span></h4>
 
     
 
@@ -292,7 +408,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="constructors_uri-load.js.html">constructors/uri-load.js</a>, <a href="constructors_uri-load.js.html#line26">line 26</a>
+        <a href="dictionary.d.js.html">dictionary.d.js</a>, <a href="dictionary.d.js.html#line197">line 197</a>
     </li></ul></dd>
     
 
@@ -331,9 +447,155 @@
 
 
 
-<div class="description usertext">
-    <p>loadScript - is a function for adding scripts into the header</p>
-</div>
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>items</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;Promise></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">PromiseLike</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".reject"><span class="type-signature">(static) </span>reject<span class="signature">(value)</span><span class="type-signature"> &rarr; {PromiseLike}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="dictionary.d.js.html">dictionary.d.js</a>, <a href="dictionary.d.js.html#line211">line 211</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
 
 
 
@@ -370,16 +632,13 @@
 
         <tr>
             
-                <td class="name"><code>url</code></td>
+                <td class="name"><code>value</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
-|
-
-<span class="param-type">Array.&lt;string></span>
+<span class="param-type">any</span>
 
 
             
@@ -389,53 +648,7 @@
 
             
 
-            <td class="description last"><p>url/urls of scripts</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>callback</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>[description]</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>opts</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>settings with info related to the script tags</p></td>
+            <td class="description last"></td>
         </tr>
 
     
@@ -457,6 +670,174 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">PromiseLike</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".resolve"><span class="type-signature">(static) </span>resolve<span class="signature">(value)</span><span class="type-signature"> &rarr; {PromiseLike}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="dictionary.d.js.html">dictionary.d.js</a>, <a href="dictionary.d.js.html#line204">line 204</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">any</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">PromiseLike</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
