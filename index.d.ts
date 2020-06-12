@@ -724,6 +724,35 @@ declare module "js-template" {
 }
 
 /**
+ * @module request/params-parser
+ * @function
+ * @param {string} value
+ * @param {string} pattern
+ * @param {object} [opts]
+ * @param {object} [opts.cache] object where reg expressions will be cached
+ * @param {function} [opts.mapper] function that will decode value, default is decodeURIComponent
+ * @param {string} [opts.boud="\x02\x00\x00\x03"] function that will decode value, default is decodeURIComponent
+ * @param {object} [opts.ret] object to be updated with found params
+ * @param {string[]} [opts.tableIndex] list of parameters' names ( @experimental )
+ * @param {string} [opts.pRegExp="\\:([a-z][a-z0-9]+)"] RegExp params' chars
+ * @param {string} [opts.matchGroup="([^\\/]+)"] RegExp value
+ * @param {string} [opts.fixedEnd=true] RegExp value
+ * @returns {Object<string,string>}
+ */
+declare function request/params-parser(value: string, pattern: string, opts?: {
+    cache?: any;
+    mapper?: (...params: any[]) => any;
+    boud?: string;
+    ret?: any;
+    tableIndex?: string[];
+    pRegExp?: string;
+    matchGroup?: string;
+    fixedEnd?: string;
+}): {
+    [key: string]: string;
+};
+
+/**
  * Module used for retrieving date using XMLHttpRequest
  * @example
  * Application.require('request').then(function (request) {
