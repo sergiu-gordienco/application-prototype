@@ -102,9 +102,18 @@ module.exports  = function (conf) {
 		};
 		methods	= {
 			setItem	: function (key, value) {
-				return transactionPromise("add", {
-					k : key,
-					v : value
+				return new Promise(function (resolve, reject) {
+					transactionPromise("delete", key).then(function () {
+						transactionPromise("add", {
+							k : key,
+							v : value
+						}).then(resolve, reject);
+					}, function () {
+						transactionPromise("add", {
+							k : key,
+							v : value
+						}).then(resolve, reject);
+					});
 				});
 			},
 			removeItem	: function (key) {
