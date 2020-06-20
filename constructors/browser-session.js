@@ -5,12 +5,10 @@ var dbConnectionBuilder 	= false;
 
 /**
  * browserSessionBuilder description
- * @callback BrowserSessionModule
+ * @interface BrowserSessionModule
  * @param  {string|object} objectStoreArg name or object of strategyStore
  * @param {object} [objectStoreConf]
- * @return {Promise<ApplicationPrototypeInstance>}                session application
  */
-/** @type {BrowserSessionModule} */
 var browserSessionBuilder	= function (objectStoreArg, objectStoreConf) {
 	var app	= new ApplicationPrototype();
 	var loader = Application.Promise();
@@ -50,7 +48,15 @@ var browserSessionBuilder	= function (objectStoreArg, objectStoreConf) {
 				return sid;
 			}, "");
 		})());
-		app.bind("getItem", function (key, returnResult) {
+		app.bind("getItem",
+			/**
+			 * @method getItem
+			 * @memberof BrowserSessionModule
+			 * @param {string} key 
+			 * @param {boolean} returnResult 
+			 * @returns {Promise<any>}
+			 */
+			function (key, returnResult) {
 			return new Application.Promise(function (resolve, reject) {
 				objectStore.getItem(key).then(function (event) {
 					resolve(
@@ -62,7 +68,16 @@ var browserSessionBuilder	= function (objectStoreArg, objectStoreConf) {
 				});
 			});
 		}, "");
-		app.bind("setItem", function (key, val, returnResult) {
+		app.bind("setItem",
+			/**
+			 * @method setItem
+			 * @memberof BrowserSessionModule
+			 * @param {string} key 
+			 * @param {any} val
+			 * @param {boolean} returnResult 
+			 * @returns {Promise<any>}
+			 */
+			function (key, val, returnResult) {
 			return new Application.Promise(function (resolve, reject) {
 				app.getItem(key, true).then(function (result) {
 					var setValue = function () {
@@ -90,7 +105,15 @@ var browserSessionBuilder	= function (objectStoreArg, objectStoreConf) {
 				});
 			});
 		});
-		app.bind("removeItem", function (key, returnResult) {
+		app.bind("removeItem",
+			/**
+			 * @method removeItem
+			 * @memberof BrowserSessionModule
+			 * @param {string} key 
+			 * @param {boolean} returnResult 
+			 * @returns {Promise<any>}
+			 */
+			function (key, returnResult) {
 			return new Application.Promise(function (resolve, reject) {
 				objectStore.removeItem(key).then(function (event) {
 					resolve(
@@ -103,7 +126,14 @@ var browserSessionBuilder	= function (objectStoreArg, objectStoreConf) {
 				});
 			});
 		});
-		app.bind("getItems", function (keys) {
+		app.bind("getItems",
+			/**
+			 * @method getItems
+			 * @memberof BrowserSessionModule
+			 * @param {string[]} keys
+			 * @returns {Promise<Object<string,any>>}
+			 */
+			function (keys) {
 			return new Application.Promise(function (resolve, reject) {
 				Application.Promise.all(keys.map(function (key) {
 					return app.getItem(key);
@@ -119,7 +149,14 @@ var browserSessionBuilder	= function (objectStoreArg, objectStoreConf) {
 			});
 		});
 
-		app.bind("setItems", function (obj) {
+		app.bind("setItems",
+			/**
+			 * @method setItems
+			 * @memberof BrowserSessionModule
+			 * @param {Object<string,any>} obj
+			 * @returns {Promise<any[]>}
+			 */
+			function (obj) {
 			var i, arr = [];
 			for (i in obj) {
 				arr.push((function (key, value) {
@@ -129,13 +166,27 @@ var browserSessionBuilder	= function (objectStoreArg, objectStoreConf) {
 			return Application.Promise.all(arr);
 		});
 
-		app.bind("removeItems", function (keys) {
+		app.bind("removeItems",
+			/**
+			 * @method removeItems
+			 * @memberof BrowserSessionModule
+			 * @param {string[]} keys
+			 * @returns {Promise<any[]>}
+			 */
+			function (keys) {
 			return Application.Promise.all(keys.map(function (key) {
 				return app.removeItem(key);
 			}));
 		});
 
-		app.bind("findItems", function (filter) {
+		app.bind("findItems",
+			/**
+			 * @method findItems
+			 * @memberof BrowserSessionModule
+			 * @param {function(any):boolean} filter
+			 * @returns {Promise<Object<string,any>>}
+			 */
+			function (filter) {
 			return new Application.Promise(function (resolve, reject) {
 				objectStore.filter(filter).then(function (event) {
 					var result = {};
@@ -150,7 +201,13 @@ var browserSessionBuilder	= function (objectStoreArg, objectStoreConf) {
 		});
 
 
-		app.bind("clear", function () {
+		app.bind("clear",
+			/**
+			 * @method clear
+			 * @memberof BrowserSessionModule
+			 * @returns {Promise<any>}
+			 */
+			function () {
 			return new Application.Promise(function (resolve, reject) {
 				objectStore.filter(function (k ,v) {
 					var er;

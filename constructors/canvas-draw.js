@@ -46,9 +46,10 @@ module.exports = function (canvas, _config) {
 
 	var resource	= {
 		/**
-	 	* set of canvas paths
-	 	* @type {Array}
-	 	*/
+		 * set of canvas paths
+		 * @type {Array}
+		 * @private
+		 */
 		paths   : [],
 		animationStatus : false,
 		animationRequest: false
@@ -68,9 +69,9 @@ module.exports = function (canvas, _config) {
 		return resource.paths;
 	}, "");
 	app.bind("createPath", function (conf) {
-		/**
-		* createPath - create a generic path object
-		* @return {pathObject}
+		/*
+			createPath - create a generic path object
+			@return {pathObject}
 		*/
 		var path = new ApplicationPrototype();
 		var config  = {

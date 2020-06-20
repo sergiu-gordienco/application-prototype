@@ -1,30 +1,23 @@
-/**
- * Module used processing data asynchronous
- * @example
- * Application.require('async').then(function (asyncOperations) {
- *	// @TODO
- * }, console.error);
- * @module async
- * @returns {module:async.AsyncConstructor}
- * @see module:async~async
- */
-declare module "async" {
+declare namespace async {
     /**
      * @callback AsyncConstructor
-     * @memberof module:async
-     * @returns {module:async.Async}
+     * @memberof async
+     * @returns {async.Async}
      */
-    type AsyncConstructor = () => module;
+    type AsyncConstructor = () => async.Async;
+}
+
+declare namespace async {
     /**
-     * @memberof module:async
      * @class
      * @name Async
+     * @memberof async
      */
     class Async {
         /**
          * return unique index identifier for an operation
          * @method index
-         * @memberof module:async.Async#
+         * @memberof async.Async#
          * @returns {string}
          */
         index(): string;
@@ -34,8 +27,8 @@ declare module "async" {
          * if operation already obtained a value
          * then value is not accepted and it returns `false`
          * @method receive
-         * @memberof module:async.Async#
-         * @param {string} id obtained from {@link module:async.Async#index}
+         * @memberof async.Async#
+         * @param {string} id obtained from {@link async.Async#index}
          * @param {any} args
          * @returns {boolean}
          */
@@ -43,20 +36,20 @@ declare module "async" {
         /**
          * require to wait an additional operation
          * @method wait
-         * @memberof module:async.Async#
+         * @memberof async.Async#
          */
         wait(): void;
         /**
-         * require to reserve index {@link module:async.Async#index} for an additional operation
+         * require to reserve index {@link async.Async#index} for an additional operation
          * @method reserve
-         * @memberof module:async.Async#
+         * @memberof async.Async#
          * @returns {string}
          */
         reserve(): string;
         /**
          * require to run an operation
          * @method run
-         * @memberof module:async.Async#
+         * @memberof async.Async#
          * @param {function():void} func function that should be executed
          * @param {any[]} args
          * @param {object} context
@@ -66,20 +59,20 @@ declare module "async" {
         /**
          * reset operation processing
          * @method flush
-         * @memberof module:async.Async#
+         * @memberof async.Async#
          */
         flush(): void;
         /**
          * return how many operations are processing right now
          * @method processing
-         * @memberof module:async.Async#
+         * @memberof async.Async#
          * @returns {number}
          */
         processing(): number;
         /**
          * return operations' responses
          * @method responses
-         * @memberof module:async.Async#
+         * @memberof async.Async#
          * @param {boolean} [returnUnknownResponses=false]
          * @returns {any[][]}
          */
@@ -87,20 +80,62 @@ declare module "async" {
         /**
          * return all errors found in responses
          * @method errors
-         * @memberof module:async.Async#
+         * @memberof async.Async#
          * @returns {Error[]}
          */
         errors(): Error[];
         /**
          * register a callback to be called when processing is done
          * @method done
-         * @memberof module:async.Async#
+         * @memberof async.Async#
          * @param {function():void} cb
          */
         done(cb: (...params: any[]) => any): void;
     }
+    namespace Async {
+        /**
+         * @typedef {Array} async.Async~Operation
+         * @property {async.Async~OperationCallback} 0
+         * @property {async.Async~OperationArgs} 1
+         * @property {async.Async~OperationContext} 2
+         * @property {async.Async~OperationCallbackIndex} 3
+         */
+        type Operation = any[];
+        /**
+         * @typedef {Array} async.Async~Operation
+         * @property {async.Async~OperationCallback} 0
+         * @property {async.Async~OperationArgs} 1
+         * @property {async.Async~OperationContext} 2
+         * @property {async.Async~OperationCallbackIndex} 3
+         */
+        type Operation = any[];
+        /**
+         * a function that represents the operation itself, it have as argument `next` callback, by default it is first.
+         * @typedef {Function} async.Async~OperationCallback
+         */
+        type OperationCallback = () => void;
+        /**
+         * list if arguments passed to `OperationCallback`.
+         * @typedef {any[]} async.Async~OperationArgs
+         */
+        type OperationArgs = any[];
+        /**
+         * context that should be used in `OperationCallback`. Default value is `{}`.
+         * @typedef {object} async.Async~OperationContext
+         */
+        type OperationContext = any;
+        /**
+         * index of `next()` callback in list of `OperationCallback`'s arguments. Default value is `0`.
+         * @typedef {number} async.Async~OperationCallbackIndex
+         */
+        type OperationCallbackIndex = number;
+        /**
+         * @typedef {async.Async~Operation[]} async.Async~Operations
+         */
+        type Operations = async.Async~Operation[];
+    }
     /**
-     * @callback module:async.processCallback
+     * @callback async.processCallback
      * @param {function(Error?): void} next
      * @param {any} item
      * @param {number} index
@@ -108,184 +143,215 @@ declare module "async" {
      */
     type processCallback = (next: (...params: any[]) => any, item: any, index: number, items: any[]) => void;
     /**
-     * @callback module:async.doneCallback
-     * @this module:async.Async
+     * @callback async.doneCallback
+     * @this async.Async
      */
     type doneCallback = () => void;
     /**
      * @method flow
-     * @memberof module:async.
-     * @param {module:async.Async~Operations} operations
-     * @param {module:async.doneCallback} cb
+     * @memberof async.
+     * @param {async.Async~Operations} operations
+     * @param {async.doneCallback} cb
      * @param {number} [timeout=0] timeout between operations
-     * @returns {module:async.Async}
+     * @returns {async.Async}
      */
-    function flow(operations: module, cb: module, timeout?: number): module;
+    function flow(operations: async.Async~Operations, cb: async.doneCallback, timeout?: number): async.Async;
     /**
      * @method waterfall
-     * @memberof module:async.
-     * @param {module:async.Async~Operations} operations
-     * @param {module:async.doneCallback} cb
+     * @memberof async.
+     * @param {async.Async~Operations} operations
+     * @param {async.doneCallback} cb
      * @param {number} [parallel=27] number of operations that can be done in parallel
      * @param {number} [timeout=0] timeout between operations
-     * @returns {module:async.Async}
+     * @returns {async.Async}
      */
-    function waterfall(operations: module, cb: module, parallel?: number, timeout?: number): module;
+    function waterfall(operations: async.Async~Operations, cb: async.doneCallback, parallel?: number, timeout?: number): async.Async;
     /**
      * @method map
-     * @memberof module:async.
+     * @memberof async.
      * @param {any[]} operations
-     * @param {module:async.processCallback}
-     * @param {module:async.doneCallback} cb
+     * @param {async.processCallback}
+     * @param {async.doneCallback} cb
      * @param {number} [timeout=0] timeout between operations
-     * @returns {module:async.Async}
+     * @returns {async.Async}
      */
-    function map(operations: any[], cb: module, timeout?: number): module;
+    function map(operations: any[], cb: async.doneCallback, timeout?: number): async.Async;
     /**
      * @method flow·map
-     * @memberof module:async.
+     * @memberof async.
      * @param {any[]} operations
-     * @param {module:async.processCallback}
-     * @param {module:async.doneCallback} cb
+     * @param {async.processCallback}
+     * @param {async.doneCallback} cb
      * @param {number} [timeout=0] timeout between operations
-     * @returns {module:async.Async}
+     * @returns {async.Async}
      */
-    function flow·map(operations: any[], cb: module, timeout?: number): module;
+    function flow·map(operations: any[], cb: async.doneCallback, timeout?: number): async.Async;
     /**
      * @method waterfall·map
-     * @memberof module:async.
+     * @memberof async.
      * @param {any[]} operations
-     * @param {module:async.processCallback}
-     * @param {module:async.doneCallback} cb
+     * @param {async.processCallback}
+     * @param {async.doneCallback} cb
      * @param {number} [parallel=27] number of operations that can be done in parallel
      * @param {number} [timeout=0] timeout between operations
-     * @returns {module:async.Async}
+     * @returns {async.Async}
      */
-    function waterfall·map(operations: any[], cb: module, parallel?: number, timeout?: number): module;
+    function waterfall·map(operations: any[], cb: async.doneCallback, parallel?: number, timeout?: number): async.Async;
 }
 
-declare namespace async {
-    namespace Async {
-        /**
-         * @typedef {Array} module:async.Async~Operation
-         * @property {module:async.Async~OperationCallback} 0
-         * @property {module:async.Async~OperationArgs} 1
-         * @property {module:async.Async~OperationContext} 2
-         * @property {module:async.Async~OperationCallbackIndex} 3
-         */
-        type Operation = any[];
-        /**
-         * @typedef {Array} module:async.Async~Operation
-         * @property {module:async.Async~OperationCallback} 0
-         * @property {module:async.Async~OperationArgs} 1
-         * @property {module:async.Async~OperationContext} 2
-         * @property {module:async.Async~OperationCallbackIndex} 3
-         */
-        type Operation = any[];
-        /**
-         * a function that represents the operation itself, it have as argument `next` callback, by default it is first.
-         * @typedef {Function} module:async.Async~OperationCallback
-         */
-        type OperationCallback = () => void;
-        /**
-         * list if arguments passed to `OperationCallback`.
-         * @typedef {any[]} module:async.Async~OperationArgs
-         */
-        type OperationArgs = any[];
-        /**
-         * context that should be used in `OperationCallback`. Default value is `{}`.
-         * @typedef {object} module:async.Async~OperationContext
-         */
-        type OperationContext = any;
-        /**
-         * index of `next()` callback in list of `OperationCallback`'s arguments. Default value is `0`.
-         * @typedef {number} module:async.Async~OperationCallbackIndex
-         */
-        type OperationCallbackIndex = number;
-        /**
-         * @typedef {module:async.Async~Operation[]} module:async.Async~Operations
-         */
-        type Operations = module[];
-    }
+/**
+ * Module used processing data asynchronous
+ * @example
+ * Application.require('async').then(function (asyncOperations) {
+ *	// @TODO
+ * }, console.error);
+ * @interface async
+ * @returns {async.AsyncConstructor}
+ * @see async.Async
+ */
+declare interface async {
+}
+
+declare namespace BrowserSessionModule {
+    /**
+     * @method getItem
+     * @memberof BrowserSessionModule
+     * @param {string} key
+     * @param {boolean} returnResult
+     * @returns {Promise<any>}
+     */
+    function getItem(key: string, returnResult: boolean): Promise<any>;
+    /**
+     * @method setItem
+     * @memberof BrowserSessionModule
+     * @param {string} key
+     * @param {any} val
+     * @param {boolean} returnResult
+     * @returns {Promise<any>}
+     */
+    function setItem(key: string, val: any, returnResult: boolean): Promise<any>;
+    /**
+     * @method removeItem
+     * @memberof BrowserSessionModule
+     * @param {string} key
+     * @param {boolean} returnResult
+     * @returns {Promise<any>}
+     */
+    function removeItem(key: string, returnResult: boolean): Promise<any>;
+    /**
+     * @method getItems
+     * @memberof BrowserSessionModule
+     * @param {string[]} keys
+     * @returns {Promise<Object<string,any>>}
+     */
+    function getItems(keys: string[]): Promise<{
+        [key: string]: any;
+    }>;
+    /**
+     * @method setItems
+     * @memberof BrowserSessionModule
+     * @param {Object<string,any>} obj
+     * @returns {Promise<any[]>}
+     */
+    function setItems(obj: {
+        [key: string]: any;
+    }): Promise<any[]>;
+    /**
+     * @method removeItems
+     * @memberof BrowserSessionModule
+     * @param {string[]} keys
+     * @returns {Promise<any[]>}
+     */
+    function removeItems(keys: string[]): Promise<any[]>;
+    /**
+     * @method findItems
+     * @memberof BrowserSessionModule
+     * @param {function(any):boolean} filter
+     * @returns {Promise<Object<string,any>>}
+     */
+    function findItems(filter: (...params: any[]) => any): Promise<{
+        [key: string]: any;
+    }>;
+    /**
+     * @method clear
+     * @memberof BrowserSessionModule
+     * @returns {Promise<any>}
+     */
+    function clear(): Promise<any>;
 }
 
 /**
  * browserSessionBuilder description
- * @callback BrowserSessionModule
+ * @interface BrowserSessionModule
  * @param  {string|object} objectStoreArg name or object of strategyStore
  * @param {object} [objectStoreConf]
- * @return {Promise<ApplicationPrototypeInstance>}                session application
  */
-declare type BrowserSessionModule = (objectStoreArg: string | any, objectStoreConf?: any) => Promise<ApplicationPrototypeInstance>;
+declare interface BrowserSessionModule {
+}
 
-/** @type {BrowserSessionModule}
- */
-declare function browserSessionBuilder(): void;
-
-/**
- * @module extensions/prototype
- */
-declare module "extensions/prototype" {
+declare namespace ExtensionsPrototype {
     /**
      * @var {object} fn
-     * @memberof module:extensions/prototype
-     * @property {module:extensions/prototype~WindowFunctions} window
-     * @property {module:extensions/prototype~MouseFunctions} mouse
-     * @property {(module:extensions/prototype~getRandId_1|module:extensions/prototype~getRandId_2)} getRandId
+     * @memberof ExtensionsPrototype
+     * @property {ExtensionsPrototype.WindowFunctions} window
+     * @property {ExtensionsPrototype.MouseFunctions} mouse
+     * @property {(ExtensionsPrototype.getRandId_1|ExtensionsPrototype.getRandId_2)} getRandId
      */
     var fn: {
-        window: module;
-        mouse: module;
-        getRandId: module | module;
+        window: ExtensionsPrototype.WindowFunctions;
+        mouse: ExtensionsPrototype.MouseFunctions;
+        getRandId: ExtensionsPrototype.getRandId_1 | ExtensionsPrototype.getRandId_2;
     };
     /**
      * @typedef {object} WindowFunctions
+     * @memberof ExtensionsPrototype
      * @property {object} sizeLimit
-     * @property {module:extensions/prototype~windowSizeCache} sizeLimit.min
-     * @property {module:extensions/prototype~windowSizeCache} sizeLimit.max
+     * @property {ExtensionsPrototype.windowSizeCache} sizeLimit.min
+     * @property {ExtensionsPrototype.windowSizeCache} sizeLimit.max
      * @property {number} [refreshRate=200] how often to recalculate window size
-     * @property {module:extensions/prototype~windowSizeActive} sizeActive
-     * @property {module:extensions/prototype~windowSize} size
+     * @property {ExtensionsPrototype.windowSizeActive} sizeActive
+     * @property {ExtensionsPrototype.windowSize} size
      */
     type WindowFunctions = {
         sizeLimit: {
-            min: module;
-            max: module;
+            min: ExtensionsPrototype.windowSizeCache;
+            max: ExtensionsPrototype.windowSizeCache;
         };
         refreshRate?: number;
-        sizeActive: module;
-        size: module;
+        sizeActive: ExtensionsPrototype.windowSizeActive;
+        size: ExtensionsPrototype.windowSize;
     };
     /**
      * @typedef {object} MouseFunctions
+     * @memberof ExtensionsPrototype
      * @property {external:MouseEvent} event
-     * @property {module:extensions/prototype~MousePosition} position
+     * @property {ExtensionsPrototype.MousePosition} position
      * @property {object} config
      * @property {boolean} config.tracking
      */
     type MouseFunctions = {
         event: external;
-        position: module;
+        position: ExtensionsPrototype.MousePosition;
         config: {
             tracking: boolean;
         };
     };
     /**
      * @var {object} object
-     * @property {(module:extensions/prototype~ObjectExtend_1|module:extensions/prototype~ObjectExtend_2)} extend
-     * @memberof module:extensions/prototype
+     * @property {(ExtensionsPrototype.ObjectExtend_1|ExtensionsPrototype.ObjectExtend_2)} extend
+     * @memberof ExtensionsPrototype
      */
     var object: {
-        extend: module | module;
+        extend: ExtensionsPrototype.ObjectExtend_1 | ExtensionsPrototype.ObjectExtend_2;
     };
     /**
      * @var {object} string
-     * @memberof module:extensions/prototype
+     * @memberof ExtensionsPrototype
      */
     var string: any;
     /**
      * @var {any} WindowExtend
-     * @memberof module:extensions/prototype
+     * @memberof ExtensionsPrototype
      * @example
      * window.addEvent(elem, type, handler);
      * window.removeEvent(elem, type, handlerId);
@@ -295,19 +361,20 @@ declare module "extensions/prototype" {
     var WindowExtend: any;
     /**
      * @callback getRandId_1
-     * @memberof module:extensions/prototype~
+     * @memberof ExtensionsPrototype
      * @param {string} prefix
      * @param {boolean} minimize
      */
     type getRandId_1 = (prefix: string, minimize: boolean) => void;
     /**
      * @callback getRandId_2
-     * @memberof module:extensions/prototype~
+     * @memberof ExtensionsPrototype
      * @param {boolean} minimize
      */
     type getRandId_2 = (minimize: boolean) => void;
     /**
      * @typedef {object} windowSizeCache
+     * @memberof ExtensionsPrototype
      * @property {number} w
      * @property {number} h
      */
@@ -317,18 +384,21 @@ declare module "extensions/prototype" {
     };
     /**
      * @callback windowSizeActive
+     * @memberof ExtensionsPrototype
      * @property {boolean} refreshed
-     * @returns {module:extensions/prototype~windowSizeCache}
+     * @returns {ExtensionsPrototype.windowSizeCache}
      */
-    type windowSizeActive = () => module;
+    type windowSizeActive = () => ExtensionsPrototype.windowSizeCache;
     /**
      * @callback windowSize
+     * @memberof ExtensionsPrototype
      * @property {boolean} refreshed
-     * @returns {module:extensions/prototype~windowSizeCache}
+     * @returns {ExtensionsPrototype.windowSizeCache}
      */
-    type windowSize = () => module;
+    type windowSize = () => ExtensionsPrototype.windowSizeCache;
     /**
      * @typedef {object} MousePositionCache
+     * @memberof ExtensionsPrototype
      * @property {number} x
      * @property {number} y
      * @property {number} xmax
@@ -342,18 +412,20 @@ declare module "extensions/prototype" {
     };
     /**
      * @callback MousePosition
+     * @memberof ExtensionsPrototype
      * @param {MouseEvent} [eventMouseMove]
      * @param {object} [context]
      * @param {object} [context.window]
      * @param {object} [context.document]
-     * @returns {module:extensions/prototype~MousePositionCache}
+     * @returns {ExtensionsPrototype.MousePositionCache}
      */
     type MousePosition = (eventMouseMove?: MouseEvent, context?: {
         window?: any;
         document?: any;
-    }) => module;
+    }) => ExtensionsPrototype.MousePositionCache;
     /**
      * @callback ObjectExtend_1
+     * @memberof ExtensionsPrototype
      * @param {object} object
      * @param {object} options
      * @param {any} options.value
@@ -369,6 +441,7 @@ declare module "extensions/prototype" {
     }) => void;
     /**
      * @callback ObjectExtend_2
+     * @memberof ExtensionsPrototype
      * @param {object} object
      * @param {object} options
      * @param {function():void} [options.get]
@@ -383,164 +456,383 @@ declare module "extensions/prototype" {
         config?: boolean;
     }) => void;
     /**
-     * @var {module:extensions/prototype.slDOM} slDOM
-     * @memberof module:extensions/prototype
+     * @var {ExtensionsPrototype.slDOM} slDOM
+     * @memberof ExtensionsPrototype
      */
-    var slDOM: module;
+    var slDOM: ExtensionsPrototype.slDOM;
     /**
-     * @var {module:extensions/prototype.slDOM_env} slDOM_env
-     * @memberof module:extensions/prototype
+     * @var {ExtensionsPrototype.slDOM_env} slDOM_env
+     * @memberof ExtensionsPrototype
      */
-    var slDOM_env: module;
+    var slDOM_env: ExtensionsPrototype.slDOM_env;
     /**
-     * @var {module:extensions/prototype.slDOM} _
-     * @memberof module:extensions/prototype
+     * @var {ExtensionsPrototype.slDOM} _
+     * @memberof ExtensionsPrototype
      */
-    var _: module;
+    var _: ExtensionsPrototype.slDOM;
     /**
-     * @var {module:extensions/prototype.slDOMSet} __
-     * @memberof module:extensions/prototype
+     * @var {ExtensionsPrototype.slDOMSet} __
+     * @memberof ExtensionsPrototype
      */
-    var __: module;
+    var __: ExtensionsPrototype.slDOMSet;
     /**
      * @class
      * @name slDOMSet
-     * @memberof module:extensions/prototype
+     * @memberof ExtensionsPrototype
      * @param {string} [cssSelector]
      */
     class slDOMSet {
         constructor(cssSelector?: string);
         /**
          * @method config
-         * @memberof module:extensions/prototype.slDOMSet
+         * @memberof ExtensionsPrototype.slDOMSet
          * @param {string} key
          * @param {any} value
-         * @returns {module:extensions/prototype.slDOMSet}
+         * @returns {ExtensionsPrototype.slDOMSet}
          */
-        static config(key: string, value: any): module;
+        static config(key: string, value: any): ExtensionsPrototype.slDOMSet;
         /**
          * @method config
-         * @memberof module:extensions/prototype.slDOMSet
+         * @memberof ExtensionsPrototype.slDOMSet
          * @param {string} key
          * @param {any} value
-         * @returns {module:extensions/prototype.slDOMSet}
+         * @returns {ExtensionsPrototype.slDOMSet}
          */
-        static config(key: string, value: any): module;
+        static config(key: string, value: any): ExtensionsPrototype.slDOMSet;
         /**
          * @method unique
-         * @memberof module:extensions/prototype.slDOMSet
-         * @returns {module:extensions/prototype.slDOMSet}
+         * @memberof ExtensionsPrototype.slDOMSet
+         * @returns {ExtensionsPrototype.slDOMSet}
          */
-        static unique(): module;
+        static unique(): ExtensionsPrototype.slDOMSet;
         /**
          * @method set
-         * @memberof module:extensions/prototype.slDOMSet
+         * @memberof ExtensionsPrototype.slDOMSet
          * @param {string} v css selector applied over document
-         * @returns {module:extensions/prototype.slDOMSet}
+         * @returns {ExtensionsPrototype.slDOMSet}
          */
-        static set(v: string): module;
+        static set(v: string): ExtensionsPrototype.slDOMSet;
         /**
          * @method set
-         * @memberof module:extensions/prototype.slDOMSet
+         * @memberof ExtensionsPrototype.slDOMSet
          * @param {string} v css selector applied over document
-         * @returns {module:extensions/prototype.slDOMSet}
+         * @returns {ExtensionsPrototype.slDOMSet}
          */
-        static set(v: string): module;
+        static set(v: string): ExtensionsPrototype.slDOMSet;
         /**
          * @method add
-         * @memberof module:extensions/prototype.slDOMSet
+         * @memberof ExtensionsPrototype.slDOMSet
          * @param {(NodeList|any)} ...v array of Nodes or HTMLElements
-         * @returns {module:extensions/prototype.slDOMSet}
+         * @returns {ExtensionsPrototype.slDOMSet}
          */
-        static add(): module;
+        static add(): ExtensionsPrototype.slDOMSet;
         /**
          * @method env
-         * @memberof module:extensions/prototype.slDOMSet
-         * @returns {module:extensions/prototype.slDOM_env}
+         * @memberof ExtensionsPrototype.slDOMSet
+         * @returns {ExtensionsPrototype.slDOM_env}
          */
-        static env(): module;
+        static env(): ExtensionsPrototype.slDOM_env;
         /**
          * @method get
-         * @memberof module:extensions/prototype.slDOMSet
+         * @memberof ExtensionsPrototype.slDOMSet
          * @returns {(Node[])}
          */
         static get(): Node[];
         /**
          * @method get
-         * @memberof module:extensions/prototype.slDOMSet
+         * @memberof ExtensionsPrototype.slDOMSet
          * @returns {(Node[])}
          */
         static get(): Node[];
         /**
          * @method eq
-         * @memberof module:extensions/prototype.slDOMSet
+         * @memberof ExtensionsPrototype.slDOMSet
          * @param {number} index
-         * @returns {module:extensions/prototype.slDOMSet}
+         * @returns {ExtensionsPrototype.slDOMSet}
          */
-        static eq(index: number): module;
+        static eq(index: number): ExtensionsPrototype.slDOMSet;
         /**
          * @method find
-         * @memberof module:extensions/prototype.slDOMSet
+         * @memberof ExtensionsPrototype.slDOMSet
          * @param {string} cssSelector
-         * @returns {module:extensions/prototype.slDOMSet}
+         * @returns {ExtensionsPrototype.slDOMSet}
          */
-        static find(cssSelector: string): module;
+        static find(cssSelector: string): ExtensionsPrototype.slDOMSet;
         /**
          * @method filter
-         * @memberof module:extensions/prototype.slDOMSet
-         * @param {module:extensions/prototype.slDOMSet.itemHandlerFilter} filterCallback
-         * @returns {module:extensions/prototype.slDOMSet}
+         * @memberof ExtensionsPrototype.slDOMSet
+         * @param {ExtensionsPrototype.slDOMSet.itemHandlerFilter} filterCallback
+         * @returns {ExtensionsPrototype.slDOMSet}
          */
-        static filter(filterCallback: module): module;
+        static filter(filterCallback: ExtensionsPrototype.slDOMSet.itemHandlerFilter): ExtensionsPrototype.slDOMSet;
         /**
          * @method each
-         * @memberof module:extensions/prototype.slDOMSet
-         * @param {module:extensions/prototype.slDOMSet.itemHandler} filterCallback
-         * @returns {module:extensions/prototype.slDOMSet}
+         * @memberof ExtensionsPrototype.slDOMSet
+         * @param {ExtensionsPrototype.slDOMSet.itemHandler} filterCallback
+         * @returns {ExtensionsPrototype.slDOMSet}
          */
-        static each(filterCallback: module): module;
+        static each(filterCallback: ExtensionsPrototype.slDOMSet.itemHandler): ExtensionsPrototype.slDOMSet;
         /**
          * @method map
-         * @memberof module:extensions/prototype.slDOMSet
-         * @param {module:extensions/prototype.slDOMSet.itemHandlerMap} filterCallback
-         * @returns {module:extensions/prototype.slDOMSet}
+         * @memberof ExtensionsPrototype.slDOMSet
+         * @param {ExtensionsPrototype.slDOMSet.itemHandlerMap} filterCallback
+         * @returns {ExtensionsPrototype.slDOMSet}
          */
-        static map(filterCallback: module): module;
+        static map(filterCallback: ExtensionsPrototype.slDOMSet.itemHandlerMap): ExtensionsPrototype.slDOMSet;
         /**
          * @method attr
-         * @memberof module:extensions/prototype.slDOMSet
+         * @memberof ExtensionsPrototype.slDOMSet
          * @returns {external:NamedNodeMap}
          */
         static attr(): external;
         /**
          * @method attr
-         * @memberof module:extensions/prototype.slDOMSet
+         * @memberof ExtensionsPrototype.slDOMSet
          * @returns {external:NamedNodeMap}
          */
         static attr(): external;
         /**
          * @method attr
-         * @memberof module:extensions/prototype.slDOMSet
+         * @memberof ExtensionsPrototype.slDOMSet
          * @returns {external:NamedNodeMap}
          */
         static attr(): external;
         /**
          * @method attr
-         * @memberof module:extensions/prototype.slDOMSet
+         * @memberof ExtensionsPrototype.slDOMSet
          * @returns {external:NamedNodeMap}
          */
         static attr(): external;
     }
+    namespace slDOMSet {
+        /**
+         * @callback itemHandler
+         * @memberof ExtensionsPrototype.slDOMSet
+         * @param {Node} node
+         * @param {number} index
+         * @param {ExtensionsPrototype.slDOMSet} context
+         * @param {ExtensionsPrototype.slDOM} p
+         */
+        type itemHandler = (node: Node, index: number, context: ExtensionsPrototype.slDOMSet, p: ExtensionsPrototype.slDOM) => void;
+        /**
+         * @callback itemHandlerFilter
+         * @memberof ExtensionsPrototype.slDOMSet
+         * @param {Node} node
+         * @param {number} index
+         * @param {ExtensionsPrototype.slDOMSet} context
+         * @param {ExtensionsPrototype.slDOM} p
+         * @returns {boolean}
+         */
+        type itemHandlerFilter = (node: Node, index: number, context: ExtensionsPrototype.slDOMSet, p: ExtensionsPrototype.slDOM) => boolean;
+        /**
+         * @callback itemHandlerMap
+         * @memberof ExtensionsPrototype.slDOMSet
+         * @param {Node} node
+         * @param {number} index
+         * @param {ExtensionsPrototype.slDOMSet} context
+         * @param {ExtensionsPrototype.slDOM} p
+         * @returns {Node}
+         */
+        type itemHandlerMap = (node: Node, index: number, context: ExtensionsPrototype.slDOMSet, p: ExtensionsPrototype.slDOM) => Node;
+    }
     /**
-     * @var {module:extensions/prototype.slDOM_env} slDOM_env
-     * @memberof module:extensions/prototype
+     * @var {ExtensionsPrototype.slDOM_env} slDOM_env
+     * @memberof ExtensionsPrototype
      */
-    var slDOM_env: module;
+    var slDOM_env: ExtensionsPrototype.slDOM_env;
     /**
-     * @var {module:extensions/prototype.slDOM} slDOM
-     * @memberof module:extensions/prototype
+     * @typedef {Object<string,(string|number)>} slDOM_ObjectCSSProperties a list of proprieties mapped in a object, example: { fontSize: "10px", "white-space": "nowrap" }
+     * @memberof ExtensionsPrototype
      */
-    var slDOM: module;
+    type slDOM_ObjectCSSProperties = {
+        [key: string]: string | number;
+    };
+    /**
+     * @typedef {Object<string,(string|number)>} slDOM_ObjectAttributes a list of proprieties mapped in a object, example: { fontSize: "10px", "white-space": "nowrap" }
+     * @memberof ExtensionsPrototype
+     */
+    type slDOM_ObjectAttributes = {
+        [key: string]: string | number;
+    };
+    /**
+     * @var {ExtensionsPrototype.slDOM} slDOM
+     * @memberof ExtensionsPrototype
+     */
+    var slDOM: ExtensionsPrototype.slDOM;
+}
+
+/**
+ * @interface ExtensionsPrototype
+ */
+declare interface ExtensionsPrototype {
+}
+
+declare namespace JSTemplate {
+    /**
+     * @memberof JSTemplate
+     * @typedef {Object} JSTemplateModule
+     * @property {JSTemplate.nodeParser} parseContent
+     * @property {object} config
+     * @property {number} [config.RENDER_FPS=15]
+     * @property {number} [config.REMOVE_EMPTY_NODES=true]
+     */
+    type JSTemplateModule = {
+        parseContent: JSTemplate.nodeParser;
+        config: {
+            RENDER_FPS?: number;
+            REMOVE_EMPTY_NODES?: number;
+        };
+    };
+}
+
+declare namespace JSTemplate {
+    /**
+     * @typedef {Object} jsTemplate_textResult
+     * @memberof JSTemplate
+     * @property {string} [type='text']
+     * @property {JSTemplate.jsTemplate_textResultData} data
+     */
+    type jsTemplate_textResult = {
+        type?: string;
+        data: JSTemplate.jsTemplate_textResultData;
+    };
+    /**
+     * @typedef {Object} jsTemplate_textResultData
+     * @memberof JSTemplate
+     * @property {Array<Text>} nodes
+     * @property {Array<Text>} initialNodes
+     * @property {string} code
+     */
+    type jsTemplate_textResultData = {
+        nodes: Text[];
+        initialNodes: Text[];
+        code: string;
+    };
+    /**
+     * @typedef {Object} parseTextNodesConfig
+     * @memberof JSTemplate
+     * @property {object} [args={}] arguments
+     * @property {object} [context={}] execution context
+     * @property {string} [start='{{'] start token
+     * @property {string} [end='}}'] end token
+     * @property {Array<JSTemplate.jsTemplate_textResult>} [textNodes] array of TextNodes
+     * @property {Array<Text>} [buffer] (technical property) buffer
+     * @property {boolean} [opened=false] (technical property)
+     * @property {Array<string>} [__argsNames] (technical property)
+     * @property {Array<any>} [__argsValues] (technical property)
+     */
+    type parseTextNodesConfig = {
+        args?: any;
+        context?: any;
+        start?: string;
+        end?: string;
+        textNodes?: JSTemplate.jsTemplate_textResult[];
+        buffer?: Text[];
+        opened?: boolean;
+        __argsNames?: string[];
+        __argsValues?: any[];
+    };
+    /**
+     * Expression Builder
+     * @protected
+     * @function
+     * @memberof JSTemplate
+     * @param {string} code
+     * @param {JSTemplate.parseTextNodesConfig} config
+     */
+    function expressionBuilder(code: string, config: JSTemplate.parseTextNodesConfig): void;
+    /**
+     * @callback parseTextNodesCallback
+     * @memberof JSTemplate
+     * @param {Error} err
+     * @param {JSTemplate.parseTextNodesConfig} config
+     */
+    type parseTextNodesCallback = (err: Error, config: JSTemplate.parseTextNodesConfig) => void;
+    /**
+     * @typedef {Object} jsTemplate_Attribute
+     * @memberof JSTemplate
+     * @property {string} name
+     * @property {string} value
+     */
+    type jsTemplate_Attribute = {
+        name: string;
+        value: string;
+    };
+    /**
+     * @typedef {Object} jsTemplate_attrResultAttributeData
+     * @memberof JSTemplate
+     * @property {string} name attribute name
+     * @property {string} code executable code
+     * @property {HTMLElement} node node element
+     * @property {any} [buffer] ( technical property )
+     * @property {boolean} [inline=false] should be value be parsed
+     * @property {boolean} [postProcess=false] should be value be parsed
+     */
+    type jsTemplate_attrResultAttributeData = {
+        name: string;
+        code: string;
+        node: HTMLElement;
+        buffer?: any;
+        inline?: boolean;
+        postProcess?: boolean;
+    };
+    /**
+     * @typedef {Object} jsTemplate_attrResult
+     * @memberof JSTemplate
+     * @property {('event'|'attribute'|'binding'|'macro')} type
+     * @property {JSTemplate.jsTemplate_Attribute} attr
+     * @property {JSTemplate.jsTemplate_attrResultAttributeData} data
+     */
+    type jsTemplate_attrResult = {
+        type: 'event' | 'attribute' | 'binding' | 'macro';
+        attr: JSTemplate.jsTemplate_Attribute;
+        data: JSTemplate.jsTemplate_attrResultAttributeData;
+    };
+    /**
+     * @typedef {Object} jsTemplateAttrData
+     * @memberof JSTemplate
+     * @property {Array<JSTemplate.jsTemplate_attrResult>} nodes
+     * @property {Array<JSTemplate.jsTemplate_textResult>} texts
+     * @property {Array<JSTemplate.jsTemplateAttrData>} children
+     * @property {Object<string,JSTemplate.jsTemplate_attrResult>} _macro
+     * @property {boolean} [HAS_POST_PROCESS=false]
+     */
+    type jsTemplateAttrData = {
+        nodes: JSTemplate.jsTemplate_attrResult[];
+        texts: JSTemplate.jsTemplate_textResult[];
+        children: JSTemplate.jsTemplateAttrData[];
+        _macro: {
+            [key: string]: JSTemplate.jsTemplate_attrResult;
+        };
+        HAS_POST_PROCESS?: boolean;
+    };
+    /**
+     * Parsing NodeElement Attribute
+     * @protected
+     * @memberof JSTemplate
+     * @param {JSTemplate.jsTemplate_Attribute} attr
+     * @returns {JSTemplate.jsTemplate_attrResult}
+     */
+    function attrParser(attr: JSTemplate.jsTemplate_Attribute): JSTemplate.jsTemplate_attrResult;
+    /**
+     * @protected
+     * @callback nodeParserCallback
+     * @memberof JSTemplate
+     * @param {Error} err
+     * @param {JSTemplate.parseTextNodesConfig} config
+     * @returns {JSTemplate.parseTextNodesConfig}
+     */
+    type nodeParserCallback = (err: Error, config: JSTemplate.parseTextNodesConfig) => JSTemplate.parseTextNodesConfig;
+    /**
+     * @protected
+     * @function
+     * @memberof JSTemplate
+     * @param {HTMLElement} nodeElement
+     * @param {JSTemplate.nodeParserCallback} cb
+     * @param {JSTemplate.parseTextNodesConfig} config
+     * @returns {JSTemplate.parseTextNodesConfig}
+     */
+    function nodeParser(nodeElement: HTMLElement, cb: JSTemplate.nodeParserCallback, config: JSTemplate.parseTextNodesConfig): JSTemplate.parseTextNodesConfig;
 }
 
 /**
@@ -553,204 +845,29 @@ declare module "extensions/prototype" {
  * 		{ context: {}, args: { item: 'sample reference' }}
  * 	);
  * }, console.error);
- * @module js-template
- * @returns {module:js-template.JSTemplateModule}
+ * @interface JSTemplate
+ * @returns {JSTemplate.JSTemplateModule}
  */
-declare module "js-template" {
-    /**
-     * @memberof module:js-template
-     * @typedef {Object} JSTemplateModule
-     * @property {module:js-template~nodeParser} parseContent
-     * @property {object} config
-     * @property {number} [config.RENDER_FPS=15]
-     * @property {number} [config.REMOVE_EMPTY_NODES=true]
-     */
-    type JSTemplateModule = {
-        parseContent: module;
-        config: {
-            RENDER_FPS?: number;
-            REMOVE_EMPTY_NODES?: number;
-        };
-    };
-    /**
-     * @typedef {Object} jsTemplate_textResult
-     * @property {string} [type='text']
-     * @property {module:js-template~jsTemplate_textResultData} data
-     */
-    type jsTemplate_textResult = {
-        type?: string;
-        data: module;
-    };
-    /**
-     * @typedef {Object} jsTemplate_textResultData
-     * @property {Array<Text>} nodes
-     * @property {Array<Text>} initialNodes
-     * @property {String} code
-     */
-    type jsTemplate_textResultData = {
-        nodes: Text[];
-        initialNodes: Text[];
-        code: string;
-    };
-    /**
-     * @typedef {Object} parseTextNodesConfig
-     * @property {object} [args={}] arguments
-     * @property {object} [context={}] execution context
-     * @property {String} [start='{{'] start token
-     * @property {String} [end='}}'] end token
-     * @property {Array<module:js-template~jsTemplate_textResult>} [textNodes] array of TextNodes
-     * @property {Array<Text>} [buffer] (technical property) buffer
-     * @property {boolean} [opened=false] (technical property)
-     * @property {Array<string>} [__argsNames] (technical property)
-     * @property {Array<any>} [__argsValues] (technical property)
-     */
-    type parseTextNodesConfig = {
-        args?: any;
-        context?: any;
-        start?: string;
-        end?: string;
-        textNodes?: module[];
-        buffer?: Text[];
-        opened?: boolean;
-        __argsNames?: string[];
-        __argsValues?: any[];
-    };
-    /**
-     * Expression Builder
-     * @param {string} code
-     * @param {module:js-template~parseTextNodesConfig} config
-     */
-    function expressionBuilder(code: string, config: module): void;
-    /**
-     * @callback parseTextNodesCallback
-     * @param {Error} err
-     * @param {module:js-template~parseTextNodesConfig} config
-     */
-    type parseTextNodesCallback = (err: Error, config: module) => void;
-    /**
-     * @param {HTMLElement|Node|Text} textNode
-     * @param {module:js-template.parseTextNodesCallback} cb
-     * @param {module:js-template~parseTextNodesConfig} config
-     */
-    function parseTextNodes(textNode: HTMLElement | Node | Text, cb: module, config: module): void;
-    /** @type {string}
-     */
-    var text: string;
-    /**
-     * @typedef {Object} jsTemplate_Attribute
-     * @property {String} name
-     * @property {String} value
-     */
-    type jsTemplate_Attribute = {
-        name: string;
-        value: string;
-    };
-    /**
-     * @typedef {Object} jsTemplate_attrResultAttributeData
-     * @property {String} name attribute name
-     * @property {String} code executable code
-     * @property {HTMLElement} node node element
-     * @property {any} [buffer] ( technical property )
-     * @property {Boolean} [inline=false] should be value be parsed
-     * @property {Boolean} [postProcess=false] should be value be parsed
-     */
-    type jsTemplate_attrResultAttributeData = {
-        name: string;
-        code: string;
-        node: HTMLElement;
-        buffer?: any;
-        inline?: boolean;
-        postProcess?: boolean;
-    };
-    /**
-     * @typedef {Object} jsTemplate_attrResult
-     * @property {('event'|'attribute'|'binding'|'macro')} type
-     * @property {module:js-template~jsTemplate_Attribute} attr
-     * @property {module:js-template~jsTemplate_attrResultAttributeData} data
-     */
-    type jsTemplate_attrResult = {
-        type: 'event' | 'attribute' | 'binding' | 'macro';
-        attr: module;
-        data: module;
-    };
-    /**
-     * @typedef {Object} jsTemplateAttrData
-     * @property {Array<module:js-template~jsTemplate_attrResult>} nodes
-     * @property {Array<module:js-template~jsTemplate_textResult>} texts
-     * @property {Array<module:js-template~jsTemplateAttrData>} children
-     * @property {Object<string,module:js-template~jsTemplate_attrResult>} _macro
-     * @property {boolean} [HAS_POST_PROCESS=false]
-     */
-    type jsTemplateAttrData = {
-        nodes: module[];
-        texts: module[];
-        children: module[];
-        _macro: {
-            [key: string]: module;
-        };
-        HAS_POST_PROCESS?: boolean;
-    };
-    /**
-     * Parsing NodeElement Attribute
-     * @param {module:js-template~jsTemplate_Attribute} attr
-     * @returns {module:js-template~jsTemplate_attrResult}
-     */
-    function attrParser(attr: module): module;
-    /** @var {HTMLInputElement} node
-     */
-    var node: HTMLInputElement;
-    /** @var {HTMLInputElement} node
-     */
-    var node: HTMLInputElement;
-    /** @var {HTMLInputElement} node
-     */
-    var node: HTMLInputElement;
-    /**
-     * @protected
-     * @memberof module:js-template
-     * @callback nodeParserCallback
-     * @param {Error} err
-     * @param {module:js-template~parseTextNodesConfig} config
-     * @returns {module:js-template~parseTextNodesConfig}
-     */
-    type nodeParserCallback = (err: Error, config: module) => module;
-    /**
-     * @param {HTMLElement} nodeElement
-     * @param {module:js-template.nodeParserCallback} cb
-     * @param {module:js-template~parseTextNodesConfig} config
-     * @returns {module:js-template~parseTextNodesConfig}
-     */
-    function nodeParser(nodeElement: HTMLElement, cb: module, config: module): module;
+declare interface JSTemplate {
 }
 
 /**
- * @module request/params-parser
+ * @protected
  * @function
- * @param {string} value
- * @param {string} pattern
- * @param {object} [opts]
- * @param {object} [opts.cache] object where reg expressions will be cached
- * @param {function} [opts.mapper] function that will decode value, default is decodeURIComponent
- * @param {string} [opts.boud="\x02\x00\x00\x03"] function that will decode value, default is decodeURIComponent
- * @param {object} [opts.ret] object to be updated with found params
- * @param {string[]} [opts.tableIndex] list of parameters' names ( @experimental )
- * @param {string} [opts.pRegExp="\\:([a-z][a-z0-9]+)"] RegExp params' chars
- * @param {string} [opts.matchGroup="([^\\/]+)"] RegExp value
- * @param {string} [opts.fixedEnd=true] RegExp value
- * @returns {Object<string,string>}
+ * @param {Array<Text>} bf
+ * @param {parseTextNodesConfig} config
+ * @returns {JSTemplate.jsTemplate_textResult}
  */
-declare function request/params-parser(value: string, pattern: string, opts?: {
-    cache?: any;
-    mapper?: (...params: any[]) => any;
-    boud?: string;
-    ret?: any;
-    tableIndex?: string[];
-    pRegExp?: string;
-    matchGroup?: string;
-    fixedEnd?: string;
-}): {
-    [key: string]: string;
-};
+declare function textParser(bf: Text[], config: parseTextNodesConfig): JSTemplate.jsTemplate_textResult;
+
+/**
+ * @protected
+ * @function
+ * @param {HTMLElement|Node|Text} textNode
+ * @param {JSTemplate.parseTextNodesCallback} cb
+ * @param {JSTemplate.parseTextNodesConfig} config
+ */
+declare function parseTextNodes(textNode: HTMLElement | Node | Text, cb: JSTemplate.parseTextNodesCallback, config: JSTemplate.parseTextNodesConfig): void;
 
 /**
  * Module used for retrieving date using XMLHttpRequest
@@ -768,6 +885,34 @@ declare function request/params-parser(value: string, pattern: string, opts?: {
  * @see module:request.RequestModule
  */
 declare module "request" {
+    /**
+     * @method params-parser
+     * @memberof module:request
+     * @param {string} value
+     * @param {string} pattern
+     * @param {object} [opts]
+     * @param {object} [opts.cache] object where reg expressions will be cached
+     * @param {function} [opts.mapper] function that will decode value, default is decodeURIComponent
+     * @param {string} [opts.boud="\x02\x00\x00\x03"] function that will decode value, default is decodeURIComponent
+     * @param {object} [opts.ret] object to be updated with found params
+     * @param {string[]} [opts.tableIndex] list of parameters' names ( @experimental )
+     * @param {string} [opts.pRegExp="\\:([a-z][a-z0-9]+)"] RegExp params' chars
+     * @param {string} [opts.matchGroup="([^\\/]+)"] RegExp value
+     * @param {string} [opts.fixedEnd=true] RegExp value
+     * @returns {Object<string,string>}
+     */
+    function params-parser(value: string, pattern: string, opts?: {
+        cache?: any;
+        mapper?: (...params: any[]) => any;
+        boud?: string;
+        ret?: any;
+        tableIndex?: string[];
+        pRegExp?: string;
+        matchGroup?: string;
+        fixedEnd?: string;
+    }): {
+        [key: string]: string;
+    };
     /**
      * @memberof module:request
      * @class
@@ -1054,20 +1199,17 @@ declare module "uri-load" {
     function link(url: string | string[], callback: (...params: any[]) => any, opts: any): void;
 }
 
-/**
- * @module ApplicationPrototype
- */
-declare module "ApplicationPrototype" {
+declare namespace ApplicationPrototype {
     /**
      * @class
      * @name Instance
-     * @memberof module:ApplicationPrototype
+     * @memberof ApplicationPrototype
      */
     class Instance {
         /**
          * returns listener Id
          * @method on
-         * @memberof module:ApplicationPrototype.Instance
+         * @memberof ApplicationPrototype.Instance
          * @param {string|function} event event name of function with name
          * @param {function} [callback] function that will listen data
          * @param {string} specifiedEventId event name of function with name
@@ -1077,7 +1219,7 @@ declare module "ApplicationPrototype" {
         /**
          * returns listener Id
          * @method once
-         * @memberof module:ApplicationPrototype.Instance
+         * @memberof ApplicationPrototype.Instance
          * @param {string|function} event event name of function with name
          * @param {function} [callback] function that will listen data
          * @param {string} specifiedEventId event name of function with name
@@ -1087,17 +1229,17 @@ declare module "ApplicationPrototype" {
         /**
          * returns listener Id
          * @method bind
-         * @memberof module:ApplicationPrototype.Instance
+         * @memberof ApplicationPrototype.Instance
          * @param {string|function} event event name of function with name
-         * @param {function|module:ApplicationPrototype.Instance.BindListenerConfig} [callback] function that will listen data
-         * @param {module:ApplicationPrototype.Instance.BindListenerConfig|string} [listenersConfig] of lis event name of function with name
+         * @param {function|ApplicationPrototype.Instance.BindListenerConfig} [callback] function that will listen data
+         * @param {ApplicationPrototype.Instance.BindListenerConfig|string} [listenersConfig] of lis event name of function with name
          * @returns {string}
          */
-        static bind(event: string | ((...params: any[]) => any), callback?: ((...params: any[]) => any) | module, listenersConfig?: module | string): string;
+        static bind(event: string | ((...params: any[]) => any), callback?: ((...params: any[]) => any) | ApplicationPrototype.Instance.BindListenerConfig, listenersConfig?: ApplicationPrototype.Instance.BindListenerConfig | string): string;
         /**
          * remove all event listeners
          * @method off
-         * @memberof module:ApplicationPrototype.Instance
+         * @memberof ApplicationPrototype.Instance
          * @param {string} event event or events names separated by comma
          * @param {string} [specifiedEventId] event name of function with name
          * @returns {boolean}
@@ -1106,11 +1248,11 @@ declare module "ApplicationPrototype" {
         /**
          * returns listener Id
          * @method crudEvents
-         * @memberof module:ApplicationPrototype.Instance
+         * @memberof ApplicationPrototype.Instance
          * @param {Object<any>} context will be used as a base for ApplicationPrototype instance that will be returned
          * @param {Object<Function>} publicMethods list of public methods available from returned instance
          * @param {Object<Function>} privateMethods list of private methods available only for instance's methods
-         * @returns {module:ApplicationPrototype.Instance}
+         * @returns {ApplicationPrototype.Instance}
          */
         static crudEvents(context: {
             [key: string]: any;
@@ -1118,182 +1260,56 @@ declare module "ApplicationPrototype" {
             [key: string]: any;
         }, privateMethods: {
             [key: string]: any;
-        }): module;
+        }): ApplicationPrototype.Instance;
         /**
          * @method property
-         * @memberof module:ApplicationPrototype.Instance
+         * @memberof ApplicationPrototype.Instance
          * @param {string} propertyName
-         * @param {module:ApplicationPrototype.Instance.PropertyHandler} getter
-         * @param {module:ApplicationPrototype.Instance.PropertyHandler} [setter]
+         * @param {ApplicationPrototype.Instance.PropertyHandler} getter
+         * @param {ApplicationPrototype.Instance.PropertyHandler} [setter]
          * @param {object} [config]
          * @param {boolean} [config.configurable=true]
          * @param {boolean} [config.enumerable=true]
-         * @fires module:ApplicationPrototype.Instance.__onSet
-         * @fires module:ApplicationPrototype.Instance.__onGet
-         * @fires module:ApplicationPrototype.Instance.__afterGet
-         * @fires module:ApplicationPrototype.Instance.__afterGet
-         * @fires module:ApplicationPrototype.Instance.__onSet::propName
-         * @fires module:ApplicationPrototype.Instance.__onGet::propName
-         * @fires module:ApplicationPrototype.Instance.__afterGet::propName
-         * @fires module:ApplicationPrototype.Instance.__afterGet::propName
+         * @fires ApplicationPrototype.Instance.__onSet
+         * @fires ApplicationPrototype.Instance.__onGet
+         * @fires ApplicationPrototype.Instance.__afterGet
+         * @fires ApplicationPrototype.Instance.__afterGet
+         * @fires ApplicationPrototype.Instance.__onSet::propName
+         * @fires ApplicationPrototype.Instance.__onGet::propName
+         * @fires ApplicationPrototype.Instance.__afterGet::propName
+         * @fires ApplicationPrototype.Instance.__afterGet::propName
          */
-        static property(propertyName: string, getter: module, setter?: module, config?: {
+        static property(propertyName: string, getter: ApplicationPrototype.Instance.PropertyHandler, setter?: ApplicationPrototype.Instance.PropertyHandler, config?: {
             configurable?: boolean;
             enumerable?: boolean;
         }): void;
         /**
          * @method property
-         * @memberof module:ApplicationPrototype.Instance
+         * @memberof ApplicationPrototype.Instance
          * @param {string} propertyName
-         * @param {module:ApplicationPrototype.Instance.PropertyHandler} getter
-         * @param {module:ApplicationPrototype.Instance.PropertyHandler} [setter]
+         * @param {ApplicationPrototype.Instance.PropertyHandler} getter
+         * @param {ApplicationPrototype.Instance.PropertyHandler} [setter]
          * @param {object} [config]
          * @param {boolean} [config.configurable=true]
          * @param {boolean} [config.enumerable=true]
-         * @fires module:ApplicationPrototype.Instance.__onSet
-         * @fires module:ApplicationPrototype.Instance.__onGet
-         * @fires module:ApplicationPrototype.Instance.__afterGet
-         * @fires module:ApplicationPrototype.Instance.__afterGet
-         * @fires module:ApplicationPrototype.Instance.__onSet::propName
-         * @fires module:ApplicationPrototype.Instance.__onGet::propName
-         * @fires module:ApplicationPrototype.Instance.__afterGet::propName
-         * @fires module:ApplicationPrototype.Instance.__afterGet::propName
+         * @fires ApplicationPrototype.Instance.__onSet
+         * @fires ApplicationPrototype.Instance.__onGet
+         * @fires ApplicationPrototype.Instance.__afterGet
+         * @fires ApplicationPrototype.Instance.__afterGet
+         * @fires ApplicationPrototype.Instance.__onSet::propName
+         * @fires ApplicationPrototype.Instance.__onGet::propName
+         * @fires ApplicationPrototype.Instance.__afterGet::propName
+         * @fires ApplicationPrototype.Instance.__afterGet::propName
          */
-        static property(propertyName: string, getter: module, setter?: module, config?: {
+        static property(propertyName: string, getter: ApplicationPrototype.Instance.PropertyHandler, setter?: ApplicationPrototype.Instance.PropertyHandler, config?: {
             configurable?: boolean;
             enumerable?: boolean;
         }): void;
     }
-    /**
-     * @class
-     * @name Builder
-     * @memberof module:ApplicationPrototype
-     * @augments module:ApplicationPrototype.Instance
-     */
-    class Builder extends module:ApplicationPrototype.Instance {
-        /**
-         * @method require
-         * @memberof module:ApplicationPrototype.Builder
-         * @param {string|string[]} events List of Events Names or Array of Events Mapping like [ "uriLoad :: uri-load", "ePrototype :: extensions/prototype" ]
-         * @param {function} [callback] Callback that will receive Module
-         * @returns {PromiseLike<any>}
-         */
-        static require(events: string | string[], callback?: (...params: any[]) => any): PromiseLike<any>;
-        /**
-         * @method isNode
-         * @memberof module:ApplicationPrototype.Builder
-         * @returns {boolean}
-         */
-        static isNode(): boolean;
-        /**
-         * @method isBrowser
-         * @memberof module:ApplicationPrototype.Builder
-         * @returns {boolean}
-         */
-        static isBrowser(): boolean;
-        /**
-         * @method debugEnabled
-         * @memberof module:ApplicationPrototype.Builder
-         * @param {boolean} [status]
-         * @returns {boolean}
-         */
-        static debugEnabled(status?: boolean): boolean;
-        /**
-         * @method runModulesInFiles
-         * @memberof module:ApplicationPrototype.Builder
-         * @param {boolean} [status]
-         * @returns {boolean}
-         */
-        static runModulesInFiles(status?: boolean): boolean;
-        /**
-         * @method consoleOptions
-         * @memberof module:ApplicationPrototype.Builder
-         * @param {module:ApplicationPrototype.Builder.ConsoleOptions} [options]
-         * @returns {module:ApplicationPrototype.Builder.ConsoleOptions}
-         */
-        static consoleOptions(options?: module): module;
-        /**
-         * @method moduleRegister
-         * @memberof module:ApplicationPrototype.Builder
-         * @param {string} path path that will be used as `Application.modulePath()`
-         * @param {string[]} modules list of modules names that should be registered
-         * @returns {module:ApplicationPrototype.Builder.ModuleStore}
-         */
-        static moduleRegister(path: string, modules: string[]): module;
-    }
-    /**
-     * @method modulePath
-     * @param {string} [path]
-     * @returns {string}
-     */
-    function modulePath(path?: string): string;
-    /**
-     * returns interface for accessing Node Env, is defined only in node env
-     * @var NodeInterface
-     * @type {object}
-     * @property {function():NodeJS.Process} process
-     * @property {function():NodeJS.Global} global
-     * @property {function():NodeRequire} require
-     * @property {function(string):any} globalReference returns NodeJS require reference by it's name
-     */
-    var NodeInterface: {
-        process: (...params: any[]) => any;
-        global: (...params: any[]) => any;
-        require: (...params: any[]) => any;
-        globalReference: (...params: any[]) => any;
-    };
-    /**
-     * @callback ApplicationPrototypeConstructor
-     * @returns {module:ApplicationPrototype.Instance}
-     */
-    type ApplicationPrototypeConstructor = () => module;
-    /**
-     * @callback ApplicationBuilderConstructor
-     * @returns {module:ApplicationPrototype.Builder}
-     */
-    type ApplicationBuilderConstructor = () => module;
-    /**
-     * @typedef {String} ModuleResourceUrl
-     * @description resources url is composed from `module's plath` + `resource path`
-     */
-    type ModuleResourceUrl = string;
-    /**
-     * @typedef {Object} ApplicationModule
-     * @property {PromiseLike} $request resolves module exports
-     * @property {function():any} exports module exports handler
-     * @property {Number} atime unix time in milliseconds
-     * @property {function():ApplicationBuilderInstance} Application returns current application
-     * @property {function():ApplicationModuleStore} cache returns module's reserved cache object
-     * @property {function(any):Promise} require require modules from module's folder
-     * @property {function(ModuleResourceUrl):String} resourceUrl returns module's resource URL
-     * @property {ApplicationModuleMeta} meta module's meta information
-     */
-    type ApplicationModule = {
-        $request: PromiseLike;
-        exports: (...params: any[]) => any;
-        atime: number;
-        Application: (...params: any[]) => any;
-        cache: (...params: any[]) => any;
-        require: (...params: any[]) => any;
-        resourceUrl: (...params: any[]) => any;
-        meta: ApplicationModuleMeta;
-    };
-    /**
-     * @typedef ApplicationBuilderExports
-     * @property {ApplicationPrototypeConstructor} application
-     * @property {ApplicationBuilderConstructor} builder
-     */
-    type ApplicationBuilderExports = {
-        application: ApplicationPrototypeConstructor;
-        builder: ApplicationBuilderConstructor;
-    };
-}
-
-declare namespace ApplicationPrototype {
     namespace Instance {
         /**
          * @typedef {object} BindListenerConfig - configuration for bind listeners
-         * @memberof module:ApplicationPrototype.Instance
+         * @memberof ApplicationPrototype.Instance
          * @property {boolean} [listenedBefore=true] allow listeners before method call
          * @property {boolean} [listenedOn=true] allow listeners on method call ( is after )
          * @property {boolean} [listenedAfter=true] allow listeners after method call ( is after small delay )
@@ -1308,18 +1324,82 @@ declare namespace ApplicationPrototype {
         /**
          * returns listener Id
          * @callback PropertyHandler
-         * @memberof module:ApplicationPrototype.Instance
+         * @memberof ApplicationPrototype.Instance
          * @param {any} value is undefined when `isSetter = true`
          * @param {any} lastValue
          * @param {boolean} isSetter
          */
         type PropertyHandler = (value: any, lastValue: any, isSetter: boolean) => void;
     }
+    /**
+     * @class
+     * @name Builder
+     * @memberof ApplicationPrototype
+     * @augments ApplicationPrototype.Instance
+     */
+    class Builder extends ApplicationPrototype.Instance {
+        /**
+         * @method require
+         * @memberof ApplicationPrototype.Builder
+         * @param {string|string[]} events List of Events Names or Array of Events Mapping like [ "uriLoad :: uri-load", "ePrototype :: ExtensionsPrototype" ]
+         * @param {function} [callback] Callback that will receive Module
+         * @returns {PromiseLike<any>}
+         */
+        static require(events: string | string[], callback?: (...params: any[]) => any): PromiseLike<any>;
+        /**
+         * @method isNode
+         * @memberof ApplicationPrototype.Builder
+         * @returns {boolean}
+         */
+        static isNode(): boolean;
+        /**
+         * @method isBrowser
+         * @memberof ApplicationPrototype.Builder
+         * @returns {boolean}
+         */
+        static isBrowser(): boolean;
+        /**
+         * @method debugEnabled
+         * @memberof ApplicationPrototype.Builder
+         * @param {boolean} [status]
+         * @returns {boolean}
+         */
+        static debugEnabled(status?: boolean): boolean;
+        /**
+         * @method runModulesInFiles
+         * @memberof ApplicationPrototype.Builder
+         * @param {boolean} [status]
+         * @returns {boolean}
+         */
+        static runModulesInFiles(status?: boolean): boolean;
+        /**
+         * @method consoleOptions
+         * @memberof ApplicationPrototype.Builder
+         * @param {ApplicationPrototype.Builder.ConsoleOptions} [options]
+         * @returns {ApplicationPrototype.Builder.ConsoleOptions}
+         */
+        static consoleOptions(options?: ApplicationPrototype.Builder.ConsoleOptions): ApplicationPrototype.Builder.ConsoleOptions;
+        /**
+         * @method modulePath
+         * @memberof ApplicationPrototype.Builder
+         * @param {string} [path]
+         * @returns {string}
+         */
+        static modulePath(path?: string): string;
+        /**
+         * @method moduleRegister
+         * @memberof ApplicationPrototype.Builder
+         * @param {string} path path that will be used as `Application.modulePath()`
+         * @param {string[]} modules list of modules names that should be registered
+         * @returns {ApplicationPrototype.Builder.ModuleStore}
+         */
+        static moduleRegister(path: string, modules: string[]): ApplicationPrototype.Builder.ModuleStore;
+    }
     namespace Builder {
         /**
          * @class
          * @name Promise
-         * @memberof module:ApplicationPrototype.Builder
+         * @memberof ApplicationPrototype.Builder
          * @param {function} handler
          * @returns {PromiseLike}
          */
@@ -1327,28 +1407,28 @@ declare namespace ApplicationPrototype {
             constructor(handler: (...params: any[]) => any);
             /**
              * @method all
-             * @memberof module:ApplicationPrototype.Builder.Promise
+             * @memberof ApplicationPrototype.Builder.Promise
              * @param {Promise[]} items
              * @returns {PromiseLike}
              */
             static all(items: Promise[]): PromiseLike;
             /**
              * @method race
-             * @memberof module:ApplicationPrototype.Builder.Promise
+             * @memberof ApplicationPrototype.Builder.Promise
              * @param {Promise[]} items
              * @returns {PromiseLike}
              */
             static race(items: Promise[]): PromiseLike;
             /**
              * @method resolve
-             * @memberof module:ApplicationPrototype.Builder.Promise
+             * @memberof ApplicationPrototype.Builder.Promise
              * @param {any} value
              * @returns {PromiseLike}
              */
             static resolve(value: any): PromiseLike;
             /**
              * @method reject
-             * @memberof module:ApplicationPrototype.Builder.Promise
+             * @memberof ApplicationPrototype.Builder.Promise
              * @param {any} value
              * @returns {PromiseLike}
              */
@@ -1356,7 +1436,7 @@ declare namespace ApplicationPrototype {
         }
         /**
          * @typedef {object} ConsoleOptions
-         * @memberof module:ApplicationPrototype.Builder
+         * @memberof ApplicationPrototype.Builder
          * @property {boolean} [file] enable/disable showing filename in console log. default value is `true`
          * @property {boolean} [contextName] enable/disable showing context Execution info in console log. default value is `true`
          * @property {boolean} [timestamp] enable/disable showing current timestamp in console log. default value is `true`
@@ -1370,14 +1450,14 @@ declare namespace ApplicationPrototype {
         };
         /**
          * @typedef {object} ModuleStore
-         * @memberof module:ApplicationPrototype.Builder
+         * @memberof ApplicationPrototype.Builder
          * @description modules store where are indexed modules
          */
         type ModuleStore = any;
         /**
          * @typedef {object} ModuleMeta
-         * @memberof module:ApplicationPrototype.Builder
-         * @property {module:ApplicationPrototype.Builder.ModuleStore} store same as `module.cache()`
+         * @memberof ApplicationPrototype.Builder
+         * @property {ApplicationPrototype.Builder.ModuleStore} store same as `module.cache()`
          * @property {PromiseLike<string>} $requestQuery XMLHttpRequest used for obtaining Module's Content
          * @property {string} module_path module's path
          * @property {string} path module's internal path used as identifier of module
@@ -1385,7 +1465,7 @@ declare namespace ApplicationPrototype {
          * @property {string} __dirname module's dirname
          */
         type ModuleMeta = {
-            store: module;
+            store: ApplicationPrototype.Builder.ModuleStore;
             $requestQuery: PromiseLike<string>;
             module_path: string;
             path: string;
@@ -1394,46 +1474,84 @@ declare namespace ApplicationPrototype {
         };
         /**
          * @callback moduleResolve
-         * @memberof module:ApplicationPrototype.Builder
+         * @memberof ApplicationPrototype.Builder
          * @param {string} module module name
          * @param {string} [path] module path
-         * @returns {module:ApplicationPrototype.Builder.ModuleMeta}
+         * @returns {ApplicationPrototype.Builder.ModuleMeta}
          */
-        type moduleResolve = (module: string, path?: string) => module;
+        type moduleResolve = (module: string, path?: string) => ApplicationPrototype.Builder.ModuleMeta;
+        /**
+         * @typedef {string} ModuleResourceUrl
+         * @memberof ApplicationPrototype.Builder
+         * @description resources url is composed from `module's plath` + `resource path`
+         */
+        type ModuleResourceUrl = string;
+        /**
+         * @typedef {Object} ApplicationModule
+         * @memberof ApplicationPrototype.Builder
+         * @property {PromiseLike} $request resolves module exports
+         * @property {function():any} exports module exports handler
+         * @property {number} atime unix time in milliseconds
+         * @property {function():ApplicationPrototype.Builder} Application returns current application
+         * @property {function():ApplicationPrototype.Builder.ModuleStore} cache returns module's reserved cache object
+         * @property {function(any):Promise} require require modules from module's folder
+         * @property {function(ModuleResourceUrl):string} resourceUrl returns module's resource URL
+         * @property {ApplicationPrototype.Builder.ModuleMeta} meta module's meta information
+         */
+        type ApplicationModule = {
+            $request: PromiseLike;
+            exports: (...params: any[]) => any;
+            atime: number;
+            Application: (...params: any[]) => any;
+            cache: (...params: any[]) => any;
+            require: (...params: any[]) => any;
+            resourceUrl: (...params: any[]) => any;
+            meta: ApplicationPrototype.Builder.ModuleMeta;
+        };
     }
 }
 
-declare namespace extensions/prototype {
-    namespace slDOMSet {
-        /**
-         * @callback itemHandler
-         * @memberof module:extensions/prototype.slDOMSet
-         * @param {Node} node
-         * @param {number} index
-         * @param {module:extensions/prototype.slDOMSet} context
-         * @param {module:extensions/prototype.slDOM} p
-         */
-        type itemHandler = (node: Node, index: number, context: module, p: module) => void;
-        /**
-         * @callback itemHandlerFilter
-         * @memberof module:extensions/prototype.slDOMSet
-         * @param {Node} node
-         * @param {number} index
-         * @param {module:extensions/prototype.slDOMSet} context
-         * @param {module:extensions/prototype.slDOM} p
-         * @returns {boolean}
-         */
-        type itemHandlerFilter = (node: Node, index: number, context: module, p: module) => boolean;
-        /**
-         * @callback itemHandlerMap
-         * @memberof module:extensions/prototype.slDOMSet
-         * @param {Node} node
-         * @param {number} index
-         * @param {module:extensions/prototype.slDOMSet} context
-         * @param {module:extensions/prototype.slDOM} p
-         * @returns {Node}
-         */
-        type itemHandlerMap = (node: Node, index: number, context: module, p: module) => Node;
-    }
+/**
+ * @interface ApplicationPrototype
+ */
+declare interface ApplicationPrototype {
 }
+
+/**
+ * returns interface for accessing Node Env, is defined only in node env
+ * @var NodeInterface
+ * @type {object}
+ * @property {function():NodeJS.Process} process
+ * @property {function():NodeJS.Global} global
+ * @property {function():NodeRequire} require
+ * @property {function(string):any} globalReference returns NodeJS require reference by it's name
+ */
+declare var NodeInterface: {
+    process: (...params: any[]) => any;
+    global: (...params: any[]) => any;
+    require: (...params: any[]) => any;
+    globalReference: (...params: any[]) => any;
+};
+
+/**
+ * @callback ApplicationPrototypeConstructor
+ * @returns {ApplicationPrototype.Instance}
+ */
+declare type ApplicationPrototypeConstructor = () => ApplicationPrototype.Instance;
+
+/**
+ * @callback ApplicationBuilderConstructor
+ * @returns {ApplicationPrototype.Builder}
+ */
+declare type ApplicationBuilderConstructor = () => ApplicationPrototype.Builder;
+
+/**
+ * @typedef ApplicationBuilderExports
+ * @property {ApplicationPrototypeConstructor} application
+ * @property {ApplicationBuilderConstructor} builder
+ */
+declare type ApplicationBuilderExports = {
+    application: ApplicationPrototypeConstructor;
+    builder: ApplicationBuilderConstructor;
+};
 

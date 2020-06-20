@@ -1,9 +1,11 @@
+module.exports =
 /**
  * parse array from csv string
- * @param  {String} data CSV Content
- * @return {Array}       matrix of csv cells
+ * @function
+ * @param  {string} data CSV Content
+ * @return {Array<Array<string>>}       matrix of csv cells
  */
-module.exports = function (data) {
+function (data) {
 	var i;
 	var cell  = [0, 0];
 	var cells = [[]];

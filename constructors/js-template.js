@@ -1,9 +1,7 @@
-//@ts-check
-
 /**
- * @memberof module:js-template
+ * @memberof JSTemplate
  * @typedef {Object} JSTemplateModule
- * @property {module:js-template~nodeParser} parseContent
+ * @property {JSTemplate.nodeParser} parseContent
  * @property {object} config
  * @property {number} [config.RENDER_FPS=15]
  * @property {number} [config.REMOVE_EMPTY_NODES=true]
@@ -19,32 +17,35 @@
  * 		{ context: {}, args: { item: 'sample reference' }}
  * 	);
  * }, console.error);
- * @module js-template
- * @returns {module:js-template.JSTemplateModule}
+ * @interface JSTemplate
+ * @returns {JSTemplate.JSTemplateModule}
  */
 
 var libs;
 
 /**
  * @typedef {Object} jsTemplate_textResult
+ * @memberof JSTemplate
  * @property {string} [type='text']
- * @property {module:js-template~jsTemplate_textResultData} data
+ * @property {JSTemplate.jsTemplate_textResultData} data
  */
 
 /**
  * @typedef {Object} jsTemplate_textResultData
+ * @memberof JSTemplate
  * @property {Array<Text>} nodes
  * @property {Array<Text>} initialNodes
- * @property {String} code
+ * @property {string} code
  */
 
 /**
  * @typedef {Object} parseTextNodesConfig
+ * @memberof JSTemplate
  * @property {object} [args={}] arguments
  * @property {object} [context={}] execution context
- * @property {String} [start='{{'] start token
- * @property {String} [end='}}'] end token
- * @property {Array<module:js-template~jsTemplate_textResult>} [textNodes] array of TextNodes
+ * @property {string} [start='{{'] start token
+ * @property {string} [end='}}'] end token
+ * @property {Array<JSTemplate.jsTemplate_textResult>} [textNodes] array of TextNodes
  * @property {Array<Text>} [buffer] (technical property) buffer
  * @property {boolean} [opened=false] (technical property)
  * @property {Array<string>} [__argsNames] (technical property)
@@ -54,8 +55,11 @@ var libs;
 
 /**
  * Expression Builder
+ * @protected
+ * @function
+ * @memberof JSTemplate
  * @param {string} code 
- * @param {module:js-template~parseTextNodesConfig} config 
+ * @param {JSTemplate.parseTextNodesConfig} config 
  */
 var expressionBuilder = function (code, config) {
 	var expressionCall;
@@ -87,10 +91,11 @@ var expressionBuilder = function (code, config) {
 
 
 /**
- * @callback module:js-template#
+ * @protected
+ * @function
  * @param {Array<Text>} bf 
  * @param {parseTextNodesConfig} config 
- * @returns {module:js-template~jsTemplate_textResult}
+ * @returns {JSTemplate.jsTemplate_textResult}
  */
 
 var textParser = function (bf, config) {
@@ -115,8 +120,10 @@ var textParser = function (bf, config) {
 };
 
 /**
- * @param {module:js-template~jsTemplate_textResult} item
- * @param {module:js-template~parseTextNodesConfig} config
+ * @protected
+ * @function
+ * @param {JSTemplate.jsTemplate_textResult} item
+ * @param {JSTemplate.parseTextNodesConfig} config
  * @param {function(Error, any): void} cb
  */
 textParser.value  = function (item, config, cb) {
@@ -141,7 +148,9 @@ textParser.value  = function (item, config, cb) {
 };
 
 /**
- * @param {module:js-template~jsTemplate_textResult} item
+ * @protected
+ * @function
+ * @param {JSTemplate.jsTemplate_textResult} item
  * @param {Array<Node|Text>|Text|Node} val
  * @param {function(Error): void} cb
  */
@@ -224,14 +233,17 @@ textParser.update = function (item, val, cb) {
 
 /**
  * @callback parseTextNodesCallback
+ * @memberof JSTemplate
  * @param {Error} err
- * @param {module:js-template~parseTextNodesConfig} config 
+ * @param {JSTemplate.parseTextNodesConfig} config 
  */
 
 /**
+ * @protected
+ * @function
  * @param {HTMLElement|Node|Text} textNode 
- * @param {module:js-template.parseTextNodesCallback} cb
- * @param {module:js-template~parseTextNodesConfig} config 
+ * @param {JSTemplate.parseTextNodesCallback} cb
+ * @param {JSTemplate.parseTextNodesConfig} config 
  */
 var parseTextNodes = function (textNode, cb, config) {
 	if (!config && typeof(cb) !== "function") {
@@ -261,6 +273,8 @@ var parseTextNodes = function (textNode, cb, config) {
 
 	/**
 	 * nodes parser
+	 * @private
+	 * @function
 	 * @param {(ChildNode|Node|Text)} textNode 
 	 */
 	var ate = function (textNode) {
@@ -269,7 +283,10 @@ var parseTextNodes = function (textNode, cb, config) {
 		var firstNode, nextNode, index, cNode;
 
 		if (textNode && textNode.nodeType === Node.TEXT_NODE) {
-			/** @type {string} */
+			/**
+			 * @private
+			 * @type {string}
+			 */
 			//@ts-ignore
 			text = textNode.data;
 		}
@@ -380,33 +397,37 @@ var parseTextNodes = function (textNode, cb, config) {
 
 /**
  * @typedef {Object} jsTemplate_Attribute
- * @property {String} name
- * @property {String} value
+ * @memberof JSTemplate
+ * @property {string} name
+ * @property {string} value
  */
 
 /**
  * @typedef {Object} jsTemplate_attrResultAttributeData
- * @property {String} name attribute name
- * @property {String} code executable code
+ * @memberof JSTemplate
+ * @property {string} name attribute name
+ * @property {string} code executable code
  * @property {HTMLElement} node node element
  * @property {any} [buffer] ( technical property )
- * @property {Boolean} [inline=false] should be value be parsed
- * @property {Boolean} [postProcess=false] should be value be parsed
+ * @property {boolean} [inline=false] should be value be parsed
+ * @property {boolean} [postProcess=false] should be value be parsed
  */
 
 /**
  * @typedef {Object} jsTemplate_attrResult
+ * @memberof JSTemplate
  * @property {('event'|'attribute'|'binding'|'macro')} type
- * @property {module:js-template~jsTemplate_Attribute} attr
- * @property {module:js-template~jsTemplate_attrResultAttributeData} data
+ * @property {JSTemplate.jsTemplate_Attribute} attr
+ * @property {JSTemplate.jsTemplate_attrResultAttributeData} data
  */
 
 /**
  * @typedef {Object} jsTemplateAttrData
- * @property {Array<module:js-template~jsTemplate_attrResult>} nodes
- * @property {Array<module:js-template~jsTemplate_textResult>} texts
- * @property {Array<module:js-template~jsTemplateAttrData>} children
- * @property {Object<string,module:js-template~jsTemplate_attrResult>} _macro
+ * @memberof JSTemplate
+ * @property {Array<JSTemplate.jsTemplate_attrResult>} nodes
+ * @property {Array<JSTemplate.jsTemplate_textResult>} texts
+ * @property {Array<JSTemplate.jsTemplateAttrData>} children
+ * @property {Object<string,JSTemplate.jsTemplate_attrResult>} _macro
  * @property {boolean} [HAS_POST_PROCESS=false]
  */
 
@@ -415,11 +436,16 @@ var parseTextNodes = function (textNode, cb, config) {
 
 /**
  * Parsing NodeElement Attribute
- * @param {module:js-template~jsTemplate_Attribute} attr
- * @returns {module:js-template~jsTemplate_attrResult}
+ * @protected
+ * @memberof JSTemplate
+ * @param {JSTemplate.jsTemplate_Attribute} attr
+ * @returns {JSTemplate.jsTemplate_attrResult}
  */
 var attrParser = function (attr, node) {
-	/** @type {module:js-template~jsTemplate_attrResult} */
+	/**
+	 * @private
+	 * @type {JSTemplate.jsTemplate_attrResult}
+	 */
 	var attrResult = {
 		type: null,
 		attr: attr,
@@ -491,10 +517,12 @@ var attrParser = function (attr, node) {
 };
 
 /**
- * @param {module:js-template~jsTemplate_attrResult} item
+ * @protected
+ * @function
+ * @param {JSTemplate.jsTemplate_attrResult} item
  * @param {(Node|Text|Array<Node|Text>|function)} value
  * @param {function (Error, boolean): void} cb
- * @param {module:js-template~parseTextNodesConfig} config
+ * @param {JSTemplate.parseTextNodesConfig} config
  */
 attrParser.update = function (item, value, config, cb) {
 	var status = true;
@@ -753,11 +781,17 @@ attrParser.update = function (item, value, config, cb) {
 					if (!item.data.buffer) {
 						item.data.buffer = value;
 						if (typeof (value) === "function") {
-							/** @type {HTMLTextAreaElement} */
+							/**
+							 * @private
+							 * @type {HTMLTextAreaElement}
+							 */
 							var node = item.data.node;
 							switch (node.tagName.toLowerCase()) {
 								case "input":
-									/** @var {HTMLInputElement} node */
+									/**
+									 * @private
+									 * @var {HTMLInputElement} node
+									 */
 									var inputType = node.getAttribute('type').toLowerCase();
 
 									if (inputType === "radio") {
@@ -792,7 +826,10 @@ attrParser.update = function (item, value, config, cb) {
 										break;
 									};
 								case "textarea":
-									/** @var {HTMLTextAreaElement} node */
+									/**
+									 * @private
+									 * @var {HTMLTextAreaElement} node
+									 */
 									node.value = value({});
 									node.addEventListener('keyup', function (event) {
 										//@ts-ignore
@@ -805,7 +842,10 @@ attrParser.update = function (item, value, config, cb) {
 									});
 								break;
 								case "select":
-									/** @var {HTMLSelectElement} node */
+									/**
+									 * @private
+									 * @var {HTMLSelectElement} node
+									 */
 									node.value = value({});
 									node.addEventListener('change', function (event) {
 										//@ts-ignore
@@ -856,12 +896,17 @@ attrParser.update = function (item, value, config, cb) {
 
 
 /**
- * @param {module:js-template~jsTemplate_attrResult} item
- * @param {module:js-template~parseTextNodesConfig} config
+ * @protected
+ * @function
+ * @param {JSTemplate.jsTemplate_attrResult} item
+ * @param {JSTemplate.parseTextNodesConfig} config
  * @param {function (Error, any): void} cb
  */
 attrParser.value = function (item, config, cb) {
-	/** @type {jsTemplate_attrResultAttributeData} */
+	/**
+	 * @private
+	 * @type {jsTemplate_attrResultAttributeData}
+	 */
 	//@ts-ignore
 	var data = item.data;
 	var value;
@@ -932,17 +977,20 @@ attrParser.value = function (item, config, cb) {
 
 /**
  * @protected
- * @memberof module:js-template
  * @callback nodeParserCallback
+ * @memberof JSTemplate
  * @param {Error} err
- * @param {module:js-template~parseTextNodesConfig} config 
- * @returns {module:js-template~parseTextNodesConfig}
+ * @param {JSTemplate.parseTextNodesConfig} config 
+ * @returns {JSTemplate.parseTextNodesConfig}
  */
 /**
+ * @protected
+ * @function
+ * @memberof JSTemplate
  * @param {HTMLElement} nodeElement 
- * @param {module:js-template.nodeParserCallback} cb 
- * @param {module:js-template~parseTextNodesConfig} config 
- * @returns {module:js-template~parseTextNodesConfig}
+ * @param {JSTemplate.nodeParserCallback} cb 
+ * @param {JSTemplate.parseTextNodesConfig} config 
+ * @returns {JSTemplate.parseTextNodesConfig}
  */
 var nodeParser = function (nodeElement, cb, config) {
 	if (typeof (cb) !== "function") cb = function () {};
@@ -976,8 +1024,10 @@ var nodeParser = function (nodeElement, cb, config) {
 	})(config.args));
 
 	/**
+	 * @private
+	 * @function
 	 * @param {(HTMLElement)} nodeElement 
-	 * @returns {module:js-template~jsTemplateAttrData}
+	 * @returns {JSTemplate.jsTemplateAttrData}
 	 */
 	var ate = function (nodeElement) {
 		//@ts-ignore
@@ -994,12 +1044,18 @@ var nodeParser = function (nodeElement, cb, config) {
 		//@ts-ignore
 		nodeElement.attrdata.__JS_TEMPLATE.texts = nodeElement.attrdata.__JS_TEMPLATE.texts || [];
 
-		/** @type {module:js-template~jsTemplateAttrData} */
+		/**
+		 * @private
+		 * @type {JSTemplate.jsTemplateAttrData}
+		 */
 		//@ts-ignore
 		var __JS_TEMPLATE = nodeElement.attrdata.__JS_TEMPLATE;
 
 		var i;
-		/** @type {module:js-template~jsTemplate_attrResult} */
+		/**
+		 * @private
+		 * @type {JSTemplate.jsTemplate_attrResult}
+		 */
 		var attrResult;
 		//@ts-ignore
 		for (i = 0; i < nodeElement.attributes.length; i++) {
@@ -1040,7 +1096,10 @@ var nodeParser = function (nodeElement, cb, config) {
 		 *    // Node.DOCUMENT_TYPE_NODE,
 		 *    // Node.DOCUMENT_FRAGMENT_NODE
 		 */
-		/** @type {NodeList} */
+		/**
+		 * @private
+		 * @type {NodeList}
+		 */
 		var children = Array.prototype.slice.call(nodeElement.childNodes)
 			.filter(function ( /** @type {Node} */ node) {
 				if (
@@ -1149,8 +1208,9 @@ var nodeParser = function (nodeElement, cb, config) {
 				})(config.args));
 
 				/**
-				 * 
-				 * @param {module:js-template~jsTemplateAttrData} item 
+				 * @function
+				 * @private
+				 * @param {JSTemplate.jsTemplateAttrData} item 
 				 * @param {function():void} cb 
 				 */
 				var renderItem = function (item, cb) {

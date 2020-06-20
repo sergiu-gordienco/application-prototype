@@ -1,7 +1,7 @@
 /**
  * @callback AsyncConstructor
- * @memberof module:async
- * @returns {module:async.Async}
+ * @memberof async
+ * @returns {async.Async}
  */
 
 /**
@@ -10,15 +10,15 @@
  * Application.require('async').then(function (asyncOperations) {
  *	// @TODO
  * }, console.error);
- * @module async
- * @returns {module:async.AsyncConstructor}
- * @see module:async~async
+ * @interface async
+ * @returns {async.AsyncConstructor}
+ * @see async.Async
  */
 
 /**
- * @memberof module:async
  * @class
  * @name Async
+ * @memberof async
  */
 var async	= function () {
 	var life = 0;
@@ -33,7 +33,7 @@ var async	= function () {
 	/**
 	 * return unique index identifier for an operation
 	 * @method index
-	 * @memberof module:async.Async#
+	 * @memberof async.Async#
 	 * @returns {string}
 	 */
 	app.bind("index", ((function () {
@@ -50,8 +50,8 @@ var async	= function () {
 	 * if operation already obtained a value
 	 * then value is not accepted and it returns `false`
 	 * @method receive
-	 * @memberof module:async.Async#
-	 * @param {string} id obtained from {@link module:async.Async#index}
+	 * @memberof async.Async#
+	 * @param {string} id obtained from {@link async.Async#index}
 	 * @param {any} args
 	 * @returns {boolean}
 	 */
@@ -72,16 +72,16 @@ var async	= function () {
 	/**
 	 * require to wait an additional operation
 	 * @method wait
-	 * @memberof module:async.Async#
+	 * @memberof async.Async#
 	 */
 	app.bind("wait", function () {
 		waited += 1;
 	}, 'on af st');
 
 	/**
-	 * require to reserve index {@link module:async.Async#index} for an additional operation
+	 * require to reserve index {@link async.Async#index} for an additional operation
 	 * @method reserve
-	 * @memberof module:async.Async#
+	 * @memberof async.Async#
 	 * @returns {string}
 	 */
 	app.bind("reserve", function () {
@@ -92,7 +92,7 @@ var async	= function () {
 	/**
 	 * require to run an operation
 	 * @method run
-	 * @memberof module:async.Async#
+	 * @memberof async.Async#
 	 * @param {function():void} func function that should be executed
 	 * @param {any[]} args 
 	 * @param {object} context
@@ -109,7 +109,7 @@ var async	= function () {
 	/**
 	 * reset operation processing
 	 * @method flush
-	 * @memberof module:async.Async#
+	 * @memberof async.Async#
 	 */
 	app.bind("flush", function () {
 		life		+= 1;
@@ -122,7 +122,7 @@ var async	= function () {
 	/**
 	 * return how many operations are processing right now
 	 * @method processing
-	 * @memberof module:async.Async#
+	 * @memberof async.Async#
 	 * @returns {number}
 	 */
 	app.bind('processing', function () {
@@ -132,7 +132,7 @@ var async	= function () {
 	/**
 	 * return operations' responses
 	 * @method responses
-	 * @memberof module:async.Async#
+	 * @memberof async.Async#
 	 * @param {boolean} [returnUnknownResponses=false]
 	 * @returns {any[][]}
 	 */
@@ -148,7 +148,7 @@ var async	= function () {
 	/**
 	 * return all errors found in responses
 	 * @method errors
-	 * @memberof module:async.Async#
+	 * @memberof async.Async#
 	 * @returns {Error[]}
 	 */
 	app.bind('errors', function () {
@@ -172,7 +172,7 @@ var async	= function () {
 	/**
 	 * register a callback to be called when processing is done 
 	 * @method done
-	 * @memberof module:async.Async#
+	 * @memberof async.Async#
 	 * @param {function():void} cb
 	 */
 	app.bind('done', function (cb) {
@@ -188,43 +188,43 @@ var async	= function () {
 };
 
 /**
- * @typedef {Array} module:async.Async~Operation
- * @property {module:async.Async~OperationCallback} 0
- * @property {module:async.Async~OperationArgs} 1
- * @property {module:async.Async~OperationContext} 2
- * @property {module:async.Async~OperationCallbackIndex} 3 
+ * @typedef {Array} async.Async~Operation
+ * @property {async.Async~OperationCallback} 0
+ * @property {async.Async~OperationArgs} 1
+ * @property {async.Async~OperationContext} 2
+ * @property {async.Async~OperationCallbackIndex} 3 
  */
 
 /**
- * @typedef {Array<Array<Function, any[], object, number>>} module:async.Async~Operation
+ * @typedef {Array<Array<Function, any[], object, number>>} async.Async~Operation
  */
 
 /**
  * a function that represents the operation itself, it have as argument `next` callback, by default it is first.
- * @typedef {Function} module:async.Async~OperationCallback
+ * @typedef {Function} async.Async~OperationCallback
  */
 
 /**
  * list if arguments passed to `OperationCallback`.
- * @typedef {any[]} module:async.Async~OperationArgs
+ * @typedef {any[]} async.Async~OperationArgs
  */
 
 /**
  * context that should be used in `OperationCallback`. Default value is `{}`.
- * @typedef {object} module:async.Async~OperationContext
+ * @typedef {object} async.Async~OperationContext
  */
 
 /**
  * index of `next()` callback in list of `OperationCallback`'s arguments. Default value is `0`.
- * @typedef {number} module:async.Async~OperationCallbackIndex
+ * @typedef {number} async.Async~OperationCallbackIndex
  */
 
 /**
- * @typedef {module:async.Async~Operation[]} module:async.Async~Operations
+ * @typedef {async.Async~Operation[]} async.Async~Operations
  */
 
 /**
- * @callback module:async.processCallback
+ * @callback async.processCallback
  * @param {function(Error?): void} next
  * @param {any} item
  * @param {number} index
@@ -232,17 +232,17 @@ var async	= function () {
  */
 
 /**
- * @callback module:async.doneCallback
- * @this module:async.Async
+ * @callback async.doneCallback
+ * @this async.Async
  */
 
 /**
  * @method flow
- * @memberof module:async.
- * @param {module:async.Async~Operations} operations
- * @param {module:async.doneCallback} cb
+ * @memberof async.
+ * @param {async.Async~Operations} operations
+ * @param {async.doneCallback} cb
  * @param {number} [timeout=0] timeout between operations
- * @returns {module:async.Async}
+ * @returns {async.Async}
  */
 async.flow	= function (operations, cb, timeout) {
 	if (typeof(operations) !== "undefined" && Array.isArray(operations)) {
@@ -289,12 +289,12 @@ async.flow	= function (operations, cb, timeout) {
 
 /**
  * @method waterfall
- * @memberof module:async.
- * @param {module:async.Async~Operations} operations
- * @param {module:async.doneCallback} cb
+ * @memberof async.
+ * @param {async.Async~Operations} operations
+ * @param {async.doneCallback} cb
  * @param {number} [parallel=27] number of operations that can be done in parallel
  * @param {number} [timeout=0] timeout between operations
- * @returns {module:async.Async}
+ * @returns {async.Async}
  */
 async.waterfall	= function (ops, cb, parallel, timeout) {
 	if (typeof(ops) !== "undefined" && Array.isArray(ops)) {
@@ -350,21 +350,21 @@ async.waterfall	= function (ops, cb, parallel, timeout) {
 
 /**
  * @method map
- * @memberof module:async.
+ * @memberof async.
  * @param {any[]} operations
- * @param {module:async.processCallback}
- * @param {module:async.doneCallback} cb
+ * @param {async.processCallback}
+ * @param {async.doneCallback} cb
  * @param {number} [timeout=0] timeout between operations
- * @returns {module:async.Async}
+ * @returns {async.Async}
  */
 /**
  * @method flow·map
- * @memberof module:async.
+ * @memberof async.
  * @param {any[]} operations
- * @param {module:async.processCallback}
- * @param {module:async.doneCallback} cb
+ * @param {async.processCallback}
+ * @param {async.doneCallback} cb
  * @param {number} [timeout=0] timeout between operations
- * @returns {module:async.Async}
+ * @returns {async.Async}
  */
 
 async.map = async.flow.map	= function (ops, ev, cb, timeout) {
@@ -419,13 +419,13 @@ async.map = async.flow.map	= function (ops, ev, cb, timeout) {
 
 /**
  * @method waterfall·map
- * @memberof module:async.
+ * @memberof async.
  * @param {any[]} operations
- * @param {module:async.processCallback}
- * @param {module:async.doneCallback} cb
+ * @param {async.processCallback}
+ * @param {async.doneCallback} cb
  * @param {number} [parallel=27] number of operations that can be done in parallel
  * @param {number} [timeout=0] timeout between operations
- * @returns {module:async.Async}
+ * @returns {async.Async}
  */
 
 async.waterfall.map	= function (ops, ev, cb, parallel, timeout) {

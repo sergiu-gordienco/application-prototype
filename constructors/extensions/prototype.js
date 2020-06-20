@@ -3,8 +3,10 @@
 /* jshint -W027 */
 /* jshint -W086 */
 
+
+
 /**
- * @module extensions/prototype
+ * @interface ExtensionsPrototype
  */
 
 module.exports =
@@ -14,28 +16,30 @@ module.exports =
 
 	/**
 	 * @var {object} fn
-	 * @memberof module:extensions/prototype
-	 * @property {module:extensions/prototype~WindowFunctions} window
-	 * @property {module:extensions/prototype~MouseFunctions} mouse
-	 * @property {(module:extensions/prototype~getRandId_1|module:extensions/prototype~getRandId_2)} getRandId
+	 * @memberof ExtensionsPrototype
+	 * @property {ExtensionsPrototype.WindowFunctions} window
+	 * @property {ExtensionsPrototype.MouseFunctions} mouse
+	 * @property {(ExtensionsPrototype.getRandId_1|ExtensionsPrototype.getRandId_2)} getRandId
 	 */
 	_public.fn = {};
 
 	/**
 	 * @typedef {object} WindowFunctions
+	 * @memberof ExtensionsPrototype
 	 * @property {object} sizeLimit
-	 * @property {module:extensions/prototype~windowSizeCache} sizeLimit.min
-	 * @property {module:extensions/prototype~windowSizeCache} sizeLimit.max
+	 * @property {ExtensionsPrototype.windowSizeCache} sizeLimit.min
+	 * @property {ExtensionsPrototype.windowSizeCache} sizeLimit.max
 	 * @property {number} [refreshRate=200] how often to recalculate window size
-	 * @property {module:extensions/prototype~windowSizeActive} sizeActive
-	 * @property {module:extensions/prototype~windowSize} size
+	 * @property {ExtensionsPrototype.windowSizeActive} sizeActive
+	 * @property {ExtensionsPrototype.windowSize} size
 	 */
 	_public.fn.window = {};
 
 	/**
 	 * @typedef {object} MouseFunctions
+	 * @memberof ExtensionsPrototype
 	 * @property {external:MouseEvent} event
-	 * @property {module:extensions/prototype~MousePosition} position
+	 * @property {ExtensionsPrototype.MousePosition} position
 	 * @property {object} config
 	 * @property {boolean} config.tracking
 	 */
@@ -44,14 +48,14 @@ module.exports =
 
 	/**
 	 * @var {object} object
-	 * @property {(module:extensions/prototype~ObjectExtend_1|module:extensions/prototype~ObjectExtend_2)} extend
-	 * @memberof module:extensions/prototype
+	 * @property {(ExtensionsPrototype.ObjectExtend_1|ExtensionsPrototype.ObjectExtend_2)} extend
+	 * @memberof ExtensionsPrototype
 	 */
 	_public.object	= {};
 
 	/**
 	 * @var {object} string
-	 * @memberof module:extensions/prototype
+	 * @memberof ExtensionsPrototype
 	 */
 	_public.string	= {};
 
@@ -101,7 +105,7 @@ module.exports =
 
 	/**
 	 * @var {any} WindowExtend
-	 * @memberof module:extensions/prototype
+	 * @memberof ExtensionsPrototype
 	 * @example
 	 * window.addEvent(elem, type, handler);
 	 * window.removeEvent(elem, type, handlerId);
@@ -132,13 +136,13 @@ module.exports =
 
 	/**
 	 * @callback getRandId_1
-	* @memberof module:extensions/prototype~
+	* @memberof ExtensionsPrototype
 	 * @param {string} prefix
 	 * @param {boolean} minimize
 	 */
 	/**
 	 * @callback getRandId_2
-	 * @memberof module:extensions/prototype~
+	 * @memberof ExtensionsPrototype
 	 * @param {boolean} minimize
 	 */
 	_public.fn.getRandId = getRandId;
@@ -214,13 +218,15 @@ module.exports =
 		var _cache_raw = getWindowSize_fRaw();
 		/**
 		 * @typedef {object} windowSizeCache
+		 * @memberof ExtensionsPrototype
 		 * @property {number} w
 		 * @property {number} h
 		 */
 		/**
 		 * @callback windowSizeActive
+		 * @memberof ExtensionsPrototype
 		 * @property {boolean} refreshed
-		 * @returns {module:extensions/prototype~windowSizeCache}
+		 * @returns {ExtensionsPrototype.windowSizeCache}
 		 */
 		_public.fn.window.sizeActive	= function (refreshed) {
 			var t = new Date().valueOf();
@@ -232,8 +238,9 @@ module.exports =
 		};
 		/**
 		 * @callback windowSize
+		 * @memberof ExtensionsPrototype
 		 * @property {boolean} refreshed
-		 * @returns {module:extensions/prototype~windowSizeCache}
+		 * @returns {ExtensionsPrototype.windowSizeCache}
 		 */
 		_public.fn.window.size	= function (refreshed) {
 			var t = new Date().valueOf();
@@ -282,6 +289,7 @@ module.exports =
 		})());
 		/**
 		 * @typedef {object} MousePositionCache
+		 * @memberof ExtensionsPrototype
 		 * @property {number} x
 		 * @property {number} y
 		 * @property {number} xmax
@@ -289,11 +297,12 @@ module.exports =
 		 */
 		/**
 		 * @callback MousePosition
+		 * @memberof ExtensionsPrototype
 		 * @param {MouseEvent} [eventMouseMove]
 		 * @param {object} [context]
 		 * @param {object} [context.window]
 		 * @param {object} [context.document]
-		 * @returns {module:extensions/prototype~MousePositionCache}
+		 * @returns {ExtensionsPrototype.MousePositionCache}
 		 */
 		MouseMove.position = function (eventMouseMove, windowOrDocumentObject) {
 			return getMousePosXY(eventMouseMove, windowOrDocumentObject);
@@ -303,6 +312,7 @@ module.exports =
 
 	/**
 	 * @callback ObjectExtend_1
+	 * @memberof ExtensionsPrototype
 	 * @param {object} object
 	 * @param {object} options
 	 * @param {any} options.value
@@ -312,6 +322,7 @@ module.exports =
 	 */
 	/**
 	 * @callback ObjectExtend_2
+	 * @memberof ExtensionsPrototype
 	 * @param {object} object
 	 * @param {object} options
 	 * @param {function():void} [options.get]
@@ -674,7 +685,10 @@ var slDOMset=function(v){
 };
 var __	= function (v) { return new slDOMset(v || false); };
 
-/** @type ApplicationPrototype.slDOM */
+/**
+ * @type {slDOM}
+ * @private
+ */
 var slDOM=function(a,b){
 if(!a)	a = null;	if(!b)	b = null;
 if(a){this.newE=slDOMlib.newE(a);var e;try{switch(typeof(b)){case "function":((b)(this,a,this.newE));break;}}catch(e){}} else {this.newE=b;}
@@ -2242,14 +2256,13 @@ function dataURItoBlobUrl(dataURI,mimeString) {
 		url	: createObjectURL(v_blob)
 	};
 };
-/**
-* loadObj('m_chart')	return ('m_chart' in window && typeof(window['m_chart']) == "object");
-*
-* loadObj('m_chart,m_editor',function(vars,module_arr){},vars)		.. will execute function after modules are loaded
+/*
+	loadObj('m_chart')	return ('m_chart' in window && typeof(window['m_chart']) == "object");
+	loadObj('m_chart,m_editor',function(vars,module_arr){},vars)		.. will execute function after modules are loaded
 */
 if (document)
 ((function (global) {
-	/** emulate online offline detect for all browsers */
+	/* emulate online offline detect for all browsers */
 	global.on	= function (eventName, callback) {
 		return global.addEventListener(eventName, callback, false);
 	};

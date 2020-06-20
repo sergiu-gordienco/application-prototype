@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>constructors/request/params-parser.js - Application Prototype - Framework</title>
+    <title>BrowserSessionModule - Application Prototype - Framework</title>
     
     <meta name="description" content="Application Prototype Framework based on Module Pattern" />
     
@@ -46,109 +46,1352 @@
 
 <div id="main">
     
-    <h1 class="page-title">constructors/request/params-parser.js</h1>
+    <h1 class="page-title">BrowserSessionModule</h1>
     
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/**
- * @method params-parser
- * @memberof module:request
- * @param {string} value
- * @param {string} pattern
- * @param {object} [opts]
- * @param {object} [opts.cache] object where reg expressions will be cached
- * @param {function} [opts.mapper] function that will decode value, default is decodeURIComponent
- * @param {string} [opts.boud="\x02\x00\x00\x03"] function that will decode value, default is decodeURIComponent
- * @param {object} [opts.ret] object to be updated with found params
- * @param {string[]} [opts.tableIndex] list of parameters' names ( @experimental )
- * @param {string} [opts.pRegExp="\\:([a-z][a-z0-9]+)"] RegExp params' chars
- * @param {string} [opts.matchGroup="([^\\/]+)"] RegExp value
- * @param {string} [opts.fixedEnd=true] RegExp value
- * @returns {Object&lt;string,string>}
- */
+        <h2>
+        BrowserSessionModule
+        </h2>
+        
+    
+</header>
 
-var paramsParse	= function (v, s, opts) {
-	opts	= (opts || {});
-	var cache = (opts.cache || null);
-	var r	= (opts.ret || {});
-	var mapper	= opts.mapper || function decodeURLReference(v) {
-		var err, val = v;
-		try {
-			val = decodeURIComponent((v || '') + '');
-		} catch (err) {
-			val = unescape((v || '') + '');
-		}
-		return val;
-	};
-	var tableIndex, matchRule, cacheKey = s;
-	if (cache &amp;&amp; (cacheKey in cache)) {
-		tableIndex = cache[cacheKey].tableIndex;
-		matchRule = cache[cacheKey].matchRule;
-	} else {
-		var boud	= (opts.boud || '\x02\x00\x00\x03');
-		tableIndex	= (opts.tableIndex || []);
-		var pRegExp	= new RegExp(opts.pRegExp || "\\:([a-z][a-z0-9]+)", "gi");
-		var fixedEnd = ( opts.fixedEnd === false ? false : true );
-		var pCleaner	= function (idx, parts) {
-			idx.push(parts[1]);
-			return true;
-		};
-		var matchGroup	= opts.matchGroup || '([^\/]+)';
-		if (typeof(opts.pCleaner) === "function") {
-			pCleaner	= opts.pCleaner;
-		};
-		s = s.replace(new RegExp(matchGroup.toHex().replace(/(.{2})/g,'\\x$1'), "g"), boud);
-		s = s.replace(pRegExp, function () {
-			var p	= pCleaner(tableIndex, arguments);
-			if (p === true) {
-				return matchGroup;
-			} else if (typeof(p) === "string") {
-				return p;
-			} else {
-				return arguments[0];
-			}
-		});
-		var rboud	= new RegExp(boud.toHex().replace(/(.{2})/g,'\\x$1'), "g")
-		matchRule = new RegExp(
-			s.split(matchGroup).map(function (v) {
-				return v.replace(rboud, matchGroup).toHex().replace(/(.{2})/g,'\\x$1');
-			}).join(matchGroup) + ( fixedEnd ? "$" : ""),
-			""
-		);
+<article>
+    
+        <div class="container-overview">
+        
+            
 
-		if (cache) {
-			cache[cacheKey] = {
-				matchRule: matchRule,
-				tableIndex: tableIndex
-			};
-		}
-	}
-	var matches = v.match(matchRule);
-	if (!matches) return null;
-	tableIndex.forEach(function (v, k) {
-		r[v]	= mapper(matches[k+1]);
-	});
-	return r;
-};
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="constructors_browser-session.js.html">constructors/browser-session.js</a>, <a href="constructors_browser-session.js.html#line6">line 6</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
 
 
-module.exports  = paramsParse;
 
-paramsParse.test    = function () {
-	var testString	= "/login/:service/:action/test%20";
 
-	console.log(paramsParse("/api/test%20value/", "/api/:name/"));
-	console.log(paramsParse("/login/google/login/test",testString));
-};
-</code></pre>
-        </article>
-    </section>
+            
+                <div class="description usertext"><p>browserSessionBuilder description</p></div>
+            
+
+            
+        
+        </div>
+    
+
+    
+
+    
+
+    
+    
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id=".clear"><span class="type-signature">(static) </span>clear<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;any>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="constructors_browser-session.js.html">constructors/browser-session.js</a>, <a href="constructors_browser-session.js.html#line205">line 205</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;any></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".findItems"><span class="type-signature">(static) </span>findItems<span class="signature">(filter)</span><span class="type-signature"> &rarr; {Promise.&lt;Object.&lt;string, any>>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="constructors_browser-session.js.html">constructors/browser-session.js</a>, <a href="constructors_browser-session.js.html#line183">line 183</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>filter</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;Object.&lt;string, any>></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".getItem"><span class="type-signature">(static) </span>getItem<span class="signature">(key, returnResult)</span><span class="type-signature"> &rarr; {Promise.&lt;any>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="constructors_browser-session.js.html">constructors/browser-session.js</a>, <a href="constructors_browser-session.js.html#line52">line 52</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>returnResult</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;any></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".getItems"><span class="type-signature">(static) </span>getItems<span class="signature">(keys)</span><span class="type-signature"> &rarr; {Promise.&lt;Object.&lt;string, any>>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="constructors_browser-session.js.html">constructors/browser-session.js</a>, <a href="constructors_browser-session.js.html#line130">line 130</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>keys</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;Object.&lt;string, any>></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".removeItem"><span class="type-signature">(static) </span>removeItem<span class="signature">(key, returnResult)</span><span class="type-signature"> &rarr; {Promise.&lt;any>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="constructors_browser-session.js.html">constructors/browser-session.js</a>, <a href="constructors_browser-session.js.html#line109">line 109</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>returnResult</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;any></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".removeItems"><span class="type-signature">(static) </span>removeItems<span class="signature">(keys)</span><span class="type-signature"> &rarr; {Promise.&lt;Array.&lt;any>>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="constructors_browser-session.js.html">constructors/browser-session.js</a>, <a href="constructors_browser-session.js.html#line170">line 170</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>keys</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;Array.&lt;any>></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".setItem"><span class="type-signature">(static) </span>setItem<span class="signature">(key, val, returnResult)</span><span class="type-signature"> &rarr; {Promise.&lt;any>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="constructors_browser-session.js.html">constructors/browser-session.js</a>, <a href="constructors_browser-session.js.html#line72">line 72</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>val</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">any</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>returnResult</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;any></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".setItems"><span class="type-signature">(static) </span>setItems<span class="signature">(obj)</span><span class="type-signature"> &rarr; {Promise.&lt;Array.&lt;any>>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="constructors_browser-session.js.html">constructors/browser-session.js</a>, <a href="constructors_browser-session.js.html#line153">line 153</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>obj</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object.&lt;string, any></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;Array.&lt;any>></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 

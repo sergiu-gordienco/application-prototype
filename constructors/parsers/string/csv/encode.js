@@ -1,9 +1,11 @@
+module.exports =
 /**
- * encode a Array matrix into a CSV encoded string with separators " and ,
+ * encode a Array matrix into a CSV encoded string with separators " and
+ * @function
  * @param  {Array}  data array matrix that represents csv cells
- * @return {String}      csv content
+ * @return {string}      csv content
  */
-module.exports = function (data, encodeValue) {
+function (data, encodeValue) {
 	if (!encodeValue) encodeValue = function (v) {
 		if (v instanceof Date) {
 			var s = function (i) {
