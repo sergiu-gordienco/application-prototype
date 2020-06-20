@@ -742,12 +742,30 @@ declare namespace JSTemplate {
      */
     function expressionBuilder(code: string, config: JSTemplate.parseTextNodesConfig): void;
     /**
+     * @protected
+     * @function
+     * @memberof JSTemplate
+     * @param {Array<Text>} bf
+     * @param {parseTextNodesConfig} config
+     * @returns {JSTemplate.jsTemplate_textResult}
+     */
+    function textParser(bf: Text[], config: parseTextNodesConfig): JSTemplate.jsTemplate_textResult;
+    /**
      * @callback parseTextNodesCallback
      * @memberof JSTemplate
      * @param {Error} err
      * @param {JSTemplate.parseTextNodesConfig} config
      */
     type parseTextNodesCallback = (err: Error, config: JSTemplate.parseTextNodesConfig) => void;
+    /**
+     * @protected
+     * @function
+     * @memberof JSTemplate
+     * @param {HTMLElement|Node|Text} textNode
+     * @param {JSTemplate.parseTextNodesCallback} cb
+     * @param {JSTemplate.parseTextNodesConfig} config
+     */
+    function parseTextNodes(textNode: HTMLElement | Node | Text, cb: JSTemplate.parseTextNodesCallback, config: JSTemplate.parseTextNodesConfig): void;
     /**
      * @typedef {Object} jsTemplate_Attribute
      * @memberof JSTemplate
@@ -850,24 +868,6 @@ declare namespace JSTemplate {
  */
 declare interface JSTemplate {
 }
-
-/**
- * @protected
- * @function
- * @param {Array<Text>} bf
- * @param {parseTextNodesConfig} config
- * @returns {JSTemplate.jsTemplate_textResult}
- */
-declare function textParser(bf: Text[], config: parseTextNodesConfig): JSTemplate.jsTemplate_textResult;
-
-/**
- * @protected
- * @function
- * @param {HTMLElement|Node|Text} textNode
- * @param {JSTemplate.parseTextNodesCallback} cb
- * @param {JSTemplate.parseTextNodesConfig} config
- */
-declare function parseTextNodes(textNode: HTMLElement | Node | Text, cb: JSTemplate.parseTextNodesCallback, config: JSTemplate.parseTextNodesConfig): void;
 
 /**
  * Module used for retrieving date using XMLHttpRequest

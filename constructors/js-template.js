@@ -93,6 +93,7 @@ var expressionBuilder = function (code, config) {
 /**
  * @protected
  * @function
+ * @memberof JSTemplate
  * @param {Array<Text>} bf 
  * @param {parseTextNodesConfig} config 
  * @returns {JSTemplate.jsTemplate_textResult}
@@ -241,6 +242,7 @@ textParser.update = function (item, val, cb) {
 /**
  * @protected
  * @function
+ * @memberof JSTemplate
  * @param {HTMLElement|Node|Text} textNode 
  * @param {JSTemplate.parseTextNodesCallback} cb
  * @param {JSTemplate.parseTextNodesConfig} config 
