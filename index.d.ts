@@ -165,7 +165,7 @@ declare namespace async {
     function flow(operations: async.Async.Operations, cb: async.doneCallback, timeout?: number): async.Async;
     /**
      * @method waterfall
-     * @memberof async
+     * @memberof async.
      * @param {async.Async.Operations} operations
      * @param {async.doneCallback} cb
      * @param {number} [parallel=27] number of operations that can be done in parallel
@@ -175,7 +175,7 @@ declare namespace async {
     function waterfall(operations: async.Async.Operations, cb: async.doneCallback, parallel?: number, timeout?: number): async.Async;
     /**
      * @method map
-     * @memberof async
+     * @memberof async.
      * @param {any[]} operations
      * @param {async.processCallback}
      * @param {async.doneCallback} cb
@@ -1389,7 +1389,7 @@ declare namespace ApplicationPrototype {
          * @name Promise
          * @memberof ApplicationPrototype.Builder
          * @param {function} handler
-         * @returns {PromiseLike}
+         * @returns {PromiseLike<any>}
          */
         class Promise {
             constructor(handler: (...params: any[]) => any);
@@ -1397,30 +1397,30 @@ declare namespace ApplicationPrototype {
              * @method all
              * @memberof ApplicationPrototype.Builder.Promise
              * @param {Promise[]} items
-             * @returns {PromiseLike}
+             * @returns {PromiseLike<any[]>}
              */
-            static all(items: Promise[]): PromiseLike;
+            static all(items: Promise[]): PromiseLike<any[]>;
             /**
              * @method race
              * @memberof ApplicationPrototype.Builder.Promise
              * @param {Promise[]} items
-             * @returns {PromiseLike}
+             * @returns {PromiseLike<any[]>}
              */
-            static race(items: Promise[]): PromiseLike;
+            static race(items: Promise[]): PromiseLike<any[]>;
             /**
              * @method resolve
              * @memberof ApplicationPrototype.Builder.Promise
              * @param {any} value
-             * @returns {PromiseLike}
+             * @returns {PromiseLike<any>}
              */
-            static resolve(value: any): PromiseLike;
+            static resolve(value: any): PromiseLike<any>;
             /**
              * @method reject
              * @memberof ApplicationPrototype.Builder.Promise
              * @param {any} value
-             * @returns {PromiseLike}
+             * @returns {PromiseLike<Error>}
              */
-            static reject(value: any): PromiseLike;
+            static reject(value: any): PromiseLike<Error>;
         }
         /**
          * @typedef {object} ConsoleOptions
@@ -1477,7 +1477,7 @@ declare namespace ApplicationPrototype {
         /**
          * @typedef {Object} ApplicationModule
          * @memberof ApplicationPrototype.Builder
-         * @property {PromiseLike} $request resolves module exports
+         * @property {PromiseLike<XMLHttpRequest>} $request resolves module exports
          * @property {function():any} exports module exports handler
          * @property {number} atime unix time in milliseconds
          * @property {function():ApplicationPrototype.Builder} Application returns current application
@@ -1487,7 +1487,7 @@ declare namespace ApplicationPrototype {
          * @property {ApplicationPrototype.Builder.ModuleMeta} meta module's meta information
          */
         type ApplicationModule = {
-            $request: PromiseLike;
+            $request: PromiseLike<XMLHttpRequest>;
             exports: (...params: any[]) => any;
             atime: number;
             Application: (...params: any[]) => any;

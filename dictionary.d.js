@@ -184,35 +184,35 @@
  * @name Promise
  * @memberof ApplicationPrototype.Builder
  * @param {function} handler
- * @returns {PromiseLike}
+ * @returns {PromiseLike<any>}
  */
 
 /**
  * @method all
  * @memberof ApplicationPrototype.Builder.Promise
  * @param {Promise[]} items
- * @returns {PromiseLike}
+ * @returns {PromiseLike<any[]>}
  */
 
 /**
  * @method race
  * @memberof ApplicationPrototype.Builder.Promise
  * @param {Promise[]} items
- * @returns {PromiseLike}
+ * @returns {PromiseLike<any[]>}
  */
 
 /**
  * @method resolve
  * @memberof ApplicationPrototype.Builder.Promise
  * @param {any} value
- * @returns {PromiseLike}
+ * @returns {PromiseLike<any>}
  */
 
 /**
  * @method reject
  * @memberof ApplicationPrototype.Builder.Promise
  * @param {any} value
- * @returns {PromiseLike}
+ * @returns {PromiseLike<Error>}
  */
 
 /**
@@ -685,7 +685,7 @@
 /**
  * @typedef {Object} ApplicationModule
  * @memberof ApplicationPrototype.Builder
- * @property {PromiseLike} $request resolves module exports
+ * @property {PromiseLike<XMLHttpRequest>} $request resolves module exports
  * @property {function():any} exports module exports handler
  * @property {number} atime unix time in milliseconds
  * @property {function():ApplicationPrototype.Builder} Application returns current application
