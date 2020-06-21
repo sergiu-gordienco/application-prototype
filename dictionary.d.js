@@ -23,7 +23,7 @@
  * @memberof ApplicationPrototype.Instance
  * @param {string|function} event event name of function with name
  * @param {function} [callback] function that will listen data
- * @param {string} specifiedEventId event name of function with name
+ * @param {string} [specifiedEventId] event name of function with name
  * @returns {string}
  */
 
@@ -33,7 +33,7 @@
  * @memberof ApplicationPrototype.Instance
  * @param {string|function} event event name of function with name
  * @param {function} [callback] function that will listen data
- * @param {string} specifiedEventId event name of function with name
+ * @param {string} [specifiedEventId] event name of function with name
  * @returns {string}
  */
 
@@ -326,14 +326,6 @@
 // property {*} _i 	= function(i,n){return ((n + (i % n))%n); };
 
 /**
- * @var {ExtensionsPrototype.slDOM} slDOM
- * @memberof ExtensionsPrototype
- */
-/**
- * @var {ExtensionsPrototype.slDOM_env} slDOM_env
- * @memberof ExtensionsPrototype
- */
-/**
  * @var {ExtensionsPrototype.slDOM} _
  * @memberof ExtensionsPrototype
  */
@@ -534,12 +526,12 @@
 /**
  * @typedef {object} slDOM returns a pointer that walks over DOM and applying needed operations
  * @memberof ExtensionsPrototype
- * @property {slDOM_env} env Environment Flags
+ * @property {ExtensionsPrototype.slDOM_env} env Environment Flags
  * @property {function(boolean):HTMLElement} __ if params is `true` then return document otherwise current HTMLElement
- * @property {function(object):slDOM} a2D apply Css Transforms on elements
- * @property {function(number):slDOM} opacity ( short form **o** ) change element opacity
- * @property {function((HTMLElement|string)):slDOM} setE ( short form **e** ) set a HTMLElement or Create Element for slDOM Pointer
- * @property {function((string|string[]),string?,number?):slDOM|boolean} sClass =slDOMlib.sClass;
+ * @property {function(object):ExtensionsPrototype.slDOM} a2D apply Css Transforms on elements
+ * @property {function(number):ExtensionsPrototype.slDOM} opacity ( short form **o** ) change element opacity
+ * @property {function((HTMLElement|string)):ExtensionsPrototype.slDOM} setE ( short form **e** ) set a HTMLElement or Create Element for slDOM Pointer
+ * @property {function((string|string[]),string?,number?):ExtensionsPrototype.slDOM|boolean} sClass =slDOMlib.sClass;
  * @property {function(...string):slDOM} setArg ( short form **A** ) set Attributes to HTMLElement, arguments order: `[ attribute, value, attribute, value ... ]`
  * @property {function(HTMLElement):slDOM} adEto add current HTMLElement to other HTMLElement;
  * @property {function(HTMLElement):slDOM} putBfto insert current HTMLElement before other HTMLElement
@@ -615,7 +607,6 @@
  * @property {*} L =slDOMlib.getLIST;
  * @property {*} V =slDOMlib.setVar;
  * @property {*} v =slDOMlib.setObjVar;
- * @property {*} p =slDOMlib.setObjProto;
  * @property {*} PXY =slDOMlib.pagePosXY;
  * @property {*} i =slDOMlib.in_e;
  * @property {*} r =slDOMlib.g_wh;

@@ -1,7 +1,7 @@
 /**
  * @memberof JSTemplate
  * @typedef {Object} JSTemplateModule
- * @property {JSTemplate.nodeParser} parseContent
+ * @property {JSTemplate.JSTemplateParseContent} parseContent
  * @property {object} config
  * @property {number} [config.RENDER_FPS=15]
  * @property {number} [config.REMOVE_EMPTY_NODES=true]
@@ -985,6 +985,17 @@ attrParser.value = function (item, config, cb) {
  * @param {JSTemplate.parseTextNodesConfig} config 
  * @returns {JSTemplate.parseTextNodesConfig}
  */
+
+/**
+ * @protected
+ * @callback JSTemplateParseContent
+ * @memberof JSTemplate
+ * @param {HTMLElement} nodeElement 
+ * @param {JSTemplate.nodeParserCallback} cb 
+ * @param {JSTemplate.parseTextNodesConfig} config 
+ * @returns {JSTemplate.parseTextNodesConfig}
+ */
+
 /**
  * @protected
  * @function

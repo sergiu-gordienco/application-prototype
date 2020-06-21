@@ -188,17 +188,12 @@ var async	= function () {
 };
 
 /**
- * @typedef {Array} Operation
+ * @typedef {object} Operation
  * @memberof async.Async
- * @property {async.Async.OperationCallback} 0
- * @property {async.Async.OperationArgs} 1
- * @property {async.Async.OperationContext} 2
- * @property {async.Async.OperationCallbackIndex} 3 
- */
-
-/**
- * @typedef {Array<Array<Function, any[], object, number>>} Operation
- * @memberof async.Async
+ * @property {async.Async.OperationCallback} [0]
+ * @property {async.Async.OperationArgs} [1]
+ * @property {async.Async.OperationContext} [2]
+ * @property {async.Async.OperationCallbackIndex} [3] 
  */
 
 /**
@@ -365,7 +360,7 @@ async.waterfall	= function (ops, cb, parallel, timeout) {
  * @returns {async.Async}
  */
 /**
- * @method flow·map
+ * @method flow_map
  * @memberof async.
  * @param {any[]} operations
  * @param {async.processCallback}
@@ -425,7 +420,7 @@ async.map = async.flow.map	= function (ops, ev, cb, timeout) {
 
 
 /**
- * @method waterfall·map
+ * @method waterfall_map
  * @memberof async.
  * @param {any[]} operations
  * @param {async.processCallback}

@@ -94,23 +94,19 @@ declare namespace async {
     }
     namespace Async {
         /**
-         * @typedef {Array} Operation
+         * @typedef {object} Operation
          * @memberof async.Async
-         * @property {async.Async.OperationCallback} 0
-         * @property {async.Async.OperationArgs} 1
-         * @property {async.Async.OperationContext} 2
-         * @property {async.Async.OperationCallbackIndex} 3
+         * @property {async.Async.OperationCallback} [0]
+         * @property {async.Async.OperationArgs} [1]
+         * @property {async.Async.OperationContext} [2]
+         * @property {async.Async.OperationCallbackIndex} [3]
          */
-        type Operation = any[];
-        /**
-         * @typedef {Array} Operation
-         * @memberof async.Async
-         * @property {async.Async.OperationCallback} 0
-         * @property {async.Async.OperationArgs} 1
-         * @property {async.Async.OperationContext} 2
-         * @property {async.Async.OperationCallbackIndex} 3
-         */
-        type Operation = any[];
+        type Operation = {
+            0?: async.Async.OperationCallback;
+            1?: async.Async.OperationArgs;
+            2?: async.Async.OperationContext;
+            3?: async.Async.OperationCallbackIndex;
+        };
         /**
          * a function that represents the operation itself, it have as argument `next` callback, by default it is first.
          * @typedef {Function} OperationCallback
@@ -184,7 +180,7 @@ declare namespace async {
      */
     function map(operations: any[], cb: async.doneCallback, timeout?: number): async.Async;
     /**
-     * @method flow·map
+     * @method flow_map
      * @memberof async.
      * @param {any[]} operations
      * @param {async.processCallback}
@@ -192,9 +188,9 @@ declare namespace async {
      * @param {number} [timeout=0] timeout between operations
      * @returns {async.Async}
      */
-    function flow·map(operations: any[], cb: async.doneCallback, timeout?: number): async.Async;
+    function flow_map(operations: any[], cb: async.doneCallback, timeout?: number): async.Async;
     /**
-     * @method waterfall·map
+     * @method waterfall_map
      * @memberof async.
      * @param {any[]} operations
      * @param {async.processCallback}
@@ -203,7 +199,7 @@ declare namespace async {
      * @param {number} [timeout=0] timeout between operations
      * @returns {async.Async}
      */
-    function waterfall·map(operations: any[], cb: async.doneCallback, parallel?: number, timeout?: number): async.Async;
+    function waterfall_map(operations: any[], cb: async.doneCallback, parallel?: number, timeout?: number): async.Async;
 }
 
 /**
@@ -463,16 +459,6 @@ declare namespace ExtensionsPrototype {
         config?: boolean;
     }) => void;
     /**
-     * @var {ExtensionsPrototype.slDOM} slDOM
-     * @memberof ExtensionsPrototype
-     */
-    var slDOM: ExtensionsPrototype.slDOM;
-    /**
-     * @var {ExtensionsPrototype.slDOM_env} slDOM_env
-     * @memberof ExtensionsPrototype
-     */
-    var slDOM_env: ExtensionsPrototype.slDOM_env;
-    /**
      * @var {ExtensionsPrototype.slDOM} _
      * @memberof ExtensionsPrototype
      */
@@ -643,10 +629,61 @@ declare namespace ExtensionsPrototype {
         type itemHandlerMap = (node: Node, index: number, context: ExtensionsPrototype.slDOMSet, p: ExtensionsPrototype.slDOM) => Node;
     }
     /**
-     * @var {ExtensionsPrototype.slDOM_env} slDOM_env
+     * @typedef slDOM_env
      * @memberof ExtensionsPrototype
+     * @property {boolean} gecko
+     * @property {boolean} old_ie
+     * @property {boolean} ie_lt8
+     * @property {boolean} ie_lt9
+     * @property {boolean} ie_gt10
+     * @property {boolean} ie
+     * @property {boolean} webkit
+     * @property {boolean} qtwebkit
+     * @property {boolean} chrome
+     * @property {boolean} opera
+     * @property {boolean} firefox
+     * @property {boolean} safari
+     * @property {boolean} khtml
+     * @property {boolean} mac_geLion
+     * @property {boolean} mac_geMountainLion
+     * @property {boolean} phantom
+     * @property {boolean} ios
+     * @property {boolean} mobile
+     * @property {boolean} mac
+     * @property {boolean} windows
+     * @property {Array|null} opera_version
+     * @property {boolean} flipCtrlCmd
+     * @property {boolean} captureMiddleClick
+     * @property {boolean} android
+     * @property {string|false} android_version
      */
-    var slDOM_env: ExtensionsPrototype.slDOM_env;
+    type slDOM_env = {
+        gecko: boolean;
+        old_ie: boolean;
+        ie_lt8: boolean;
+        ie_lt9: boolean;
+        ie_gt10: boolean;
+        ie: boolean;
+        webkit: boolean;
+        qtwebkit: boolean;
+        chrome: boolean;
+        opera: boolean;
+        firefox: boolean;
+        safari: boolean;
+        khtml: boolean;
+        mac_geLion: boolean;
+        mac_geMountainLion: boolean;
+        phantom: boolean;
+        ios: boolean;
+        mobile: boolean;
+        mac: boolean;
+        windows: boolean;
+        opera_version: any[] | null;
+        flipCtrlCmd: boolean;
+        captureMiddleClick: boolean;
+        android: boolean;
+        android_version: string | false;
+    };
     /**
      * @typedef {Object<string,(string|number)>} slDOM_ObjectCSSProperties a list of proprieties mapped in a object, example: { fontSize: "10px", "white-space": "nowrap" }
      * @memberof ExtensionsPrototype
@@ -662,10 +699,194 @@ declare namespace ExtensionsPrototype {
         [key: string]: string | number;
     };
     /**
-     * @var {ExtensionsPrototype.slDOM} slDOM
+     * @typedef {object} slDOM returns a pointer that walks over DOM and applying needed operations
      * @memberof ExtensionsPrototype
+     * @property {ExtensionsPrototype.slDOM_env} env Environment Flags
+     * @property {function(boolean):HTMLElement} __ if params is `true` then return document otherwise current HTMLElement
+     * @property {function(object):ExtensionsPrototype.slDOM} a2D apply Css Transforms on elements
+     * @property {function(number):ExtensionsPrototype.slDOM} opacity ( short form **o** ) change element opacity
+     * @property {function((HTMLElement|string)):ExtensionsPrototype.slDOM} setE ( short form **e** ) set a HTMLElement or Create Element for slDOM Pointer
+     * @property {function((string|string[]),string?,number?):ExtensionsPrototype.slDOM|boolean} sClass =slDOMlib.sClass;
+     * @property {function(...string):slDOM} setArg ( short form **A** ) set Attributes to HTMLElement, arguments order: `[ attribute, value, attribute, value ... ]`
+     * @property {function(HTMLElement):slDOM} adEto add current HTMLElement to other HTMLElement;
+     * @property {function(HTMLElement):slDOM} putBfto insert current HTMLElement before other HTMLElement
+     * @property {function(HTMLElement):slDOM} putAfto insert current HTMLElement after other HTMLElement
+     * @property {function((HTMLElement|string),string?,function?):slDOM} putBf =slDOMlib.putBf;
+     * @property {function(HTMLElement):slDOM} putAf =slDOMlib.putAf;
+     * @property {function((HTMLElement|string),string?,function?):slDOM} addE =slDOMlib.addE;
+     * @property {function((HTMLElement|string),string?,function?):slDOM} addB =slDOMlib.addB;
+     * @property {function(string):slDOM} addT ( short form **t** ) add text node to HTMLElement;
+     * @property {function(number):slDOM} [nextTo=1] ( short form **N** ) moving pointer forward to N neighbors
+     * @property {function(number):slDOM} [backTo=1] ( short form **B** ) moving pointer backward to N neighbors
+     * @property {function(number?):slDOM} nUP ( short form is U ) goes up on level in doom
+     * @property {function(number?):slDOM} nChild ( short form is **C** ) select the *N th* child element
+     * @property {function(number?):slDOM} getParentN ( short form is **P** ) select the *N th* parent element
+     * @property {function():slDOM} clearE ( short form is **d** ) remove all childObjects from node
+     * @property {function():slDOM} delE remove HTMLElement from its Parent
+     * @property {function(boolean):slDOM} copyE =slDOMlib.copyE;
+     * @property {function(string):slDOM} getParentTag =slDOMlib.getParentTag;
+     * @property {function(string,number,boolean,boolean):slDOM} getByTag =slDOMlib.getByTag;
+     * @property {function(string,number,boolean,boolean):slDOM} getByQuery =slDOMlib.getByQuery;
+     * @property {function(string):slDOM} getById =slDOMlib.getById;
+     * @property {function(string,boolean):Array<HTMLElement>} getTags =slDOMlib.getTags;
+     * @property {function(string,boolean):Array<HTMLElement>} getTagsByQuery =slDOMlib.getTagsByQuery;
+     * @property {function(string):slDOM} triger ( short form **T** ) trigger / emit an event on HTMLElement
+     * @property {function(string?):slDOM|HTMLElement|string} getE ( short form **_** ) return HTMLElement ;
+     * * if argument[0] is ".tag" return HTMLElement's tagname ;
+     * * if argument[0] is ".html" return HTML Content ;
+     * * if argument[0] is ".text" return Text Content ;
+     * * if argument[0] is "-attributeName" return HTMLElement's Attribute ;
+     * * if argument[0] is "!attributeName" remove HTMLElement's Attribute
+     * @property {function(ExtensionsPrototype.slDOM_ObjectCSSProperties): slDOM} setStyle ( short form **f** ) setting css proprieties to HTMLElement
+     * @property {function((ExtensionsPrototype.slDOM_ObjectAttributes | string[])): slDOM} setVar ( short form **V** ) set dot property on HTMLElement
+     * @property {function(...ExtensionsPrototype.slDOM_ObjectAttributes): slDOM} setObjVar ( short form **v** ) setting attributes to HTMLElement
+     * @property {function(ExtensionsPrototype.slDOM_ObjectCSSProperties): slDOM} setStyleSPEED ( short form **F** ) setting css proprieties to HTMLElement with normalizing values by adding units
+     * @property {function(): { x: number, y: number }} pagePXY ( short form **PXY** ) get element position on page
+     * @property {function(): Boolean} in_e check if HTMLElement is still attached to DOM ( Document Object Manager )
+     * @property {function(): { w: number, h: number }} g_wh returns width and height of HTMLElement
+     * @property {function((object | string), boolean, function, object): slDOM} getLIST =slDOMlib.getLIST;
+     * @property {function(function(HTMLElement, object, slDOM), object): slDOM} toFunction =slDOMlib.toFunction;
+     * @property {function(): slDOM} removeFromDOM ( short form **free** ) remove elements from DOM
+     * @property {function(number): slDOM} o ( short form **opacity** ) change element opacity
+     * @property {function((HTMLElement | string)): slDOM} E ( long form **setE** ) set a HTMLElement or Create Element for slDOM Pointer
+     * @property {*} c =slDOMlib.sClass;
+     * @property {function(string): Object} attrs 	= slDOMlib.attrs;
+     * @property {*} A =slDOMlib.setArg;
+     * @property {*} Et =slDOMlib.adEto;
+     * @property {*} Bt =slDOMlib.putBfto;
+     * @property {*} At =slDOMlib.putAfto;
+     * @property {*} pB =slDOMlib.putBf;
+     * @property {*} pA =slDOMlib.putAf;
+     * @property {*} e =slDOMlib.addE;
+     * @property {*} b =slDOMlib.addB;
+     * @property {*} t =slDOMlib.addT;
+     * @property {*} N =slDOMlib.nextTo;
+     * @property {*} B =slDOMlib.backTo;
+     * @property {*} U =slDOMlib.nUP;
+     * @property {*} C =slDOMlib.nChild;
+     * @property {*} P =slDOMlib.getParentN;
+     * @property {*} d =slDOMlib.clearE;
+     * @property {*} D =slDOMlib.delE;
+     * @property {*} X =slDOMlib.copyE;
+     * @property {*} p =slDOMlib.getParentTag;
+     * @property {*} S =slDOMlib.getByTag;
+     * @property {*} Q =slDOMlib.getByQuery;
+     * @property {*} I =slDOMlib.getById;
+     * @property {*} s =slDOMlib.getTags;
+     * @property {*} q =slDOMlib.getTagsByQuery;
+     * @property {*} T =slDOMlib.triger;
+     * @property {*} _ =slDOMlib.getE;
+     * @property {*} $ =slDOMlib.getLIST;
+     * @property {*} F =slDOMlib.setStyleSPEED;
+     * @property {*} f =slDOMlib.setStyle;
+     * @property {*} L =slDOMlib.getLIST;
+     * @property {*} V =slDOMlib.setVar;
+     * @property {*} v =slDOMlib.setObjVar;
+     * @property {*} PXY =slDOMlib.pagePosXY;
+     * @property {*} i =slDOMlib.in_e;
+     * @property {*} r =slDOMlib.g_wh;
+     * @property {*} x =slDOMlib.toFunction;
+     * @property {function(): slDOM} free 	= slDOMlib.removeFromDOM;
+     * @property {function(): Boolean} is_free 	= slDOMlib.is_free;
+     * @property {function(): Boolean} is_focused 	= slDOMlib.is_focused;
+     * @property {function(): Boolean} is_inview 	= slDOMlib.elementInViewport;
+     * @property {function(): Boolean} is_visible 	= slDOMlib.elementIsVisible;
+     * @property {*} _normalizeCssValues 	= slDOMlib._normalizeCssValues;
+     * @property {*} on 	= slDOMlib.on;
+     * @property {*} off 	= slDOMlib.off;
+     * @property {function(): Object} eventsCache 	= slDOMlib.eventsCache;
      */
-    var slDOM: ExtensionsPrototype.slDOM;
+    type slDOM = {
+        env: ExtensionsPrototype.slDOM_env;
+        __: (...params: any[]) => any;
+        a2D: (...params: any[]) => any;
+        opacity: (...params: any[]) => any;
+        setE: (...params: any[]) => any;
+        sClass: (...params: any[]) => any;
+        setArg: (...params: any[]) => any;
+        adEto: (...params: any[]) => any;
+        putBfto: (...params: any[]) => any;
+        putAfto: (...params: any[]) => any;
+        putBf: (...params: any[]) => any;
+        putAf: (...params: any[]) => any;
+        addE: (...params: any[]) => any;
+        addB: (...params: any[]) => any;
+        addT: (...params: any[]) => any;
+        nextTo?: (...params: any[]) => any;
+        backTo?: (...params: any[]) => any;
+        nUP: (...params: any[]) => any;
+        nChild: (...params: any[]) => any;
+        getParentN: (...params: any[]) => any;
+        clearE: (...params: any[]) => any;
+        delE: (...params: any[]) => any;
+        copyE: (...params: any[]) => any;
+        getParentTag: (...params: any[]) => any;
+        getByTag: (...params: any[]) => any;
+        getByQuery: (...params: any[]) => any;
+        getById: (...params: any[]) => any;
+        getTags: (...params: any[]) => any;
+        getTagsByQuery: (...params: any[]) => any;
+        triger: (...params: any[]) => any;
+        getE: (...params: any[]) => any;
+        setStyle: (...params: any[]) => any;
+        setVar: (...params: any[]) => any;
+        setObjVar: (...params: any[]) => any;
+        setStyleSPEED: (...params: any[]) => any;
+        pagePXY: (...params: any[]) => any;
+        in_e: (...params: any[]) => any;
+        g_wh: (...params: any[]) => any;
+        getLIST: (...params: any[]) => any;
+        toFunction: (...params: any[]) => any;
+        removeFromDOM: (...params: any[]) => any;
+        o: (...params: any[]) => any;
+        E: (...params: any[]) => any;
+        c: any;
+        attrs: (...params: any[]) => any;
+        A: any;
+        Et: any;
+        Bt: any;
+        At: any;
+        pB: any;
+        pA: any;
+        e: any;
+        b: any;
+        t: any;
+        N: any;
+        B: any;
+        U: any;
+        C: any;
+        P: any;
+        d: any;
+        D: any;
+        X: any;
+        p: any;
+        S: any;
+        Q: any;
+        I: any;
+        s: any;
+        q: any;
+        T: any;
+        _: any;
+        $: any;
+        F: any;
+        f: any;
+        L: any;
+        V: any;
+        v: any;
+        PXY: any;
+        i: any;
+        r: any;
+        x: any;
+        free: (...params: any[]) => any;
+        is_free: (...params: any[]) => any;
+        is_focused: (...params: any[]) => any;
+        is_inview: (...params: any[]) => any;
+        is_visible: (...params: any[]) => any;
+        _normalizeCssValues: any;
+        on: any;
+        off: any;
+        eventsCache: (...params: any[]) => any;
+    };
 }
 
 /**
@@ -678,13 +899,13 @@ declare namespace JSTemplate {
     /**
      * @memberof JSTemplate
      * @typedef {Object} JSTemplateModule
-     * @property {JSTemplate.nodeParser} parseContent
+     * @property {JSTemplate.JSTemplateParseContent} parseContent
      * @property {object} config
      * @property {number} [config.RENDER_FPS=15]
      * @property {number} [config.REMOVE_EMPTY_NODES=true]
      */
     type JSTemplateModule = {
-        parseContent: JSTemplate.nodeParser;
+        parseContent: JSTemplate.JSTemplateParseContent;
         config: {
             RENDER_FPS?: number;
             REMOVE_EMPTY_NODES?: number;
@@ -848,6 +1069,16 @@ declare namespace JSTemplate {
      * @returns {JSTemplate.parseTextNodesConfig}
      */
     type nodeParserCallback = (err: Error, config: JSTemplate.parseTextNodesConfig) => JSTemplate.parseTextNodesConfig;
+    /**
+     * @protected
+     * @callback JSTemplateParseContent
+     * @memberof JSTemplate
+     * @param {HTMLElement} nodeElement
+     * @param {JSTemplate.nodeParserCallback} cb
+     * @param {JSTemplate.parseTextNodesConfig} config
+     * @returns {JSTemplate.parseTextNodesConfig}
+     */
+    type JSTemplateParseContent = (nodeElement: HTMLElement, cb: JSTemplate.nodeParserCallback, config: JSTemplate.parseTextNodesConfig) => JSTemplate.parseTextNodesConfig;
     /**
      * @protected
      * @function
@@ -1021,47 +1252,53 @@ declare class RequestModule {
      */
     statusText(): string;
     /**
+     * returns `RequestModule.RequestConfig["async"]`
      * @method async
      * @memberof RequestModule#
-     * @returns {RequestModule.RequestConfig.async}
+     * @returns {boolean}
      * @see RequestModule.RequestConfig
      */
-    async(): RequestModule.RequestConfig.async;
+    async(): boolean;
     /**
+     * returns `RequestModule.RequestConfig["async"]`
      * @method async
      * @memberof RequestModule#
-     * @returns {RequestModule.RequestConfig.async}
+     * @returns {boolean}
      * @see RequestModule.RequestConfig
      */
-    async(): RequestModule.RequestConfig.async;
+    async(): boolean;
     /**
+     * returns `RequestModule.RequestConfig["method"]`
      * @method method
      * @memberof RequestModule#
-     * @returns {RequestModule.RequestConfig.method}
+     * @returns {string}
      * @see RequestModule.RequestConfig
      */
-    method(): RequestModule.RequestConfig.method;
+    method(): string;
     /**
+     * returns `RequestModule.RequestConfig["method"]`
      * @method method
      * @memberof RequestModule#
-     * @returns {RequestModule.RequestConfig.method}
+     * @returns {string}
      * @see RequestModule.RequestConfig
      */
-    method(): RequestModule.RequestConfig.method;
+    method(): string;
     /**
+     * returns `RequestModule.RequestConfig["url"]`
      * @method url
      * @memberof RequestModule#
-     * @returns {RequestModule.RequestConfig.url}
+     * @returns {string}
      * @see RequestModule.RequestConfig
      */
-    url(): RequestModule.RequestConfig.url;
+    url(): string;
     /**
+     * returns `RequestModule.RequestConfig["url"]`
      * @method url
      * @memberof RequestModule#
-     * @returns {RequestModule.RequestConfig.url}
+     * @returns {string}
      * @see RequestModule.RequestConfig
      */
-    url(): RequestModule.RequestConfig.url;
+    url(): string;
     /**
      * @method open
      * @memberof RequestModule#
@@ -1175,20 +1412,20 @@ declare namespace ApplicationPrototype {
          * @memberof ApplicationPrototype.Instance
          * @param {string|function} event event name of function with name
          * @param {function} [callback] function that will listen data
-         * @param {string} specifiedEventId event name of function with name
+         * @param {string} [specifiedEventId] event name of function with name
          * @returns {string}
          */
-        static on(event: string | ((...params: any[]) => any), callback?: (...params: any[]) => any, specifiedEventId: string): string;
+        static on(event: string | ((...params: any[]) => any), callback?: (...params: any[]) => any, specifiedEventId?: string): string;
         /**
          * returns listener Id
          * @method once
          * @memberof ApplicationPrototype.Instance
          * @param {string|function} event event name of function with name
          * @param {function} [callback] function that will listen data
-         * @param {string} specifiedEventId event name of function with name
+         * @param {string} [specifiedEventId] event name of function with name
          * @returns {string}
          */
-        static once(event: string | ((...params: any[]) => any), callback?: (...params: any[]) => any, specifiedEventId: string): string;
+        static once(event: string | ((...params: any[]) => any), callback?: (...params: any[]) => any, specifiedEventId?: string): string;
         /**
          * returns listener Id
          * @method bind

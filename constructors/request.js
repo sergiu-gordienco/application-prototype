@@ -466,9 +466,10 @@ Application.require("extensions/prototype", function (epro) {
 
 
 		/**
+		 * returns `RequestModule.RequestConfig["async"]`
 		 * @method async
 		 * @memberof RequestModule#
-		 * @returns {RequestModule.RequestConfig.async}
+		 * @returns {boolean}
 		 * @see RequestModule.RequestConfig
 		 */
 		/**
@@ -486,9 +487,10 @@ Application.require("extensions/prototype", function (epro) {
 		});
 
 		/**
+		 * returns `RequestModule.RequestConfig["method"]`
 		 * @method method
 		 * @memberof RequestModule#
-		 * @returns {RequestModule.RequestConfig.method}
+		 * @returns {string}
 		 * @see RequestModule.RequestConfig
 		 */
 		/**
@@ -506,9 +508,10 @@ Application.require("extensions/prototype", function (epro) {
 		});
 
 		/**
+		 * returns `RequestModule.RequestConfig["url"]`
 		 * @method url
 		 * @memberof RequestModule#
-		 * @returns {RequestModule.RequestConfig.url}
+		 * @returns {string}
 		 * @see RequestModule.RequestConfig
 		 *//**
 		 * @memberof RequestModule#
