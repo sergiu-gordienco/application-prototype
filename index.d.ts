@@ -94,45 +94,52 @@ declare namespace async {
     }
     namespace Async {
         /**
-         * @typedef {Array} async.Async~Operation
-         * @property {async.Async~OperationCallback} 0
-         * @property {async.Async~OperationArgs} 1
-         * @property {async.Async~OperationContext} 2
-         * @property {async.Async~OperationCallbackIndex} 3
+         * @typedef {Array} Operation
+         * @memberof async.Async
+         * @property {async.Async.OperationCallback} 0
+         * @property {async.Async.OperationArgs} 1
+         * @property {async.Async.OperationContext} 2
+         * @property {async.Async.OperationCallbackIndex} 3
          */
         type Operation = any[];
         /**
-         * @typedef {Array} async.Async~Operation
-         * @property {async.Async~OperationCallback} 0
-         * @property {async.Async~OperationArgs} 1
-         * @property {async.Async~OperationContext} 2
-         * @property {async.Async~OperationCallbackIndex} 3
+         * @typedef {Array} Operation
+         * @memberof async.Async
+         * @property {async.Async.OperationCallback} 0
+         * @property {async.Async.OperationArgs} 1
+         * @property {async.Async.OperationContext} 2
+         * @property {async.Async.OperationCallbackIndex} 3
          */
         type Operation = any[];
         /**
          * a function that represents the operation itself, it have as argument `next` callback, by default it is first.
-         * @typedef {Function} async.Async~OperationCallback
+         * @typedef {Function} OperationCallback
+         * @memberof async.Async
          */
         type OperationCallback = () => void;
         /**
          * list if arguments passed to `OperationCallback`.
-         * @typedef {any[]} async.Async~OperationArgs
+         * @typedef {any[]} OperationArgs
+         * @memberof async.Async
          */
         type OperationArgs = any[];
         /**
          * context that should be used in `OperationCallback`. Default value is `{}`.
-         * @typedef {object} async.Async~OperationContext
+         * @typedef {object} OperationContext
+         * @memberof async.Async
          */
         type OperationContext = any;
         /**
          * index of `next()` callback in list of `OperationCallback`'s arguments. Default value is `0`.
-         * @typedef {number} async.Async~OperationCallbackIndex
+         * @typedef {number} OperationCallbackIndex
+         * @memberof async.Async
          */
         type OperationCallbackIndex = number;
         /**
-         * @typedef {async.Async~Operation[]} async.Async~Operations
+         * @typedef {async.Async.Operation[]} Operations
+         * @memberof async.Async
          */
-        type Operations = async.Async~Operation[];
+        type Operations = async.Async.Operation[];
     }
     /**
      * @callback async.processCallback
@@ -150,25 +157,25 @@ declare namespace async {
     /**
      * @method flow
      * @memberof async.
-     * @param {async.Async~Operations} operations
+     * @param {async.Async.Operations} operations
      * @param {async.doneCallback} cb
      * @param {number} [timeout=0] timeout between operations
      * @returns {async.Async}
      */
-    function flow(operations: async.Async~Operations, cb: async.doneCallback, timeout?: number): async.Async;
+    function flow(operations: async.Async.Operations, cb: async.doneCallback, timeout?: number): async.Async;
     /**
      * @method waterfall
-     * @memberof async.
-     * @param {async.Async~Operations} operations
+     * @memberof async
+     * @param {async.Async.Operations} operations
      * @param {async.doneCallback} cb
      * @param {number} [parallel=27] number of operations that can be done in parallel
      * @param {number} [timeout=0] timeout between operations
      * @returns {async.Async}
      */
-    function waterfall(operations: async.Async~Operations, cb: async.doneCallback, parallel?: number, timeout?: number): async.Async;
+    function waterfall(operations: async.Async.Operations, cb: async.doneCallback, parallel?: number, timeout?: number): async.Async;
     /**
      * @method map
-     * @memberof async.
+     * @memberof async
      * @param {any[]} operations
      * @param {async.processCallback}
      * @param {async.doneCallback} cb
@@ -874,6 +881,34 @@ declare interface JSTemplate {
  * @name RequestModule
  */
 declare class RequestModule {
+    /**
+     * @function ParamsParser
+     * @memberof RequestModule
+     * @param {string} value
+     * @param {string} pattern
+     * @param {object} [opts]
+     * @param {object} [opts.cache] object where reg expressions will be cached
+     * @param {function} [opts.mapper] function that will decode value, default is decodeURIComponent
+     * @param {string} [opts.boud="\x02\x00\x00\x03"] function that will decode value, default is decodeURIComponent
+     * @param {object} [opts.ret] object to be updated with found params
+     * @param {string[]} [opts.tableIndex] list of parameters' names ( @experimental )
+     * @param {string} [opts.pRegExp="\\:([a-z][a-z0-9]+)"] RegExp params' chars
+     * @param {string} [opts.matchGroup="([^\\/]+)"] RegExp value
+     * @param {string} [opts.fixedEnd=true] RegExp value
+     * @returns {Object<string,string>}
+     */
+    static ParamsParser(value: string, pattern: string, opts?: {
+        cache?: any;
+        mapper?: (...params: any[]) => any;
+        boud?: string;
+        ret?: any;
+        tableIndex?: string[];
+        pRegExp?: string;
+        matchGroup?: string;
+        fixedEnd?: string;
+    }): {
+        [key: string]: string;
+    };
     /**
      * @method config
      * @memberof RequestModule#

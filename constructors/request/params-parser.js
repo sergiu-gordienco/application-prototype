@@ -1,6 +1,6 @@
 /**
- * @method params-parser
- * @memberof module:request
+ * @function ParamsParser
+ * @memberof RequestModule
  * @param {string} value
  * @param {string} pattern
  * @param {object} [opts]
