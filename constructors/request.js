@@ -181,44 +181,10 @@ Application.require("extensions/prototype", function (epro) {
 		/**
 		 * @method response
 		 * @memberof RequestModule#
-		 * @returns {XMLHttpRequest.response}
-		 */
-
-
-		/**
-		 * @method response
-		 * @memberof RequestModule#
-		 * @param {'request'} type
-		 * @returns {Promise<RequestModule>}
-		 */
-
-		/**
-		 * @method response
-		 * @memberof RequestModule#
-		 * @param {'blob'} type
-		 * @param {{ type: string }} [params={type: 'application/octet-stream'}] Blob constructor's params
-		 * @returns {Promise<Blob>}
-		 */
-
-		/**
-		 * @method response
-		 * @memberof RequestModule#
-		 * @param {'arraybuffer'} type
-		 * @returns {Promise<ArrayBuffer>}
-		 */
-
-		/**
-		 * @method response
-		 * @memberof RequestModule#
-		 * @param {('text'|'json')} type
-		 * @returns {Promise<string>}
-		 */
-
-		/**
-		 * @method response
-		 * @memberof RequestModule#
-		 * @param {'document'} type
-		 * @returns {HTMLElement}
+		 * @param {(''|'request'|'blob'|'arraybuffer'|'text'|'json'|'document')} [type]
+		 * @param {object} [options]
+		 * @param {string} [options.type="application/octet-stream"] Blob constructor's params
+		 * @returns {(RequestModule|Promise<ArrayBuffer>|Promise<Blob>|Promise<HTMLElement>|Promise<DocumentFragment>|Promise<string>|ArrayBuffer|Blob|HTMLElement|string)}
 		 */
 		app.bind("response", function (type, params) {
 			var er, err, data, node;
@@ -483,7 +449,7 @@ Application.require("extensions/prototype", function (epro) {
 		/**
 		 * @method status
 		 * @memberof RequestModule#
-		 * @returns {XMLHttpRequest.status}
+		 * @returns {number}
 		 */
 		app.bind("status", function (int) {
 		  return httpRequest.status;
@@ -492,7 +458,7 @@ Application.require("extensions/prototype", function (epro) {
 		/**
 		 * @method statusText
 		 * @memberof RequestModule#
-		 * @returns {XMLHttpRequest.statusText}
+		 * @returns {string}
 		 */
 		app.bind("statusText", function (int) {
 		  return httpRequest.statusText;

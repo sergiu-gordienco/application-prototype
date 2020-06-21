@@ -931,39 +931,14 @@ declare class RequestModule {
     /**
      * @method response
      * @memberof RequestModule#
-     * @returns {XMLHttpRequest.response}
+     * @param {(''|'request'|'blob'|'arraybuffer'|'text'|'json'|'document')} [type]
+     * @param {object} [options]
+     * @param {string} [options.type="application/octet-stream"] Blob constructor's params
+     * @returns {(RequestModule|Promise<ArrayBuffer>|Promise<Blob>|Promise<HTMLElement>|Promise<DocumentFragment>|Promise<string>|ArrayBuffer|Blob|HTMLElement|string)}
      */
-    response(): XMLHttpRequest.response;
-    /**
-     * @method response
-     * @memberof RequestModule#
-     * @returns {XMLHttpRequest.response}
-     */
-    response(): XMLHttpRequest.response;
-    /**
-     * @method response
-     * @memberof RequestModule#
-     * @returns {XMLHttpRequest.response}
-     */
-    response(): XMLHttpRequest.response;
-    /**
-     * @method response
-     * @memberof RequestModule#
-     * @returns {XMLHttpRequest.response}
-     */
-    response(): XMLHttpRequest.response;
-    /**
-     * @method response
-     * @memberof RequestModule#
-     * @returns {XMLHttpRequest.response}
-     */
-    response(): XMLHttpRequest.response;
-    /**
-     * @method response
-     * @memberof RequestModule#
-     * @returns {XMLHttpRequest.response}
-     */
-    response(): XMLHttpRequest.response;
+    response(type?: '' | 'request' | 'blob' | 'arraybuffer' | 'text' | 'json' | 'document', options?: {
+        type?: string;
+    }): RequestModule | Promise<ArrayBuffer> | Promise<Blob> | Promise<HTMLElement> | Promise<DocumentFragment> | Promise<string> | ArrayBuffer | Blob | HTMLElement | string;
     /**
      * current XMLHttpRequest timeout in seconds
      * @method timeout
@@ -1036,15 +1011,15 @@ declare class RequestModule {
     /**
      * @method status
      * @memberof RequestModule#
-     * @returns {XMLHttpRequest.status}
+     * @returns {number}
      */
-    status(): XMLHttpRequest.status;
+    status(): number;
     /**
      * @method statusText
      * @memberof RequestModule#
-     * @returns {XMLHttpRequest.statusText}
+     * @returns {string}
      */
-    statusText(): XMLHttpRequest.statusText;
+    statusText(): string;
     /**
      * @method async
      * @memberof RequestModule#
