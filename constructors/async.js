@@ -188,39 +188,46 @@ var async	= function () {
 };
 
 /**
- * @typedef {Array} async.Async~Operation
- * @property {async.Async~OperationCallback} 0
- * @property {async.Async~OperationArgs} 1
- * @property {async.Async~OperationContext} 2
- * @property {async.Async~OperationCallbackIndex} 3 
+ * @typedef {Array} Operation
+ * @memberof async.Async
+ * @property {async.Async.OperationCallback} 0
+ * @property {async.Async.OperationArgs} 1
+ * @property {async.Async.OperationContext} 2
+ * @property {async.Async.OperationCallbackIndex} 3 
  */
 
 /**
- * @typedef {Array<Array<Function, any[], object, number>>} async.Async~Operation
+ * @typedef {Array<Array<Function, any[], object, number>>} Operation
+ * @memberof async.Async
  */
 
 /**
  * a function that represents the operation itself, it have as argument `next` callback, by default it is first.
- * @typedef {Function} async.Async~OperationCallback
+ * @typedef {Function} OperationCallback
+ * @memberof async.Async
  */
 
 /**
  * list if arguments passed to `OperationCallback`.
- * @typedef {any[]} async.Async~OperationArgs
+ * @typedef {any[]} OperationArgs
+ * @memberof async.Async
  */
 
 /**
  * context that should be used in `OperationCallback`. Default value is `{}`.
- * @typedef {object} async.Async~OperationContext
+ * @typedef {object} OperationContext
+ * @memberof async.Async
  */
 
 /**
  * index of `next()` callback in list of `OperationCallback`'s arguments. Default value is `0`.
- * @typedef {number} async.Async~OperationCallbackIndex
+ * @typedef {number} OperationCallbackIndex
+ * @memberof async.Async
  */
 
 /**
- * @typedef {async.Async~Operation[]} async.Async~Operations
+ * @typedef {async.Async.Operation[]} Operations
+ * @memberof async.Async
  */
 
 /**
@@ -239,7 +246,7 @@ var async	= function () {
 /**
  * @method flow
  * @memberof async.
- * @param {async.Async~Operations} operations
+ * @param {async.Async.Operations} operations
  * @param {async.doneCallback} cb
  * @param {number} [timeout=0] timeout between operations
  * @returns {async.Async}
@@ -290,7 +297,7 @@ async.flow	= function (operations, cb, timeout) {
 /**
  * @method waterfall
  * @memberof async.
- * @param {async.Async~Operations} operations
+ * @param {async.Async.Operations} operations
  * @param {async.doneCallback} cb
  * @param {number} [parallel=27] number of operations that can be done in parallel
  * @param {number} [timeout=0] timeout between operations

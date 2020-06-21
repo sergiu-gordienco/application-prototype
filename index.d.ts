@@ -870,312 +870,265 @@ declare interface JSTemplate {
 }
 
 /**
- * Module used for retrieving date using XMLHttpRequest
- * @example
- * Application.require('request').then(function (request) {
- *	 request()
- *		 .url('/data.json')
- *		 .response('json')
- *		 .then(function (data) {
- *			 console.log(data);
- *		 }, console.error);
- * }, console.error);
- * @module request
- * @returns {RequestModuleConstructor}
- * @see module:request.RequestModule
+ * @class
+ * @name RequestModule
  */
-declare module "request" {
+declare class RequestModule {
     /**
-     * @method params-parser
-     * @memberof module:request
-     * @param {string} value
-     * @param {string} pattern
-     * @param {object} [opts]
-     * @param {object} [opts.cache] object where reg expressions will be cached
-     * @param {function} [opts.mapper] function that will decode value, default is decodeURIComponent
-     * @param {string} [opts.boud="\x02\x00\x00\x03"] function that will decode value, default is decodeURIComponent
-     * @param {object} [opts.ret] object to be updated with found params
-     * @param {string[]} [opts.tableIndex] list of parameters' names ( @experimental )
-     * @param {string} [opts.pRegExp="\\:([a-z][a-z0-9]+)"] RegExp params' chars
-     * @param {string} [opts.matchGroup="([^\\/]+)"] RegExp value
-     * @param {string} [opts.fixedEnd=true] RegExp value
-     * @returns {Object<string,string>}
+     * @method config
+     * @memberof RequestModule#
+     * @returns {RequestModule.RequestConfig}
      */
-    function params-parser(value: string, pattern: string, opts?: {
-        cache?: any;
-        mapper?: (...params: any[]) => any;
-        boud?: string;
-        ret?: any;
-        tableIndex?: string[];
-        pRegExp?: string;
-        matchGroup?: string;
-        fixedEnd?: string;
-    }): {
-        [key: string]: string;
-    };
+    config(): RequestModule.RequestConfig;
     /**
-     * @memberof module:request
-     * @class
-     * @name RequestModule
-     */
-    class RequestModule {
-        /**
-         * @method config
-         * @memberof module:request.RequestModule#
-         * @returns {RequestModule.RequestConfig}
-         */
-        config(): RequestModule.RequestConfig;
-        /**
-         * @method configurator
-         * @memberof module:request.RequestModule#
-         * @param {('multipart'|'blob'|'binary'|'POST'|'prepare-multipart'|'retrieve-blob'|'retrieve-binary-string'|'prepare-post'|'check-status-code'|'ignore-status-code')} template configuration name
-         * @returns {RequestModule}
-         */
-        configurator(template: 'multipart' | 'blob' | 'binary' | 'POST' | 'prepare-multipart' | 'retrieve-blob' | 'retrieve-binary-string' | 'prepare-post' | 'check-status-code' | 'ignore-status-code'): RequestModule;
-        /**
-         * @method request
-         * @memberof module:request.RequestModule#
-         * @returns {XMLHttpRequest}
-         */
-        request(): XMLHttpRequest;
-        /**
-         * @method response
-         * @memberof module:request.RequestModule#
-         * @returns {XMLHttpRequest.response}
-         */
-        response(): XMLHttpRequest.response;
-        /**
-         * @method response
-         * @memberof module:request.RequestModule#
-         * @returns {XMLHttpRequest.response}
-         */
-        response(): XMLHttpRequest.response;
-        /**
-         * @method response
-         * @memberof module:request.RequestModule#
-         * @returns {XMLHttpRequest.response}
-         */
-        response(): XMLHttpRequest.response;
-        /**
-         * @method response
-         * @memberof module:request.RequestModule#
-         * @returns {XMLHttpRequest.response}
-         */
-        response(): XMLHttpRequest.response;
-        /**
-         * @method response
-         * @memberof module:request.RequestModule#
-         * @returns {XMLHttpRequest.response}
-         */
-        response(): XMLHttpRequest.response;
-        /**
-         * @method response
-         * @memberof module:request.RequestModule#
-         * @returns {XMLHttpRequest.response}
-         */
-        response(): XMLHttpRequest.response;
-        /**
-         * current XMLHttpRequest timeout in seconds
-         * @method timeout
-         * @memberof module:request.RequestModule#
-         * @returns {number}
-         */
-        timeout(): number;
-        /**
-         * current XMLHttpRequest timeout in seconds
-         * @method timeout
-         * @memberof module:request.RequestModule#
-         * @returns {number}
-         */
-        timeout(): number;
-        /**
-         * current XMLHttpRequest withCredentials status
-         * @method withCredentials
-         * @memberof module:request.RequestModule#
-         * @returns {boolean}
-         */
-        withCredentials(): boolean;
-        /**
-         * current XMLHttpRequest withCredentials status
-         * @method withCredentials
-         * @memberof module:request.RequestModule#
-         * @returns {boolean}
-         */
-        withCredentials(): boolean;
-        /**
-         * Client has been created. open() not called yet.
-         * @alias module:request.RequestModule.READY_STATE_UNSENT
-         * @type {number}
-         * @default 0
-         */
-        static READY_STATE_UNSENT: number;
-        /**
-         * open() has been called.
-         * @alias module:request.RequestModule.READY_STATE_OPENED
-         * @type {number}
-         * @default 1
-         */
-        static READY_STATE_OPENED: number;
-        /**
-         * send() has been called, and headers and status are available.
-         * @alias module:request.RequestModule.READY_STATE_HEADERS_RECEIVED
-         * @type {number}
-         * @default 2
-         */
-        static READY_STATE_HEADERS_RECEIVED: number;
-        /**
-         * Downloading; responseText holds partial data.
-         * @alias module:request.RequestModule.READY_STATE_LOADING
-         * @type {number}
-         * @default 3
-         */
-        static READY_STATE_LOADING: number;
-        /**
-         * Downloading is done
-         * @alias module:request.RequestModule.READY_STATE_DONE
-         * @type {number}
-         * @default 4
-         */
-        static READY_STATE_DONE: number;
-        /**
-         * @method readyState
-         * @memberof module:request.RequestModule#
-         * @returns {RequestModule.readyStateType}
-         */
-        readyState(): RequestModule.readyStateType;
-        /**
-         * @method status
-         * @memberof module:request.RequestModule#
-         * @returns {XMLHttpRequest.status}
-         */
-        status(): XMLHttpRequest.status;
-        /**
-         * @method statusText
-         * @memberof module:request.RequestModule#
-         * @returns {XMLHttpRequest.statusText}
-         */
-        statusText(): XMLHttpRequest.statusText;
-        /**
-         * @method async
-         * @memberof module:request.RequestModule#
-         * @returns {RequestModule.RequestConfig.async}
-         * @see module:request.RequestModule.RequestConfig
-         */
-        async(): RequestModule.RequestConfig.async;
-        /**
-         * @method async
-         * @memberof module:request.RequestModule#
-         * @returns {RequestModule.RequestConfig.async}
-         * @see module:request.RequestModule.RequestConfig
-         */
-        async(): RequestModule.RequestConfig.async;
-        /**
-         * @method method
-         * @memberof module:request.RequestModule#
-         * @returns {RequestModule.RequestConfig.method}
-         * @see module:request.RequestModule.RequestConfig
-         */
-        method(): RequestModule.RequestConfig.method;
-        /**
-         * @method method
-         * @memberof module:request.RequestModule#
-         * @returns {RequestModule.RequestConfig.method}
-         * @see module:request.RequestModule.RequestConfig
-         */
-        method(): RequestModule.RequestConfig.method;
-        /**
-         * @method url
-         * @memberof module:request.RequestModule#
-         * @returns {RequestModule.RequestConfig.url}
-         * @see module:request.RequestModule.RequestConfig
-         */
-        url(): RequestModule.RequestConfig.url;
-        /**
-         * @method url
-         * @memberof module:request.RequestModule#
-         * @returns {RequestModule.RequestConfig.url}
-         * @see module:request.RequestModule.RequestConfig
-         */
-        url(): RequestModule.RequestConfig.url;
-        /**
-         * @method open
-         * @memberof module:request.RequestModule#
-         * @param {string} [method="GET"]
-         * @param {string} [url]
-         * @param {boolean} [async]
-         * @param {number} [timeout] request timeout in seconds
-         * @returns {RequestModule}
-         */
-        open(method?: string, url?: string, async?: boolean, timeout?: number): RequestModule;
-        /**
-         * @method send
-         * @memberof module:request.RequestModule#
-         * @param {string|FormData|MediaStream} [data='']
-         * @param {("asFormData"|"json")} [type=null]
-         * @returns {RequestModule}
-         */
-        send(data?: string | FormData | MediaStream, type?: "asFormData" | "json"): RequestModule;
-        /**
-         * @method headers
-         * @memberof module:request.RequestModule#
-         * @returns {string}
-         */
-        headers(): string;
-        /**
-         * @method headers
-         * @memberof module:request.RequestModule#
-         * @returns {string}
-         */
-        headers(): string;
-    }
-    /**
-     * @memberof module:request
-     * @callback RequestModuleConstructor
+     * @method configurator
+     * @memberof RequestModule#
+     * @param {('multipart'|'blob'|'binary'|'POST'|'prepare-multipart'|'retrieve-blob'|'retrieve-binary-string'|'prepare-post'|'check-status-code'|'ignore-status-code')} template configuration name
      * @returns {RequestModule}
      */
-    type RequestModuleConstructor = () => RequestModule;
+    configurator(template: 'multipart' | 'blob' | 'binary' | 'POST' | 'prepare-multipart' | 'retrieve-blob' | 'retrieve-binary-string' | 'prepare-post' | 'check-status-code' | 'ignore-status-code'): RequestModule;
+    /**
+     * @method request
+     * @memberof RequestModule#
+     * @returns {XMLHttpRequest}
+     */
+    request(): XMLHttpRequest;
+    /**
+     * @method response
+     * @memberof RequestModule#
+     * @returns {XMLHttpRequest.response}
+     */
+    response(): XMLHttpRequest.response;
+    /**
+     * @method response
+     * @memberof RequestModule#
+     * @returns {XMLHttpRequest.response}
+     */
+    response(): XMLHttpRequest.response;
+    /**
+     * @method response
+     * @memberof RequestModule#
+     * @returns {XMLHttpRequest.response}
+     */
+    response(): XMLHttpRequest.response;
+    /**
+     * @method response
+     * @memberof RequestModule#
+     * @returns {XMLHttpRequest.response}
+     */
+    response(): XMLHttpRequest.response;
+    /**
+     * @method response
+     * @memberof RequestModule#
+     * @returns {XMLHttpRequest.response}
+     */
+    response(): XMLHttpRequest.response;
+    /**
+     * @method response
+     * @memberof RequestModule#
+     * @returns {XMLHttpRequest.response}
+     */
+    response(): XMLHttpRequest.response;
+    /**
+     * current XMLHttpRequest timeout in seconds
+     * @method timeout
+     * @memberof RequestModule#
+     * @returns {number}
+     */
+    timeout(): number;
+    /**
+     * current XMLHttpRequest timeout in seconds
+     * @method timeout
+     * @memberof RequestModule#
+     * @returns {number}
+     */
+    timeout(): number;
+    /**
+     * current XMLHttpRequest withCredentials status
+     * @method withCredentials
+     * @memberof RequestModule#
+     * @returns {boolean}
+     */
+    withCredentials(): boolean;
+    /**
+     * current XMLHttpRequest withCredentials status
+     * @method withCredentials
+     * @memberof RequestModule#
+     * @returns {boolean}
+     */
+    withCredentials(): boolean;
+    /**
+     * Client has been created. open() not called yet.
+     * @alias RequestModule.READY_STATE_UNSENT
+     * @type {number}
+     * @default 0
+     */
+    static READY_STATE_UNSENT: number;
+    /**
+     * open() has been called.
+     * @alias RequestModule.READY_STATE_OPENED
+     * @type {number}
+     * @default 1
+     */
+    static READY_STATE_OPENED: number;
+    /**
+     * send() has been called, and headers and status are available.
+     * @alias RequestModule.READY_STATE_HEADERS_RECEIVED
+     * @type {number}
+     * @default 2
+     */
+    static READY_STATE_HEADERS_RECEIVED: number;
+    /**
+     * Downloading; responseText holds partial data.
+     * @alias RequestModule.READY_STATE_LOADING
+     * @type {number}
+     * @default 3
+     */
+    static READY_STATE_LOADING: number;
+    /**
+     * Downloading is done
+     * @alias RequestModule.READY_STATE_DONE
+     * @type {number}
+     * @default 4
+     */
+    static READY_STATE_DONE: number;
+    /**
+     * @method readyState
+     * @memberof RequestModule#
+     * @returns {RequestModule.readyStateType}
+     */
+    readyState(): RequestModule.readyStateType;
+    /**
+     * @method status
+     * @memberof RequestModule#
+     * @returns {XMLHttpRequest.status}
+     */
+    status(): XMLHttpRequest.status;
+    /**
+     * @method statusText
+     * @memberof RequestModule#
+     * @returns {XMLHttpRequest.statusText}
+     */
+    statusText(): XMLHttpRequest.statusText;
+    /**
+     * @method async
+     * @memberof RequestModule#
+     * @returns {RequestModule.RequestConfig.async}
+     * @see RequestModule.RequestConfig
+     */
+    async(): RequestModule.RequestConfig.async;
+    /**
+     * @method async
+     * @memberof RequestModule#
+     * @returns {RequestModule.RequestConfig.async}
+     * @see RequestModule.RequestConfig
+     */
+    async(): RequestModule.RequestConfig.async;
+    /**
+     * @method method
+     * @memberof RequestModule#
+     * @returns {RequestModule.RequestConfig.method}
+     * @see RequestModule.RequestConfig
+     */
+    method(): RequestModule.RequestConfig.method;
+    /**
+     * @method method
+     * @memberof RequestModule#
+     * @returns {RequestModule.RequestConfig.method}
+     * @see RequestModule.RequestConfig
+     */
+    method(): RequestModule.RequestConfig.method;
+    /**
+     * @method url
+     * @memberof RequestModule#
+     * @returns {RequestModule.RequestConfig.url}
+     * @see RequestModule.RequestConfig
+     */
+    url(): RequestModule.RequestConfig.url;
+    /**
+     * @method url
+     * @memberof RequestModule#
+     * @returns {RequestModule.RequestConfig.url}
+     * @see RequestModule.RequestConfig
+     */
+    url(): RequestModule.RequestConfig.url;
+    /**
+     * @method open
+     * @memberof RequestModule#
+     * @param {string} [method="GET"]
+     * @param {string} [url]
+     * @param {boolean} [async]
+     * @param {number} [timeout] request timeout in seconds
+     * @returns {RequestModule}
+     */
+    open(method?: string, url?: string, async?: boolean, timeout?: number): RequestModule;
+    /**
+     * @method send
+     * @memberof RequestModule#
+     * @param {string|FormData|MediaStream} [data='']
+     * @param {("asFormData"|"json")} [type=null]
+     * @returns {RequestModule}
+     */
+    send(data?: string | FormData | MediaStream, type?: "asFormData" | "json"): RequestModule;
+    /**
+     * @method headers
+     * @memberof RequestModule#
+     * @returns {string}
+     */
+    headers(): string;
+    /**
+     * @method headers
+     * @memberof RequestModule#
+     * @returns {string}
+     */
+    headers(): string;
 }
 
-declare namespace request {
-    namespace RequestModule {
-        /**
-         * @typedef {Object} module:request.RequestModule.RequestConfig
-         * @inner
-         * @property {boolean} [method="GET"]
-         * @property {boolean} [url="#"]
-         * @property {boolean} [async=true]
-         * @property {boolean} [opened=false]
-         * @property {boolean} [isSent=false]
-         * @property {boolean} [isLoaded=false]
-         * @property {boolean} [isUploaded=false]
-         * @property {boolean} [ignoreStatusCode=false]
-         */
-        type RequestConfig = {
-            method?: boolean;
-            url?: boolean;
-            async?: boolean;
-            opened?: boolean;
-            isSent?: boolean;
-            isLoaded?: boolean;
-            isUploaded?: boolean;
-            ignoreStatusCode?: boolean;
-        };
-        /**
-         * @typedef {object} module:request.RequestModule.readyStateType
-         * @property {number} [READY_STATE_UNSENT=0]
-         * @property {number} [READY_STATE_OPENED=1]
-         * @property {number} [READY_STATE_HEADERS_RECEIVED=2]
-         * @property {number} [READY_STATE_LOADING=3]
-         * @property {number} [READY_STATE_DONE=4]
-         */
-        type readyStateType = {
-            READY_STATE_UNSENT?: number;
-            READY_STATE_OPENED?: number;
-            READY_STATE_HEADERS_RECEIVED?: number;
-            READY_STATE_LOADING?: number;
-            READY_STATE_DONE?: number;
-        };
-    }
+/**
+ * @callback RequestModuleConstructor
+ * @returns {RequestModule}
+ */
+declare type RequestModuleConstructor = () => RequestModule;
+
+declare namespace RequestModule {
+    /**
+     * @inner
+     * @typedef {Object} RequestConfig
+     * @memberof RequestModule
+     * @property {boolean} [method="GET"]
+     * @property {boolean} [url="#"]
+     * @property {boolean} [async=true]
+     * @property {boolean} [opened=false]
+     * @property {boolean} [isSent=false]
+     * @property {boolean} [isLoaded=false]
+     * @property {boolean} [isUploaded=false]
+     * @property {boolean} [ignoreStatusCode=false]
+     */
+    type RequestConfig = {
+        method?: boolean;
+        url?: boolean;
+        async?: boolean;
+        opened?: boolean;
+        isSent?: boolean;
+        isLoaded?: boolean;
+        isUploaded?: boolean;
+        ignoreStatusCode?: boolean;
+    };
+    /**
+     * @typedef {object} RequestModule.readyStateType
+     * @property {number} [READY_STATE_UNSENT=0]
+     * @property {number} [READY_STATE_OPENED=1]
+     * @property {number} [READY_STATE_HEADERS_RECEIVED=2]
+     * @property {number} [READY_STATE_LOADING=3]
+     * @property {number} [READY_STATE_DONE=4]
+     */
+    type readyStateType = {
+        READY_STATE_UNSENT?: number;
+        READY_STATE_OPENED?: number;
+        READY_STATE_HEADERS_RECEIVED?: number;
+        READY_STATE_LOADING?: number;
+        READY_STATE_DONE?: number;
+    };
 }
 
 /** @module uri-load
