@@ -38,7 +38,7 @@ module.exports =
 	/**
 	 * @typedef {object} MouseFunctions
 	 * @memberof ExtensionsPrototype
-	 * @property {external:MouseEvent} event
+	 * @property {MouseEvent} event
 	 * @property {ExtensionsPrototype.MousePosition} position
 	 * @property {object} config
 	 * @property {boolean} config.tracking

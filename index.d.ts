@@ -331,13 +331,13 @@ declare namespace ExtensionsPrototype {
     /**
      * @typedef {object} MouseFunctions
      * @memberof ExtensionsPrototype
-     * @property {external:MouseEvent} event
+     * @property {MouseEvent} event
      * @property {ExtensionsPrototype.MousePosition} position
      * @property {object} config
      * @property {boolean} config.tracking
      */
     type MouseFunctions = {
-        event: external;
+        event: MouseEvent;
         position: ExtensionsPrototype.MousePosition;
         config: {
             tracking: boolean;
@@ -589,27 +589,27 @@ declare namespace ExtensionsPrototype {
         /**
          * @method attr
          * @memberof ExtensionsPrototype.slDOMSet
-         * @returns {external:NamedNodeMap}
+         * @returns {NamedNodeMap}
          */
-        static attr(): external;
+        static attr(): NamedNodeMap;
         /**
          * @method attr
          * @memberof ExtensionsPrototype.slDOMSet
-         * @returns {external:NamedNodeMap}
+         * @returns {NamedNodeMap}
          */
-        static attr(): external;
+        static attr(): NamedNodeMap;
         /**
          * @method attr
          * @memberof ExtensionsPrototype.slDOMSet
-         * @returns {external:NamedNodeMap}
+         * @returns {NamedNodeMap}
          */
-        static attr(): external;
+        static attr(): NamedNodeMap;
         /**
          * @method attr
          * @memberof ExtensionsPrototype.slDOMSet
-         * @returns {external:NamedNodeMap}
+         * @returns {NamedNodeMap}
          */
-        static attr(): external;
+        static attr(): NamedNodeMap;
     }
     namespace slDOMSet {
         /**

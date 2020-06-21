@@ -462,7 +462,7 @@
 /**
  * @method attr
  * @memberof ExtensionsPrototype.slDOMSet
- * @returns {external:NamedNodeMap}
+ * @returns {NamedNodeMap}
  */
 /**
  * @method attr
