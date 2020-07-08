@@ -1378,12 +1378,12 @@ declare namespace RequestModule {
     };
 }
 
-/** @module uri-load
+/** @module uriLoad
  */
-declare module "uri-load" {
+declare module "uriLoad" {
     /**
      * loadScript - is a function for adding scripts into the header
-     * @alias module:uri-load.script
+     * @alias module:uriLoad.script
      * @param  {string|string[]}   url      url/urls of scripts
      * @param  {Function} callback [description]
      * @param  {object}   opts     settings with info related to the script tags
@@ -1391,7 +1391,7 @@ declare module "uri-load" {
     function script(url: string | string[], callback: (...params: any[]) => any, opts: any): void;
     /**
      * loadLink - is a function for adding link tags into the header
-     * @alias module:uri-load.link
+     * @alias module:uriLoad.link
      * @param  {string|string[]}   url      url/urls of link tags
      * @param  {Function} callback [description]
      * @param  {object}   opts     settings with info related to the link tags

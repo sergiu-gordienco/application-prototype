@@ -59,7 +59,9 @@
 		"navLevel": 1,
 		"private": false,
 		"removeQuotes": "none",
-		"scripts": [],
+		"scripts": [
+			"https://sgapps.io/components/sgapps-labs-examples/toolbar/loader.js"
+		],
 		"menu": {
 			"Project Page ( Git Lab )": {
 				"href":"https://labs.sgapps.io/open-source/application-prototype",
