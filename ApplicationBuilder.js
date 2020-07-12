@@ -669,6 +669,22 @@ function ApplicationBuilder(callback) {
 						"\n * Module Name: " + module.meta.name +
 						"\n * Module Url: " + module.meta.url +
 						"\n */\n\n") : "";
+
+					module_header += 'var exports = (' + (function (module) {
+						var initialValue = module.exports;var value = {};
+						var timer = setInterval(function () {
+							if (initialValue !== module.exports) { clearInterval(timer); }
+							else if (value !== exports) {
+								if (Application.debugEnabled()) {
+									console.warn("⚠ DEPRECATED:\n\nPlease use `module.exports` instead of `exports` in Application Prototype Framework");
+								}
+								clearInterval(timer);
+								module.exports = exports;
+							}
+						}, 100);
+
+						return value;
+					}).toString() + ')(module);';
 					var console = {
 						log : function () {
 							if (Application.debugEnabled())
@@ -822,7 +838,7 @@ function ApplicationBuilder(callback) {
 								'ApplicationPrototype',
 								'require',
 								'Promise',
-								body
+								module_header + body
 							);
 						} catch (er) {
 							err = er;
@@ -1067,8 +1083,6 @@ ApplicationBuilder.prototype.docs = ((function (ApplicationPrototypeJSDocs) {
 
 	return ApplicationPrototypeJSDocs;
 })()));
-
-
 
 if (isNode()) {
 	module.exports	= ApplicationBuilder;
