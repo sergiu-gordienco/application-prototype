@@ -3,7 +3,7 @@
 /* jshint -W027 */
 /* jshint -W086 */
 
-
+var slDOMEvents_cache = {};
 
 /**
  * @interface ExtensionsPrototype
@@ -1188,12 +1188,7 @@ animate_2D : function(obj){
 	for(i=0;i<r.length;i++) if(r[i] in this.newE.style) this.newE.style[r[i]] = s;
 	} catch(e){return this;};	return this;	},
 	"eventsCache"	: function () {
-		var eventsKey		= "slDOMevents_cache";
-		var eventsHolder	= (window || this);
-		if (!(eventsKey in eventsHolder)) {
-			eventsHolder[eventsKey] = {};
-		}
-		return eventsHolder[eventsKey];
+		return slDOMEvents_cache;
 	},
 	"on" : function(eventName, handler, handlerAlias) {
 		var eventsCache		= this.eventsCache();
@@ -1237,7 +1232,7 @@ animate_2D : function(obj){
 				} else {
 					var node	= this.newE;
 					for (i in eventsCache[eventName]) {
-						eventsCache[eventName][i]	= eventsCache[eventName][i].forEach(function (group) {
+						eventsCache[eventName][i]	= eventsCache[eventName][i].filter(function (group) {
 							if (group.node === node) {
 								var er;
 								try {
