@@ -20,7 +20,7 @@
 /**
  * returns listener Id
  * @method on
- * @memberof ApplicationPrototype.Instance
+ * @memberof ApplicationPrototype.Instance#
  * @param {string|function} event event name of function with name
  * @param {function} [callback] function that will listen data
  * @param {string} [specifiedEventId] event name of function with name
@@ -30,7 +30,7 @@
 /**
  * returns listener Id
  * @method once
- * @memberof ApplicationPrototype.Instance
+ * @memberof ApplicationPrototype.Instance#
  * @param {string|function} event event name of function with name
  * @param {function} [callback] function that will listen data
  * @param {string} [specifiedEventId] event name of function with name
@@ -40,7 +40,7 @@
 /**
  * returns listener Id
  * @method bind
- * @memberof ApplicationPrototype.Instance
+ * @memberof ApplicationPrototype.Instance#
  * @param {string|function} event event name of function with name
  * @param {function|ApplicationPrototype.Instance.BindListenerConfig} [callback] function that will listen data
  * @param {ApplicationPrototype.Instance.BindListenerConfig|string} [listenersConfig] of lis event name of function with name
@@ -50,7 +50,7 @@
 /**
  * remove all event listeners
  * @method off
- * @memberof ApplicationPrototype.Instance
+ * @memberof ApplicationPrototype.Instance#
  * @param {string} event event or events names separated by comma
  * @param {string} [specifiedEventId] event name of function with name
  * @returns {boolean}
@@ -59,7 +59,7 @@
 /**
  * returns listener Id
  * @method crudEvents
- * @memberof ApplicationPrototype.Instance
+ * @memberof ApplicationPrototype.Instance#
  * @param {Object<any>} context will be used as a base for ApplicationPrototype instance that will be returned
  * @param {Object<Function>} publicMethods list of public methods available from returned instance
  * @param {Object<Function>} privateMethods list of private methods available only for instance's methods
@@ -77,7 +77,7 @@
 
 /**
  * @method property
- * @memberof ApplicationPrototype.Instance
+ * @memberof ApplicationPrototype.Instance#
  * @param {string} propertyName
  * @param {ApplicationPrototype.Instance.PropertyHandler} getter
  * @param {ApplicationPrototype.Instance.PropertyHandler} [setter]
@@ -94,7 +94,7 @@
  * @fires ApplicationPrototype.Instance.__afterGet::propName
  *//**
  * @method property
- * @memberof ApplicationPrototype.Instance
+ * @memberof ApplicationPrototype.Instance#
  * @param {ApplicationPrototype.PropertyHandler} getter function with name
  * @param {ApplicationPrototype.PropertyHandler} [setter]
  * @param {object} [config]
@@ -173,7 +173,7 @@
 
 /**
  * @method require
- * @memberof ApplicationPrototype.Builder
+ * @memberof ApplicationPrototype.Builder#
  * @param {string|string[]} events List of Events Names or Array of Events Mapping like [ "uriLoad :: uri-load", "ePrototype :: ExtensionsPrototype" ]
  * @param {function} [callback] Callback that will receive Module
  * @returns {PromiseLike<any>}
@@ -182,7 +182,7 @@
 /**
  * @class
  * @name Promise
- * @memberof ApplicationPrototype.Builder
+ * @memberof ApplicationPrototype.Builder#
  * @param {function} handler
  * @returns {PromiseLike<any>}
  */
@@ -217,40 +217,40 @@
 
 /**
  * @method isNode
- * @memberof ApplicationPrototype.Builder
+ * @memberof ApplicationPrototype.Builder#
  * @returns {boolean}
  */
 
 /**
  * @method isBrowser
- * @memberof ApplicationPrototype.Builder
+ * @memberof ApplicationPrototype.Builder#
  * @returns {boolean}
  */
 
 /**
  * @method debugEnabled
- * @memberof ApplicationPrototype.Builder
+ * @memberof ApplicationPrototype.Builder#
  * @param {boolean} [status]
  * @returns {boolean}
  */
 
 /**
  * @method runModulesInFiles
- * @memberof ApplicationPrototype.Builder
+ * @memberof ApplicationPrototype.Builder#
  * @param {boolean} [status]
  * @returns {boolean}
  */
 
 /**
  * @method consoleOptions
- * @memberof ApplicationPrototype.Builder
+ * @memberof ApplicationPrototype.Builder#
  * @param {ApplicationPrototype.Builder.ConsoleOptions} [options]
  * @returns {ApplicationPrototype.Builder.ConsoleOptions}
  */
 
 /**
  * @method modulePath
- * @memberof ApplicationPrototype.Builder
+ * @memberof ApplicationPrototype.Builder#
  * @param {string} [path]
  * @returns {string}
  */
@@ -273,7 +273,7 @@
 
 /**
  * @method moduleRegister
- * @memberof ApplicationPrototype.Builder
+ * @memberof ApplicationPrototype.Builder#
  * @param {string} path path that will be used as `Application.modulePath()`
  * @param {string[]} modules list of modules names that should be registered
  * @returns {ApplicationPrototype.Builder.ModuleStore}
@@ -292,7 +292,7 @@
 
 /**
  * @callback moduleResolve
- * @memberof ApplicationPrototype.Builder
+ * @memberof ApplicationPrototype.Builder#
  * @param {string} module module name
  * @param {string} [path] module path
  * @returns {ApplicationPrototype.Builder.ModuleMeta}
@@ -342,65 +342,65 @@
  */
 /**
  * @method config
- * @memberof ExtensionsPrototype.slDOMSet
+ * @memberof ExtensionsPrototype.slDOMSet#
  * @param {string} key 
  * @param {any} value
  * @returns {ExtensionsPrototype.slDOMSet}
  */
 /**
  * @method config
- * @memberof ExtensionsPrototype.slDOMSet
+ * @memberof ExtensionsPrototype.slDOMSet#
  * @param {string} key 
  * @returns {any}
  */
 /**
  * @method unique
- * @memberof ExtensionsPrototype.slDOMSet
+ * @memberof ExtensionsPrototype.slDOMSet#
  * @returns {ExtensionsPrototype.slDOMSet}
  */
 /**
  * @method set
- * @memberof ExtensionsPrototype.slDOMSet
+ * @memberof ExtensionsPrototype.slDOMSet#
  * @param {string} v css selector applied over document
  * @returns {ExtensionsPrototype.slDOMSet}
  */
 /**
  * @method set
- * @memberof ExtensionsPrototype.slDOMSet
+ * @memberof ExtensionsPrototype.slDOMSet#
  * @param {(NodeList|any[])} v array of Nodes or HTMLElements
  * @returns {ExtensionsPrototype.slDOMSet}
  */
 /**
  * @method add
- * @memberof ExtensionsPrototype.slDOMSet
+ * @memberof ExtensionsPrototype.slDOMSet#
  * @param {(NodeList|any)} ...v array of Nodes or HTMLElements
  * @returns {ExtensionsPrototype.slDOMSet}
  */
 /**
  * @method env
- * @memberof ExtensionsPrototype.slDOMSet
+ * @memberof ExtensionsPrototype.slDOMSet#
  * @returns {ExtensionsPrototype.slDOM_env}
  */
 /**
  * @method get
- * @memberof ExtensionsPrototype.slDOMSet
+ * @memberof ExtensionsPrototype.slDOMSet#
  * @returns {(Node[])}
  */
 /**
  * @method get
- * @memberof ExtensionsPrototype.slDOMSet
+ * @memberof ExtensionsPrototype.slDOMSet#
  * @param {number} index
  * @returns {(Node)}
  */
 /**
  * @method eq
- * @memberof ExtensionsPrototype.slDOMSet
+ * @memberof ExtensionsPrototype.slDOMSet#
  * @param {number} index
  * @returns {ExtensionsPrototype.slDOMSet}
  */
 /**
  * @method find
- * @memberof ExtensionsPrototype.slDOMSet
+ * @memberof ExtensionsPrototype.slDOMSet#
  * @param {string} cssSelector
  * @returns {ExtensionsPrototype.slDOMSet}
  */
@@ -434,44 +434,44 @@
  */
 /**
  * @method filter
- * @memberof ExtensionsPrototype.slDOMSet
+ * @memberof ExtensionsPrototype.slDOMSet#
  * @param {ExtensionsPrototype.slDOMSet.itemHandlerFilter} filterCallback
  * @returns {ExtensionsPrototype.slDOMSet}
  */
 /**
  * @method each
- * @memberof ExtensionsPrototype.slDOMSet
+ * @memberof ExtensionsPrototype.slDOMSet#
  * @param {ExtensionsPrototype.slDOMSet.itemHandler} filterCallback
  * @returns {ExtensionsPrototype.slDOMSet}
  */
 /**
  * @method map
- * @memberof ExtensionsPrototype.slDOMSet
+ * @memberof ExtensionsPrototype.slDOMSet#
  * @param {ExtensionsPrototype.slDOMSet.itemHandlerMap} filterCallback
  * @returns {ExtensionsPrototype.slDOMSet}
  */
 
 /**
  * @method attr
- * @memberof ExtensionsPrototype.slDOMSet
+ * @memberof ExtensionsPrototype.slDOMSet#
  * @returns {NamedNodeMap}
  */
 /**
  * @method attr
- * @memberof ExtensionsPrototype.slDOMSet
+ * @memberof ExtensionsPrototype.slDOMSet#
  * @param {string} attribute
  * @returns {string}
  */
 /**
  * @method attr
- * @memberof ExtensionsPrototype.slDOMSet
+ * @memberof ExtensionsPrototype.slDOMSet#
  * @param {string} attribute
  * @param {any} value
  * @returns {ExtensionsPrototype.slDOMSet}
  */
 /**
  * @method attr
- * @memberof ExtensionsPrototype.slDOMSet
+ * @memberof ExtensionsPrototype.slDOMSet#
  * @param {any} ...attr_value
  * @returns {ExtensionsPrototype.slDOMSet}
  */
@@ -700,3 +700,354 @@
  */
 
 /// <reference path="constructors/request.js" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * @interface String
+ */
+
+/**
+ * @memberof String#
+ * @method subs
+ * @param {number} index
+ * @param {number} [lastIndex]
+ * @returns {string}
+ */
+
+/**
+ * @memberof String#
+ * @method toHex
+ * @param {boolean} [isUtf8=true]
+ * @returns {string}
+ */
+
+/**
+ * @memberof String#
+ * @method fromHex
+ * @returns {string}
+ */
+
+/**
+ * encode in HTML minimal
+ * @memberof String#
+ * @method toHtmlSimple
+ * @returns {string}
+ */
+
+/**
+ * encode in HTML
+ * @memberof String#
+ * @method toHtml
+ * @returns {string}
+ */
+
+/**
+ * decode from HTML ( works in Browser )
+ * @memberof String#
+ * @method fromHtml
+ * @returns {string}
+ */
+
+/**
+ * remove risky tags from HTML Code: comments, script, iframe, style, object, noscript, frame, frameset
+ * @memberof String#
+ * @method cleanTags
+ * @returns {string}
+ */
+
+/**
+ * @memberof String#
+ * @method add_Class
+ * @param {string} newClass
+ * @returns {string}
+ */
+
+/**
+ * @memberof String#
+ * @method del_Class
+ * @param {string} newClass
+ * @returns {string}
+ */
+
+/**
+ * @memberof String#
+ * @method fnd_Class
+ * @param {string} newClass
+ * @returns {boolean}
+ */
+
+/**
+ * @memberof String#
+ * @method swp_case
+ * @returns {string}
+ */
+
+/**
+ * @memberof String#
+ * @method ucfirst
+ * @param {number} [length=1] how many first chars to be transformed to uppercase
+ * @returns {string}
+ */
+
+/**
+ * @memberof String#
+ * @method lcfirst
+ * @param {number} [length=1] how many first chars to be transformed to uppercase
+ * @returns {string}
+ */
+
+/**
+ * Detects if a string is unicode, and if it is, then it is transformed to UTF8
+ * @memberof String#
+ * @method utf8need
+ * @returns {string}
+ */
+
+/**
+ * @memberof String#
+ * @method utf8encode
+ * @returns {string}
+ */
+
+/**
+ * @memberof String#
+ * @method utf8decode
+ * @returns {string}
+ */
+
+ /**
+ * @see {String#utf8encode}
+ * @memberof String#
+ * @method utf8
+ * @returns {string}
+ */
+
+/**
+ * @see {String#utf8decode}
+ * @memberof String#
+ * @method unicode
+ * @returns {string}
+ */
+
+/**
+ * @memberof String#
+ * @method encryptAes
+ * @param {string} password
+ * @param {number} [size=128]
+ * @returns {string}
+ */
+/**
+ * @memberof String#
+ * @method decryptAes
+ * @param {string} password
+ * @param {number} [size=128]
+ * @returns {string}
+ */
+
+/**
+ * @memberof String#
+ * @method encryptTea
+ * @param {string} password
+ * @returns {string}
+ */
+
+/**
+ * @memberof String#
+ * @method decryptTea
+ * @param {string} password
+ * @returns {string}
+ */
+
+/**
+ * @memberof String#
+ * @method base64decode
+ * @returns {string}
+ */
+
+/**
+ * @memberof String#
+ * @method base64encode
+ * @returns {string}
+ */
+
+/**
+ * @memberof String#
+ * @method base64decodeBytes
+ * @returns {Uint8Array}
+ */
+
+/**
+ * @memberof String#
+ * @method base64encodeBytes
+ * @returns {Uint8Array}
+ */
+
+/**
+ * @memberof String#
+ * @method base64decodeBytesArray
+ * @returns {Array<number>}
+ */
+
+/**
+ * @memberof String#
+ * @method base64encodeBytesArray
+ * @returns {Array<number>}
+ */
+
+
+/**
+ * @memberof String#
+ * @method base64encodeClean
+ * @returns {string}
+ */
+
+/**
+ * @memberof String#
+ * @method base64decodeClean
+ * @returns {string}
+ */
+
+/**
+ * @memberof String#
+ * @method encodeURI
+ * @returns {string}
+ */
+
+/**
+ * @memberof String#
+ * @method decodeURI
+ * @returns {string}
+ */
+
+/**
+ * @memberof String#
+ * @method escapeHex
+ * @returns {string}
+ */
+
+/**
+ * @memberof String#
+ * @method escape
+ * @returns {string}
+ */
+
+/**
+ * @memberof String#
+ * @method unescape
+ * @returns {string}
+ */
+
+/**
+ * @memberof String#
+ * @method sha1
+ * @param {boolean} [isUtf8=true]
+ * @returns {string}
+ */
+
+/**
+ * @memberof String#
+ * @method sha256
+ * @param {boolean} [isUtf8=true]
+ * @returns {string}
+ */
+
+/**
+ * @memberof String#
+ * @method subs
+ * @param {number} index
+ * @param {number} count
+ * @returns {string}
+ */
+
+/**
+ * @memberof String#
+ * @method md5
+ * @returns {string}
+ */
+
+/**
+ * @memberof String#
+ * @method markdown
+ * @returns {string}
+ */
+
+/**
+ * @memberof String#
+ * @method toRegexp
+ * @returns {RegExp}
+ */
+
+/**
+ * @memberof String#
+ * @method parseUrl
+ * @param {("get_vars"|boolean)} [mode]
+ * @returns {object}
+ */
+
+/**
+ * @memberof String#
+ * @method match_str
+ * @param {string} rule reg exp rule in string format
+ * @param {string} [flags] reg exp flags
+ * @returns {Array|object}
+ */
+
+/**
+ * Returns a list of parameters included in a string
+ * @example
+ * 'my-demo testIndex: 23 with testValue: "demo content"'.buildQuery()
+ * // returns
+ * {
+ *     "_keys": [
+ *         "testindex",
+ *         "testvalue"
+ *     ],
+ *     "_": "my-demo",
+ *     "testindex": "23 with",
+ *     "testvalue": "\"demo content\""
+ * }
+ * @memberof String#
+ * @method buildQuery
+ * @returns {Object<string,(string|string[])>}
+ */
+
+
+/**
+ * Returns a list of parameters included in a string
+ * @example
+ * '"this is" "list of fragments"'.buildSearchArray()
+ * // returns
+ * [
+ *     "this is",
+ *     "list of fragments"
+ * ]
+ * @memberof String#
+ * @method buildSearchArray
+ * @returns {Array<string>}
+ */
+
+/**
+ * @memberof String#
+ * @method toArrayBufferFromUtf8
+ * @returns {ArrayBuffer}
+ */
+
+
+

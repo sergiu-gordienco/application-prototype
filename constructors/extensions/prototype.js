@@ -1397,9 +1397,9 @@ utf8decode : function(strUtf) {
 	return this.replace(/[\u00e0-\u00ef][\u0080-\u00bf][\u0080-\u00bf]/g,function(c){var cc = ((c.charCodeAt(0)&0x0f)<<12) | ((c.charCodeAt(1)&0x3f)<<6) | ( c.charCodeAt(2)&0x3f);return String.fromCharCode(cc);}).replace(/[\u00c0-\u00df][\u0080-\u00bf]/g,function(c){return String.fromCharCode((c.charCodeAt(0)&0x1f)<<6 | c.charCodeAt(1)&0x3f);});},
 toRegexp : function(flags){
 	if(!flags) flags	= '';
-	var e,r = false;try {
+	var e,r = null;try {
 		eval("r = "+(this.match(/^\//) ? this : '/'+this+'/')+""+flags+" ;");
-	} catch(e) { r = false; };
+	} catch(e) { r = null; };
 	return r;
 },
 escapeHex	: function() { return escape(this).replace(/\%u/g,'\\u').replace(/\%/g,'\\x') },
@@ -1508,14 +1508,14 @@ match_str	: function(str,flags){
 sha1 : function(utf8){return Sha1.hash(this,( utf8 || typeof(utf8) == "undefined" ) ? true : false)},
 sha256 : function(utf8){return Sha256.hash(this,( utf8 || typeof(utf8) == "undefined" ) ? true : false)},
 md5	: function() { return MD5(this);},
-base64encode	: function() { return btoa(this.utf8need()); },
-base64decode	: function() { return atob(this).unicode(); },
+base64encode	: function() { return base64.encode(this.utf8need()); },
+base64decode	: function() { return base64.decode(this).unicode(); },
 base64encodeBytes	: function() { return base64Binary.encodeBytes(this); },
 base64encodeBytesArray	: function() { return Array.prototype.slice.call(this.base64encodeBytes()); },
 base64decodeBytes	: function() { return base64Binary.decode(this); },
 base64decodeBytesArray	: function() { return Array.prototype.slice.call(this.base64decodeBytes()); },
-base64encodeClean	: function() { return btoa(this); },
-base64decodeClean	: function() { return atob(this); },
+base64encodeClean	: function() { return base64.encode(this); },
+base64decodeClean	: function() { return base64.decode(this); },
 encryptTea	: function(p) { return Tea.encrypt(this,p); },
 decryptTea	: function(p) { return Tea.decrypt(this,p); },
 encryptAes	: function(p,b) { return Aes.Ctr.encrypt(this,p,b ? b : 128); },
@@ -1531,7 +1531,7 @@ buildQuery	: function() {
 	while( m = f.match(r) ) {
 		o[k = m[1].toLowerCase()]	= m[2];
 		o["_keys"].push(k);
-		f = f.split(m[0]).join(m[3]);
+		f = f.replace(m[0], m[3]);
 	};
 	return o;
 },
@@ -1539,7 +1539,7 @@ buildSearchArray	: function() {
 	var s = this,m,a = [];
 	while( m = s.match(/(\"[^\"]+\"|\'[^\']+\'|\S+)/) ) {
 		a.push(m[1].replace(/^(\"|\')([\s\S]+)?\1/,'$2'));
-		s = s.split(m[0]).join('');
+		s = s.replace(m[0], '');
 	};
 	return a;
 }
@@ -1562,7 +1562,7 @@ var i;for(i in o) {
 			value: o[i],
 			writable: false,
 			configurable: true,
-			enumerable: false
+			enumerable: true
 		}
 	);
 }
@@ -2101,8 +2101,13 @@ var base64 = {
 	encode : function(s) {if (arguments.length !== 1) {throw new SyntaxError("Not enough arguments");};var padchar = base64.PADCHAR;var alpha   = base64.ALPHA;var getbyte = base64.getbyte;var i, b10;var x = [];s = '' + s;var imax = s.length - s.length % 3;if (s.length === 0) return s;for (i = 0; i < imax; i += 3) {b10 = (getbyte(s,i) << 16) | (getbyte(s,i+1) << 8) | getbyte(s,i+2);x.push(alpha.charAt(b10 >> 18));x.push(alpha.charAt((b10 >> 12) & 0x3F));x.push(alpha.charAt((b10 >> 6) & 0x3f));x.push(alpha.charAt(b10 & 0x3f));};switch (s.length - imax) {case 1:b10 = getbyte(s,i) << 16;x.push(alpha.charAt(b10 >> 18) + alpha.charAt((b10 >> 12) & 0x3F) + padchar + padchar);break;case 2:b10 = (getbyte(s,i) << 16) | (getbyte(s,i+1) << 8);x.push(alpha.charAt(b10 >> 18) + alpha.charAt((b10 >> 12) & 0x3F) + alpha.charAt((b10 >> 6) & 0x3f) + padchar);break;};return x.join('');}
 };
 _public.string.base64 = base64;
-if (!window.btoa) window.btoa = base64.encode;
-if (!window.atob) window.atob = base64.decode;
+if (typeof(window) === "object") {
+	if (!window.btoa) window.btoa = base64.encode;
+	if (!window.atob) window.atob = base64.decode;
+} else if (typeof(global) === "object") {
+	if (!global.btoa) global.btoa = base64.encode;
+	if (!global.atob) global.atob = base64.decode;
+}
 
 
 
@@ -2221,7 +2226,7 @@ function base64toBlob(b64Data, contentType, sliceSize) {
 	function charCodeFromCharacter(c) {	return c.charCodeAt(0);	};
 	var byteArrays = [], byteCharacters = null;
 	if (typeof(b64Data) === "string") {
-		byteCharacters	= atob(b64Data);
+		byteCharacters	= base64.decode(b64Data);
 		for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
 			var slice = byteCharacters.slice(offset, offset + sliceSize);
 			var byteNumbers = Array.prototype.map.call(slice, charCodeFromCharacter);

@@ -3,7 +3,7 @@
 var isBrowser=new Function("try {return this===window;}catch(e){ return false;}");
 var isNode=new Function("var isBrowser = false; try { isBrowser = this===window;}catch(e){ isBrowser = false;}; try {return !isBrowser && ( this ===global );}catch(e){console.error(e); return false;}");
 
-;((function (window, undefined) {
+var ApplicationPrototype = ((function (window, undefined) {
 	window.ApplicationPrototype	= (function (builder) {
 		var methods = {};
 		var private_methods	= [];
@@ -280,6 +280,8 @@ var isNode=new Function("var isBrowser = false; try { isBrowser = this===window;
 		}
 		return public_methods;
 	});
+
+	return window.ApplicationPrototype;
 })((function () {
 	if (typeof(window) !== "undefined") { return window;
 	} else if (typeof(global) !== "undefined") { return global;

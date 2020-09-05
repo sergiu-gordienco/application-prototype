@@ -1,6 +1,6 @@
 {
   "name": "application-prototype",
-  "version": "1.25.12",
+  "version": "1.25.13",
   "description": "Application builder - prototype",
   "main": "index.ts",
   "scripts": {
@@ -43,7 +43,7 @@
     "-W069": true,
     "-W032": true
   },
-  "author": "Sergiu Gordienco <sergiu.gordienco@gmail.com> (http://www.cloudwebcode.com/)",
+  "author": "Sergiu Gordienco <sergiu.gordienco@gmail.com> ( https://sgapps.io/about-us )",
   "license": "Creative Commons Attribution-NonCommercial 4.0 / or Granted by SGApps Labs",
   "bugs": {
     "url": "https://github.com/sergiu-gordienco/application-prototype/issues"
