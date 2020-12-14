@@ -182,7 +182,7 @@
 /**
  * @class
  * @name Promise
- * @memberof ApplicationPrototype.Builder#
+ * @memberof ApplicationPrototype.Builder
  * @param {function} handler
  * @returns {PromiseLike<any>}
  */

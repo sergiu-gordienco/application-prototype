@@ -1676,12 +1676,40 @@ declare namespace ApplicationPrototype {
         /**
          * @class
          * @name Promise
-         * @memberof ApplicationPrototype.Builder#
+         * @memberof ApplicationPrototype.Builder
          * @param {function} handler
          * @returns {PromiseLike<any>}
          */
         class Promise {
             constructor(handler: (...params: any[]) => any);
+            /**
+             * @method all
+             * @memberof ApplicationPrototype.Builder.Promise
+             * @param {Promise[]} items
+             * @returns {PromiseLike<any[]>}
+             */
+            static all(items: Promise[]): PromiseLike<any[]>;
+            /**
+             * @method race
+             * @memberof ApplicationPrototype.Builder.Promise
+             * @param {Promise[]} items
+             * @returns {PromiseLike<any[]>}
+             */
+            static race(items: Promise[]): PromiseLike<any[]>;
+            /**
+             * @method resolve
+             * @memberof ApplicationPrototype.Builder.Promise
+             * @param {any} value
+             * @returns {PromiseLike<any>}
+             */
+            static resolve(value: any): PromiseLike<any>;
+            /**
+             * @method reject
+             * @memberof ApplicationPrototype.Builder.Promise
+             * @param {any} value
+             * @returns {PromiseLike<Error>}
+             */
+            static reject(value: any): PromiseLike<Error>;
         }
         /**
          * @typedef {object} ConsoleOptions

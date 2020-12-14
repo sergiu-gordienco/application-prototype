@@ -1,4 +1,6 @@
 /// <reference path="index.d.ts" />
+/* jshint -W054, -W018, undef:true */
+/* globals APP_BUILDER_GLOBAL, window, module, process, console, global, setImmediate, setTimeout */
 
 var isBrowser=new Function("try {return this===window;}catch(e){ return false;}");
 var isNode=new Function("var isBrowser = false; try { isBrowser = this===window;}catch(e){ isBrowser = false;}; try {return !isBrowser && ( this ===global );}catch(e){console.error(e); return false;}");
@@ -13,9 +15,13 @@ var ApplicationPrototype = ((function (window, undefined) {
 		var crudEvents	= function (methods, public_methods, private_methods) {
 			var events		= {};
 			var nextTick;
+			// @ts-ignore
 			if (typeof(setImmediate) === "function") {
+				// @ts-ignore
 				nextTick = setImmediate;
+				// @ts-ignore
 			} else if (typeof(process) === "object" && process && typeof(process.nextTick) === "function") {
+				// @ts-ignore
 				nextTick = setImmediate;
 			} else {
 				nextTick = setTimeout;
@@ -30,19 +36,22 @@ var ApplicationPrototype = ((function (window, undefined) {
 						listenedOn		: false,
 						listenedAfter	: false,
 						allowInterruption: false
-					}
+					};
 					if (conf.indexOf("light") !== -1) { // on
+						//@ts-ignore
 						method_config.listenedOn	= {
 							hookname : "on" + methodNameCamel
 						};
 						method_config.allowInterruption	= true;
 					}
 					if (conf.indexOf("af") !== -1) { // after
+						//@ts-ignore
 						method_config.listenedAfter	= {
 							hookname : "after" + methodNameCamel
 						};
 					}
 					if (conf.indexOf("on") !== -1) { // on
+						//@ts-ignore
 						method_config.listenedOn	= {
 							hookname : "on" + methodNameCamel
 						};
@@ -51,6 +60,7 @@ var ApplicationPrototype = ((function (window, undefined) {
 						method_config.allowInterruption	= true;
 					}
 					if (conf.indexOf("before") !== -1 || conf.indexOf("bf") !== -1) { // before
+						//@ts-ignore
 						method_config.listenedBefore	= {
 							hookname : "before" + methodNameCamel
 						};
@@ -61,7 +71,7 @@ var ApplicationPrototype = ((function (window, undefined) {
 						listenedOn		: { hookname : "on" + methodNameCamel },
 						listenedAfter	: { hookname : "after" + methodNameCamel },
 						allowInterruption: true
-					}
+					};
 				}
 				if (conf && typeof(conf) === "object") {
 					((function (config, conf) {
@@ -75,7 +85,11 @@ var ApplicationPrototype = ((function (window, undefined) {
 				}
 				public_methods[method]	= function () {
 					if (
-						method === 'on' || method === 'once' || method === 'off' || method === 'emit' || method === 'bind'
+						method === 'on' || method === 'once' || method === 'off' || method === 'emit' || method === 'bind' || (
+							method_config.listenedBefore === false
+							&& method_config.listenedOn === false
+							&& method_config.listenedAfter === false
+						)
 					) {
 						return ( f || methods[method] ).apply(public_methods, arguments);
 					}
@@ -135,7 +149,7 @@ var ApplicationPrototype = ((function (window, undefined) {
 				id = methods.on(eventName, function () {
 					methods.off(eventName, id);
 					handler.apply(this, arguments);
-				}, handler);
+				}, handlerId);
 				return id;
 			};
 			methods.off	= function (eventName, handlerId) {
@@ -143,7 +157,7 @@ var ApplicationPrototype = ((function (window, undefined) {
 					eventName.split(/\s*\,\s*/).forEach(function (eventName) {
 						eventName = eventName.replace(/^\s+/, '').replace(/\s+$/, '');
 						if (!eventName) return;
-						methods.off(eventName, handler, handlerId);
+						methods.off(eventName, handlerId);
 					});
 					return;
 				} else {
@@ -281,13 +295,17 @@ var ApplicationPrototype = ((function (window, undefined) {
 		return public_methods;
 	});
 
+
 	return window.ApplicationPrototype;
 })((function () {
 	if (typeof(window) !== "undefined") { return window;
+		// @ts-ignore
 	} else if (typeof(global) !== "undefined") { return global;
+		// @ts-ignore
 	} else if (typeof(APP_BUILDER_GLOBAL) === "undefined") {
 		throw new Error("Define APP_BUILDER_GLOBAL as global reference");
 	} else {
+		// @ts-ignore
 		return APP_BUILDER_GLOBAL;
 	}
 })()));
