@@ -45,7 +45,7 @@ function ApplicationBuilder(callback) {
 	};
 	var getExecInfo = function () {
 		var err;
-		try { throw Error("debugg error"); } catch (err) {
+		try { throw Error("debug error"); } catch (err) {
 			return err.stack.replace(/^[^\n]+\n[^\n]+\n/, '').replace(/^\n+/, '');
 		}
 		return null;
@@ -251,7 +251,7 @@ function ApplicationBuilder(callback) {
 		config	= configurations;
 		vars	= variables;
 		config.cache_enabled	= false;
-		config.debug_enabled	= true;
+		config.debug_enabled	= false;
 		config.runModulesInFiles = false;
 		// console.log(callback.toString());
 		if (typeof(callback) === "function") {
@@ -429,7 +429,9 @@ function ApplicationBuilder(callback) {
 			if (config.debug_enabled) {
 				if (!ApplicationPrototypeJSDocs) {
 					ApplicationPrototypeJSDocs = _self.docs();
-					ApplicationPrototypeJSDocs.subscribe(Application);
+					if (ApplicationPrototypeJSDocs) {
+						ApplicationPrototypeJSDocs.subscribe(Application);
+					}
 				}
 			}
 		}
@@ -631,7 +633,7 @@ function ApplicationBuilder(callback) {
 					};
 
 					if (Application.debugEnabled()) {
-						if (typeof(ApplicationPrototypeJSDocs) === "object") {
+						if (ApplicationPrototypeJSDocs && typeof(ApplicationPrototypeJSDocs) === "object") {
 							ApplicationPrototypeJSDocs.subscribeModule(module);
 						}
 					}
@@ -958,10 +960,14 @@ function ApplicationBuilder(callback) {
 									err = undefined;
 									try {
 										if (Application.debugEnabled()) {
-											var runCode = function () {
-												return moduleRunner(module_text);
-											};
-											ApplicationPrototypeJSDocs.evalModule(module_text, module, module_header, runCode);
+											if (ApplicationPrototypeJSDocs) {
+												var runCode = function () {
+													return moduleRunner(module_text);
+												};
+												ApplicationPrototypeJSDocs.evalModule(module_text, module, module_header, runCode);
+											} else {
+												moduleRunner(module_text);
+											}
 										} else {
 											moduleRunner(module_text);
 										}
@@ -977,10 +983,14 @@ function ApplicationBuilder(callback) {
 								var err;
 								try {
 									if (Application.debugEnabled()) {
-										var runCode = function () {
-											return moduleRunner(module_text);
-										};
-										ApplicationPrototypeJSDocs.evalModule(module_text, module, module_header, runCode);
+										if (ApplicationPrototypeJSDocs) {
+											var runCode = function () {
+												return moduleRunner(module_text);
+											};
+											ApplicationPrototypeJSDocs.evalModule(module_text, module, module_header, runCode);
+										} else {
+											moduleRunner(module_text);
+										}
 									} else {
 										moduleRunner(module_text);
 									}
