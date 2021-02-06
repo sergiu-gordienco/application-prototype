@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>constructors/browser-session.js - Application Prototype - Framework</title>
+    <title>Promise - Application Prototype - Framework</title>
     
     <meta name="description" content="Application Prototype Framework based on Module Pattern" />
     
@@ -46,306 +46,810 @@
 
 <div id="main">
     
-    <h1 class="page-title">constructors/browser-session.js</h1>
+    <h1 class="page-title">Promise</h1>
     
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/* jshint -W014 */
-/* jshint -W002 */
-var sessionDbConnection = false;
-var dbConnectionBuilder 	= false;
+        <h2>
+            <span class="ancestors"><a href="ApplicationPrototype.html">ApplicationPrototype</a><a href="ApplicationPrototype.Builder.html">.Builder</a>.</span>
+        
+        Promise
+        </h2>
+        
+    
+</header>
 
-/**
- * browserSessionBuilder description
- * @interface BrowserSessionModule
- * @param  {string|object} objectStoreArg name or object of strategyStore
- * @param {object} [objectStoreConf]
- */
-var browserSessionBuilder	= function (objectStoreArg, objectStoreConf) {
-	var app	= new ApplicationPrototype();
-	var loader = Application.Promise();
-	if (typeof(objectStoreArg) === "string") {
-		var strategyName = objectStoreArg;
-		objectStoreArg	= module.require('strategy/'+strategyName).then(function (strategyStore) {
-			loader.resolve(new strategyStore(objectStoreConf));
-		}, function (err) {
-			loader.reject(err);
-		});
-	} else {
-		if (typeof(objectStoreArg) === "object") {
-			objectStoreArg.initialization.then(function () {
-				loader.resolve(objectStoreArg);
-			}, function (err) {
-				loader.reject(err);
-			});
-		} else {
-			loader.resolve(sessionDbConnection);
-		}
-	}
-	loader.then(function (objectStore) {
-		var newId	= ((function () {
-			var k = 0;
-			return function (p) {
-				return (p || '')
-					+ (new Date().valueOf().toString(36))
-					+ '_'
-					+ (++k).toString(36)
-					+ '_'
-					+ Math.floor(Math.random() * 100000000).toString(36);
-			};
-		})());
-		;((function () {
-			var sid = newId('sid_');
-			app.bind("id", function () {
-				return sid;
-			}, "");
-		})());
-		app.bind("getItem",
-			/**
-			 * @method getItem
-			 * @memberof BrowserSessionModule
-			 * @param {string} key 
-			 * @param {boolean} returnResult 
-			 * @returns {Promise&lt;any>}
-			 */
-			function (key, returnResult) {
-			return new Application.Promise(function (resolve, reject) {
-				objectStore.getItem(key).then(function (event) {
-					resolve(
-						(typeof(event.target.result) === "object" &amp;&amp; event.target.result &amp;&amp; !returnResult)
-						? event.target.result.v : event.target.result
-					);
-				}, function (event) {
-					reject(event);
-				});
-			});
-		}, "");
-		app.bind("setItem",
-			/**
-			 * @method setItem
-			 * @memberof BrowserSessionModule
-			 * @param {string} key 
-			 * @param {any} val
-			 * @param {boolean} returnResult 
-			 * @returns {Promise&lt;any>}
-			 */
-			function (key, val, returnResult) {
-			return new Application.Promise(function (resolve, reject) {
-				app.getItem(key, true).then(function (result) {
-					var setValue = function () {
-						objectStore.setItem(key, val).then(function (event) {
-							resolve(
-								(typeof(event.target.result) === "object" &amp;&amp; event.target.result &amp;&amp; !returnResult)
-								? event.target.result.v : event.target.result
-							);
-							app.emit("setItem::"+key, [key, val]);
-						}, function (event) {
-							reject(event);
-						});
-					};
-					if (typeof(result) !== undefined) {
-						app.removeItem(key).then(function () {
-							setValue();
-						}, function (event) {
-							reject(event);
-						});
-					} else {
-						setValue();
-					}
-				}, function (event) {
-					reject(event);
-				});
-			});
-		});
-		app.bind("removeItem",
-			/**
-			 * @method removeItem
-			 * @memberof BrowserSessionModule
-			 * @param {string} key 
-			 * @param {boolean} returnResult 
-			 * @returns {Promise&lt;any>}
-			 */
-			function (key, returnResult) {
-			return new Application.Promise(function (resolve, reject) {
-				objectStore.removeItem(key).then(function (event) {
-					resolve(
-						(typeof(event.target.result) === "object" &amp;&amp; event.target.result &amp;&amp; !returnResult)
-						? event.target.result.v : event.target.result
-					);
-					app.emit("removeItem::"+key, [key]);
-				}, function (event) {
-					reject(event);
-				});
-			});
-		});
-		app.bind("getItems",
-			/**
-			 * @method getItems
-			 * @memberof BrowserSessionModule
-			 * @param {string[]} keys
-			 * @returns {Promise&lt;Object&lt;string,any>>}
-			 */
-			function (keys) {
-			return new Application.Promise(function (resolve, reject) {
-				Application.Promise.all(keys.map(function (key) {
-					return app.getItem(key);
-				})).then(function (values) {
-					var result = {};
-					keys.forEach(function (key, index) {
-						result[key]	= values[index];
-					});
-					resolve(result);
-				}, function (event) {
-					reject(event);
-				});
-			});
-		});
+<article>
+    
+        <div class="container-overview">
+        
+            
 
-		app.bind("setItems",
-			/**
-			 * @method setItems
-			 * @memberof BrowserSessionModule
-			 * @param {Object&lt;string,any>} obj
-			 * @returns {Promise&lt;any[]>}
-			 */
-			function (obj) {
-			var i, arr = [];
-			for (i in obj) {
-				arr.push((function (key, value) {
-					return app.setItem(key, value);
-				})(i, obj[i]));
-			}
-			return Application.Promise.all(arr);
-		});
+    
 
-		app.bind("removeItems",
-			/**
-			 * @method removeItems
-			 * @memberof BrowserSessionModule
-			 * @param {string[]} keys
-			 * @returns {Promise&lt;any[]>}
-			 */
-			function (keys) {
-			return Application.Promise.all(keys.map(function (key) {
-				return app.removeItem(key);
-			}));
-		});
+    <h4 class="name" id="Promise"><span class="type-signature"></span>new Promise<span class="signature">(handler)</span><span class="type-signature"> &rarr; {PromiseLike.&lt;any>}</span></h4>
 
-		app.bind("findItems",
-			/**
-			 * @method findItems
-			 * @memberof BrowserSessionModule
-			 * @param {function(any):boolean} filter
-			 * @returns {Promise&lt;Object&lt;string,any>>}
-			 */
-			function (filter) {
-			return new Application.Promise(function (resolve, reject) {
-				objectStore.filter(filter).then(function (event) {
-					var result = {};
-					event.target.result.forEach(function (row) {
-						result[row.k] = row.v;
-					});
-					resolve(result);
-				}, function (event) {
-					reject(event);
-				});
-			});
-		});
+    
 
 
-		app.bind("clear",
-			/**
-			 * @method clear
-			 * @memberof BrowserSessionModule
-			 * @returns {Promise&lt;any>}
-			 */
-			function () {
-			return new Application.Promise(function (resolve, reject) {
-				objectStore.filter(function (k ,v) {
-					var er;
-					try {
-						app.removeItem(k);
-						return true;
-					} catch (er) {}
-				}).then(function (event) {
-					var result = {};
-					event.target.result.forEach(function (row) {
-						result[row.k] = row.v;
-					});
-					resolve(result);
-				}, function (event) {
-					reject(event);
-				});
-			});
-		});
-	}, function (err) {
-		console.error(err);
-		app.emit('error', [err]);
-	});
-	return Application.Promise(function (resolve, reject) {
-		loader.then(function (store) {
-			resolve(app);
-		}, function (err) {
-			reject(err);
-		})
-	});
-};
-
-module.require('strategy/indexed-db').then(function (dbConnectionBuilder) {
-	var loader = new Application.Promise();
-	var _sessionConnection;
-	var er;
-	try {
-		_sessionConnection	= dbConnectionBuilder({ name: "browserDefaultSession", table: "references" });
-	} catch (er) {}
-
-	_sessionConnection.initialization.then(function () {
-		loader.resolve(_sessionConnection);
-	}, function (err) {
-		console.error(err);
-		var er;
-		try {
-			console.warn("IndexDB not supported, fallback to localStorage or polyfill emulation");
-			module.require('strategy/local-storage').then(function (strategyStore) {
-				_sessionConnection	= strategyStore();
-				_sessionConnection.initialization.then(function () {
-					loader.resolve(_sessionConnection);
-				}, function (event) {
-					loader.reject(event);
-				});
-			}, function (err) {
-				loader.reject(err);
-			});
-		} catch (er) {
-			loader.reject(er);
-		}
-	});
-
-	loader.then(function (_sessionConnection) {
-		sessionDbConnection	= _sessionConnection;
-		if (typeof(module) === "object" &amp;&amp; module) {
-			module.exports	= browserSessionBuilder;
-		} else if (typeof(window) === "object" &amp;&amp; window) {
-			window.browserSession	= new browserSessionBuilder();
-		}
-	}, function (err) {
-		console.error("browserSession Error", err);
-	});
 
 
-	// browserSessionBuilder.dbConnectionBuilder	= dbConnectionBuilder;
-}).catch(function (reason) {
- console.error(reason);
-});
-</code></pre>
-        </article>
-    </section>
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="dictionary.d.js.html">dictionary.d.js</a>, <a href="dictionary.d.js.html#line192">line 192</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>handler</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">PromiseLike.&lt;any></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+        </div>
+    
+
+    
+
+    
+
+    
+    
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id=".all"><span class="type-signature">(static) </span>all<span class="signature">(items)</span><span class="type-signature"> &rarr; {PromiseLike.&lt;Array.&lt;any>>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="dictionary.d.js.html">dictionary.d.js</a>, <a href="dictionary.d.js.html#line200">line 200</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>items</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;Promise></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">PromiseLike.&lt;Array.&lt;any>></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".race"><span class="type-signature">(static) </span>race<span class="signature">(items)</span><span class="type-signature"> &rarr; {PromiseLike.&lt;Array.&lt;any>>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="dictionary.d.js.html">dictionary.d.js</a>, <a href="dictionary.d.js.html#line207">line 207</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>items</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;Promise></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">PromiseLike.&lt;Array.&lt;any>></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".reject"><span class="type-signature">(static) </span>reject<span class="signature">(value)</span><span class="type-signature"> &rarr; {PromiseLike.&lt;Error>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="dictionary.d.js.html">dictionary.d.js</a>, <a href="dictionary.d.js.html#line221">line 221</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">any</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">PromiseLike.&lt;Error></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".resolve"><span class="type-signature">(static) </span>resolve<span class="signature">(value)</span><span class="type-signature"> &rarr; {PromiseLike.&lt;any>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="dictionary.d.js.html">dictionary.d.js</a>, <a href="dictionary.d.js.html#line214">line 214</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">any</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">PromiseLike.&lt;any></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 

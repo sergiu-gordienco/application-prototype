@@ -1437,6 +1437,16 @@ declare namespace ApplicationPrototype {
          */
         bind(event: string | ((...params: any[]) => any), callback?: ((...params: any[]) => any) | ApplicationPrototype.Instance.BindListenerConfig, listenersConfig?: ApplicationPrototype.Instance.BindListenerConfig | string): string;
         /**
+         * emits an application event
+         * @method emit
+         * @memberof ApplicationPrototype.Instance#
+         * @param {string} event event name
+         * @param {any[]} [args] arguments passed with event
+         * @param {boolean} [track=false] indicate if to use tracked handler or internal
+         * @param {boolean} [noSkipStopReturn=false] indicate if event flow can be stopped by a `false` return
+         */
+        emit(event: string, args?: any[], track?: boolean, noSkipStopReturn?: boolean): void;
+        /**
          * remove all event listeners
          * @method off
          * @memberof ApplicationPrototype.Instance#
@@ -1624,6 +1634,16 @@ declare namespace ApplicationPrototype {
          * @returns {string}
          */
         bind(event: string | ((...params: any[]) => any), callback?: ((...params: any[]) => any) | ApplicationPrototype.Instance.BindListenerConfig, listenersConfig?: ApplicationPrototype.Instance.BindListenerConfig | string): string;
+        /**
+         * emits an application event
+         * @method emit
+         * @memberof ApplicationPrototype.Instance#
+         * @param {string} event event name
+         * @param {any[]} [args] arguments passed with event
+         * @param {boolean} [track=false] indicate if to use tracked handler or internal
+         * @param {boolean} [noSkipStopReturn=false] indicate if event flow can be stopped by a `false` return
+         */
+        emit(event: string, args?: any[], track?: boolean, noSkipStopReturn?: boolean): void;
         /**
          * remove all event listeners
          * @method off
