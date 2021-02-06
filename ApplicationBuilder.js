@@ -385,7 +385,7 @@ function ApplicationBuilder(callback) {
 	};
 	Application.Promise.all	= function (a) {
 		var p = new Application.Promise();
-		var values = [];
+		var values = [];var i;
 		for (i=0;i<a.length;i++) {
 			a[i].then(function (val) {
 				values.push(val);

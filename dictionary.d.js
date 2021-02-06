@@ -48,6 +48,16 @@
  */
 
 /**
+ * emits an application event
+ * @method emit
+ * @memberof ApplicationPrototype.Instance#
+ * @param {string} event event name
+ * @param {any[]} [args] arguments passed with event
+ * @param {boolean} [track=false] indicate if to use tracked handler or internal
+ * @param {boolean} [noSkipStopReturn=false] indicate if event flow can be stopped by a `false` return
+ */
+
+/**
  * remove all event listeners
  * @method off
  * @memberof ApplicationPrototype.Instance#
