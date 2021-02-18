@@ -70,9 +70,9 @@
  * returns listener Id
  * @method crudEvents
  * @memberof ApplicationPrototype.Instance#
- * @param {Object<any>} context will be used as a base for ApplicationPrototype instance that will be returned
- * @param {Object<Function>} publicMethods list of public methods available from returned instance
- * @param {Object<Function>} privateMethods list of private methods available only for instance's methods
+ * @param {Object<string,any>} context will be used as a base for ApplicationPrototype instance that will be returned
+ * @param {Object<string,Function>} publicMethods list of public methods available from returned instance
+ * @param {Object<string,Function>} privateMethods list of private methods available only for instance's methods
  * @returns {ApplicationPrototype.Instance}
  */
 
