@@ -1313,10 +1313,13 @@ declare class RequestModule {
      * @method send
      * @memberof RequestModule#
      * @param {string|FormData|MediaStream} [data='']
-     * @param {("asFormData"|"json")} [type=null]
+     * @param {("asFormData"|"json"|"urlencoded")} [type=null]
+     * @param {Object<string,string>} [headers]
      * @returns {RequestModule}
      */
-    send(data?: string | FormData | MediaStream, type?: "asFormData" | "json"): RequestModule;
+    send(data?: string | FormData | MediaStream, type?: "asFormData" | "json" | "urlencoded", headers?: {
+        [key: string]: string;
+    }): RequestModule;
     /**
      * @method headers
      * @memberof RequestModule#
