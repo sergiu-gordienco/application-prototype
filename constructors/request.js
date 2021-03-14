@@ -26,13 +26,15 @@
  */
 
  Application.require("extensions/prototype", function (epro) {
-	if (typeof(XMLHttpRequest) !== "undefined" && Application.NodeInterface()) {
-		if (typeof(require) === "function") {
-			var err;
-			try {
-				XMLHttpRequest = Application.NodeInterface().require("xmlhttprequest").XMLHttpRequest;
-				global.XMLHttpRequest = XMLHttpRequest;
-			} catch (err) {}
+	if (typeof(Application.NodeInterface) === "function") {
+		if (typeof(XMLHttpRequest) !== "undefined" && Application.NodeInterface()) {
+			if (typeof(require) === "function") {
+				var err;
+				try {
+					XMLHttpRequest = Application.NodeInterface().require("xmlhttprequest").XMLHttpRequest;
+					global.XMLHttpRequest = XMLHttpRequest;
+				} catch (err) {}
+			}
 		}
 	}
 
