@@ -25,7 +25,18 @@
  * @see RequestModule
  */
 
-Application.require("extensions/prototype", function (epro) {
+ Application.require("extensions/prototype", function (epro) {
+	if (typeof(Application.NodeInterface) === "function") {
+		if (typeof(XMLHttpRequest) !== "undefined" && Application.NodeInterface()) {
+			if (typeof(require) === "function") {
+				var err;
+				try {
+					XMLHttpRequest = Application.NodeInterface().require("xmlhttprequest").XMLHttpRequest;
+					global.XMLHttpRequest = XMLHttpRequest;
+				} catch (err) {}
+			}
+		}
+	}
 
 	function Request() {
 		var app	 = new ApplicationPrototype();
@@ -72,6 +83,10 @@ Application.require("extensions/prototype", function (epro) {
 			},
 			"check-status-code"  : function () {
 			  config.ignoreStatusCode = false;
+			},
+			"prepare-json"  : function () {
+				httpRequest.setRequestHeader('Accept', 'application/json');
+				httpRequest.setRequestHeader('Content-Type', 'application/json');
 			},
 			"prepare-post"  : function () {
 				httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -147,29 +162,31 @@ Application.require("extensions/prototype", function (epro) {
 		});
 
 		// events for upload
-		httpRequest.upload.addEventListener("progress", function (evt) {
-			if (evt.lengthComputable && evt.total) {
-				var percentComplete = evt.loaded / evt.total;
-				app.emit("upload-progress", [evt, percentComplete]);
-			} else {
-				app.emit("upload-progress", [evt]);
-			}
-		});
-		httpRequest.upload.addEventListener("load", function (evt) {
-			app.emit("upload-load", [evt]);
-		});
-		httpRequest.upload.addEventListener("error", function (evt) {
-			app.emit("upload-error", [evt]);
-		});
-		httpRequest.upload.addEventListener("abort", function (evt) {
-			app.emit("upload-abort", [evt]);
-		});
-
-
-		httpRequest.upload.addEventListener("loadend", function (evt) {
-			config.isUploaded = true;
-			app.emit("upload-loadend", [evt]);
-		});
+		if (httpRequest.upload) {
+			httpRequest.upload.addEventListener("progress", function (evt) {
+				if (evt.lengthComputable && evt.total) {
+					var percentComplete = evt.loaded / evt.total;
+					app.emit("upload-progress", [evt, percentComplete]);
+				} else {
+					app.emit("upload-progress", [evt]);
+				}
+			});
+			httpRequest.upload.addEventListener("load", function (evt) {
+				app.emit("upload-load", [evt]);
+			});
+			httpRequest.upload.addEventListener("error", function (evt) {
+				app.emit("upload-error", [evt]);
+			});
+			httpRequest.upload.addEventListener("abort", function (evt) {
+				app.emit("upload-abort", [evt]);
+			});
+	
+	
+			httpRequest.upload.addEventListener("loadend", function (evt) {
+				config.isUploaded = true;
+				app.emit("upload-loadend", [evt]);
+			});
+		}
 
 		/**
 		 * @method request
@@ -212,10 +229,12 @@ Application.require("extensions/prototype", function (epro) {
 					});
 				}
 				var response = Application.Promise(), reader;
-				if (type === "request") {
-				  response.resolve(app);
+				if (!config.ignoreStatusCode && (httpRequest.status < 200 || httpRequest.status >= 300)) {
+					response.reject(Error('Status ' + httpRequest.status + ': ' + httpRequest.statusText));
+				} else if (type === "request") {
+					response.resolve(app);
 				} else if (type === "response") {
-				  response.resolve(httpRequest.response);
+					response.resolve(httpRequest.response);
 				} else if (httpRequest.responseType === "arraybuffer") {
 					switch (type) {
 						case "blob":
@@ -332,7 +351,7 @@ Application.require("extensions/prototype", function (epro) {
 				}
 				return new Application.Promise(function (resolve, reject) {
 				  response.then(function (data) {
-					if (httpRequest.status === 200 || config.ignoreStatusCode) {
+					if (httpRequest.status >= 200 && httpRequest.status < 300 || config.ignoreStatusCode) {
 					  resolve(data);
 					} else {
 					  var er = Error(
@@ -551,19 +570,26 @@ Application.require("extensions/prototype", function (epro) {
 		 * @method send
 		 * @memberof RequestModule#
 		 * @param {string|FormData|MediaStream} [data='']
-		 * @param {("asFormData"|"json")} [type=null]
+		 * @param {("asFormData"|"json"|"urlencoded")} [type=null]
+		 * @param {Object<string,string>} [headers]
 		 * @returns {RequestModule}
 		 */
-		app.bind("send", function (data, type) {
+		app.bind("send", function (data, type, headers) {
 			if (!config.opened) {
 				app.open();
 			}
 			if (config.isSent) {
 				console.warn("Error: the request is sended twice", app, app.request());
 				return app;
+			} else if (headers) {
+				var header;
+				for (header in headers) {
+					httpRequest.setRequestHeader(header, headers[header]);
+				}
 			}
 			config.isSent   = true;
 			if (type === "asFormData") {
+				app.configurator("multipart");
 				// convert data to form data
 				var fData = new FormData();
 				var i;
@@ -572,8 +598,12 @@ Application.require("extensions/prototype", function (epro) {
 				}
 				httpRequest.send(fData);
 			} else if (type === "json") {
+				app.configurator("prepare-json");
 				httpRequest.send(JSON.stringify(data));
 			} else {
+				if (type === "urlencoded") {
+					app.configurator("prepare-post");
+				}
 				httpRequest.send(typeof(data) === "undefined" ? null : data);
 			}
 			return app;
