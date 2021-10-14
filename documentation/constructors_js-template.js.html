@@ -1254,7 +1254,7 @@ var nodeParser = function (nodeElement, cb, config) {
 					});
 				}
 				// @TODO Check
-				// return;
+				return;
 			}
 
 			if (_timer) {
@@ -1431,17 +1431,26 @@ var nodeParser = function (nodeElement, cb, config) {
 					});
 				}
 				var sTime = new Date().valueOf();
-				renderItem(
-					_methods.items,
-					function () {
-						_methods.__renderStarted = false;
-						if (DEBUG_MODE) {
-							console.info("🎨 JSTemplate::Finish delay: ", (Math.floor(_delay * 100) / 100), "; time: ", (new Date().valueOf() - sTime), "ms;", {
-								node: nodeElement
-							});
+				try {
+					renderItem(
+						_methods.items,
+						function () {
+							_methods.__renderStarted = false;
+							if (DEBUG_MODE) {
+								console.info("🎨 JSTemplate::Finish delay: ", (Math.floor(_delay * 100) / 100), "; time: ", (new Date().valueOf() - sTime), "ms;", {
+									node: nodeElement
+								});
+							}
 						}
+					);
+				} catch (err) {
+					_methods.__renderStarted = false;
+					if (DEBUG_MODE) {
+						console.warn("🎨 JSTemplate::Render finished with error: ", (Math.floor(_delay * 100) / 100), "; time: ", (new Date().valueOf() - sTime), "ms;", {
+							node: nodeElement
+						});
 					}
-				);
+				}
 
 			}, _delay);
 		}
