@@ -1012,25 +1012,16 @@ declare namespace JSTemplateComponent {
      * @param {Error} err
      */
     type constructorCallback = (err: Error) => void;
-    /**
-     * @memberof JSTemplateComponent
-     * @method __constructor
-     * @param {string} tagName
-     * @param {JSTemplateComponent.options} options
-     * @param {JSTemplateComponent.constructorCallback} callback
-     * @returns {JSTemplateComponent}
-     */
-    function __constructor(tagName: string, options: JSTemplateComponent.options, callback: JSTemplateComponent.constructorCallback): JSTemplateComponent;
 }
 
 /**
  * @example
  *  Application.require('js-template-component')
  *      .then(function (
- *          // @type {JSTemplateComponent.__constructor}
+ *          // @type {JSTemplateComponent}
  *          JSTemplateComponentConstructor
  *      ) {
- *          JSTemplateComponentConstructor(
+ *          new JSTemplateComponentConstructor(
  *              'my-custom-tagname',
  *              {
  *                  context: {
@@ -1058,12 +1049,15 @@ declare namespace JSTemplateComponent {
  *              }
  *          );
  *      }).catch(console.error);
- * @interface JSTemplateComponent
+ * @class
+ * @name JSTemplateComponent
  * @param {string} tagName
  * @param {JSTemplateComponent.options} options
- * @param {function(Error):void} callback
+ * @param {JSTemplateComponent.constructorCallback} callback
+ * @returns {JSTemplateComponent}
  */
-declare interface JSTemplateComponent {
+declare class JSTemplateComponent {
+    constructor(tagName: string, options: JSTemplateComponent.options, callback: JSTemplateComponent.constructorCallback);
 }
 
 declare namespace JSTemplate {

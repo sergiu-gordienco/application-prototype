@@ -1,46 +1,4 @@
 /**
- * @example
- *  Application.require('js-template-component')
- *      .then(function (
- *          // @type {JSTemplateComponent.__constructor}
- *          JSTemplateComponentConstructor
- *      ) {
- *          JSTemplateComponentConstructor(
- *              'my-custom-tagname',
- *              {
- *                  context: {
- *                      numberOfClicks: 0
- *                  },
- *                  templateCode: `
- *                      <div>
- *                          {{ this.numberOfClicks }}
- *                          <button (click)="this.increaseClicksNumber()">
- *                          </button>
- *                      </div>
- *                  `,
- *                  sharedPrototypeMethods: {
- *                      increaseClicksNumber: function () {
- *                          this.numberOfClicks += 1;
- *                      }
- *                  },
- *                  sharedReferences: {},
- *                  cssStyles: [
- *                      '/some/styles/style.css'
- *                  ]
- *              },
- *              function (err) {
- *                  if (err) console.error(err);
- *              }
- *          );
- *      }).catch(console.error);
- * @interface JSTemplateComponent
- * @param {string} tagName
- * @param {JSTemplateComponent.options} options
- * @param {function(Error):void} callback
- */
-
-
-/**
  * @memberof JSTemplateComponent
  * @typedef {object} contextInstance
  * @property {function} redraw
@@ -106,15 +64,49 @@
  * @param {Error} err
  */
 
- /**
- * @memberof JSTemplateComponent
- * @method __constructor
+/**
+ * @example
+ *  Application.require('js-template-component')
+ *      .then(function (
+ *          // @type {JSTemplateComponent}
+ *          JSTemplateComponentConstructor
+ *      ) {
+ *          new JSTemplateComponentConstructor(
+ *              'my-custom-tagname',
+ *              {
+ *                  context: {
+ *                      numberOfClicks: 0
+ *                  },
+ *                  templateCode: `
+ *                      <div>
+ *                          {{ this.numberOfClicks }}
+ *                          <button (click)="this.increaseClicksNumber()">
+ *                          </button>
+ *                      </div>
+ *                  `,
+ *                  sharedPrototypeMethods: {
+ *                      increaseClicksNumber: function () {
+ *                          this.numberOfClicks += 1;
+ *                      }
+ *                  },
+ *                  sharedReferences: {},
+ *                  cssStyles: [
+ *                      '/some/styles/style.css'
+ *                  ]
+ *              },
+ *              function (err) {
+ *                  if (err) console.error(err);
+ *              }
+ *          );
+ *      }).catch(console.error);
+ * @class
+ * @name JSTemplateComponent
  * @param {string} tagName
  * @param {JSTemplateComponent.options} options
  * @param {JSTemplateComponent.constructorCallback} callback
  * @returns {JSTemplateComponent}
  */;
-function __JSTemplateComponent(
+function JSTemplateComponent(
 	/**
 	 * @private
 	 * @type {string}
@@ -398,4 +390,4 @@ function __JSTemplateComponent(
 	return this;
 }
 
-module.exports = __JSTemplateComponent;
+module.exports = JSTemplateComponent;
