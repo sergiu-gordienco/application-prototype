@@ -9,7 +9,7 @@
     "docs-dictionary": "jsdoc -c jsdoc.json -t node_modules/tsd-jsdoc/dist -r -d . ; rm index.d.ts ; cat types.d.ts > index.d.ts ; echo 'declare module \"sgapps-server\" {\\n' >> index.d.ts ; echo '\nfunction application(): ApplicationPrototype.Instance; ' >> index.d.ts ; echo '\nfunction builder(): ApplicationPrototype.Builder; ' >> index.d.ts ; echo '}' >> index.d.ts ; rm types.d.ts",
     "docs-dictionary-dev": "npm run docs-dictionary; while true; do find . -not -path './documentation' | entr -pd npm run docs-dictionary; done",
     "docs-dev": "npm run docs; while true; do find . -not -path './documentation' | entr -pd npm run docs; done",
-    "docs-preview": "live-server --wait=2500 --no-browser documentation",
+    "docs-preview": "live-server --wait=6500 --no-browser documentation",
     "build": "npm run docs-dictionary ; npm run docs "
   },
   "repository": {

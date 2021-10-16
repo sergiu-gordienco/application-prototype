@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>Promise - Application Prototype - Framework</title>
+    <title>JSTemplateComponent - Application Prototype - Framework</title>
     
     <meta name="description" content="Application Prototype Framework based on Module Pattern" />
     
@@ -46,7 +46,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Promise</h1>
+    <h1 class="page-title">JSTemplateComponent</h1>
     
 
     
@@ -59,9 +59,7 @@
 <header>
     
         <h2>
-            <span class="ancestors"><a href="ApplicationPrototype.html">ApplicationPrototype</a><a href="ApplicationPrototype.Builder.html">.Builder</a>.</span>
-        
-        Promise
+        JSTemplateComponent
         </h2>
         
     
@@ -73,21 +71,12 @@
         
             
 
-    
-
-    <h4 class="name" id="Promise"><span class="type-signature"></span>new Promise<span class="signature">(handler)</span><span class="type-signature"> &rarr; {PromiseLike.&lt;any>}</span></h4>
-
-    
-
-
-
-
 <dl class="details">
 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dictionary.d.js.html">dictionary.d.js</a>, <a href="dictionary.d.js.html#line192">line 192</a>
+        <a href="constructors_js-template-component.js.html">constructors/js-template-component.js</a>, <a href="constructors_js-template-component.js.html#line1">line 1</a>
     </li></ul></dd>
     
 
@@ -125,101 +114,46 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>handler</code></td>
             
 
-            <td class="type">
             
+                <h3>Example</h3>
                 
-<span class="param-type">function</span>
-
+    <pre class="prettyprint"><code>Application.require('js-template-component')
+     .then(function (
+         // @type {JSTemplateComponent.__constructor}
+         JSTemplateComponentConstructor
+     ) {
+         JSTemplateComponentConstructor(
+             'my-custom-tagname',
+             {
+                 context: {
+                     numberOfClicks: 0
+                 },
+                 templateCode: `
+                     &lt;div>
+                         {{ this.numberOfClicks }}
+                         &lt;button (click)="this.increaseClicksNumber()">
+                         &lt;/button>
+                     &lt;/div>
+                 `,
+                 sharedPrototypeMethods: {
+                     increaseClicksNumber: function () {
+                         this.numberOfClicks += 1;
+                     }
+                 },
+                 sharedReferences: {},
+                 cssStyles: [
+                     '/some/styles/style.css'
+                 ]
+             },
+             function (err) {
+                 if (err) console.error(err);
+             }
+         );
+     }).catch(console.error);</code></pre>
 
             
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">PromiseLike.&lt;any></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
         
         </div>
     
@@ -246,7 +180,7 @@
 
     
 
-    <h4 class="name" id=".all"><span class="type-signature">(static) </span>all<span class="signature">(items)</span><span class="type-signature"> &rarr; {PromiseLike.&lt;Array.&lt;any>>}</span></h4>
+    <h4 class="name" id=".__constructor"><span class="type-signature">(static) </span>__constructor<span class="signature">(tagName, options, callback)</span><span class="type-signature"> &rarr; {<a href="JSTemplateComponent.html">JSTemplateComponent</a>}</span></h4>
 
     
 
@@ -258,7 +192,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dictionary.d.js.html">dictionary.d.js</a>, <a href="dictionary.d.js.html#line200">line 200</a>
+        <a href="constructors_js-template-component.js.html">constructors/js-template-component.js</a>, <a href="constructors_js-template-component.js.html#line109">line 109</a>
     </li></ul></dd>
     
 
@@ -332,13 +266,59 @@
 
         <tr>
             
-                <td class="name"><code>items</code></td>
+                <td class="name"><code>tagName</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Array.&lt;Promise></span>
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="JSTemplateComponent.html#.options">JSTemplateComponent.options</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="JSTemplateComponent.html#.constructorCallback">JSTemplateComponent.constructorCallback</a></span>
 
 
             
@@ -381,7 +361,7 @@
     </dt>
     <dd>
         
-<span class="param-type">PromiseLike.&lt;Array.&lt;any>></span>
+<span class="param-type"><a href="JSTemplateComponent.html">JSTemplateComponent</a></span>
 
 
     </dd>
@@ -392,11 +372,17 @@
 
 
         
-            
+    
+
+    
+        <h3 class="subsection-title">Type Definitions</h3>
+
+        
+                
 
     
 
-    <h4 class="name" id=".race"><span class="type-signature">(static) </span>race<span class="signature">(items)</span><span class="type-signature"> &rarr; {PromiseLike.&lt;Array.&lt;any>>}</span></h4>
+    <h4 class="name" id=".constructorCallback"><span class="type-signature"></span>constructorCallback<span class="signature">(err)</span><span class="type-signature"></span></h4>
 
     
 
@@ -408,7 +394,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dictionary.d.js.html">dictionary.d.js</a>, <a href="dictionary.d.js.html#line207">line 207</a>
+        <a href="constructors_js-template-component.js.html">constructors/js-template-component.js</a>, <a href="constructors_js-template-component.js.html#line103">line 103</a>
     </li></ul></dd>
     
 
@@ -482,13 +468,13 @@
 
         <tr>
             
-                <td class="name"><code>items</code></td>
+                <td class="name"><code>err</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Array.&lt;Promise></span>
+<span class="param-type">Error</span>
 
 
             
@@ -520,33 +506,689 @@
 
 
 
-<h5>Returns:</h5>
-
-        
 
 
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">PromiseLike.&lt;Array.&lt;any>></span>
+
+            
+                
+<h4 class="name" id=".contextInstance">contextInstance</h4>
 
 
-    </dd>
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="constructors_js-template-component.js.html">constructors/js-template-component.js</a>, <a href="constructors_js-template-component.js.html#line43">line 43</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 </dl>
 
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
     
 
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
 
+        <th>Type</th>
 
         
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
             
+                <td class="name"><code>redraw</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
 
     
 
-    <h4 class="name" id=".reject"><span class="type-signature">(static) </span>reject<span class="signature">(value)</span><span class="type-signature"> &rarr; {PromiseLike.&lt;Error>}</span></h4>
+        <tr>
+            
+                <td class="name"><code>node</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="HTMLElement.html">HTMLElement</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id=".contextLifeCycle">contextLifeCycle</h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="constructors_js-template-component.js.html">constructors/js-template-component.js</a>, <a href="constructors_js-template-component.js.html#line50">line 50</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>init</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="JSTemplateComponent.html#.lifeCycleCallback">JSTemplateComponent.lifeCycleCallback</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>callbacks on init</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>getReferences</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="JSTemplateComponent.html#.lifeCycleCallbackGetReferences">JSTemplateComponent.lifeCycleCallbackGetReferences</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>returns</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>contentChange</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="JSTemplateComponent.html#.lifeCycleCallback">JSTemplateComponent.lifeCycleCallback</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>callback on content change</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>attrChange</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="JSTemplateComponent.html#.lifeCycleCallback">JSTemplateComponent.lifeCycleCallback</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>context object default is Node</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>remove</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="JSTemplateComponent.html#.lifeCycleCallback">JSTemplateComponent.lifeCycleCallback</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>context object default is Node</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id=".contextWithInstance">contextWithInstance</h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="constructors_js-template-component.js.html">constructors/js-template-component.js</a>, <a href="constructors_js-template-component.js.html#line60">line 60</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>__instance</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="JSTemplateComponent.html#.contextInstance">JSTemplateComponent.contextInstance</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>__lifeCycle</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="JSTemplateComponent.html#.contextLifeCycle">JSTemplateComponent.contextLifeCycle</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>context object default is Node</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id=".contextWithoutInstance">contextWithoutInstance</h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="constructors_js-template-component.js.html">constructors/js-template-component.js</a>, <a href="constructors_js-template-component.js.html#line67">line 67</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>__lifeCycle</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="JSTemplateComponent.html#.contextLifeCycle">JSTemplateComponent.contextLifeCycle</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>context object default is Node</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+            
+                
+
+    
+
+    <h4 class="name" id=".lifeCycleCallback"><span class="type-signature"></span>lifeCycleCallback<span class="signature">(context, references, methods)</span><span class="type-signature"></span></h4>
 
     
 
@@ -558,7 +1200,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dictionary.d.js.html">dictionary.d.js</a>, <a href="dictionary.d.js.html#line221">line 221</a>
+        <a href="constructors_js-template-component.js.html">constructors/js-template-component.js</a>, <a href="constructors_js-template-component.js.html#line95">line 95</a>
     </li></ul></dd>
     
 
@@ -632,13 +1274,59 @@
 
         <tr>
             
-                <td class="name"><code>value</code></td>
+                <td class="name"><code>context</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">any</span>
+<span class="param-type"><a href="JSTemplateComponent.html#.contextWithInstance">JSTemplateComponent.contextWithInstance</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>references</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object.&lt;string, any></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>methods</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object.&lt;string, any></span>
 
 
             
@@ -670,33 +1358,15 @@
 
 
 
-<h5>Returns:</h5>
-
-        
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">PromiseLike.&lt;Error></span>
-
-
-    </dd>
-</dl>
-
-    
 
 
 
-        
             
+                
 
     
 
-    <h4 class="name" id=".resolve"><span class="type-signature">(static) </span>resolve<span class="signature">(value)</span><span class="type-signature"> &rarr; {PromiseLike.&lt;any>}</span></h4>
+    <h4 class="name" id=".lifeCycleCallbackGetReferences"><span class="type-signature"></span>lifeCycleCallbackGetReferences<span class="signature">(context, sharedReferences, sharedPrototypeMethods)</span><span class="type-signature"> &rarr; {object}</span></h4>
 
     
 
@@ -708,7 +1378,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dictionary.d.js.html">dictionary.d.js</a>, <a href="dictionary.d.js.html#line214">line 214</a>
+        <a href="constructors_js-template-component.js.html">constructors/js-template-component.js</a>, <a href="constructors_js-template-component.js.html#line86">line 86</a>
     </li></ul></dd>
     
 
@@ -782,13 +1452,59 @@
 
         <tr>
             
-                <td class="name"><code>value</code></td>
+                <td class="name"><code>context</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">any</span>
+<span class="param-type"><a href="JSTemplateComponent.html#.contextWithInstance">JSTemplateComponent.contextWithInstance</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>sharedReferences</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>sharedPrototypeMethods</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
 
 
             
@@ -831,7 +1547,7 @@
     </dt>
     <dd>
         
-<span class="param-type">PromiseLike.&lt;any></span>
+<span class="param-type">object</span>
 
 
     </dd>
@@ -841,9 +1557,391 @@
 
 
 
-        
+            
+                
+<h4 class="name" id=".options">options</h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="constructors_js-template-component.js.html">constructors/js-template-component.js</a>, <a href="constructors_js-template-component.js.html#line73">line 73</a>
+    </li></ul></dd>
     
 
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>context</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="JSTemplateComponent.html#.contextWithoutInstance">JSTemplateComponent.contextWithoutInstance</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>context object default is Node</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>__lifeCycle</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="JSTemplateComponent.html#.contextLifeCycle">JSTemplateComponent.contextLifeCycle</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>context object default is Node</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>templateCode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>template Code</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>templateUrl</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>template URL</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cssStyles</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>list of URLs that point to styles</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>sharedReferences</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>references that will be same for all created components</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>sharedPrototypeMethods</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>methods that will be on all components under method &quot;methods&quot;</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>__flag_RejectOnStylesError</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+            
     
 
     

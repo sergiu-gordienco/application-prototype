@@ -355,9 +355,25 @@ module.exports =
  */
 if (document)
 ((function () {
+	/**
+	 * @interface HTMLElement
+	 */
+	/**
+	 * @memberof HTMLElement#
+	 * @var {object} attrdata object for storing custom variables
+	 */;
+	/**
+	 * @memberof HTMLElement#
+	 * @var {object} attrdatastore
+	 */;
 	_public.object.extend(HTMLElement.prototype, {
 		key	: "attrdata",
-		get	: function () {
+		get	: 
+		/**
+		 * @private
+		 * @this {HTMLElement}
+		 */
+		function () {
 			if (typeof(this.attrdatastore) === "undefined") {
 				this.attrdatastore	= {};
 				var attr	= this.attributes;

@@ -895,6 +895,177 @@ declare namespace ExtensionsPrototype {
 declare interface ExtensionsPrototype {
 }
 
+/**
+ * @interface HTMLElement
+ */
+declare interface HTMLElement {
+    /**
+     * @memberof HTMLElement#
+     * @var {Object<string,function>} methods
+     */
+    methods: {
+        [key: string]: (...params: any[]) => void;
+    };
+    /**
+     * @memberof HTMLElement#
+     * @var {object} attrdata object for storing custom variables
+     */
+    attrdata: any;
+    /**
+     * @memberof HTMLElement#
+     * @var {object} attrdatastore
+     */
+    attrdatastore: any;
+}
+
+declare namespace JSTemplateComponent {
+    /**
+     * @memberof JSTemplateComponent
+     * @typedef {object} contextInstance
+     * @property {function} redraw
+     * @property {HTMLElement} node
+     */
+    type contextInstance = {
+        redraw: (...params: any[]) => any;
+        node: HTMLElement;
+    };
+    /**
+     * @memberof JSTemplateComponent
+     * @typedef {object} contextLifeCycle
+     * @property {JSTemplateComponent.lifeCycleCallback} [init] callbacks on init
+     * @property {JSTemplateComponent.lifeCycleCallbackGetReferences} [getReferences] returns
+     * @property {JSTemplateComponent.lifeCycleCallback} [contentChange] callback on content change
+     * @property {JSTemplateComponent.lifeCycleCallback} [attrChange] context object default is Node
+     * @property {JSTemplateComponent.lifeCycleCallback} [remove] context object default is Node
+     */
+    type contextLifeCycle = {
+        init?: JSTemplateComponent.lifeCycleCallback;
+        getReferences?: JSTemplateComponent.lifeCycleCallbackGetReferences;
+        contentChange?: JSTemplateComponent.lifeCycleCallback;
+        attrChange?: JSTemplateComponent.lifeCycleCallback;
+        remove?: JSTemplateComponent.lifeCycleCallback;
+    };
+    /**
+     * @memberof JSTemplateComponent
+     * @typedef {object} contextWithInstance
+     * @property {JSTemplateComponent.contextInstance} __instance
+     * @property {JSTemplateComponent.contextLifeCycle} __lifeCycle context object default is Node
+     */
+    type contextWithInstance = {
+        __instance: JSTemplateComponent.contextInstance;
+        __lifeCycle: JSTemplateComponent.contextLifeCycle;
+    };
+    /**
+     * @memberof JSTemplateComponent
+     * @typedef {object} contextWithoutInstance
+     * @property {JSTemplateComponent.contextLifeCycle} [__lifeCycle] context object default is Node
+     */
+    type contextWithoutInstance = {
+        __lifeCycle?: JSTemplateComponent.contextLifeCycle;
+    };
+    /**
+     * @memberof JSTemplateComponent
+     * @typedef {object} options
+     * @property {JSTemplateComponent.contextWithoutInstance} [context] context object default is Node
+     * @property {JSTemplateComponent.contextLifeCycle} [__lifeCycle] context object default is Node
+     * @property {string} [templateCode] template Code
+     * @property {string} [templateUrl] template URL
+     * @property {Array<string>} [cssStyles] list of URLs that point to styles
+     * @property {object} [sharedReferences] references that will be same for all created components
+     * @property {object} [sharedPrototypeMethods] methods that will be on all components under method "methods"
+     * @property {boolean} [__flag_RejectOnStylesError=false]
+     */
+    type options = {
+        context?: JSTemplateComponent.contextWithoutInstance;
+        __lifeCycle?: JSTemplateComponent.contextLifeCycle;
+        templateCode?: string;
+        templateUrl?: string;
+        cssStyles?: string[];
+        sharedReferences?: any;
+        sharedPrototypeMethods?: any;
+        __flag_RejectOnStylesError?: boolean;
+    };
+    /**
+     * @memberof JSTemplateComponent
+     * @callback lifeCycleCallbackGetReferences
+     * @param {JSTemplateComponent.contextWithInstance} context
+     * @param {object} sharedReferences
+     * @param {object} sharedPrototypeMethods
+     * @returns {object}
+     */
+    type lifeCycleCallbackGetReferences = (context: JSTemplateComponent.contextWithInstance, sharedReferences: any, sharedPrototypeMethods: any) => any;
+    /**
+     * @memberof JSTemplateComponent
+     * @callback lifeCycleCallback
+     * @param {JSTemplateComponent.contextWithInstance} context
+     * @param {Object<string,any>} references
+     * @param {Object<string,any>} methods
+     */
+    type lifeCycleCallback = (context: JSTemplateComponent.contextWithInstance, references: {
+        [key: string]: any;
+    }, methods: {
+        [key: string]: any;
+    }) => void;
+    /**
+     * @memberof JSTemplateComponent
+     * @callback constructorCallback
+     * @param {Error} err
+     */
+    type constructorCallback = (err: Error) => void;
+    /**
+     * @memberof JSTemplateComponent
+     * @method __constructor
+     * @param {string} tagName
+     * @param {JSTemplateComponent.options} options
+     * @param {JSTemplateComponent.constructorCallback} callback
+     * @returns {JSTemplateComponent}
+     */
+    function __constructor(tagName: string, options: JSTemplateComponent.options, callback: JSTemplateComponent.constructorCallback): JSTemplateComponent;
+}
+
+/**
+ * @example
+ *  Application.require('js-template-component')
+ *      .then(function (
+ *          // @type {JSTemplateComponent.__constructor}
+ *          JSTemplateComponentConstructor
+ *      ) {
+ *          JSTemplateComponentConstructor(
+ *              'my-custom-tagname',
+ *              {
+ *                  context: {
+ *                      numberOfClicks: 0
+ *                  },
+ *                  templateCode: `
+ *                      <div>
+ *                          {{ this.numberOfClicks }}
+ *                          <button (click)="this.increaseClicksNumber()">
+ *                          </button>
+ *                      </div>
+ *                  `,
+ *                  sharedPrototypeMethods: {
+ *                      increaseClicksNumber: function () {
+ *                          this.numberOfClicks += 1;
+ *                      }
+ *                  },
+ *                  sharedReferences: {},
+ *                  cssStyles: [
+ *                      '/some/styles/style.css'
+ *                  ]
+ *              },
+ *              function (err) {
+ *                  if (err) console.error(err);
+ *              }
+ *          );
+ *      }).catch(console.error);
+ * @interface JSTemplateComponent
+ * @param {string} tagName
+ * @param {JSTemplateComponent.options} options
+ * @param {function(Error):void} callback
+ */
+declare interface JSTemplateComponent {
+}
+
 declare namespace JSTemplate {
     /**
      * @memberof JSTemplate
