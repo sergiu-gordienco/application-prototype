@@ -31,6 +31,7 @@ loader.list = [
 			'graphic/utils',
 			'graphic/utils/imagedata-clone',
 			'js-template',
+			'js-template-component',
 			'lib',
 			'request',
 			'request/http-interceptor',
