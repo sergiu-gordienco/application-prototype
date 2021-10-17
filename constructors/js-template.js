@@ -751,10 +751,12 @@ attrParser.update = function (item, value, config, cb) {
 									console.error(err);
 									return;
 								}
-								value.apply(
+								if (value.apply(
 									config.context,
 									[event]
-								);
+								) !== false) {
+									config.__redraw();
+								}
 							});
 						}
 					);
@@ -803,13 +805,13 @@ attrParser.update = function (item, value, config, cb) {
 										break;
 									} else if (inputType === "checkbox") {
 										//@ts-ignore
-										node.checked = value({});
+										node.checked = value.apply(config.context, [{}]);
 										node.addEventListener('mouseup', function (event) {
 											//@ts-ignore
 											event.__args = config.args;
 											//@ts-ignore
 											event.__value = !!event.target.checked;
-											value(event);
+											value.apply(config.context, [event]);
 
 											config.__redraw();
 										});
@@ -821,7 +823,7 @@ attrParser.update = function (item, value, config, cb) {
 											event.__args = config.args;
 											//@ts-ignore
 											event.__value = event.target.files;
-											value(event);
+											value.apply(config.context, [event]);
 
 											config.__redraw();
 										});
@@ -838,7 +840,7 @@ attrParser.update = function (item, value, config, cb) {
 										event.__args = config.args;
 										//@ts-ignore
 										event.__value = event.target.value;
-										value(event);
+										value.apply(config.context, [event]);
 
 										config.__redraw();
 									});
@@ -854,7 +856,7 @@ attrParser.update = function (item, value, config, cb) {
 										event.__args = config.args;
 										//@ts-ignore
 										event.__value = event.target.value;
-										value(event);
+										value.apply(config.context, [event]);
 
 										config.__redraw();
 									});
@@ -957,8 +959,9 @@ attrParser.value = function (item, config, cb) {
 			};
 		}
 		/* jshint +W054 */
-		value = expressionCall.apply(config.context, config.__argsValues);
 
+		value = expressionCall.apply(config.context, config.__argsValues);
+		
 		if (
 			value &&
 			typeof (value) === "object" &&
@@ -969,6 +972,10 @@ attrParser.value = function (item, config, cb) {
 				cb(null, result);
 			}, function (err) {
 				cb(err, null);
+			});
+		} else if (typeof(value) === "function") {
+			cb(null, function () {
+				return value.apply(config.context, arguments);
 			});
 		} else {
 			cb(null, value);
@@ -1164,9 +1171,11 @@ var nodeParser = function (nodeElement, cb, config) {
 
 	var _time = new Date().valueOf();
 	var _timer = null;
+	var _timerTime = 0;
 	var _methods = {
 		__renderStarted: false,
 		items: ate(nodeElement),
+		_config: config,
 		redraw: function (cb, context, args) {
 			var DEBUG_MODE = 1;
 
@@ -1175,18 +1184,31 @@ var nodeParser = function (nodeElement, cb, config) {
 			}
 			if (typeof (args) === "object" && args) {
 				config.args = args;
-				console.info(config.args);
 			}
 
 			if (!cb) cb = function () {
 				console.log("JSTemplate Redraw", nodeElement);
 			};
-			if (_timer !== null) {
-				return;
-			}
+
 			var time = new Date().valueOf();
 
-			var _delay = Math.max(1000 / config.RENDER_FPS - (time - _time), 0);
+
+			var timerWaitedTime = 0;
+			if (_timer !== null) {
+				timerWaitedTime = time - _timerTime;
+				if (DEBUG_MODE) {
+					console.warn("🎨 JSTemplate::Redraw Replaces; onother render request waited ", timerWaitedTime, "ms", {
+						node: nodeElement
+					});
+
+				}
+			}
+
+			var _delay = 
+				Math.max(
+					0,
+					Math.max(1000 / config.RENDER_FPS - (time - _time), 0) - timerWaitedTime
+				);
 
 
 			if (_methods.__renderStarted) {
@@ -1204,6 +1226,7 @@ var nodeParser = function (nodeElement, cb, config) {
 				_timer = null;
 			}
 
+			_timerTime = time;
 			_timer = setTimeout(function () {
 				_methods.__renderStarted = true;
 				_timer = null;

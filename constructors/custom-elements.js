@@ -27,6 +27,7 @@
 					if (_elementsKeys.indexOf(tagName) !== -1) {
 						if (typeof(_elements[tagName][cbName]) === "function") {
 							try {
+								console.log({tagName, cbName});
 								_elements[tagName][cbName].apply(nodeList[i], []);
 							} catch (er) {
 								console.error(er);
@@ -42,7 +43,28 @@
 						}
 						delete _pendingList[tagName];
 					}
-					trackNodes(nodeList[i].childNodes, cbName, attrs);
+
+					var _found = false;
+					if (cbName === "__onAttrChange" || cbName === "__onContentChange") {
+						var _current = nodeList[i], _currentTagName = nodeList[i].tagName.toLowerCase();
+						while (_current && !_found) {
+							if (_elementsKeys.indexOf(_currentTagName) !== -1) {
+								_found = true;
+							}
+							_current = _current.parentElement;
+							if (_current) {
+								_currentTagName = _current.tagName.toLowerCase()
+							}
+						}
+
+						if (!_found) return;
+					} else {
+						_found = true;
+					}
+
+					if (_found) {
+						trackNodes(nodeList[i].childNodes, cbName, attrs);
+					}
 				} else if (nodeList[i].nodeType === Node.DOCUMENT_NODE) {
 					trackNodes(nodeList[i].childNodes, cbName, attrs);
 				} else if (nodeList[i].nodeType === Node.DOCUMENT_FRAGMENT_NODE) {

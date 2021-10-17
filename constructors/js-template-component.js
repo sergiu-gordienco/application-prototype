@@ -1,69 +1,4 @@
-/**
- * @memberof JSTemplateComponent
- * @typedef {object} contextInstance
- * @property {function} redraw
- * @property {HTMLElement} node
- */
-
-/**
- * @memberof JSTemplateComponent
- * @typedef {object} contextLifeCycle
- * @property {JSTemplateComponent.lifeCycleCallback} [init] callbacks on init
- * @property {JSTemplateComponent.lifeCycleCallbackGetReferences} [getReferences] returns
- * @property {JSTemplateComponent.lifeCycleCallback} [contentChange] callback on content change
- * @property {JSTemplateComponent.lifeCycleCallback} [attrChange] context object default is Node
- * @property {JSTemplateComponent.lifeCycleCallback} [remove] context object default is Node
- */
-
-/**
- * @memberof JSTemplateComponent
- * @typedef {object} contextWithInstance
- * @property {JSTemplateComponent.contextInstance} __instance
- * @property {JSTemplateComponent.contextLifeCycle} __lifeCycle context object default is Node
- */
-
-/**
- * @memberof JSTemplateComponent
- * @typedef {object} contextWithoutInstance
- * @property {JSTemplateComponent.contextLifeCycle} [__lifeCycle] context object default is Node
- */
-
-/**
- * @memberof JSTemplateComponent
- * @typedef {object} options
- * @property {JSTemplateComponent.contextWithoutInstance} [context] context object default is Node
- * @property {JSTemplateComponent.contextLifeCycle} [__lifeCycle] context object default is Node
- * @property {string} [templateCode] template Code
- * @property {string} [templateUrl] template URL
- * @property {Array<string>} [cssStyles] list of URLs that point to styles
- * @property {object} [sharedReferences] references that will be same for all created components
- * @property {object} [sharedPrototypeMethods] methods that will be on all components under method "methods"
- * @property {boolean} [__flag_RejectOnStylesError=false]
- */
-
-/**
- * @memberof JSTemplateComponent
- * @callback lifeCycleCallbackGetReferences
- * @param {JSTemplateComponent.contextWithInstance} context
- * @param {object} sharedReferences
- * @param {object} sharedPrototypeMethods
- * @returns {object}
- */
-
-/**
- * @memberof JSTemplateComponent
- * @callback lifeCycleCallback
- * @param {JSTemplateComponent.contextWithInstance} context
- * @param {Object<string,any>} references
- * @param {Object<string,any>} methods
- */
-
-/**
- * @memberof JSTemplateComponent
- * @callback constructorCallback
- * @param {Error} err
- */
-
+//@
 /**
  * @example
  *  Application.require('js-template-component')
@@ -104,9 +39,84 @@
  * @param {string} tagName
  * @param {JSTemplateComponent.options} options
  * @param {JSTemplateComponent.constructorCallback} callback
- * @returns {JSTemplateComponent}
  */;
-function JSTemplateComponent(
+
+/**
+ * @memberof JSTemplateComponent
+ * @callback Builder
+ * @param {string} tagName
+ * @param {JSTemplateComponent.options} options
+ * @param {JSTemplateComponent.constructorCallback} callback
+ * @returns {JSTemplateComponent}
+ */
+
+/**
+ * @memberof JSTemplateComponent
+ * @typedef {object} contextInstance
+ * @property {function} redraw
+ * @property {HTMLElement} node
+ */
+
+/**
+ * @memberof JSTemplateComponent
+ * @typedef {object} contextLifeCycle
+ * @property {JSTemplateComponent.lifeCycleCallback} [init] callbacks on init
+ * @property {JSTemplateComponent.lifeCycleCallbackGetReferences} [getReferences] returns
+ * @property {JSTemplateComponent.lifeCycleCallback} [contentChange] callback on content change
+ * @property {JSTemplateComponent.lifeCycleCallback} [attrChange] context object default is Node
+ * @property {JSTemplateComponent.lifeCycleCallback} [remove] context object default is Node
+ */
+
+/**
+ * @memberof JSTemplateComponent
+ * @typedef {object} contextWithInstance
+ * @property {JSTemplateComponent.contextInstance} __instance
+ * @property {JSTemplateComponent.contextLifeCycle} __lifeCycle context object default is Node
+ */
+
+/**
+ * @memberof JSTemplateComponent
+ * @typedef {object} contextWithoutInstance
+ * @property {JSTemplateComponent.contextLifeCycle} [__lifeCycle] context object default is Node
+ */
+
+/**
+ * @memberof JSTemplateComponent
+ * @typedef {object} options
+ * @property {function ():JSTemplateComponent.contextWithoutInstance} [context] context object default is Node
+ * @property {JSTemplateComponent.contextLifeCycle} [__lifeCycle] context object default is Node
+ * @property {string} [templateCode] template Code
+ * @property {string} [templateUrl] template URL
+ * @property {Array<string>} [cssStyles] list of URLs that point to styles
+ * @property {object} [sharedReferences] references that will be same for all created components
+ * @property {object} [sharedPrototypeMethods] methods that will be on all components under method "methods"
+ * @property {boolean} [__flag_RejectOnStylesError=false]
+ */
+
+/**
+ * @memberof JSTemplateComponent
+ * @callback lifeCycleCallbackGetReferences
+ * @param {JSTemplateComponent.contextWithInstance} context
+ * @param {object} sharedReferences
+ * @param {object} sharedPrototypeMethods
+ * @returns {object}
+ */
+
+/**
+ * @memberof JSTemplateComponent
+ * @callback lifeCycleCallback
+ * @param {JSTemplateComponent.contextWithInstance} context
+ * @param {Object<string,any>} references
+ * @param {Object<string,any>} methods
+ */
+
+/**
+ * @memberof JSTemplateComponent
+ * @callback constructorCallback
+ * @param {Error} err
+ */
+
+ function JSTemplateComponentConstructor(
 	/**
 	 * @private
 	 * @type {string}
@@ -183,7 +193,6 @@ function JSTemplateComponent(
 					__loadCssStyles().then(
 						function () {
 							var sharedPrototypeMethods = options.sharedPrototypeMethods || {};
-
 							lib.customElements.registerMethods(
 								tagName,
 								Object.assign(
@@ -205,12 +214,20 @@ function JSTemplateComponent(
 											 * @type {JSTemplateComponent.contextWithInstance}
 											 */
 											var ComponentContext = Object.assign(
-												options.context || {},
+												options.context ? (options.context() || {}) : {},
 												/**
 												 * @private
 												 * @type {JSTemplateComponent.contextWithInstance}
 												 */
 												{
+													setState   : function (state, callback) {
+														ComponentContext.state = Object.assign(
+															ComponentContext.state || {},
+															state || {}
+														);
+														if (callback) callback();
+														ComponentContext.__instance.redraw();
+													},
 													__instance : {
 														node   : node,
 														redraw : function () {
@@ -310,6 +327,8 @@ function JSTemplateComponent(
 													]
 												);
 											}
+
+											ComponentContext.__instance.redraw();
 										},
 										"__onContentChange" :
 										/**
@@ -390,4 +409,4 @@ function JSTemplateComponent(
 	return this;
 }
 
-module.exports = JSTemplateComponent;
+module.exports = JSTemplateComponentConstructor;
