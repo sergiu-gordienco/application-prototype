@@ -27,7 +27,7 @@
 					if (_elementsKeys.indexOf(tagName) !== -1) {
 						if (typeof(_elements[tagName][cbName]) === "function") {
 							try {
-								console.log({tagName, cbName});
+								// console.log({tagName, cbName});
 								_elements[tagName][cbName].apply(nodeList[i], []);
 							} catch (er) {
 								console.error(er);
@@ -63,6 +63,7 @@
 					}
 
 					if (_found) {
+						// console.log({ cbName, nodes: nodeList[i].childNodes });
 						trackNodes(nodeList[i].childNodes, cbName, attrs);
 					}
 				} else if (nodeList[i].nodeType === Node.DOCUMENT_NODE) {
@@ -74,18 +75,18 @@
 		}
 	};
 	var observer = new MutationObserver(function(mutations) {
-	  mutations.forEach(function(mutation) {
-		  var attrs = [];
-		  if (mutation.type === "childList") {
-			  trackNodes(mutation.addedNodes, "__onInit", attrs);
-			  trackNodes([mutation.target], "__onContentChange", attrs);
-			  trackNodes(mutation.removedNodes, "__onRemove", attrs);
-		  } else if (mutation.type === "attributes") {
-			  trackNodes([mutation.target], "__onContentChange", attrs);
-			  trackNodes([mutation.target], "__onAttrChange", [mutation.attributeName, mutation.oldValue]);
-		  }
-		// console.log(mutation.type, mutation);
-	  });
+		mutations.forEach(function(mutation) {
+			var attrs = [];
+			if (mutation.type === "childList") {
+				trackNodes(mutation.addedNodes, "__onInit", attrs);
+				trackNodes([mutation.target], "__onContentChange", attrs);
+				trackNodes(mutation.removedNodes, "__onRemove", attrs);
+			} else if (mutation.type === "attributes") {
+				trackNodes([mutation.target], "__onContentChange", attrs);
+				trackNodes([mutation.target], "__onAttrChange", [mutation.attributeName, mutation.oldValue]);
+			}
+			// console.log(mutation.type, mutation);
+		});
 	});
 	// configuration of the observer:
 	var config = { attributes: true, childList: true, subtree: true, attributeOldValue: true };

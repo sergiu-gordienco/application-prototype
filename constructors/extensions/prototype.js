@@ -849,8 +849,8 @@ newE:function(t) {var e;try{return document.createElement(t);}catch(e){return fa
 sClass:function(t,m,k) {var s = (this.newE.className || '');
 	if (typeof(t) === "string") {
 		if (t.match(/[\s\n\t]+/)) {
-			t = t.split(/[\s\n\t]+/).filter(function () {
-				return t.toLowerCase();
+			t = t.split(/[\s\n\t]+/).filter(function (item) {
+				return item;
 			});
 			if (t.length === 0)
 				return this;

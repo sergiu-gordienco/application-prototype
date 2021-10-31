@@ -818,6 +818,7 @@ attrParser.update = function (item, value, config, cb) {
 										break;
 									} else if (inputType === "file") {
 										//@ts-ignore
+										node.files = value.apply(config.context, [{}]);
 										node.addEventListener('change', function (event) {
 											//@ts-ignore
 											event.__args = config.args;
@@ -828,14 +829,30 @@ attrParser.update = function (item, value, config, cb) {
 											config.__redraw();
 										});
 										break;
-									};
+									} else {
+										/**
+										 * @private
+										 * @var {HTMLInputElement} node
+										 */
+										node.value = value({});
+										node.addEventListener('input', function (event) {
+											//@ts-ignore
+											event.__args = config.args;
+											//@ts-ignore
+											event.__value = event.target.value;
+											value.apply(config.context, [event]);
+
+											config.__redraw();
+										});
+									}
+									break;
 								case "textarea":
 									/**
 									 * @private
 									 * @var {HTMLTextAreaElement} node
 									 */
 									node.value = value({});
-									node.addEventListener('keyup', function (event) {
+									node.addEventListener('input', function (event) {
 										//@ts-ignore
 										event.__args = config.args;
 										//@ts-ignore
@@ -878,6 +895,45 @@ attrParser.update = function (item, value, config, cb) {
 									});
 								}
 							);
+						}
+					} else {
+						var node = item.data.node;
+						var _newValue = null;
+						switch (node.tagName.toLowerCase()) {
+							case 'input':
+								var inputType = node.getAttribute('type').toLowerCase();
+								var value;
+								if (inputType === "radio") {
+									// TODO
+								} else if (inputType === "checkbox") {
+									_newValue = !!value({});
+									if (node.checked !== _newValue) {
+										node.checked = _newValue;
+									}
+								} else if (inputType === "file") {
+									_newValue = value({});
+									if (node.files !== _newValue) {
+										node.files = _newValue;
+									}
+								} else {
+									_newValue = value({});
+									if (node.value !== _newValue) {
+										node.value = _newValue;
+									}
+								}
+							break;
+							case "textarea":
+								_newValue = value({});
+								if (node.value !== _newValue) {
+									node.value = _newValue;
+								}
+							break;
+							case "select":
+								_newValue = value({});
+								if (node.value !== _newValue) {
+									node.value = _newValue;
+								}
+							break;
 						}
 					}
 				break;
@@ -1052,6 +1108,7 @@ var nodeParser = function (nodeElement, cb, config) {
 	var ate = function (nodeElement) {
 		//@ts-ignore
 		nodeElement.attrdata.__JS_TEMPLATE = nodeElement.attrdata.__JS_TEMPLATE || {
+			target: nodeElement,
 			nodes: [],
 			texts: [],
 			children: [],
@@ -1137,7 +1194,11 @@ var nodeParser = function (nodeElement, cb, config) {
 
 		children.forEach(function (node) {
 			//@ts-ignore
-			__JS_TEMPLATE.children.push(ate(node));
+			if (!__JS_TEMPLATE.children.find(function (item) {
+				return item.target === node;
+			})) {
+				__JS_TEMPLATE.children.push(ate(node));
+			}
 		});
 
 		parseTextNodes(nodeElement, function (err, data) {
@@ -1177,7 +1238,28 @@ var nodeParser = function (nodeElement, cb, config) {
 		items: ate(nodeElement),
 		_config: config,
 		redraw: function (cb, context, args) {
-			var DEBUG_MODE = 1;
+			var DEBUG_MODE = 0;
+
+			if (!cb) cb = function () {
+				console.log("JSTemplate Redraw", nodeElement);
+			};
+
+			var _callbackProtection = function (callback) {
+				if (!DEBUG_MODE) return callback;
+
+				var _calls    = 0;
+				return function (a0, a1, a2, a3) {
+					if (_calls) {
+						_calls++;
+						console.warn('Mulltiple callback arguments ', arguments);
+						throw Error('Mulltiple callback calls ' + _calls);
+					}
+					_calls++;
+					callback(a0, a1, a2, a3);
+				};
+			};
+
+			cb = _callbackProtection(cb);
 
 			if (typeof (context) !== "undefined") {
 				config.context = context;
@@ -1186,9 +1268,6 @@ var nodeParser = function (nodeElement, cb, config) {
 				config.args = args;
 			}
 
-			if (!cb) cb = function () {
-				console.log("JSTemplate Redraw", nodeElement);
-			};
 
 			var time = new Date().valueOf();
 
@@ -1228,6 +1307,10 @@ var nodeParser = function (nodeElement, cb, config) {
 
 			_timerTime = time;
 			_timer = setTimeout(function () {
+				if (_methods.__renderStarted) {
+					return false;
+				}
+
 				_methods.__renderStarted = true;
 				_timer = null;
 
@@ -1250,6 +1333,7 @@ var nodeParser = function (nodeElement, cb, config) {
 				 * @param {function():void} cb 
 				 */
 				var renderItem = function (item, cb) {
+					cb = _callbackProtection(cb);
 					var renderStop = false;
 					var renderChildren = true;
 					var handleError = function (instance) {
@@ -1270,6 +1354,8 @@ var nodeParser = function (nodeElement, cb, config) {
 					libs.async.forEach(
 						item.nodes,
 						function (next, itemNode) {
+							next = _callbackProtection(next);
+
 							if (DEBUG_MODE >= 3) {
 								console.log("      ➡ Item", itemNode);
 							}
@@ -1295,8 +1381,8 @@ var nodeParser = function (nodeElement, cb, config) {
 												if (err) {
 													//@ts-ignore
 													err.item = itemNode;
-													next(err);
 													renderStop = true;
+													next(err);
 													if (DEBUG_MODE >= 3) {
 														console.log("❌ renderStop = ", true);
 													}
@@ -1326,6 +1412,7 @@ var nodeParser = function (nodeElement, cb, config) {
 								libs.async.forEach(
 									item.texts,
 									function (next, itemText) {
+										next = _callbackProtection(next);
 										if (DEBUG_MODE >= 3) {
 											console.log("      ➡ Text", itemText);
 										}
@@ -1363,9 +1450,14 @@ var nodeParser = function (nodeElement, cb, config) {
 											if (DEBUG_MODE >= 2) {
 												console.log("    ⬇ Render Children");
 											}
+											if (!item.children.length) {
+												cb();
+												return;
+											}
 											libs.async.forEach(
 												item.children,
 												function (next, itemChild) {
+													next = _callbackProtection(next);
 													if (DEBUG_MODE >= 3) {
 														console.log("      ➡ Child", itemChild);
 													}

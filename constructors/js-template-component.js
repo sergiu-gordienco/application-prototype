@@ -167,7 +167,7 @@
 			}
 
 			function __loadCssStyles() {
-				if (options.cssStyles.length) {
+				if (!options.cssStyles.length) {
 					return Promise.resolve();
 				}
 				return new Promise(function (resolve, reject) {
@@ -225,21 +225,32 @@
 															ComponentContext.state || {},
 															state || {}
 														);
-														if (callback) callback();
+														
+														ComponentContext.__requireRender = true;
 														ComponentContext.__instance.redraw();
+
+														if (callback) callback();
 													},
+													__requireRender: true,
 													__instance : {
 														node   : node,
 														redraw : function () {
+															if (!ComponentContext.__requireRender) return;
 															//@ts-ignore
 															if (node.attrdata.JSRenderer) {
 																//@ts-ignore
+																ComponentContext.__requireRender = false;
+																
 																node.attrdata.JSRenderer.content.redraw();
 																// /**
 																//  * @deprecated
 																//  */
 																// node.attrdata.JSRenderer.attr.redraw();
 															}
+														},
+														redrawForce: function () {
+															ComponentContext.__requireRender = true;
+															ComponentContext.__instance.redraw();
 														}
 													},
 													__lifeCycle: {
@@ -336,19 +347,25 @@
 										 * @this {HTMLElement}
 										 */
 										function () {
-											if (this.attrdata.JSRenderer) {
-												if (options.__lifeCycle && options.__lifeCycle.contentChange) {
-													options.__lifeCycle.contentChange.apply(
-														this.attrdata.JSRenderer.ComponentContext,
-														[
-															this.attrdata.JSRenderer.ComponentContext,
-															this.attrdata.JSRenderer.envReferences,
-															this.methods
-														]
-													);
-												}
+											if (this.attrdata.JSRenderer && this.attrdata.JSRenderer.ComponentContext) {
 
-												this.attrdata.JSRenderer.ComponentContext.__instance.redraw();
+												if (
+													this.attrdata.JSRenderer.ComponentContext.__requireRender
+												// 	!this.attrdata.JSRenderer.ComponentContext.__instance.__renderStarted
+												) {
+													if (options.__lifeCycle && options.__lifeCycle.contentChange) {
+														options.__lifeCycle.contentChange.apply(
+															this.attrdata.JSRenderer.ComponentContext,
+															[
+																this.attrdata.JSRenderer.ComponentContext,
+																this.attrdata.JSRenderer.envReferences,
+																this.methods
+															]
+														);
+													}
+
+													this.attrdata.JSRenderer.ComponentContext.__instance.redraw();
+												}
 											}
 										},
 										"__onAttrChange" :
@@ -357,19 +374,25 @@
 										 * @this {HTMLElement}
 										 */
 										function () {
-											if (this.attrdata.JSRenderer) {
-												if (options.__lifeCycle && options.__lifeCycle.attrChange) {
-													options.__lifeCycle.attrChange.apply(
-														this.attrdata.JSRenderer.ComponentContext,
-														[
-															this.attrdata.JSRenderer.ComponentContext,
-															this.attrdata.JSRenderer.envReferences,
-															this.methods
-														]
-													);
-												}
+											if (this.attrdata.JSRenderer && this.attrdata.JSRenderer.ComponentContext) {
 
-												this.attrdata.JSRenderer.ComponentContext.__instance.redraw();
+												if (
+													this.attrdata.JSRenderer.ComponentContext.__requireRender
+												// 	!this.attrdata.JSRenderer.ComponentContext.__instance.__renderStarted
+												) {
+
+													if (options.__lifeCycle && options.__lifeCycle.attrChange) {
+														options.__lifeCycle.attrChange.apply(
+															this.attrdata.JSRenderer.ComponentContext,
+															[
+																this.attrdata.JSRenderer.ComponentContext,
+																this.attrdata.JSRenderer.envReferences,
+																this.methods
+															]
+														);
+													}
+													this.attrdata.JSRenderer.ComponentContext.__instance.redraw();
+												}
 											}
 										},
 										"__onRemove" :
