@@ -918,7 +918,61 @@ declare interface HTMLElement {
     attrdatastore: any;
 }
 
+/**
+ * @example
+ *  Application.require('js-template-component')
+ *      .then(function (
+ *          // @type {JSTemplateComponent}
+ *          JSTemplateComponentConstructor
+ *      ) {
+ *          new JSTemplateComponentConstructor(
+ *              'my-custom-tagname',
+ *              {
+ *                  context: {
+ *                      numberOfClicks: 0
+ *                  },
+ *                  templateCode: `
+ *                      <div>
+ *                          {{ this.numberOfClicks }}
+ *                          <button (click)="this.increaseClicksNumber()">
+ *                          </button>
+ *                      </div>
+ *                  `,
+ *                  sharedPrototypeMethods: {
+ *                      increaseClicksNumber: function () {
+ *                          this.numberOfClicks += 1;
+ *                      }
+ *                  },
+ *                  sharedReferences: {},
+ *                  cssStyles: [
+ *                      '/some/styles/style.css'
+ *                  ]
+ *              },
+ *              function (err) {
+ *                  if (err) console.error(err);
+ *              }
+ *          );
+ *      }).catch(console.error);
+ * @class
+ * @name JSTemplateComponent
+ * @param {string} tagName
+ * @param {JSTemplateComponent.options} options
+ * @param {JSTemplateComponent.constructorCallback} callback
+ */
+declare class JSTemplateComponent {
+    constructor(tagName: string, options: JSTemplateComponent.options, callback: JSTemplateComponent.constructorCallback);
+}
+
 declare namespace JSTemplateComponent {
+    /**
+     * @memberof JSTemplateComponent
+     * @callback Builder
+     * @param {string} tagName
+     * @param {JSTemplateComponent.options} options
+     * @param {JSTemplateComponent.constructorCallback} callback
+     * @returns {JSTemplateComponent}
+     */
+    type Builder = (tagName: string, options: JSTemplateComponent.options, callback: JSTemplateComponent.constructorCallback) => JSTemplateComponent;
     /**
      * @memberof JSTemplateComponent
      * @typedef {object} contextInstance
@@ -966,7 +1020,7 @@ declare namespace JSTemplateComponent {
     /**
      * @memberof JSTemplateComponent
      * @typedef {object} options
-     * @property {JSTemplateComponent.contextWithoutInstance} [context] context object default is Node
+     * @property {function ():JSTemplateComponent.contextWithoutInstance} [context] context object default is Node
      * @property {JSTemplateComponent.contextLifeCycle} [__lifeCycle] context object default is Node
      * @property {string} [templateCode] template Code
      * @property {string} [templateUrl] template URL
@@ -976,7 +1030,7 @@ declare namespace JSTemplateComponent {
      * @property {boolean} [__flag_RejectOnStylesError=false]
      */
     type options = {
-        context?: JSTemplateComponent.contextWithoutInstance;
+        context?: (...params: any[]) => any;
         __lifeCycle?: JSTemplateComponent.contextLifeCycle;
         templateCode?: string;
         templateUrl?: string;
@@ -1012,52 +1066,6 @@ declare namespace JSTemplateComponent {
      * @param {Error} err
      */
     type constructorCallback = (err: Error) => void;
-}
-
-/**
- * @example
- *  Application.require('js-template-component')
- *      .then(function (
- *          // @type {JSTemplateComponent}
- *          JSTemplateComponentConstructor
- *      ) {
- *          new JSTemplateComponentConstructor(
- *              'my-custom-tagname',
- *              {
- *                  context: {
- *                      numberOfClicks: 0
- *                  },
- *                  templateCode: `
- *                      <div>
- *                          {{ this.numberOfClicks }}
- *                          <button (click)="this.increaseClicksNumber()">
- *                          </button>
- *                      </div>
- *                  `,
- *                  sharedPrototypeMethods: {
- *                      increaseClicksNumber: function () {
- *                          this.numberOfClicks += 1;
- *                      }
- *                  },
- *                  sharedReferences: {},
- *                  cssStyles: [
- *                      '/some/styles/style.css'
- *                  ]
- *              },
- *              function (err) {
- *                  if (err) console.error(err);
- *              }
- *          );
- *      }).catch(console.error);
- * @class
- * @name JSTemplateComponent
- * @param {string} tagName
- * @param {JSTemplateComponent.options} options
- * @param {JSTemplateComponent.constructorCallback} callback
- * @returns {JSTemplateComponent}
- */
-declare class JSTemplateComponent {
-    constructor(tagName: string, options: JSTemplateComponent.options, callback: JSTemplateComponent.constructorCallback);
 }
 
 declare namespace JSTemplate {
