@@ -1252,8 +1252,8 @@ var nodeParser = function (nodeElement, cb, config) {
 				return function (a0, a1, a2, a3) {
 					if (_calls) {
 						_calls++;
-						console.warn('Mulltiple callback arguments ', arguments);
-						throw Error('Mulltiple callback calls ' + _calls);
+						console.warn('Multiple callback arguments ', arguments);
+						throw Error('Multiple callback calls ' + _calls);
 					}
 					_calls++;
 					callback(a0, a1, a2, a3);
@@ -1300,6 +1300,9 @@ var nodeParser = function (nodeElement, cb, config) {
 					);
 				}
 				
+				if (_methods.__requireRedraw) {
+					_methods.__requireRedraw.cb(Error('JSTemplate::Redraw Omitted'));
+				}
 				_methods.__requireRedraw = { cb: cb, context: context, args: args };
 				// @TODO Check
 				return;
