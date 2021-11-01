@@ -1234,6 +1234,7 @@ var nodeParser = function (nodeElement, cb, config) {
 	var _timer = null;
 	var _timerTime = 0;
 	var _methods = {
+		__requireRedraw: null,
 		__renderStarted: false,
 		items: ate(nodeElement),
 		_config: config,
@@ -1279,7 +1280,6 @@ var nodeParser = function (nodeElement, cb, config) {
 					console.warn("🎨 JSTemplate::Redraw Replaces; onother render request waited ", timerWaitedTime, "ms", {
 						node: nodeElement
 					});
-
 				}
 			}
 
@@ -1292,10 +1292,15 @@ var nodeParser = function (nodeElement, cb, config) {
 
 			if (_methods.__renderStarted) {
 				if (DEBUG_MODE) {
-					console.warn("🎨 JSTemplate::Redraw Omitted: ", _delay, {
-						node: nodeElement
-					});
+					console.warn(
+						"🎨 JSTemplate::Redraw Omitted: ", _delay,
+						{
+							node: nodeElement
+						}
+					);
 				}
+				
+				_methods.__requireRedraw = { cb: cb, context: context, args: args };
 				// @TODO Check
 				return;
 			}
@@ -1493,6 +1498,10 @@ var nodeParser = function (nodeElement, cb, config) {
 						_methods.items,
 						function () {
 							_methods.__renderStarted = false;
+							if (_methods.__requireRedraw) {
+								_methods.redraw(_methods.__requireRedraw.cb, _methods.__requireRedraw.context, _methods.__requireRedraw.args);
+								_methods.__requireRedraw = null;
+							}
 							if (DEBUG_MODE) {
 								console.info("🎨 JSTemplate::Finish delay: ", (Math.floor(_delay * 100) / 100), "; time: ", (new Date().valueOf() - sTime), "ms;", {
 									node: nodeElement
@@ -1502,6 +1511,10 @@ var nodeParser = function (nodeElement, cb, config) {
 					);
 				} catch (err) {
 					_methods.__renderStarted = false;
+					if (_methods.__requireRedraw) {
+						_methods.redraw(_methods.__requireRedraw.cb, _methods.__requireRedraw.context, _methods.__requireRedraw.args);
+						_methods.__requireRedraw = null;
+					}
 					if (DEBUG_MODE) {
 						console.warn("🎨 JSTemplate::Render finished with error: ", (Math.floor(_delay * 100) / 100), "; time: ", (new Date().valueOf() - sTime), "ms;", {
 							node: nodeElement

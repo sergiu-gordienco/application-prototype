@@ -213,13 +213,7 @@
 											 * @private
 											 * @type {JSTemplateComponent.contextWithInstance}
 											 */
-											var ComponentContext = Object.assign(
-												options.context ? (options.context() || {}) : {},
-												/**
-												 * @private
-												 * @type {JSTemplateComponent.contextWithInstance}
-												 */
-												{
+											var _contextDefault = {
 													setState   : function (state, callback) {
 														ComponentContext.state = Object.assign(
 															ComponentContext.state || {},
@@ -294,10 +288,18 @@
 															}
 														}
 													}
-												}
-											);
+												};
+
 											var sharedReferences = options.sharedReferences || {};
-											
+
+											/**
+											 * @private
+											 * @type {JSTemplateComponent.contextWithInstance}
+											 */
+											var ComponentContext = Object.assign(
+												options.context ? (options.context(_contextDefault, sharedReferences, sharedPrototypeMethods) || {}) : {},
+												_contextDefault
+											);
 	
 											var envReferences = Object.assign({}, sharedReferences);
 
