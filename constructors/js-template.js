@@ -897,12 +897,15 @@ attrParser.update = function (item, value, config, cb) {
 							);
 						}
 					} else {
+						/**
+						 * @private
+						 * @type {HTMLInputElement}
+						 */
 						var node = item.data.node;
 						var _newValue = null;
 						switch (node.tagName.toLowerCase()) {
 							case 'input':
 								var inputType = node.getAttribute('type').toLowerCase();
-								var value;
 								if (inputType === "radio") {
 									// TODO
 								} else if (inputType === "checkbox") {
@@ -1242,7 +1245,9 @@ var nodeParser = function (nodeElement, cb, config) {
 			var DEBUG_MODE = 0;
 
 			if (!cb) cb = function () {
-				console.log("JSTemplate Redraw", nodeElement);
+				if (DEBUG_MODE) {
+					console.log("JSTemplate Redraw", nodeElement);
+				}
 			};
 
 			var _callbackProtection = function (callback) {
@@ -1277,7 +1282,7 @@ var nodeParser = function (nodeElement, cb, config) {
 			if (_timer !== null) {
 				timerWaitedTime = time - _timerTime;
 				if (DEBUG_MODE) {
-					console.warn("🎨 JSTemplate::Redraw Replaces; onother render request waited ", timerWaitedTime, "ms", {
+					console.warn("🎨 JSTemplate::Redraw Replaces; another render request waited ", timerWaitedTime, "ms", {
 						node: nodeElement
 					});
 				}
