@@ -973,16 +973,38 @@ declare namespace JSTemplateComponent {
      * @returns {JSTemplateComponent}
      */
     type Builder = (tagName: string, options: JSTemplateComponent.options, callback: JSTemplateComponent.constructorCallback) => JSTemplateComponent;
+    namespace contextInstance {
+        /**
+         * @memberof JSTemplateComponent.contextInstance
+         * @method redraw
+         */
+        function redraw(): void;
+        /**
+         * @memberof JSTemplateComponent.contextInstance
+         * @method redrawForce
+         */
+        function redrawForce(): void;
+        /**
+         * @memberof JSTemplateComponent.contextInstance
+         * @name references
+         * @type {Object<string,any>}
+         */
+        var references: {
+            [key: string]: any;
+        };
+        /**
+         * @memberof JSTemplateComponent.contextInstance
+         * @name node
+         * @type {HTMLElement}
+         */
+        var node: HTMLElement;
+    }
     /**
      * @memberof JSTemplateComponent
-     * @typedef {object} contextInstance
-     * @property {function} redraw
-     * @property {HTMLElement} node
+     * @interface contextInstance
      */
-    type contextInstance = {
-        redraw: (...params: any[]) => any;
-        node: HTMLElement;
-    };
+    interface contextInstance {
+    }
     /**
      * @memberof JSTemplateComponent
      * @typedef {object} contextLifeCycle
@@ -999,24 +1021,65 @@ declare namespace JSTemplateComponent {
         attrChange?: JSTemplateComponent.lifeCycleCallback;
         remove?: JSTemplateComponent.lifeCycleCallback;
     };
+    namespace contextWithInstance {
+        /**
+         * @memberof JSTemplateComponent.contextWithInstance
+         * @name __instance
+         * @type {JSTemplateComponent.contextInstance}
+         */
+        var __instance: JSTemplateComponent.contextInstance;
+        /**
+         * @memberof JSTemplateComponent.contextWithInstance
+         * @description context object default is Node
+         * @name __lifeCycle
+         * @type {JSTemplateComponent.contextLifeCycle}
+         */
+        var __lifeCycle: JSTemplateComponent.contextLifeCycle;
+        /**
+         * @memberof JSTemplateComponent.contextWithInstance
+         * @description context object default is Node
+         * @name state
+         * @type {Object<string,(string|number|Object<string,any>|null|any[])>}
+         */
+        var state: {
+            [key: string]: string | number | {
+                [key: string]: any;
+            } | null | any[];
+        };
+    }
     /**
      * @memberof JSTemplateComponent
-     * @typedef {object} contextWithInstance
-     * @property {JSTemplateComponent.contextInstance} __instance
-     * @property {JSTemplateComponent.contextLifeCycle} __lifeCycle context object default is Node
+     * @interface contextWithInstance
+     * @implements JSTemplateComponent.contextInstance
      */
-    type contextWithInstance = {
-        __instance: JSTemplateComponent.contextInstance;
-        __lifeCycle: JSTemplateComponent.contextLifeCycle;
-    };
+    interface contextWithInstance extends JSTemplateComponent.contextInstance {
+    }
+    namespace contextWithoutInstance {
+        /**
+         * @memberof JSTemplateComponent.contextWithoutInstance
+         * @description context object default is Node
+         * @name __lifeCycle
+         * @type {JSTemplateComponent.contextLifeCycle}
+         */
+        var __lifeCycle: JSTemplateComponent.contextLifeCycle;
+        /**
+         * @memberof JSTemplateComponent.contextWithoutInstance
+         * @description context object default is Node
+         * @name state
+         * @type {Object<string,(string|number|Object<string,any>|null|any[])>}
+         */
+        var state: {
+            [key: string]: string | number | {
+                [key: string]: any;
+            } | null | any[];
+        };
+    }
     /**
      * @memberof JSTemplateComponent
-     * @typedef {object} contextWithoutInstance
-     * @property {JSTemplateComponent.contextLifeCycle} [__lifeCycle] context object default is Node
+     * @interface contextWithoutInstance
      */
-    type contextWithoutInstance = {
-        __lifeCycle?: JSTemplateComponent.contextLifeCycle;
-    };
+    interface contextWithoutInstance {
+    }
     /**
      * @memberof JSTemplateComponent
      * @typedef {object} options

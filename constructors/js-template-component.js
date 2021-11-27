@@ -52,9 +52,25 @@
 
 /**
  * @memberof JSTemplateComponent
- * @typedef {object} contextInstance
- * @property {function} redraw
- * @property {HTMLElement} node
+ * @interface contextInstance
+ */
+/**
+ * @memberof JSTemplateComponent.contextInstance
+ * @method redraw
+ */
+/**
+ * @memberof JSTemplateComponent.contextInstance
+ * @method redrawForce
+ */
+/**
+ * @memberof JSTemplateComponent.contextInstance
+ * @name references
+ * @type {Object<string,any>}
+ */
+/**
+ * @memberof JSTemplateComponent.contextInstance
+ * @name node
+ * @type {HTMLElement}
  */
 
 /**
@@ -69,15 +85,43 @@
 
 /**
  * @memberof JSTemplateComponent
- * @typedef {object} contextWithInstance
- * @property {JSTemplateComponent.contextInstance} __instance
- * @property {JSTemplateComponent.contextLifeCycle} __lifeCycle context object default is Node
+ * @interface contextWithInstance
+ * @implements JSTemplateComponent.contextInstance
+ */
+
+/**
+ * @memberof JSTemplateComponent.contextWithInstance
+ * @name __instance
+ * @type {JSTemplateComponent.contextInstance}
+ */
+/**
+ * @memberof JSTemplateComponent.contextWithInstance
+ * @description context object default is Node
+ * @name __lifeCycle
+ * @type {JSTemplateComponent.contextLifeCycle}
+ */
+/**
+ * @memberof JSTemplateComponent.contextWithInstance
+ * @description context object default is Node
+ * @name state
+ * @type {Object<string,(string|number|Object<string,any>|null|any[])>}
  */
 
 /**
  * @memberof JSTemplateComponent
- * @typedef {object} contextWithoutInstance
- * @property {JSTemplateComponent.contextLifeCycle} [__lifeCycle] context object default is Node
+ * @interface contextWithoutInstance
+ */
+/**
+ * @memberof JSTemplateComponent.contextWithoutInstance
+ * @description context object default is Node
+ * @name __lifeCycle
+ * @type {JSTemplateComponent.contextLifeCycle}
+ */
+/**
+ * @memberof JSTemplateComponent.contextWithoutInstance
+ * @description context object default is Node
+ * @name state
+ * @type {Object<string,(string|number|Object<string,any>|null|any[])>}
  */
 
 /**
@@ -314,6 +358,8 @@
 												);
 											}
 						
+											ComponentContext.__instance.references = envReferences;
+
 											node.innerHTML	= __instance.templateCode;
 
 											// @ts-ignore

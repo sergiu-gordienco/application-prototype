@@ -1,6 +1,6 @@
 {
   "name": "application-prototype",
-  "version": "1.25.26",
+  "version": "1.25.27",
   "description": "Application builder - prototype",
   "main": "index.ts",
   "scripts": {
