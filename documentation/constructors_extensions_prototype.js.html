@@ -2262,26 +2262,30 @@ _public.fn.downloadFile = function (filename,content,encoding,mimetype) {
 	} else {
 		if(!encoding)
 			encoding	= 'none';
-		if(!mimetype)
-			mimetype	= "application/x-unknown";
-		switch(encoding) {
-			case 'base64':
-				content = "data:"+mimetype+";base64,"+content;
-			break;
-			case 'file-encoded':
-				// skip;
-			break;
-			case 'chunks':
-			break;
-			case 'escape':
-			case 'uri-encoded':
-				content = "data:"+mimetype+";base64,"+unescape(content).base64encode();
-			break;
-			case 'none':
-				content = "data:"+mimetype+";base64,"+content.base64encode();
-			break;
-		};
-		url = dataURItoBlobUrl(content,mimetype).url;
+		if (encoding === "url") {
+			url = content;
+		} else {
+			if(!mimetype)
+				mimetype	= "application/x-unknown";
+			switch(encoding) {
+				case 'base64':
+					content = "data:"+mimetype+";base64,"+content;
+				break;
+				case 'file-encoded':
+					// skip;
+				break;
+				case 'chunks':
+				break;
+				case 'escape':
+				case 'uri-encoded':
+					content = "data:"+mimetype+";base64,"+unescape(content).base64encode();
+				break;
+				case 'none':
+					content = "data:"+mimetype+";base64,"+content.base64encode();
+				break;
+			};
+			url = dataURItoBlobUrl(content,mimetype).url;
+		}
 	}
 	var i = getRandId('donwload-link');
 	var p = _();
