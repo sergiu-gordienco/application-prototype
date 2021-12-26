@@ -3,6 +3,7 @@ var databaseStragedy = null;
 var HTTPCache = function (interceptor, tableName) {
 	var app = new ApplicationPrototype();
 	var cacheFiles = {};
+	var _processedFiles = {};
 	var mimetypes  = {
 		"_"        : "application/octet-stream", // default
 		".txt"     : "text/plain",
@@ -15,7 +16,8 @@ var HTTPCache = function (interceptor, tableName) {
 		".jpeg"    : "image/jpeg",
 		".jpg"     : "image/jpeg",
 		".gif"     : "image/gif",
-		".png"     : "image/png"
+		".png"     : "image/png",
+		".svg"     : "image/svg+xml"
 	};
 	var methods = [
 		"post",
@@ -26,7 +28,6 @@ var HTTPCache = function (interceptor, tableName) {
 		"delete",
 		"options",
 		"connect",
-
 		"checkout",
 		"copy",
 		"lock",
@@ -124,11 +125,16 @@ var HTTPCache = function (interceptor, tableName) {
 			) {
 				callback(undefined, content.base64encode());
 			} else if ( content instanceof Blob ) {
-				content.toArrayBuffer(function (content) {
-					callback(undefined, content.toStringUtf8().base64encode());
+				content.toArrayBuffer(function (err, content) {
+					if (err) {
+						callback(err);
+					} else {
+						callback(undefined, content.base64encode());
+					}
 				});
 			} else if ( content instanceof ArrayBuffer ) {
-				callback(undefined, content.toStringUtf8().base64encode());
+				callback(undefined, content.base64encode());
+				// callback(undefined, content.toStringUtf8().base64encode());
 			} else {
 				callback(Error("Incorrect file content"));
 			}
@@ -145,9 +151,20 @@ var HTTPCache = function (interceptor, tableName) {
 			send = true;
 			cb(err, data);
 		};
-
 		try {
-			callback(undefined, data.base64decode());
+			if (data === null) {
+				return callback(Error('empty data'));
+			}
+			var xhrRequest = new XMLHttpRequest();
+			xhrRequest.addEventListener("load", function () {
+				callback(undefined, xhrRequest.response);
+			});
+			xhrRequest.addEventListener("error", function (err) {
+				callback(err);
+			});
+			xhrRequest.responseType = 'blob';
+			xhrRequest.open('get', 'data:application/octet-stream;base64,' + data, true);
+			xhrRequest.send();
 		} catch (err) {
 			callback(err);
 		}
@@ -174,6 +191,7 @@ var HTTPCache = function (interceptor, tableName) {
 			database.initialization.then(function () {
 				database.getItem(url).then(function (ev) {
 					var content = ((((ev || {}).target || {}).result || {}).v || null);
+
 					var finish  = function (content) {
 						app.mimetype(url, function (err, mimetype) {
 							if (err) {
@@ -207,31 +225,33 @@ var HTTPCache = function (interceptor, tableName) {
 			xhrProxy.transform({ url: newUrl });
 			xhrProxy.replay(true);
 		}, function (err) {
-			app.emit("error:url-find", [err]);
-			xhrProxy.addEventListener("load", function () {
-				if (xhrProxy.responseText) {
-					database.initialization.then(function () {
-						app.contentEncode(xhrProxy.response, function (err, content) {
-							if (err) return app.emit("error:cache-content", [err]);
-							database.setItem(url, content).then(function (content) {
-								app.emit("database:cache:url", [url, content]);
-							}, function (err) {
-								app.emit("error:cache-content", [err]);
+			if (err) app.emit("error:url-find", [err]);
 
-								database.getItem(url).then(function (content) {
-									database.removeItem(url).then(function () {
-										console.info("Incorrectly cached item removed", url);
-									}, function (err) {
-										app.emit("error:cache-content", [err]);
-									});
+			xhrProxy.addEventListener("load", function () {
+				database.initialization.then(function () {
+					app.contentEncode(xhrProxy.response, function (err, content) {
+						if (err) return app.emit("error:cache-content", [err]);
+						if (url in _processedFiles) {
+							app.emit("database:cache:url", [url, content, 'DUPLICATED']);
+							return;
+						}
+						_processedFiles[url] = true;
+						database.setItem(url, content).then(function (content) {
+							app.emit("database:cache:url", [url, content]);
+						}, function (err) {
+							app.emit("error:cache-content", [err]);
+							database.getItem(url).then(function (content) {
+								database.removeItem(url).then(function () {
+									console.info("Incorrectly cached item removed", url);
 								}, function (err) {
 									app.emit("error:cache-content", [err]);
 								});
+							}, function (err) {
+								app.emit("error:cache-content", [err]);
 							});
 						});
-
 					});
-				}
+				});
 			});
 			xhrProxy.replay(false);
 		});
@@ -282,6 +302,82 @@ var HTTPCache = function (interceptor, tableName) {
 	}
 
 	return app;
+};
+
+HTTPCache.HTTPCacheElements = function () {
+	if (typeof(window) !== "object") return;
+	var _urlCache = {};
+	[
+		{
+			constructorName: 'HTMLImageElement', attributeName: 'src'
+		},
+		{
+			constructorName: 'HTMLScriptElement', attributeName: 'src'
+		},
+		{
+			constructorName: 'HTMLLinkElement', attributeName: 'href'
+		}
+	].forEach(function (item) {
+		if (item.constructorName in window) {
+			window[item.constructorName].prototype.__cacheSetAttribute = window[item.constructorName].prototype.setAttribute;
+			window[item.constructorName].prototype.setAttribute = function (name, value) {
+				if (item.attributeName === name) {
+					this.setAttribute('cached-' + item.attributeName, value);
+					if (value in _urlCache) {
+						this.__cacheSetAttribute(name, _urlCache[value]);
+						return;
+					}
+					var _this = this;
+					var xhrRequest = new window.XMLHttpRequest();
+
+					if (item.constructorName === 'HTMLLinkElement') {
+						xhrRequest.addEventListener('load', function () {
+							var data = xhrRequest.response.replace(
+								/(url\s*\()([\"\']{0,1})(.*?)(\2)(\))/g,
+								function (s0, s1, s2, s3, s4, s5) {
+									var url = s3[0] === "/" ? (
+										location.origin + s3
+									) : (
+										s3.match(/[a-z\d]+\:/) ? s3 : (
+											value.replace(/[^\/]+$/, '') + s3
+										)
+									);
+									return s1 + s2 + (
+										url
+									) + s4 + s5;
+								}
+							);
+							var cachedUrl = URL.createObjectURL(new Blob([data]));
+							_urlCache[value] = cachedUrl;
+							_this.__cacheSetAttribute(name, cachedUrl);
+						});
+						xhrRequest.open('get', value, true);
+						xhrRequest.responseType = 'text';
+					} else {
+						xhrRequest.addEventListener('load', function () {
+							var cachedUrl = URL.createObjectURL(xhrRequest.response);
+							_urlCache[value] = cachedUrl;
+							_this.__cacheSetAttribute(name, cachedUrl);
+						});
+						xhrRequest.open('get', value, true);
+						xhrRequest.responseType = 'blob';
+					}
+					xhrRequest.send();
+					return;
+				} else {
+					return this.__cacheSetAttribute(name, value);
+				}
+			};
+
+			Object.defineProperty(
+				window[item.constructorName].prototype, item.attributeName, {
+				get: function() { return this.getAttribute(item.attributeName); },
+				set: function(value) { this.setAttribute(item.attributeName, value); },
+				enumerable: true,
+				configurable: true
+			});
+		}
+	});
 };
 
 Application.require("extensions/prototype", function () {

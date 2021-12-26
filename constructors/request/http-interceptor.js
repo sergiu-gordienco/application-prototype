@@ -197,8 +197,11 @@ var XMLHttpRequestInterceptor = function () {
 						"timeout",
 						"readyState"
 					].forEach(function (prop) {
-						Object.defineProperty(xhr, prop, { writable: true });
-						xhr[prop] = _xhr[prop];
+						var err;
+						try {
+							Object.defineProperty(xhr, prop, { writable: true });
+							xhr[prop] = _xhr[prop];
+						} catch (err) {}
 					});
 				};
 			}
@@ -242,7 +245,7 @@ var XMLHttpRequestInterceptor = function () {
 			}
 
 			return _xhr;
-		}
+		};
 
 		return xhr;
 	};
