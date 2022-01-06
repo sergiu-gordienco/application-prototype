@@ -304,7 +304,7 @@ var HTTPCache = function (interceptor, tableName) {
 	return app;
 };
 
-HTTPCache.HTTPCacheElements = function () {
+HTTPCache.HTTPCacheElements = function (filter) {
 	if (typeof(window) !== "object") return;
 	var _urlCache = {};
 	[
@@ -322,6 +322,10 @@ HTTPCache.HTTPCacheElements = function () {
 			window[item.constructorName].prototype.__cacheSetAttribute = window[item.constructorName].prototype.setAttribute;
 			window[item.constructorName].prototype.setAttribute = function (name, value) {
 				if (item.attributeName === name) {
+					if (filter && !filter(this, name, value)) {
+						this.__cacheSetAttribute(name, value);
+						return;
+					}
 					this.setAttribute('cached-' + item.attributeName, value);
 					if (value in _urlCache) {
 						this.__cacheSetAttribute(name, _urlCache[value]);
