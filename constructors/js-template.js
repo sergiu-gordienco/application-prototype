@@ -806,7 +806,7 @@ attrParser.update = function (item, value, config, cb) {
 									} else if (inputType === "checkbox") {
 										//@ts-ignore
 										node.checked = value.apply(config.context, [{}]);
-										node.addEventListener('mouseup', function (event) {
+										node.addEventListener('change', function (event) {
 											//@ts-ignore
 											event.__args = config.args;
 											//@ts-ignore
