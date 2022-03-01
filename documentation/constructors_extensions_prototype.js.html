@@ -996,7 +996,34 @@ addB:function(t,f,j){
 addT:function(t){if(typeof(t)!="undefined")this.newE.appendChild(document.createTextNode(t));return this;},
 nextTo:function(t) {var i;if(!t)t=1;for(i=0;i&lt;t;i++)this.newE=this.newE.nextSibling;return this;},
 backTo:function(t) {var i;if(!t)t=1;for(i=0;i&lt;t;i++)this.newE=this.newE.previousSibling;return this;},
-triger:function(t) {var e, evt;try{if(document.createEvent){evt = document.createEvent("HTMLEvents");evt.initEvent(t, true, true );/*bubbling,cancelable*/return !((this.newE).dispatchEvent(evt));} else {evt = document.createEventObject();return ((this.newE).fireEvent('on'+event,evt));}}catch(e){return 0;}},
+triger:function(t) {
+	var e, evt;
+	try{
+		if(document.createEvent) {
+			evt = document.createEvent("HTMLEvents");
+			if (evt.initEvent) {
+				evt.initEvent(t, true, true );/*bubbling,cancelable*/
+			}
+			return !((this.newE).dispatchEvent(evt));
+		}
+		if (window.Event) {
+			evt = new Event(
+				t,
+				{
+					bubbles: true,
+					cancelable: true
+				}
+			);
+			return !((this.newE).dispatchEvent(evt));
+		}
+		if (document.createEventObject) {
+			evt = document.createEventObject();
+			return ((this.newE).fireEvent('on'+t, evt));
+		}
+	} catch(e) {
+		return 0;
+	}
+},
 nUP:function(){this.newE=this.newE.parentNode;return this;},
 nChild:function(t){if(!t)t=0;if(t==-4){if(this.newE.childNodes.length)if(this.newE.childNodes[this.newE.childNodes.length-1]) this.newE = this.newE.childNodes[this.newE.childNodes.length-1];}else if(t==-3){return this.newE.childNodes;}else if(t==-2){this.newE=this.newE.childNodes;} else if(t==-1){this.newE=this.newE.lastChild;} else {this.newE=this.newE.childNodes[t];};return this;},
 getParentN:function(t){if(!t)t=1;var i;for(i=0;i&lt;t;i++)if(this.newE.parentNode)this.newE=this.newE.parentNode;return this;},
@@ -1362,26 +1389,71 @@ if (document)
 	_public.fn.mouse.touchEventsAsClicks = true;
 	var eventsList	= ["touchmove", "touchstart", "touchend", "touchleave"];
 	var p			= _();
+	/**
+	 * @private
+	 * @param {TouchEvent} evt 
+	 */
 	var handler		= function (evt) {
 		if (_public.fn.mouse.touchEventsAsClicks) {
 			// if (!p.env.mobile) {
 			// 	evt.preventDefault();
 			// }
-			if (evt.touches.length > 1 || (evt.type == "touchend" &amp;&amp; evt.touches.length > 0))
-			return;
-			var newEvt = document.createEvent("MouseEvents");
-			var type = null;
-			var touch = null;
-			switch (evt.type) {
-				case "touchstart"	: type = "mousedown";	touch = evt.changedTouches[0];break;
-				case "touchmove"	: type = "mousemove";	touch = evt.changedTouches[0];break;
-				case "touchend"		: type = "mouseup";		touch = evt.changedTouches[0];break;
-				case "touchleave"	: type = "mouseleave";	touch = evt.changedTouches[0];break;
+			var newEvt;
+
+			if (document.createEvent) {
+				if (evt.touches.length > 1 || (evt.type == "touchend" &amp;&amp; evt.touches.length > 0))
+				return;
+				newEvt = document.createEvent("MouseEvents");
+				var eventType = null;
+				var touch = null;
+				switch (evt.type) {
+					case "touchstart"	: eventType = "mousedown";	touch = evt.changedTouches[0];break;
+					case "touchmove"	: eventType = "mousemove";	touch = evt.changedTouches[0];break;
+					case "touchend"		: eventType = "mouseup";	touch = evt.changedTouches[0];break;
+					case "touchleave"	: eventType = "mouseleave";	touch = evt.changedTouches[0];break;
+				}
+				if (typeof(newEvt.initMouseEvent) === "function") {
+					newEvt.initMouseEvent(eventType, true, true, evt.target.ownerDocument.defaultView, 0,
+					touch.screenX, touch.screenY, touch.clientX, touch.clientY,
+					evt.ctrlKey, evt.altKey, evt.shiftKey, evt.metaKey, 0, null);
+					evt.target.dispatchEvent(newEvt);
+					return;
+				}
 			}
-			newEvt.initMouseEvent(type, true, true, evt.target.ownerDocument.defaultView, 0,
-			touch.screenX, touch.screenY, touch.clientX, touch.clientY,
-			evt.ctrlKey, evt.altKey, evt.shiftKey, evt.metaKey, 0, null);
-			evt.target.dispatchEvent(newEvt);
+
+			if (window.MouseEvent) {
+				if (evt.touches.length > 1 || (evt.type == "touchend" &amp;&amp; evt.touches.length > 0))
+				return;
+				var eventType = null;
+				var touch = null;
+				switch (evt.type) {
+					case "touchstart"	: eventType = "mousedown";	touch = evt.changedTouches[0];break;
+					case "touchmove"	: eventType = "mousemove";	touch = evt.changedTouches[0];break;
+					case "touchend"		: eventType = "mouseup";	touch = evt.changedTouches[0];break;
+					case "touchleave"	: eventType = "mouseleave";	touch = evt.changedTouches[0];break;
+				}
+
+				// (typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, viewArg: Window, detailArg: number, screenXArg: number, screenYArg: number, clientXArg: number, clientYArg: number, ctrlKeyArg: boolean, altKeyArg: boolean, shiftKeyArg: boolean, metaKeyArg: boolean, buttonArg: number, relatedTargetArg: EventTarget): void
+				newEvt = new MouseEvent(eventType, {
+					bubbles: true,
+					cancelable: true,
+					view: (((evt.target || {}).ownerDocument || {}).defaultView || window),
+					detail: 0,
+					screenX : touch.screenX,
+					screenY : touch.screenY,
+					clientX : touch.clientX,
+					clientY : touch.clientY,
+					ctrlKey : evt.ctrlKey,
+					altKey  : evt.altKey,
+					shiftKey: evt.shiftKey,
+					metaKey : evt.metaKey,
+					button  : 0,
+					// buttons : [0],
+					relatedTarget: evt.target
+				});
+
+				evt.target.dispatchEvent(newEvt);
+			}
 		}
 	};
 	p	= _().E(window);
@@ -2346,9 +2418,23 @@ if (document)
 		return global.addEventListener(eventName, callback, false);
 	};
 	global.trigger	= function (eventName) {
-		var event = document.createEvent('Event');
-		event.initEvent(eventName, true, true);
-		return global.dispatchEvent(event);
+		var event;
+		if (document.createEvent) {
+			event = document.createEvent('Event');
+			if (typeof(event.initEvent) === "function") {
+				//! @deprecated
+				event.initEvent(eventName, true, true);
+			}
+			return global.dispatchEvent(event);
+		}
+
+		if (global.Event) {
+			event = new Event(event, {
+				bubbles: true,
+				cancelable: true
+			});
+			return global.dispatchEvent(event);
+		}
 	};
 
 	((function () {
