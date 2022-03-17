@@ -1856,6 +1856,22 @@ var i;for(i in o) {
 		},
 		"unique"	: function () {
 			return this.filter(function (v, k, arr) { return arr.indexOf(v) === k; });
+		},
+		__pointerFilter: function (cb) {
+			var arr = this;
+			var indexes = [];
+			arr.forEach(function (item, index, arr) {
+				if (!cb(item, index, arr)) {
+					indexes.push(index);
+				}
+			});
+			indexes = indexes.map(function (item, index) {
+				return item - index;
+			});
+			indexes.forEach(function (item) {
+				arr.splice(item, 1);
+			});
+			return arr;
 		}
 	};
 	o.indexOfSect	= o.indexOf;
