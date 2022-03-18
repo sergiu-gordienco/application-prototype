@@ -1405,13 +1405,29 @@ if (document)
 })());
 
 ;((function(){
+	/**
+	 * @interface String
+	 */;
 var e,o={
+/**
+ * @memberof String#
+ * @method subs similar as PHP subs
+ * @param {number} p
+ * @param {number} [i]
+ * @returns {string}
+ */
 subs	: function(p,i){
 if(p < 0) return this.substring(this.length+p,( typeof(i) == "number" ? this.length+p+i : this.length ));
 if((i === 0 || i < 0) && p >=0) return this.substring(p,this.length+i);
 if(!i)	return this.substring(0,p);
 return this.substring(p,p+i);
 },
+/**
+ * @memberof String#
+ * @method toHex
+ * @param {boolean} utf8
+ * @returns {string}
+ */
 toHex : function(utf8) {
 	var s=this;var r="",e=s.length,c=0,h;
 	while(c<e) {
@@ -1428,13 +1444,44 @@ toHex : function(utf8) {
 		};
 	return r;
 },
+/**
+ * @memberof String#
+ * @method fromHex
+ * @returns {string}
+ */
 fromHex : function(){var s=this;if(s.length % 2)s='0'+s;var e;try{return unescape(s.replace(/([0-9A-Fa-f]{2})/gi,'%$1'));}catch(e){return '';}},
+/**
+ * @memberof String#
+ * @method toHtmlSimple
+ * @returns {string}
+ */
 toHtmlSimple	: function() { return this.replace(/\&/g, "&amp;").replace(/\</g, "&lt;").replace(/\>/g, "&gt;").replace(/\"/g, "&quot;").replace(/\'/g, "&#039;"); },
+/**
+ * @memberof String#
+ * @method toHtml
+ * @returns {string}
+ */
 toHtml : function(){return escape(this).replace(/\%u([0-9a-f]{4})/gi,'&#x$1;').replace(/\%([0-9a-f]{2})/gi,'&#x$1;').replace(/\&\#x20\;/gi,' ')},
+/**
+ * @memberof String#
+ * @method fromHtml
+ * @returns {string}
+ */
 fromHtml : function(){var e = document.createElement('div');e.innerHTML = '<textarea>'+this.replace(/\</g,'&lt;').replace(/\>/g,'&gt;')+'</textarea>';return e.getElementsByTagName('textarea')[0].value;},
+/**
+ * @memberof String#
+ * @method cleanTags remove dangerous HTML Tags
+ * @returns {string}
+ */
 cleanTags	: function() {
 	return this.replace(/\<\!\-\-[\s\S]*?\-\-\>/g,' ').replace(/\<(script|iframe|style|object|noscript|frame|frameset)[^\>]*?\>[\s\S]*?\<\/\1.*?\>/gi,'').replace(/\<[^\>]*\>/g,' ').replace(/\s{2,}/g,' ').fromHtml()
 },
+/**
+ * @memberof String#
+ * @method add_Class
+ * @param {string} className
+ * @returns {string}
+ */
 add_Class : function(x){
 	var c	= (x + '');
 	var cl	= c.toLowerCase();
@@ -1448,6 +1495,12 @@ add_Class : function(x){
 	}
 	return list.join(' ');
 },
+/**
+ * @memberof String#
+ * @method del_Class
+ * @param {string} className
+ * @returns {string}
+ */
 del_Class : function(x){
 	var c	= (x + '');
 	var cl	= c.toLowerCase();
@@ -1456,6 +1509,13 @@ del_Class : function(x){
 		return (v.toLowerCase() !== cl);
 	}).join(' ');
 },
+/**
+ * find a class
+ * @memberof String#
+ * @method fnd_Class
+ * @param {string} className
+ * @returns {boolean}
+ */
 fnd_Class : function(x){
 	var c	= (x + '');
 	var cl	= c.toLowerCase();
@@ -1466,23 +1526,64 @@ fnd_Class : function(x){
 	});
 	return founded;
 },
+/**
+ * swap letters' case
+ * @memberof String#
+ * @method swp_case
+ * @returns {string}
+ */
 swp_case : function(){return this.replace(/([a-z]+)|([A-Z]+)/g,function($0,$1,$2){return ($1) ? $0.toUpperCase() : $0.toLowerCase();})},
+/**
+ * uppercase first [k] letters from word
+ * @memberof String#
+ * @method ucfirst
+ * @param {number} [k=1]
+ * @returns {string}
+ */
 ucfirst : function(k){ if(!k) k=1; return this.subs(0,k).toUpperCase()+this.subs(k,0);},
+/**
+ * lowercase first [k] letters from word
+ * @memberof String#
+ * @method lcfirst
+ * @param {number} [k=1]
+ * @returns {string}
+ */
 lcfirst : function(k){ if(!k) k=1; return this.subs(0,k).toLowerCase()+this.subs(k,0);},
+/**
+ * @memberof String#
+ * @method utf8need
+ * @returns {string}
+ */
 utf8need : function() {
 	if( escape(this).match(/\%u[a-zA-Z0-9]{4}/) ) return this.utf8encode();
 	return this;
 },
+/**
+ * @memberof String#
+ * @method utf8encode
+ * @returns {string}
+ */
 utf8encode : function() {
 	var e;try {
 		return unescape( encodeURIComponent( this ) );
 	} catch(e) {};
 	return this.replace(/[\u0080-\u07ff]/g,function(c){var cc = c.charCodeAt(0);return String.fromCharCode(0xc0 | cc>>6, 0x80 | cc&0x3f);}).replace(/[\u0800-\uffff]/g,function(c){var cc = c.charCodeAt(0);return String.fromCharCode(0xe0 | cc>>12, 0x80 | cc>>6&0x3F, 0x80 | cc&0x3f);});},
-utf8decode : function(strUtf) {
+/**
+ * @memberof String#
+ * @method utf8decode
+ * @returns {string}
+ */
+utf8decode : function() {
 	var e;try {
 		return decodeURIComponent( escape( this ) );
 	} catch(e) {};
 	return this.replace(/[\u00e0-\u00ef][\u0080-\u00bf][\u0080-\u00bf]/g,function(c){var cc = ((c.charCodeAt(0)&0x0f)<<12) | ((c.charCodeAt(1)&0x3f)<<6) | ( c.charCodeAt(2)&0x3f);return String.fromCharCode(cc);}).replace(/[\u00c0-\u00df][\u0080-\u00bf]/g,function(c){return String.fromCharCode((c.charCodeAt(0)&0x1f)<<6 | c.charCodeAt(1)&0x3f);});},
+/**
+ * @memberof String#
+ * @method toRegexp
+ * @param {string} [flags]
+ * @returns {string}
+ */
 toRegexp : function(flags){
 	if(!flags) flags	= '';
 	var e,r = null;try {
@@ -1490,11 +1591,45 @@ toRegexp : function(flags){
 	} catch(e) { r = null; };
 	return r;
 },
+/**
+ * @memberof String#
+ * @method escapeHex
+ * @returns {string}
+ */
 escapeHex	: function() { return escape(this).replace(/\%u/g,'\\u').replace(/\%/g,'\\x') },
+/**
+ * @memberof String#
+ * @method escape
+ * @returns {string}
+ */
 escape		: function() { return escape(this); },
+/**
+ * @memberof String#
+ * @method encodeURI
+ * @returns {string}
+ */
 encodeURI	: function() { return encodeURIComponent(this); },
+/**
+ * @memberof String#
+ * @method unescape
+ * @returns {string}
+ */
 unescape	: function() { return unescape(this); },
+/**
+ * @memberof String#
+ * @method decodeURI
+ * @returns {string}
+ */
 decodeURI	: function() { return decodeURIComponent(this); },
+/**
+ * @memberof String#
+ * @method parseUrlVars
+ * @param {boolean} [json=false]
+ * @param {object} [params]
+ * @param {boolean} [params.keepOBJ=false]
+ * @param {boolean} [params.isURL=false]
+ * @returns {Object<string,any>}
+ */
 parseUrlVars	: function(json,params) {
 	if(!params) params = {
 		keepOBJ	: false,
@@ -1563,6 +1698,28 @@ parseUrlVars	: function(json,params) {
 	});
 	return r;
 },
+/**
+ * @memberof String
+ * @typedef {object} String_parseUrl_return
+ * @property {string} original https://www.test.example.com/path/data?request=5#search
+ * @property {string} origin www.test.example.com
+ * @property {string} domain www.test.example.com
+ * @property {string} domain_short test.example.com
+ * @property {string} pathname /path/data 
+ * @property {string} reqQuery request=5 
+ * @property {string} protocol https 
+ * @property {string} protocoll https:// 
+ * @property {Object<string,any>} [get_vars]
+ * @property {string} url deprecated 
+ * @property {string} url_p deprecated
+ * @property {string} isIp deprecated
+ */
+/**
+ * @memberof String#
+ * @method parseUrl
+ * @param {boolean} [k=false] decode get vars
+ * @returns {String.String_parseUrl_return}
+ */
 parseUrl	: function(k) {
 	var url	= this;
 	var domain	= url.split('//');
@@ -1590,24 +1747,119 @@ parseUrl	: function(k) {
 	};
 	return o;
 },
+/**
+ * @memberof String#
+ * @method match_str
+ * @param {string} reg_exp
+ * @param {string} [flags]
+ * @returns {string[]|null}
+ */
 match_str	: function(str,flags){
 	return this.match((""+str).toRegexp(flags ? flags : ""));
 },
-sha1 : function(utf8){return Sha1.hash(this,( utf8 || typeof(utf8) == "undefined" ) ? true : false)},
-sha256 : function(utf8){return Sha256.hash(this,( utf8 || typeof(utf8) == "undefined" ) ? true : false)},
+/**
+ * @memberof String#
+ * @method sha1
+ * @returns {string}
+ */
+sha1 : function(utf8){return Sha1.hash(this,( utf8 || typeof(utf8) == "undefined" ) ? true : false);},
+/**
+ * @memberof String#
+ * @method sha256
+ * @returns {string}
+ */
+sha256 : function(utf8){return Sha256.hash(this,( utf8 || typeof(utf8) == "undefined" ) ? true : false);},
+/**
+ * @memberof String#
+ * @method md5
+ * @returns {string}
+ */
 md5	: function() { return MD5(this);},
+/**
+ * @memberof String#
+ * @method base64encode
+ * @returns {string}
+ */
 base64encode	: function() { return base64.encode(this.utf8need()); },
+/**
+ * @memberof String#
+ * @method base64decode
+ * @returns {string}
+ */
 base64decode	: function() { return base64.decode(this).unicode(); },
+/**
+ * @memberof String#
+ * @method base64encodeBytes
+ * @returns {Uint8Array}
+ */
 base64encodeBytes	: function() { return base64Binary.encodeBytes(this); },
+/**
+ * @memberof String#
+ * @method base64encodeBytesArray
+ * @returns {number[]}
+ */
 base64encodeBytesArray	: function() { return Array.prototype.slice.call(this.base64encodeBytes()); },
+/**
+ * @memberof String#
+ * @method base64decodeBytes
+ * @returns {Uint8Array}
+ */
 base64decodeBytes	: function() { return base64Binary.decode(this); },
+/**
+ * @memberof String#
+ * @method base64decodeBytesArray
+ * @returns {number[]}
+ */
 base64decodeBytesArray	: function() { return Array.prototype.slice.call(this.base64decodeBytes()); },
+/**
+ * @memberof String#
+ * @method base64encodeClean
+ * @returns {string}
+ */
 base64encodeClean	: function() { return base64.encode(this); },
+/**
+ * @memberof String#
+ * @method base64decodeClean
+ * @returns {string}
+ */
 base64decodeClean	: function() { return base64.decode(this); },
+/**
+ * @memberof String#
+ * @method encryptTea
+ * @param {string} password
+ * @returns {string}
+ */
 encryptTea	: function(p) { return Tea.encrypt(this,p); },
+/**
+ * @memberof String#
+ * @method decryptTea
+ * @param {string} password
+ * @returns {string}
+ */
 decryptTea	: function(p) { return Tea.decrypt(this,p); },
+/**
+ * @memberof String#
+ * @method encryptAes
+ * @param {string} password
+ * @param {128|256|512} [bytes=128]
+ * @returns {string}
+ */
 encryptAes	: function(p,b) { return Aes.Ctr.encrypt(this,p,b ? b : 128); },
+/**
+ * @memberof String#
+ * @method decryptAes
+ * @param {string} password
+ * @param {128|256|512} [bytes=128]
+ * @returns {string}
+ */
 decryptAes	: function(p,b) { return Aes.Ctr.decrypt(this,p,b ? b : 128); },
+/**
+ * "asd asdsdf param:sdd test:data 2 info".buildQuery()
+ * {_keys: ["_", "param", "test"], _: 'asd asdsdf', param: 'sdd', test: 'data 2 info'}
+ * @memberof String#
+ * @method buildQuery
+ * @returns {Object<string,string>}
+ */
 buildQuery	: function() {
 	var r	= /^\s*([a-z]+)\:\s*(\S[^\:]*?|)\s*(\s[a-z]+\:.*|)$/i
 	var s = this, o = { "_keys" : [] }, m, k, f = s.split(/([a-z]+)\:/i);
@@ -1623,6 +1875,13 @@ buildQuery	: function() {
 	};
 	return o;
 },
+/**
+ * "23 test \"composed param\" 234".buildSearchArray()
+ * ['23', 'test', 'composed param', '234']
+ * @memberof String#
+ * @method buildSearchArray
+ * @returns {string[]}
+ */
 buildSearchArray	: function() {
 	var s = this,m,a = [];
 	while( m = s.match(/(\"[^\"]+\"|\'[^\']+\'|\S+)/) ) {
@@ -1632,8 +1891,25 @@ buildSearchArray	: function() {
 	return a;
 }
 };
+/**
+ * similar as utf8encode
+ * @memberof String#
+ * @method utf8
+ * @returns {string}
+ */
 o.utf8	= o.utf8encode;
+/**
+ * similar as utf8decode
+ * @memberof String#
+ * @method unicode
+ * @returns {string}
+ */
 o.unicode = o.utf8decode;
+/**
+ * @memberof String#
+ * @method toArrayBufferFromUtf8
+ * @returns {ArrayBuffer}
+ */
 o.toArrayBufferFromUtf8	= function () {
 	var buf = new ArrayBuffer(this.length*2); // 2 bytes for each char
 	var bufView = new Uint16Array(buf);
@@ -1657,6 +1933,9 @@ var i;for(i in o) {
 })());
 
 ((function(){
+	/**
+	 * @interface Array
+	 */;
 	var o = {
 		/*
 			comparator example:
@@ -1664,6 +1943,11 @@ var i;for(i in o) {
 				return a === array_item
 			}
 		*/
+		/**
+		 * @memberof Array#
+		 * @method min
+		 * @returns {any}
+		 */
 		"min"	: function () {
 			var min	= null;
 			this.forEach(function (v, k, arr) {
@@ -1677,11 +1961,21 @@ var i;for(i in o) {
 			});
 			return min;
 		},
+		/**
+		 * @memberof Array#
+		 * @method shuffle
+		 * @returns {any[]}
+		 */
 		"shuffle"	: function () {
 			return this.sort(function() {
 				return 0.5 - Math.random();
 			});
 		},
+		/**
+		 * @memberof Array#
+		 * @method max
+		 * @returns {any}
+		 */
 		"max"	: function () {
 			var max	= null;
 			this.forEach(function (v, k, arr) {
@@ -1695,11 +1989,25 @@ var i;for(i in o) {
 			});
 			return max;
 		},
+		/**
+		 * @memberof Array#
+		 * @method move
+		 * @param {number} from
+		 * @param {number} to
+		 * @returns {any[]}
+		 */
 		"move" : function(from, to) {
 			if (from > this.length) return this;
-			this.splice(to, 0, this.splice(from, 1)[0])
+			this.splice(to, 0, this.splice(from, 1)[0]);
 			return this;
 		},
+		/**
+		 * @memberof Array#
+		 * @method inArray
+		 * @param {any} a
+		 * @param {Function} comparator
+		 * @returns {boolean}
+		 */
 		"inArray"	: function(a,comparator) {
 			if(!comparator) comparator	= '===';
 			if( typeof(comparator) === "string" )
@@ -1709,6 +2017,14 @@ var i;for(i in o) {
 			};
 			var i;for(i=0;i<this.length;i++) if(comparator(a,this[i])) return true;
 		},
+		/**
+		 * @memberof Array#
+		 * @method split
+		 * @param {any} elem
+		 * @param {number} num number of items
+		 * @param {'indexOf'|'lastIndexOf'|'indexOfSect'} cmp
+		 * @returns {any[]}
+		 */
 		"split"	: function (elem, num, cmp) {
 			var k, j = 0, n, lines = [], data = this, len = (cmp ? (elem.length ? elem.length : 1) : 1);
 			while ((k = data[cmp ? cmp : "indexOf"](elem, j)) !== -1) {
@@ -1719,9 +2035,23 @@ var i;for(i in o) {
 			lines.push(data.slice(j, data.length));
 			return lines;
 		},
+		/**
+		 * @memberof Array#
+		 * @method splitSect
+		 * @param {any[]} elem
+		 * @param {number} num number of items
+		 * @returns {any[]}
+		 */
 		"splitSect"		: function(elem, num) {
 			return this.split(elem, (num || 0), "indexOfSect");
 		},
+		/**
+		 * @memberof Array#
+		 * @method toBlob
+		 * @param {string} mimetype
+		 * @param {number} [sliceSize=1024] number of items
+		 * @returns {Blob}
+		 */
 		"toBlob" : function (mimetype, sliceSize) {
 			return _public.fn.base64toBlob(
 				this.base64encode(),
@@ -1729,23 +2059,58 @@ var i;for(i in o) {
 				sliceSize
 			);
 		},
+		/**
+		 * @memberof Array#
+		 * @method base64encode
+		 * @returns {ArrayBuffer}
+		 */
 		"base64encode" : function () {
 			return base64Binary.encode(this);
 		},
+		/**
+		 * @memberof Array#
+		 * @method toBinaryString
+		 * @returns {string}
+		 */
 		"toBinaryString" : function () {
 			return this.toBytesBinary().join('');
 		},
+		/**
+		 * @memberof Array#
+		 * @method toBytesBinary
+		 * @returns {string}
+		 */
 		"toBytesBinary" : function () {
 			return this.map(function (v) { return unescape('%' + ( v < 16 ? '0' : '' ) + v.toString(16)); });
 		},
+		/**
+		 * @memberof Array#
+		 * @method toBytesEscaped
+		 * @returns {string}
+		 */
 		"toBytesEscaped" : function () {
 			return this.map(function (v) { return '%' + ( v < 16 ? '0' : '' ) + v.toString(16); });
 		},
+		/**
+		 * @memberof Array#
+		 * @method bytesToHex
+		 * @returns {string}
+		 */
 		"bytesToHex"    : function() {
 			return this.map(function (v) { return ( v < 16 ? '0' : '' ) + v.toString(16); });
 		},
+		/**
+		 * @memberof Array#
+		 * @method toParamObj
+		 * @returns {Object<any,any>}
+		 */
 		"toParamObj"	: function() { var o = {};this.forEach(function(e,i,a) { if( i % 2 == 0 ) o[e] = ( i == a.length-1 ? null : a[i+1] ); });return o; },
-		"resetArray"	: function() {return this.filter(function(v) { return ( typeof(v) != "undefined" ); })},
+		/**
+		 * @memberof Array#
+		 * @method resetArray
+		 * @returns {any[]}
+		 */
+		"resetArray"	: function() {return this.filter(function(v) { return ( typeof(v) != "undefined" ); });},
 		"indexOf" : function (searchElement, fromIndex) {
 			if ( this === undefined || this === null ) {
 				throw new TypeError( '"this" is null or not defined' );
@@ -1764,7 +2129,8 @@ var i;for(i in o) {
 			var cmp	= function(data, i, node) {
 				var b = false;
 				if (node.length) {
-					var j, b = true;
+					var j;
+					b = true;
 					for (j = 0;j<node.length;j++) {
 						if (typeof(data[i+j]) === "undefined" || data[i+j] !== node[j])
 							b = false;
@@ -1773,7 +2139,7 @@ var i;for(i in o) {
 					b	= (data[i] === node);
 				}
 				return b;
-			}
+			};
 			for (;fromIndex < length; fromIndex++) {
 				if (cmp(this, fromIndex, searchElement)) {
 					return fromIndex;
@@ -1854,9 +2220,20 @@ var i;for(i in o) {
 			}
 			return undefined;
 		},
+		/**
+		 * @memberof Array#
+		 * @method unique
+		 * @returns {any[]}
+		 */
 		"unique"	: function () {
 			return this.filter(function (v, k, arr) { return arr.indexOf(v) === k; });
 		},
+		/**
+		 * @memberof Array#
+		 * @method __pointerFilter
+		 * @param {Function} cb receives 3 parameters ( item, index, array )
+		 * @returns {any[]}
+		 */
 		__pointerFilter: function (cb) {
 			var arr = this;
 			var indexes = [];
@@ -1874,6 +2251,13 @@ var i;for(i in o) {
 			return arr;
 		}
 	};
+	/**
+	 * @memberof Array#
+	 * @method indexOfSect
+	 * @param {any[]} items
+	 * @param {number} [fromIndex=0]
+	 * @returns {any[]}
+	 */
 	o.indexOfSect	= o.indexOf;
 	var i;for(i in o) {
 		if (!(i in Array.prototype)) {
@@ -1893,6 +2277,14 @@ var i;for(i in o) {
 
 ;((function () {
 	if (typeof(ArrayBuffer) !== "undefined") {
+		/**
+		 * @interface ArrayBuffer
+		 */;
+		/**
+		 * @memberof ArrayBuffer#
+		 * @method toStringUtf8
+		 * @returns {string}
+		 */
 		Object.defineProperty(
 			ArrayBuffer.prototype,
 			'toStringUtf8',
@@ -1905,6 +2297,11 @@ var i;for(i in o) {
 				enumerable: false
 			}
 		);
+		/**
+		 * @memberof ArrayBuffer#
+		 * @method toBytes
+		 * @returns {Uint8Array}
+		 */
 		Object.defineProperty(
 			ArrayBuffer.prototype,
 			'toBytes',
@@ -1917,6 +2314,11 @@ var i;for(i in o) {
 				enumerable: false
 			}
 		);
+		/**
+		 * @memberof ArrayBuffer#
+		 * @method base64encode
+		 * @returns {string}
+		 */
 		Object.defineProperty(
 			ArrayBuffer.prototype,
 			'base64encode',
@@ -1929,6 +2331,11 @@ var i;for(i in o) {
 				enumerable: false
 			}
 		);
+		/**
+		 * @memberof ArrayBuffer#
+		 * @method toArray
+		 * @returns {number[]}
+		 */
 		Object.defineProperty(
 			ArrayBuffer.prototype,
 			'toArray',
@@ -1944,6 +2351,14 @@ var i;for(i in o) {
 
 	}
 	if (typeof(Buffer) !== "undefined") {
+		/**
+		 * @interface Buffer
+		 */;
+		/**
+		 * @memberof Buffer#
+		 * @method toStringUtf8
+		 * @returns {string}
+		 */
 		Object.defineProperty(
 			Buffer.prototype,
 			'toStringUtf8',
@@ -1956,6 +2371,11 @@ var i;for(i in o) {
 				enumerable: false
 			}
 		);
+		/**
+		 * @memberof Buffer#
+		 * @method toBytes
+		 * @returns {Uint8Array}
+		 */
 		Object.defineProperty(
 			Buffer.prototype,
 			'toBytes',
@@ -1968,6 +2388,11 @@ var i;for(i in o) {
 				enumerable: false
 			}
 		);
+		/**
+		 * @memberof Buffer#
+		 * @method base64encode
+		 * @returns {string}
+		 */
 		Object.defineProperty(
 			Buffer.prototype,
 			'base64encode',
@@ -1980,6 +2405,11 @@ var i;for(i in o) {
 				enumerable: false
 			}
 		);
+		/**
+		 * @memberof Buffer#
+		 * @method toArray
+		 * @returns {number[]}
+		 */
 		Object.defineProperty(
 			Buffer.prototype,
 			'toArray',
@@ -1994,6 +2424,11 @@ var i;for(i in o) {
 		);
 	}
 
+	/**
+	 * @memberof Array#
+	 * @method toStringUtf8
+	 * @returns {string}
+	 */
 	Object.defineProperty(
 		Array.prototype,
 		'toStringUtf8',
@@ -2010,6 +2445,20 @@ var i;for(i in o) {
 
 if (typeof(Blob) !== "undefined")
 ((function () {
+	/**
+	 * @interface Blob
+	 */;
+	/**
+	 * @callback Blob_toArrayBuffer
+	 * @memberof Blob
+	 * @param {Error} err
+	 * @param {ArrayBuffer} data
+	 */
+	/**
+	 * @memberof Blob#
+	 * @method toArrayBuffer
+	 * @param {Blob.Blob_toArrayBuffer} cb
+	 */
 	Object.defineProperty(
 		Blob.prototype,
 		'toArrayBuffer',
@@ -2044,12 +2493,19 @@ if (typeof(Blob) !== "undefined")
 			enumerable: false
 		}
 	);
+	/**
+	 * @memberof Blob#
+	 * @method toURL
+	 * @param {object} [options]
+	 * @param {string} [options.type]
+	 * @returns {string}
+	 */
 	Object.defineProperty(
 		Blob.prototype,
 		'toURL',
 		{
 			value : function (options) {
-				return URL.createObjectURL(this, options || { type: this.type || "application/octet-binary"})
+				return URL.createObjectURL(this, options || { type: this.type || "application/octet-binary"});
 			},
 			writable: false,
 			configurable: true,
@@ -2059,7 +2515,15 @@ if (typeof(Blob) !== "undefined")
 })());
 
 ;(function () {
+	/**
+	 * @interface Function
+	 */;
 	var options = {
+		/**
+		 * @memberof Function#
+		 * @method toWorkerURL
+		 * @returns {string}
+		 */
 		toWorkerURL : function () {
 			var func = this;
 			var call = function (self) {
@@ -2067,7 +2531,7 @@ if (typeof(Blob) !== "undefined")
 				self.addEventListener("message", function (ev) {
 					run(ev.data, function (res) {
 						self.postMessage(res);
-					})
+					});
 				});
 			};
 
@@ -2076,6 +2540,11 @@ if (typeof(Blob) !== "undefined")
 			var url = URL.createObjectURL(blob);
 			return url;
 		},
+		/**
+		 * @memberof Function#
+		 * @method toWorker
+		 * @returns {Worker}
+		 */
 		toWorker : function () {
 			var func = this;
 			var url = func.toWorkerURL();
@@ -2084,9 +2553,24 @@ if (typeof(Blob) !== "undefined")
 			worker.terminate = function () {
 				worker._terminate();
 				URL.revokeObjectURL(url);
-			}
+			};
 			return worker;
 		},
+		/**
+		 * @memberof ExtensionsPrototype
+		 * @callback Function_runInWorker
+		 * @param {any} result 
+		 * @param {Event} ev 
+		 * @returns {Worker}
+		 */
+		/**
+		 * @memberof Function#
+		 * @param {any} data
+		 * @param {ExtensionsPrototype.Function_runInWorker} cb
+		 * @param {boolean} keep keep worker after first execution instead of destroy it
+		 * @method runInWorker
+		 * @returns {Worker}
+		 */
 		runInWorker : function (data, cb, keep) {
 			var func = this;
 			var url = func.toWorkerURL();

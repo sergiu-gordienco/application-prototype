@@ -459,6 +459,14 @@ declare namespace ExtensionsPrototype {
         config?: boolean;
     }) => void;
     /**
+     * @memberof ExtensionsPrototype
+     * @callback Function_runInWorker
+     * @param {any} result
+     * @param {Event} ev
+     * @returns {Worker}
+     */
+    type Function_runInWorker = (result: any, ev: Event) => Worker;
+    /**
      * @var {ExtensionsPrototype.slDOM} _
      * @memberof ExtensionsPrototype
      */
@@ -916,6 +924,920 @@ declare interface HTMLElement {
      * @var {object} attrdatastore
      */
     attrdatastore: any;
+}
+
+declare namespace String {
+    /**
+     * @memberof String
+     * @typedef {object} String_parseUrl_return
+     * @property {string} original https://www.test.example.com/path/data?request=5#search
+     * @property {string} origin www.test.example.com
+     * @property {string} domain www.test.example.com
+     * @property {string} domain_short test.example.com
+     * @property {string} pathname /path/data
+     * @property {string} reqQuery request=5
+     * @property {string} protocol https
+     * @property {string} protocoll https://
+     * @property {Object<string,any>} [get_vars]
+     * @property {string} url deprecated
+     * @property {string} url_p deprecated
+     * @property {string} isIp deprecated
+     */
+    type String_parseUrl_return = {
+        original: string;
+        origin: string;
+        domain: string;
+        domain_short: string;
+        pathname: string;
+        reqQuery: string;
+        protocol: string;
+        protocoll: string;
+        get_vars?: {
+            [key: string]: any;
+        };
+        url: string;
+        url_p: string;
+        isIp: string;
+    };
+}
+
+/**
+ * @interface String
+ */
+declare interface String {
+    /**
+     * @memberof String#
+     * @method subs similar as PHP subs
+     * @param {number} p
+     * @param {number} [i]
+     * @returns {string}
+     */
+    subs similar as PHP subs(p: number, i?: number): string;
+    /**
+     * @memberof String#
+     * @method toHex
+     * @param {boolean} utf8
+     * @returns {string}
+     */
+    toHex(utf8: boolean): string;
+    /**
+     * @memberof String#
+     * @method fromHex
+     * @returns {string}
+     */
+    fromHex(): string;
+    /**
+     * @memberof String#
+     * @method toHtmlSimple
+     * @returns {string}
+     */
+    toHtmlSimple(): string;
+    /**
+     * @memberof String#
+     * @method toHtml
+     * @returns {string}
+     */
+    toHtml(): string;
+    /**
+     * @memberof String#
+     * @method fromHtml
+     * @returns {string}
+     */
+    fromHtml(): string;
+    /**
+     * @memberof String#
+     * @method cleanTags remove dangerous HTML Tags
+     * @returns {string}
+     */
+    cleanTags remove dangerous HTML Tags(): string;
+    /**
+     * @memberof String#
+     * @method add_Class
+     * @param {string} className
+     * @returns {string}
+     */
+    add_Class(className: string): string;
+    /**
+     * @memberof String#
+     * @method del_Class
+     * @param {string} className
+     * @returns {string}
+     */
+    del_Class(className: string): string;
+    /**
+     * find a class
+     * @memberof String#
+     * @method fnd_Class
+     * @param {string} className
+     * @returns {boolean}
+     */
+    fnd_Class(className: string): boolean;
+    /**
+     * swap letters' case
+     * @memberof String#
+     * @method swp_case
+     * @returns {string}
+     */
+    swp_case(): string;
+    /**
+     * uppercase first [k] letters from word
+     * @memberof String#
+     * @method ucfirst
+     * @param {number} [k=1]
+     * @returns {string}
+     */
+    ucfirst(k?: number): string;
+    /**
+     * lowercase first [k] letters from word
+     * @memberof String#
+     * @method lcfirst
+     * @param {number} [k=1]
+     * @returns {string}
+     */
+    lcfirst(k?: number): string;
+    /**
+     * @memberof String#
+     * @method utf8need
+     * @returns {string}
+     */
+    utf8need(): string;
+    /**
+     * @memberof String#
+     * @method utf8encode
+     * @returns {string}
+     */
+    utf8encode(): string;
+    /**
+     * @memberof String#
+     * @method utf8decode
+     * @returns {string}
+     */
+    utf8decode(): string;
+    /**
+     * @memberof String#
+     * @method toRegexp
+     * @param {string} [flags]
+     * @returns {string}
+     */
+    toRegexp(flags?: string): string;
+    /**
+     * @memberof String#
+     * @method escapeHex
+     * @returns {string}
+     */
+    escapeHex(): string;
+    /**
+     * @memberof String#
+     * @method escape
+     * @returns {string}
+     */
+    escape(): string;
+    /**
+     * @memberof String#
+     * @method encodeURI
+     * @returns {string}
+     */
+    encodeURI(): string;
+    /**
+     * @memberof String#
+     * @method unescape
+     * @returns {string}
+     */
+    unescape(): string;
+    /**
+     * @memberof String#
+     * @method decodeURI
+     * @returns {string}
+     */
+    decodeURI(): string;
+    /**
+     * @memberof String#
+     * @method parseUrlVars
+     * @param {boolean} [json=false]
+     * @param {object} [params]
+     * @param {boolean} [params.keepOBJ=false]
+     * @param {boolean} [params.isURL=false]
+     * @returns {Object<string,any>}
+     */
+    parseUrlVars(json?: boolean, params?: {
+        keepOBJ?: boolean;
+        isURL?: boolean;
+    }): {
+        [key: string]: any;
+    };
+    /**
+     * @memberof String#
+     * @method parseUrl
+     * @param {boolean} [k=false] decode get vars
+     * @returns {String.String_parseUrl_return}
+     */
+    parseUrl(k?: boolean): String.String_parseUrl_return;
+    /**
+     * @memberof String#
+     * @method match_str
+     * @param {string} reg_exp
+     * @param {string} [flags]
+     * @returns {string[]|null}
+     */
+    match_str(reg_exp: string, flags?: string): string[] | null;
+    /**
+     * @memberof String#
+     * @method sha1
+     * @returns {string}
+     */
+    sha1(): string;
+    /**
+     * @memberof String#
+     * @method sha256
+     * @returns {string}
+     */
+    sha256(): string;
+    /**
+     * @memberof String#
+     * @method md5
+     * @returns {string}
+     */
+    md5(): string;
+    /**
+     * @memberof String#
+     * @method base64encode
+     * @returns {string}
+     */
+    base64encode(): string;
+    /**
+     * @memberof String#
+     * @method base64decode
+     * @returns {string}
+     */
+    base64decode(): string;
+    /**
+     * @memberof String#
+     * @method base64encodeBytes
+     * @returns {Uint8Array}
+     */
+    base64encodeBytes(): Uint8Array;
+    /**
+     * @memberof String#
+     * @method base64encodeBytesArray
+     * @returns {number[]}
+     */
+    base64encodeBytesArray(): number[];
+    /**
+     * @memberof String#
+     * @method base64decodeBytes
+     * @returns {Uint8Array}
+     */
+    base64decodeBytes(): Uint8Array;
+    /**
+     * @memberof String#
+     * @method base64decodeBytesArray
+     * @returns {number[]}
+     */
+    base64decodeBytesArray(): number[];
+    /**
+     * @memberof String#
+     * @method base64encodeClean
+     * @returns {string}
+     */
+    base64encodeClean(): string;
+    /**
+     * @memberof String#
+     * @method base64decodeClean
+     * @returns {string}
+     */
+    base64decodeClean(): string;
+    /**
+     * @memberof String#
+     * @method encryptTea
+     * @param {string} password
+     * @returns {string}
+     */
+    encryptTea(password: string): string;
+    /**
+     * @memberof String#
+     * @method decryptTea
+     * @param {string} password
+     * @returns {string}
+     */
+    decryptTea(password: string): string;
+    /**
+     * @memberof String#
+     * @method encryptAes
+     * @param {string} password
+     * @param {128|256|512} [bytes=128]
+     * @returns {string}
+     */
+    encryptAes(password: string, bytes?: 128 | 256 | 512): string;
+    /**
+     * @memberof String#
+     * @method decryptAes
+     * @param {string} password
+     * @param {128|256|512} [bytes=128]
+     * @returns {string}
+     */
+    decryptAes(password: string, bytes?: 128 | 256 | 512): string;
+    /**
+     * "asd asdsdf param:sdd test:data 2 info".buildQuery()
+     * {_keys: ["_", "param", "test"], _: 'asd asdsdf', param: 'sdd', test: 'data 2 info'}
+     * @memberof String#
+     * @method buildQuery
+     * @returns {Object<string,string>}
+     */
+    buildQuery(): {
+        [key: string]: string;
+    };
+    /**
+     * "23 test \"composed param\" 234".buildSearchArray()
+     * ['23', 'test', 'composed param', '234']
+     * @memberof String#
+     * @method buildSearchArray
+     * @returns {string[]}
+     */
+    buildSearchArray(): string[];
+    /**
+     * similar as utf8encode
+     * @memberof String#
+     * @method utf8
+     * @returns {string}
+     */
+    utf8(): string;
+    /**
+     * similar as utf8decode
+     * @memberof String#
+     * @method unicode
+     * @returns {string}
+     */
+    unicode(): string;
+    /**
+     * @memberof String#
+     * @method toArrayBufferFromUtf8
+     * @returns {ArrayBuffer}
+     */
+    toArrayBufferFromUtf8(): ArrayBuffer;
+    /**
+     * @memberof String#
+     * @method subs
+     * @param {number} index
+     * @param {number} [lastIndex]
+     * @returns {string}
+     */
+    subs(index: number, lastIndex?: number): string;
+    /**
+     * @memberof String#
+     * @method toHex
+     * @param {boolean} utf8
+     * @returns {string}
+     */
+    toHex(utf8: boolean): string;
+    /**
+     * @memberof String#
+     * @method fromHex
+     * @returns {string}
+     */
+    fromHex(): string;
+    /**
+     * @memberof String#
+     * @method toHtmlSimple
+     * @returns {string}
+     */
+    toHtmlSimple(): string;
+    /**
+     * @memberof String#
+     * @method toHtml
+     * @returns {string}
+     */
+    toHtml(): string;
+    /**
+     * @memberof String#
+     * @method fromHtml
+     * @returns {string}
+     */
+    fromHtml(): string;
+    /**
+     * remove risky tags from HTML Code: comments, script, iframe, style, object, noscript, frame, frameset
+     * @memberof String#
+     * @method cleanTags
+     * @returns {string}
+     */
+    cleanTags(): string;
+    /**
+     * @memberof String#
+     * @method add_Class
+     * @param {string} className
+     * @returns {string}
+     */
+    add_Class(className: string): string;
+    /**
+     * @memberof String#
+     * @method del_Class
+     * @param {string} className
+     * @returns {string}
+     */
+    del_Class(className: string): string;
+    /**
+     * find a class
+     * @memberof String#
+     * @method fnd_Class
+     * @param {string} className
+     * @returns {boolean}
+     */
+    fnd_Class(className: string): boolean;
+    /**
+     * swap letters' case
+     * @memberof String#
+     * @method swp_case
+     * @returns {string}
+     */
+    swp_case(): string;
+    /**
+     * uppercase first [k] letters from word
+     * @memberof String#
+     * @method ucfirst
+     * @param {number} [k=1]
+     * @returns {string}
+     */
+    ucfirst(k?: number): string;
+    /**
+     * lowercase first [k] letters from word
+     * @memberof String#
+     * @method lcfirst
+     * @param {number} [k=1]
+     * @returns {string}
+     */
+    lcfirst(k?: number): string;
+    /**
+     * @memberof String#
+     * @method utf8need
+     * @returns {string}
+     */
+    utf8need(): string;
+    /**
+     * @memberof String#
+     * @method utf8encode
+     * @returns {string}
+     */
+    utf8encode(): string;
+    /**
+     * @memberof String#
+     * @method utf8decode
+     * @returns {string}
+     */
+    utf8decode(): string;
+    /**
+     * similar as utf8encode
+     * @memberof String#
+     * @method utf8
+     * @returns {string}
+     */
+    utf8(): string;
+    /**
+     * similar as utf8decode
+     * @memberof String#
+     * @method unicode
+     * @returns {string}
+     */
+    unicode(): string;
+    /**
+     * @memberof String#
+     * @method encryptAes
+     * @param {string} password
+     * @param {128|256|512} [bytes=128]
+     * @returns {string}
+     */
+    encryptAes(password: string, bytes?: 128 | 256 | 512): string;
+    /**
+     * @memberof String#
+     * @method decryptAes
+     * @param {string} password
+     * @param {128|256|512} [bytes=128]
+     * @returns {string}
+     */
+    decryptAes(password: string, bytes?: 128 | 256 | 512): string;
+    /**
+     * @memberof String#
+     * @method encryptTea
+     * @param {string} password
+     * @returns {string}
+     */
+    encryptTea(password: string): string;
+    /**
+     * @memberof String#
+     * @method decryptTea
+     * @param {string} password
+     * @returns {string}
+     */
+    decryptTea(password: string): string;
+    /**
+     * @memberof String#
+     * @method base64decode
+     * @returns {string}
+     */
+    base64decode(): string;
+    /**
+     * @memberof String#
+     * @method base64encode
+     * @returns {string}
+     */
+    base64encode(): string;
+    /**
+     * @memberof String#
+     * @method base64decodeBytes
+     * @returns {Uint8Array}
+     */
+    base64decodeBytes(): Uint8Array;
+    /**
+     * @memberof String#
+     * @method base64encodeBytes
+     * @returns {Uint8Array}
+     */
+    base64encodeBytes(): Uint8Array;
+    /**
+     * @memberof String#
+     * @method base64decodeBytesArray
+     * @returns {number[]}
+     */
+    base64decodeBytesArray(): number[];
+    /**
+     * @memberof String#
+     * @method base64encodeBytesArray
+     * @returns {number[]}
+     */
+    base64encodeBytesArray(): number[];
+    /**
+     * @memberof String#
+     * @method base64encodeClean
+     * @returns {string}
+     */
+    base64encodeClean(): string;
+    /**
+     * @memberof String#
+     * @method base64decodeClean
+     * @returns {string}
+     */
+    base64decodeClean(): string;
+    /**
+     * @memberof String#
+     * @method encodeURI
+     * @returns {string}
+     */
+    encodeURI(): string;
+    /**
+     * @memberof String#
+     * @method decodeURI
+     * @returns {string}
+     */
+    decodeURI(): string;
+    /**
+     * @memberof String#
+     * @method escapeHex
+     * @returns {string}
+     */
+    escapeHex(): string;
+    /**
+     * @memberof String#
+     * @method escape
+     * @returns {string}
+     */
+    escape(): string;
+    /**
+     * @memberof String#
+     * @method unescape
+     * @returns {string}
+     */
+    unescape(): string;
+    /**
+     * @memberof String#
+     * @method sha1
+     * @returns {string}
+     */
+    sha1(): string;
+    /**
+     * @memberof String#
+     * @method sha256
+     * @returns {string}
+     */
+    sha256(): string;
+    /**
+     * @memberof String#
+     * @method subs
+     * @param {number} index
+     * @param {number} [lastIndex]
+     * @returns {string}
+     */
+    subs(index: number, lastIndex?: number): string;
+    /**
+     * @memberof String#
+     * @method md5
+     * @returns {string}
+     */
+    md5(): string;
+    /**
+     * @memberof String#
+     * @method markdown
+     * @returns {string}
+     */
+    markdown(): string;
+    /**
+     * @memberof String#
+     * @method toRegexp
+     * @param {string} [flags]
+     * @returns {string}
+     */
+    toRegexp(flags?: string): string;
+    /**
+     * @memberof String#
+     * @method parseUrl
+     * @param {boolean} [k=false] decode get vars
+     * @returns {String.String_parseUrl_return}
+     */
+    parseUrl(k?: boolean): String.String_parseUrl_return;
+    /**
+     * @memberof String#
+     * @method match_str
+     * @param {string} reg_exp
+     * @param {string} [flags]
+     * @returns {string[]|null}
+     */
+    match_str(reg_exp: string, flags?: string): string[] | null;
+    /**
+     * "asd asdsdf param:sdd test:data 2 info".buildQuery()
+     * {_keys: ["_", "param", "test"], _: 'asd asdsdf', param: 'sdd', test: 'data 2 info'}
+     * @memberof String#
+     * @method buildQuery
+     * @returns {Object<string,string>}
+     */
+    buildQuery(): {
+        [key: string]: string;
+    };
+    /**
+     * "23 test \"composed param\" 234".buildSearchArray()
+     * ['23', 'test', 'composed param', '234']
+     * @memberof String#
+     * @method buildSearchArray
+     * @returns {string[]}
+     */
+    buildSearchArray(): string[];
+    /**
+     * @memberof String#
+     * @method toArrayBufferFromUtf8
+     * @returns {ArrayBuffer}
+     */
+    toArrayBufferFromUtf8(): ArrayBuffer;
+}
+
+/**
+ * @interface Array
+ */
+declare interface Array {
+    /**
+     * @memberof Array#
+     * @method min
+     * @returns {any}
+     */
+    min(): any;
+    /**
+     * @memberof Array#
+     * @method shuffle
+     * @returns {any[]}
+     */
+    shuffle(): any[];
+    /**
+     * @memberof Array#
+     * @method max
+     * @returns {any}
+     */
+    max(): any;
+    /**
+     * @memberof Array#
+     * @method move
+     * @param {number} from
+     * @param {number} to
+     * @returns {any[]}
+     */
+    move(from: number, to: number): any[];
+    /**
+     * @memberof Array#
+     * @method inArray
+     * @param {any} a
+     * @param {Function} comparator
+     * @returns {boolean}
+     */
+    inArray(a: any, comparator: (...params: any[]) => any): boolean;
+    /**
+     * @memberof Array#
+     * @method split
+     * @param {any} elem
+     * @param {number} num number of items
+     * @param {'indexOf'|'lastIndexOf'|'indexOfSect'} cmp
+     * @returns {any[]}
+     */
+    split(elem: any, num: number, cmp: 'indexOf' | 'lastIndexOf' | 'indexOfSect'): any[];
+    /**
+     * @memberof Array#
+     * @method splitSect
+     * @param {any[]} elem
+     * @param {number} num number of items
+     * @returns {any[]}
+     */
+    splitSect(elem: any[], num: number): any[];
+    /**
+     * @memberof Array#
+     * @method toBlob
+     * @param {string} mimetype
+     * @param {number} [sliceSize=1024] number of items
+     * @returns {Blob}
+     */
+    toBlob(mimetype: string, sliceSize?: number): Blob;
+    /**
+     * @memberof Array#
+     * @method base64encode
+     * @returns {ArrayBuffer}
+     */
+    base64encode(): ArrayBuffer;
+    /**
+     * @memberof Array#
+     * @method toBinaryString
+     * @returns {string}
+     */
+    toBinaryString(): string;
+    /**
+     * @memberof Array#
+     * @method toBytesBinary
+     * @returns {string}
+     */
+    toBytesBinary(): string;
+    /**
+     * @memberof Array#
+     * @method toBytesEscaped
+     * @returns {string}
+     */
+    toBytesEscaped(): string;
+    /**
+     * @memberof Array#
+     * @method bytesToHex
+     * @returns {string}
+     */
+    bytesToHex(): string;
+    /**
+     * @memberof Array#
+     * @method toParamObj
+     * @returns {Object<any,any>}
+     */
+    toParamObj(): {
+        [key: string]: any;
+    };
+    /**
+     * @memberof Array#
+     * @method resetArray
+     * @returns {any[]}
+     */
+    resetArray(): any[];
+    /**
+     * @memberof Array#
+     * @method unique
+     * @returns {any[]}
+     */
+    unique(): any[];
+    /**
+     * @memberof Array#
+     * @method __pointerFilter
+     * @param {Function} cb receives 3 parameters ( item, index, array )
+     * @returns {any[]}
+     */
+    __pointerFilter(cb: (...params: any[]) => any): any[];
+    /**
+     * @memberof Array#
+     * @method indexOfSect
+     * @param {any[]} items
+     * @param {number} [fromIndex=0]
+     * @returns {any[]}
+     */
+    indexOfSect(items: any[], fromIndex?: number): any[];
+    /**
+     * @memberof Array#
+     * @method toStringUtf8
+     * @returns {string}
+     */
+    toStringUtf8(): string;
+}
+
+/**
+ * @interface ArrayBuffer
+ */
+declare interface ArrayBuffer {
+    /**
+     * @memberof ArrayBuffer#
+     * @method toStringUtf8
+     * @returns {string}
+     */
+    toStringUtf8(): string;
+    /**
+     * @memberof ArrayBuffer#
+     * @method toBytes
+     * @returns {Uint8Array}
+     */
+    toBytes(): Uint8Array;
+    /**
+     * @memberof ArrayBuffer#
+     * @method base64encode
+     * @returns {string}
+     */
+    base64encode(): string;
+    /**
+     * @memberof ArrayBuffer#
+     * @method toArray
+     * @returns {number[]}
+     */
+    toArray(): number[];
+}
+
+/**
+ * @interface Buffer
+ */
+declare interface Buffer {
+    /**
+     * @memberof Buffer#
+     * @method toStringUtf8
+     * @returns {string}
+     */
+    toStringUtf8(): string;
+    /**
+     * @memberof Buffer#
+     * @method toBytes
+     * @returns {Uint8Array}
+     */
+    toBytes(): Uint8Array;
+    /**
+     * @memberof Buffer#
+     * @method base64encode
+     * @returns {string}
+     */
+    base64encode(): string;
+    /**
+     * @memberof Buffer#
+     * @method toArray
+     * @returns {number[]}
+     */
+    toArray(): number[];
+}
+
+declare namespace Blob {
+    /**
+     * @callback Blob_toArrayBuffer
+     * @memberof Blob
+     * @param {Error} err
+     * @param {ArrayBuffer} data
+     */
+    type Blob_toArrayBuffer = (err: Error, data: ArrayBuffer) => void;
+}
+
+/**
+ * @interface Blob
+ */
+declare interface Blob {
+    /**
+     * @memberof Blob#
+     * @method toArrayBuffer
+     * @param {Blob.Blob_toArrayBuffer} cb
+     */
+    toArrayBuffer(cb: Blob.Blob_toArrayBuffer): void;
+    /**
+     * @memberof Blob#
+     * @method toURL
+     * @param {object} [options]
+     * @param {string} [options.type]
+     * @returns {string}
+     */
+    toURL(options?: {
+        type?: string;
+    }): string;
+}
+
+/**
+ * @interface Function
+ */
+declare interface Function {
+    /**
+     * @memberof Function#
+     * @method toWorkerURL
+     * @returns {string}
+     */
+    toWorkerURL(): string;
+    /**
+     * @memberof Function#
+     * @method toWorker
+     * @returns {Worker}
+     */
+    toWorker(): Worker;
+    /**
+     * @memberof Function#
+     * @param {any} data
+     * @param {ExtensionsPrototype.Function_runInWorker} cb
+     * @param {boolean} keep keep worker after first execution instead of destroy it
+     * @method runInWorker
+     * @returns {Worker}
+     */
+    runInWorker(data: any, cb: ExtensionsPrototype.Function_runInWorker, keep: boolean): Worker;
 }
 
 /**
@@ -2097,19 +3019,19 @@ declare type ApplicationBuilderExports = {
 declare interface String {
     /**
      * @memberof String#
-     * @method subs
-     * @param {number} index
-     * @param {number} [lastIndex]
+     * @method subs similar as PHP subs
+     * @param {number} p
+     * @param {number} [i]
      * @returns {string}
      */
-    subs(index: number, lastIndex?: number): string;
+    subs similar as PHP subs(p: number, i?: number): string;
     /**
      * @memberof String#
      * @method toHex
-     * @param {boolean} [isUtf8=true]
+     * @param {boolean} utf8
      * @returns {string}
      */
-    toHex(isUtf8?: boolean): string;
+    toHex(utf8: boolean): string;
     /**
      * @memberof String#
      * @method fromHex
@@ -2117,76 +3039,75 @@ declare interface String {
      */
     fromHex(): string;
     /**
-     * encode in HTML minimal
      * @memberof String#
      * @method toHtmlSimple
      * @returns {string}
      */
     toHtmlSimple(): string;
     /**
-     * encode in HTML
      * @memberof String#
      * @method toHtml
      * @returns {string}
      */
     toHtml(): string;
     /**
-     * decode from HTML ( works in Browser )
      * @memberof String#
      * @method fromHtml
      * @returns {string}
      */
     fromHtml(): string;
     /**
-     * remove risky tags from HTML Code: comments, script, iframe, style, object, noscript, frame, frameset
      * @memberof String#
-     * @method cleanTags
+     * @method cleanTags remove dangerous HTML Tags
      * @returns {string}
      */
-    cleanTags(): string;
+    cleanTags remove dangerous HTML Tags(): string;
     /**
      * @memberof String#
      * @method add_Class
-     * @param {string} newClass
+     * @param {string} className
      * @returns {string}
      */
-    add_Class(newClass: string): string;
+    add_Class(className: string): string;
     /**
      * @memberof String#
      * @method del_Class
-     * @param {string} newClass
+     * @param {string} className
      * @returns {string}
      */
-    del_Class(newClass: string): string;
+    del_Class(className: string): string;
     /**
+     * find a class
      * @memberof String#
      * @method fnd_Class
-     * @param {string} newClass
+     * @param {string} className
      * @returns {boolean}
      */
-    fnd_Class(newClass: string): boolean;
+    fnd_Class(className: string): boolean;
     /**
+     * swap letters' case
      * @memberof String#
      * @method swp_case
      * @returns {string}
      */
     swp_case(): string;
     /**
+     * uppercase first [k] letters from word
      * @memberof String#
      * @method ucfirst
-     * @param {number} [length=1] how many first chars to be transformed to uppercase
+     * @param {number} [k=1]
      * @returns {string}
      */
-    ucfirst(length?: number): string;
+    ucfirst(k?: number): string;
     /**
+     * lowercase first [k] letters from word
      * @memberof String#
      * @method lcfirst
-     * @param {number} [length=1] how many first chars to be transformed to uppercase
+     * @param {number} [k=1]
      * @returns {string}
      */
-    lcfirst(length?: number): string;
+    lcfirst(k?: number): string;
     /**
-     * Detects if a string is unicode, and if it is, then it is transformed to UTF8
      * @memberof String#
      * @method utf8need
      * @returns {string}
@@ -2205,14 +3126,324 @@ declare interface String {
      */
     utf8decode(): string;
     /**
-     * @see {String#utf8encode}
+     * @memberof String#
+     * @method toRegexp
+     * @param {string} [flags]
+     * @returns {string}
+     */
+    toRegexp(flags?: string): string;
+    /**
+     * @memberof String#
+     * @method escapeHex
+     * @returns {string}
+     */
+    escapeHex(): string;
+    /**
+     * @memberof String#
+     * @method escape
+     * @returns {string}
+     */
+    escape(): string;
+    /**
+     * @memberof String#
+     * @method encodeURI
+     * @returns {string}
+     */
+    encodeURI(): string;
+    /**
+     * @memberof String#
+     * @method unescape
+     * @returns {string}
+     */
+    unescape(): string;
+    /**
+     * @memberof String#
+     * @method decodeURI
+     * @returns {string}
+     */
+    decodeURI(): string;
+    /**
+     * @memberof String#
+     * @method parseUrlVars
+     * @param {boolean} [json=false]
+     * @param {object} [params]
+     * @param {boolean} [params.keepOBJ=false]
+     * @param {boolean} [params.isURL=false]
+     * @returns {Object<string,any>}
+     */
+    parseUrlVars(json?: boolean, params?: {
+        keepOBJ?: boolean;
+        isURL?: boolean;
+    }): {
+        [key: string]: any;
+    };
+    /**
+     * @memberof String#
+     * @method parseUrl
+     * @param {boolean} [k=false] decode get vars
+     * @returns {String.String_parseUrl_return}
+     */
+    parseUrl(k?: boolean): String.String_parseUrl_return;
+    /**
+     * @memberof String#
+     * @method match_str
+     * @param {string} reg_exp
+     * @param {string} [flags]
+     * @returns {string[]|null}
+     */
+    match_str(reg_exp: string, flags?: string): string[] | null;
+    /**
+     * @memberof String#
+     * @method sha1
+     * @returns {string}
+     */
+    sha1(): string;
+    /**
+     * @memberof String#
+     * @method sha256
+     * @returns {string}
+     */
+    sha256(): string;
+    /**
+     * @memberof String#
+     * @method md5
+     * @returns {string}
+     */
+    md5(): string;
+    /**
+     * @memberof String#
+     * @method base64encode
+     * @returns {string}
+     */
+    base64encode(): string;
+    /**
+     * @memberof String#
+     * @method base64decode
+     * @returns {string}
+     */
+    base64decode(): string;
+    /**
+     * @memberof String#
+     * @method base64encodeBytes
+     * @returns {Uint8Array}
+     */
+    base64encodeBytes(): Uint8Array;
+    /**
+     * @memberof String#
+     * @method base64encodeBytesArray
+     * @returns {number[]}
+     */
+    base64encodeBytesArray(): number[];
+    /**
+     * @memberof String#
+     * @method base64decodeBytes
+     * @returns {Uint8Array}
+     */
+    base64decodeBytes(): Uint8Array;
+    /**
+     * @memberof String#
+     * @method base64decodeBytesArray
+     * @returns {number[]}
+     */
+    base64decodeBytesArray(): number[];
+    /**
+     * @memberof String#
+     * @method base64encodeClean
+     * @returns {string}
+     */
+    base64encodeClean(): string;
+    /**
+     * @memberof String#
+     * @method base64decodeClean
+     * @returns {string}
+     */
+    base64decodeClean(): string;
+    /**
+     * @memberof String#
+     * @method encryptTea
+     * @param {string} password
+     * @returns {string}
+     */
+    encryptTea(password: string): string;
+    /**
+     * @memberof String#
+     * @method decryptTea
+     * @param {string} password
+     * @returns {string}
+     */
+    decryptTea(password: string): string;
+    /**
+     * @memberof String#
+     * @method encryptAes
+     * @param {string} password
+     * @param {128|256|512} [bytes=128]
+     * @returns {string}
+     */
+    encryptAes(password: string, bytes?: 128 | 256 | 512): string;
+    /**
+     * @memberof String#
+     * @method decryptAes
+     * @param {string} password
+     * @param {128|256|512} [bytes=128]
+     * @returns {string}
+     */
+    decryptAes(password: string, bytes?: 128 | 256 | 512): string;
+    /**
+     * "asd asdsdf param:sdd test:data 2 info".buildQuery()
+     * {_keys: ["_", "param", "test"], _: 'asd asdsdf', param: 'sdd', test: 'data 2 info'}
+     * @memberof String#
+     * @method buildQuery
+     * @returns {Object<string,string>}
+     */
+    buildQuery(): {
+        [key: string]: string;
+    };
+    /**
+     * "23 test \"composed param\" 234".buildSearchArray()
+     * ['23', 'test', 'composed param', '234']
+     * @memberof String#
+     * @method buildSearchArray
+     * @returns {string[]}
+     */
+    buildSearchArray(): string[];
+    /**
+     * similar as utf8encode
      * @memberof String#
      * @method utf8
      * @returns {string}
      */
     utf8(): string;
     /**
-     * @see {String#utf8decode}
+     * similar as utf8decode
+     * @memberof String#
+     * @method unicode
+     * @returns {string}
+     */
+    unicode(): string;
+    /**
+     * @memberof String#
+     * @method toArrayBufferFromUtf8
+     * @returns {ArrayBuffer}
+     */
+    toArrayBufferFromUtf8(): ArrayBuffer;
+    /**
+     * @memberof String#
+     * @method subs
+     * @param {number} index
+     * @param {number} [lastIndex]
+     * @returns {string}
+     */
+    subs(index: number, lastIndex?: number): string;
+    /**
+     * @memberof String#
+     * @method toHex
+     * @param {boolean} utf8
+     * @returns {string}
+     */
+    toHex(utf8: boolean): string;
+    /**
+     * @memberof String#
+     * @method fromHex
+     * @returns {string}
+     */
+    fromHex(): string;
+    /**
+     * @memberof String#
+     * @method toHtmlSimple
+     * @returns {string}
+     */
+    toHtmlSimple(): string;
+    /**
+     * @memberof String#
+     * @method toHtml
+     * @returns {string}
+     */
+    toHtml(): string;
+    /**
+     * @memberof String#
+     * @method fromHtml
+     * @returns {string}
+     */
+    fromHtml(): string;
+    /**
+     * remove risky tags from HTML Code: comments, script, iframe, style, object, noscript, frame, frameset
+     * @memberof String#
+     * @method cleanTags
+     * @returns {string}
+     */
+    cleanTags(): string;
+    /**
+     * @memberof String#
+     * @method add_Class
+     * @param {string} className
+     * @returns {string}
+     */
+    add_Class(className: string): string;
+    /**
+     * @memberof String#
+     * @method del_Class
+     * @param {string} className
+     * @returns {string}
+     */
+    del_Class(className: string): string;
+    /**
+     * find a class
+     * @memberof String#
+     * @method fnd_Class
+     * @param {string} className
+     * @returns {boolean}
+     */
+    fnd_Class(className: string): boolean;
+    /**
+     * swap letters' case
+     * @memberof String#
+     * @method swp_case
+     * @returns {string}
+     */
+    swp_case(): string;
+    /**
+     * uppercase first [k] letters from word
+     * @memberof String#
+     * @method ucfirst
+     * @param {number} [k=1]
+     * @returns {string}
+     */
+    ucfirst(k?: number): string;
+    /**
+     * lowercase first [k] letters from word
+     * @memberof String#
+     * @method lcfirst
+     * @param {number} [k=1]
+     * @returns {string}
+     */
+    lcfirst(k?: number): string;
+    /**
+     * @memberof String#
+     * @method utf8need
+     * @returns {string}
+     */
+    utf8need(): string;
+    /**
+     * @memberof String#
+     * @method utf8encode
+     * @returns {string}
+     */
+    utf8encode(): string;
+    /**
+     * @memberof String#
+     * @method utf8decode
+     * @returns {string}
+     */
+    utf8decode(): string;
+    /**
+     * similar as utf8encode
+     * @memberof String#
+     * @method utf8
+     * @returns {string}
+     */
+    utf8(): string;
+    /**
+     * similar as utf8decode
      * @memberof String#
      * @method unicode
      * @returns {string}
@@ -2222,18 +3453,18 @@ declare interface String {
      * @memberof String#
      * @method encryptAes
      * @param {string} password
-     * @param {number} [size=128]
+     * @param {128|256|512} [bytes=128]
      * @returns {string}
      */
-    encryptAes(password: string, size?: number): string;
+    encryptAes(password: string, bytes?: 128 | 256 | 512): string;
     /**
      * @memberof String#
      * @method decryptAes
      * @param {string} password
-     * @param {number} [size=128]
+     * @param {128|256|512} [bytes=128]
      * @returns {string}
      */
-    decryptAes(password: string, size?: number): string;
+    decryptAes(password: string, bytes?: 128 | 256 | 512): string;
     /**
      * @memberof String#
      * @method encryptTea
@@ -2275,13 +3506,13 @@ declare interface String {
     /**
      * @memberof String#
      * @method base64decodeBytesArray
-     * @returns {Array<number>}
+     * @returns {number[]}
      */
     base64decodeBytesArray(): number[];
     /**
      * @memberof String#
      * @method base64encodeBytesArray
-     * @returns {Array<number>}
+     * @returns {number[]}
      */
     base64encodeBytesArray(): number[];
     /**
@@ -2329,17 +3560,15 @@ declare interface String {
     /**
      * @memberof String#
      * @method sha1
-     * @param {boolean} [isUtf8=true]
      * @returns {string}
      */
-    sha1(isUtf8?: boolean): string;
+    sha1(): string;
     /**
      * @memberof String#
      * @method sha256
-     * @param {boolean} [isUtf8=true]
      * @returns {string}
      */
-    sha256(isUtf8?: boolean): string;
+    sha256(): string;
     /**
      * @memberof String#
      * @method subs
@@ -2363,57 +3592,41 @@ declare interface String {
     /**
      * @memberof String#
      * @method toRegexp
-     * @returns {RegExp}
+     * @param {string} [flags]
+     * @returns {string}
      */
-    toRegexp(): RegExp;
+    toRegexp(flags?: string): string;
     /**
      * @memberof String#
      * @method parseUrl
-     * @param {("get_vars"|boolean)} [mode]
-     * @returns {object}
+     * @param {boolean} [k=false] decode get vars
+     * @returns {String.String_parseUrl_return}
      */
-    parseUrl(mode?: "get_vars" | boolean): any;
+    parseUrl(k?: boolean): String.String_parseUrl_return;
     /**
      * @memberof String#
      * @method match_str
-     * @param {string} rule reg exp rule in string format
-     * @param {string} [flags] reg exp flags
-     * @returns {Array|object}
+     * @param {string} reg_exp
+     * @param {string} [flags]
+     * @returns {string[]|null}
      */
-    match_str(rule: string, flags?: string): any[] | any;
+    match_str(reg_exp: string, flags?: string): string[] | null;
     /**
-     * Returns a list of parameters included in a string
-     * @example
-     * 'my-demo testIndex: 23 with testValue: "demo content"'.buildQuery()
-     * // returns
-     * {
-     *     "_keys": [
-     *         "testindex",
-     *         "testvalue"
-     *     ],
-     *     "_": "my-demo",
-     *     "testindex": "23 with",
-     *     "testvalue": "\"demo content\""
-     * }
+     * "asd asdsdf param:sdd test:data 2 info".buildQuery()
+     * {_keys: ["_", "param", "test"], _: 'asd asdsdf', param: 'sdd', test: 'data 2 info'}
      * @memberof String#
      * @method buildQuery
-     * @returns {Object<string,(string|string[])>}
+     * @returns {Object<string,string>}
      */
     buildQuery(): {
-        [key: string]: string | string[];
+        [key: string]: string;
     };
     /**
-     * Returns a list of parameters included in a string
-     * @example
-     * '"this is" "list of fragments"'.buildSearchArray()
-     * // returns
-     * [
-     *     "this is",
-     *     "list of fragments"
-     * ]
+     * "23 test \"composed param\" 234".buildSearchArray()
+     * ['23', 'test', 'composed param', '234']
      * @memberof String#
      * @method buildSearchArray
-     * @returns {Array<string>}
+     * @returns {string[]}
      */
     buildSearchArray(): string[];
     /**

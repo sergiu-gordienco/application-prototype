@@ -1,6 +1,6 @@
 {
   "name"   : "app-prototype",
-  "version": "1.26.01",
+  "version": "1.26.02",
   "main"   : "ApplicationPrototype.js",
   "ignore" : [
     "**/*.txt"
