@@ -1410,8 +1410,9 @@ if (document)
 	 */;
 var e,o={
 /**
+ * similar as PHP subs
  * @memberof String#
- * @method subs similar as PHP subs
+ * @method subs
  * @param {number} p
  * @param {number} [i]
  * @returns {string}
@@ -1469,8 +1470,9 @@ toHtml : function(){return escape(this).replace(/\%u([0-9a-f]{4})/gi,'&#x$1;').r
  */
 fromHtml : function(){var e = document.createElement('div');e.innerHTML = '<textarea>'+this.replace(/\</g,'&lt;').replace(/\>/g,'&gt;')+'</textarea>';return e.getElementsByTagName('textarea')[0].value;},
 /**
+ * remove dangerous HTML Tags
  * @memberof String#
- * @method cleanTags remove dangerous HTML Tags
+ * @method cleanTags
  * @returns {string}
  */
 cleanTags	: function() {

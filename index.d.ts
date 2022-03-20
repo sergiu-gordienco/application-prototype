@@ -966,13 +966,14 @@ declare namespace String {
  */
 declare interface String {
     /**
+     * similar as PHP subs
      * @memberof String#
-     * @method subs similar as PHP subs
+     * @method subs
      * @param {number} p
      * @param {number} [i]
      * @returns {string}
      */
-    subs similar as PHP subs(p: number, i?: number): string;
+    subs(p: number, i?: number): string;
     /**
      * @memberof String#
      * @method toHex
@@ -1005,11 +1006,12 @@ declare interface String {
      */
     fromHtml(): string;
     /**
+     * remove dangerous HTML Tags
      * @memberof String#
-     * @method cleanTags remove dangerous HTML Tags
+     * @method cleanTags
      * @returns {string}
      */
-    cleanTags remove dangerous HTML Tags(): string;
+    cleanTags(): string;
     /**
      * @memberof String#
      * @method add_Class
@@ -1275,13 +1277,14 @@ declare interface String {
      */
     toArrayBufferFromUtf8(): ArrayBuffer;
     /**
+     * similar as PHP subs
      * @memberof String#
      * @method subs
-     * @param {number} index
-     * @param {number} [lastIndex]
+     * @param {number} p
+     * @param {number} [i]
      * @returns {string}
      */
-    subs(index: number, lastIndex?: number): string;
+    subs(p: number, i?: number): string;
     /**
      * @memberof String#
      * @method toHex
@@ -1314,7 +1317,7 @@ declare interface String {
      */
     fromHtml(): string;
     /**
-     * remove risky tags from HTML Code: comments, script, iframe, style, object, noscript, frame, frameset
+     * remove dangerous HTML Tags
      * @memberof String#
      * @method cleanTags
      * @returns {string}
@@ -1518,13 +1521,14 @@ declare interface String {
      */
     sha256(): string;
     /**
+     * similar as PHP subs
      * @memberof String#
      * @method subs
-     * @param {number} index
-     * @param {number} [lastIndex]
+     * @param {number} p
+     * @param {number} [i]
      * @returns {string}
      */
-    subs(index: number, lastIndex?: number): string;
+    subs(p: number, i?: number): string;
     /**
      * @memberof String#
      * @method md5
@@ -3018,13 +3022,14 @@ declare type ApplicationBuilderExports = {
  */
 declare interface String {
     /**
+     * similar as PHP subs
      * @memberof String#
-     * @method subs similar as PHP subs
+     * @method subs
      * @param {number} p
      * @param {number} [i]
      * @returns {string}
      */
-    subs similar as PHP subs(p: number, i?: number): string;
+    subs(p: number, i?: number): string;
     /**
      * @memberof String#
      * @method toHex
@@ -3057,11 +3062,12 @@ declare interface String {
      */
     fromHtml(): string;
     /**
+     * remove dangerous HTML Tags
      * @memberof String#
-     * @method cleanTags remove dangerous HTML Tags
+     * @method cleanTags
      * @returns {string}
      */
-    cleanTags remove dangerous HTML Tags(): string;
+    cleanTags(): string;
     /**
      * @memberof String#
      * @method add_Class
@@ -3327,13 +3333,14 @@ declare interface String {
      */
     toArrayBufferFromUtf8(): ArrayBuffer;
     /**
+     * similar as PHP subs
      * @memberof String#
      * @method subs
-     * @param {number} index
-     * @param {number} [lastIndex]
+     * @param {number} p
+     * @param {number} [i]
      * @returns {string}
      */
-    subs(index: number, lastIndex?: number): string;
+    subs(p: number, i?: number): string;
     /**
      * @memberof String#
      * @method toHex
@@ -3366,7 +3373,7 @@ declare interface String {
      */
     fromHtml(): string;
     /**
-     * remove risky tags from HTML Code: comments, script, iframe, style, object, noscript, frame, frameset
+     * remove dangerous HTML Tags
      * @memberof String#
      * @method cleanTags
      * @returns {string}
@@ -3570,13 +3577,14 @@ declare interface String {
      */
     sha256(): string;
     /**
+     * similar as PHP subs
      * @memberof String#
      * @method subs
-     * @param {number} index
-     * @param {number} [lastIndex]
+     * @param {number} p
+     * @param {number} [i]
      * @returns {string}
      */
-    subs(index: number, lastIndex?: number): string;
+    subs(p: number, i?: number): string;
     /**
      * @memberof String#
      * @method md5
