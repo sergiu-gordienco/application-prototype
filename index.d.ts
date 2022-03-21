@@ -3645,7 +3645,7 @@ declare interface String {
     toArrayBufferFromUtf8(): ArrayBuffer;
 }
 
-declare module "sgapps-server" {
+declare module "application-prototype" {
 
 
 function application(): ApplicationPrototype.Instance; 
