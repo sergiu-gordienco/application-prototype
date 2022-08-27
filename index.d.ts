@@ -2462,6 +2462,22 @@ declare class RequestModule {
      */
     url(): string;
     /**
+     * returns `RequestModule.RequestConfig["url"]`
+     * @method basicAuth
+     * @memberof RequestModule#
+     * @returns {{username: string, password: string}}
+     * @see RequestModule.RequestConfig
+     */
+    basicAuth(): any;
+    /**
+     * returns `RequestModule.RequestConfig["url"]`
+     * @method basicAuth
+     * @memberof RequestModule#
+     * @returns {{username: string, password: string}}
+     * @see RequestModule.RequestConfig
+     */
+    basicAuth(): any;
+    /**
      * @method open
      * @memberof RequestModule#
      * @param {string} [method="GET"]
@@ -2515,6 +2531,10 @@ declare namespace RequestModule {
      * @property {boolean} [isLoaded=false]
      * @property {boolean} [isUploaded=false]
      * @property {boolean} [ignoreStatusCode=false]
+     * @property {boolean} [ignoreStatusCode=false]
+     * @property {string|null} [basicAuthUsername]
+     * @property {string|null} [basicAuthPassword]
+     * @property {Object<string, string>} [headers]
      */
     type RequestConfig = {
         method?: boolean;
@@ -2525,6 +2545,12 @@ declare namespace RequestModule {
         isLoaded?: boolean;
         isUploaded?: boolean;
         ignoreStatusCode?: boolean;
+        ignoreStatusCode?: boolean;
+        basicAuthUsername?: string | null;
+        basicAuthPassword?: string | null;
+        headers?: {
+            [key: string]: string;
+        };
     };
     /**
      * @typedef {object} RequestModule.readyStateType

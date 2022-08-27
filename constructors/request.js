@@ -55,6 +55,10 @@
 		 * @property {boolean} [isLoaded=false]
 		 * @property {boolean} [isUploaded=false]
 		 * @property {boolean} [ignoreStatusCode=false]
+		 * @property {boolean} [ignoreStatusCode=false]
+		 * @property {string|null} [basicAuthUsername]
+		 * @property {string|null} [basicAuthPassword]
+		 * @property {Object<string, string>} [headers]
 		 */
 		var config  = {
 			method  : "GET",
@@ -64,7 +68,10 @@
 			isSent  : false,
 			isLoaded: false,
 			isUploaded: false,
-			ignoreStatusCode : false
+			ignoreStatusCode : false,
+			BasicAuthUsername: null,
+			BasicAuthPassword: null,
+			headers: {}
 		};
 
 
@@ -546,6 +553,36 @@
 			return config.url;
 		});
 
+
+		/**
+		 * @method basicAuth
+		 * @memberof RequestModule#
+		 * @returns {{username: string, password: string}}
+		 * @see RequestModule.RequestConfig
+		 *//**
+		 * @memberof RequestModule#
+		 * @method basicAuth
+		 * @param {string|null} username
+		 * @param {string|null} password
+		 * @returns {RequestModule}
+		 */
+		 app.bind("basicAuth", function (username, password) {
+			if (typeof(username) === "string") {
+				config.BasicAuthUsername = username;
+				config.BasicAuthPassword = password;
+				return app;
+			}
+			if (username === null) {
+				config.BasicAuthUsername = null;
+				config.BasicAuthPassword = null;
+				return app;
+			}
+			return {
+				username: config.BasicAuthUsername,
+				password: config.BasicAuthPassword
+			};
+		});
+
 		/**
 		 * @method open
 		 * @memberof RequestModule#
@@ -555,14 +592,24 @@
 		 * @param {number} [timeout] request timeout in seconds
 		 * @returns {RequestModule}
 		 */
-		app.bind("open", function (method, url, async, timeout) {
+		app.bind("open", function (method, url, async, timeout, username, password) {
 			if (method && typeof(url) === "undefined" && typeof(async) === "undefined") {
 				url = method;
 				method = undefined;
 			}
 			app.timeout(timeout);
 			config.opened   = true;
-			httpRequest.open(method || config.method, url || config.url, async || config.async);
+			if (typeof(username) === "string" || typeof(config.BasicAuthUsername) === "string") {
+				httpRequest.open(
+					method || config.method,
+					url || config.url,
+					async || config.async,
+					username || config.BasicAuthUsername,
+					password || config.BasicAuthPassword || ''
+				);
+			} else {
+				httpRequest.open(method || config.method, url || config.url, async || config.async);
+			}
 			return app;
 		});
 
@@ -581,12 +628,16 @@
 			if (config.isSent) {
 				console.warn("Error: the request is sended twice", app, app.request());
 				return app;
-			} else if (headers) {
-				var header;
-				for (header in headers) {
-					httpRequest.setRequestHeader(header, headers[header]);
-				}
 			}
+			
+			var header;
+			var _headers = Object.assign({}, config.headers || {}, headers || {});
+			for (header in _headers) {
+				httpRequest.setRequestHeader(header, _headers[header]);
+			}
+
+			config.headers = {};
+
 			config.isSent   = true;
 			if (type === "asFormData") {
 				app.configurator("multipart");
@@ -615,7 +666,7 @@
 		 * @returns {string}
 		 */
 		app.bind("headers", function () {
-		  return httpRequest.getAllResponseHeaders();
+			return httpRequest.getAllResponseHeaders();
 		});
 
 		/**
@@ -627,7 +678,11 @@
 		 * @returns {RequestModule}
 		 */
 		app.bind("header", function (name, value) {
-			httpRequest.setRequestHeader(name, value);
+			if (config.opened) {
+				httpRequest.setRequestHeader(name, value);
+			} else {
+				config.headers[name] = value;
+			}
 			return app;
 		});
 
