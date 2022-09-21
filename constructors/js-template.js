@@ -663,7 +663,7 @@ attrParser.update = function (item, value, config, cb) {
 								var _item;
 								if (item.data.buffer.cache.length) {
 									_item = item.data.buffer.cache.shift();
-									Object.assign(item.args, args);
+									Object.assign(_item.args, args);
 									_item.node.renderJs(function (err) {
 										if (err) console.error(err);
 									});
