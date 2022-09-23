@@ -626,7 +626,7 @@ attrParser.update = function (item, value, config, cb) {
 							//@ts-ignore
 							item.data.node.attrdata.__JS_TEMPLATE._macro['key'] || {
 								data: {
-									code: 'key '
+									code: 'key'
 								}
 							}
 						).data.code || 'key';
@@ -651,7 +651,10 @@ attrParser.update = function (item, value, config, cb) {
 								//@ts-ignore
 								_item.node.renderJs(
 									config.context,
-									_item.args
+									_item.args,
+									function (err) {
+										if (err) console.error(err);
+									}
 								);
 								item.data.buffer.reference.parentNode.insertBefore(
 									_item.node,
@@ -664,9 +667,14 @@ attrParser.update = function (item, value, config, cb) {
 								if (item.data.buffer.cache.length) {
 									_item = item.data.buffer.cache.shift();
 									Object.assign(_item.args, args);
-									_item.node.renderJs(function (err) {
-										if (err) console.error(err);
-									});
+									// console.log(_item, {..._item.args}, args, config.context);
+									_item.node.renderJs(
+										config.context,
+										_item.args,
+										function (err) {
+											if (err) console.error(err);
+										}
+									);
 									item.data.buffer.reference.parentNode.insertBefore(
 										_item.node,
 										item.data.buffer.reference
@@ -681,10 +689,12 @@ attrParser.update = function (item, value, config, cb) {
 								var _item;
 								while (item.data.buffer.current.length > length) {
 									_item = item.data.buffer.current.pop();
-									item.data.buffer.cache.push(
-										_item
-									);
-									_item.node.parentElement.removeChild(_item.node);
+									if (_item) {
+										item.data.buffer.cache.push(
+											_item
+										);
+										_item.node.parentElement.removeChild(_item.node);
+									}
 								}
 							},
 							update: function (value) {
@@ -700,24 +710,37 @@ attrParser.update = function (item, value, config, cb) {
 												item.data.buffer.current[index].args,
 												args
 											);
-											item.data.buffer.current[index].node.renderJs();
+											item.data.buffer.current[index].node.renderJs(
+												config.context,
+												item.data.buffer.current[index].args,
+												function (err) {
+													if (err) console.error(err);
+												}
+											);
 										}
 									});
 									item.data.buffer.cacheCurrent(value.length);
 								} else if (value && typeof (value) === "object") {
 									var _keys = Object.keys(value);
-									_keys.sort().forEach(function (index) {
+									_keys.sort().forEach(function (indexKey, index) {
 										var args = {};
-										args[_key] = index;
-										args[_ref] = value[index];
+										args[_key] = indexKey;
+										args[_ref] = value[indexKey];
 										if (!item.data.buffer.current[index]) {
-											item.data.buffer.allocNode(args);
+											item.data.buffer.allocNode(Object.assign({}, args));
 										} else {
 											Object.assign(
 												item.data.buffer.current[index].args,
 												args
 											);
-											item.data.buffer.current[index].node.renderJs();
+											// item.data.buffer.current[index].node.renderJs();
+											item.data.buffer.current[index].node.renderJs(
+												config.context,
+												item.data.buffer.current[index].args,
+												function (err) {
+													if (err) console.error(err);
+												}
+											);
 										}
 									});
 									item.data.buffer.cacheCurrent(_keys.length);
