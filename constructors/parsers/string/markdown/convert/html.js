@@ -201,29 +201,29 @@ String.prototype.markdown	= function () {
 			return '<audio controls>'+(s4 + '').split(';').filter(function (v) { return v.length; }).map(function (s) { return '<source src="'+E(references[s]).replace('#','" type="')+'">';}).join("")+''+I(s3, nodes, node_k)+'</audio>';
 		});
 
-		f_match(/\[([^\]]+)]\(([^()]+)\)\[blank\]/g, function (s0, s1, s2) {
+		f_match(/\[([^\]]*)]\(([^()]+)\)\[blank\]/g, function (s0, s1, s2) {
 			return "<a href=\""+E(s2)+"\" target=\"_blank\">"+I(s1, nodes, node_k)+"</a>";
 		});
-		f_match(/\[([^\]]+)]\(([^()]+)\)\[download\=([^\]]+)\]/g, function (s0, s1, s2, s3) {
+		f_match(/\[([^\]]*)]\(([^()]+)\)\[download\=([^\]]+)\]/g, function (s0, s1, s2, s3) {
 			return "<a href=\""+E(s2)+"\" download=\""+E(s3)+"\">"+I(s1, nodes, node_k)+"</a>";
 		});
-		f_match(/\[([^\]]+)]\(([^()]+)\)\[([^\]]+)\]/g, function (s0, s1, s2, s3) {
+		f_match(/\[([^\]]*)]\(([^()]+)\)\[([^\]]+)\]/g, function (s0, s1, s2, s3) {
 			return "<a href=\""+E(s2)+"\" name=\""+E(s3)+"\">"+I(s1, nodes, node_k)+"</a>";
 		});
-		f_match(/\[([^\]]+)]\(([^()]+)\)/g, function (s0, s1, s2) {
+		f_match(/\[([^\]]*)]\(([^()]+)\)/g, function (s0, s1, s2) {
 			return "<a href=\""+E(s2)+"\">"+I(s1, nodes, node_k)+"</a>";
 		});
 
-		f_match(/\[([^\]]+)]\[([^()]+)\]\[blank\]/g, function (s0, s1, s2) {
+		f_match(/\[([^\]]*)]\[([^()]+)\]\[blank\]/g, function (s0, s1, s2) {
 			return "<a href=\""+E(references[s2])+"\" target=\"_blank\">"+I(s1, nodes, node_k)+"</a>";
 		});
-		f_match(/\[([^\]]+)]\[([^()]+)\]\[download\=([^\]]+)\]/g, function (s0, s1, s2, s3) {
+		f_match(/\[([^\]]*)]\[([^()]+)\]\[download\=([^\]]+)\]/g, function (s0, s1, s2, s3) {
 			return "<a href=\""+E(references[s2])+"\" download=\""+E(s3)+"\">"+I(s1, nodes, node_k)+"</a>";
 		});
-		f_match(/\[([^\]]+)]\[([^()]+)\]\[([^\]]+)\]/g, function (s0, s1, s2, s3) {
+		f_match(/\[([^\]]*)]\[([^()]+)\]\[([^\]]+)\]/g, function (s0, s1, s2, s3) {
 			return "<a href=\""+E(references[s2])+"\" name=\""+E(s3)+"\">"+I(s1, nodes, node_k)+"</a>";
 		});
-		f_match(/\[([^\]]+)]\[([^()]+)\]/g, function (s0, s1, s2) {
+		f_match(/\[([^\]]*)]\[([^()]+)\]/g, function (s0, s1, s2) {
 			return "<a href=\""+E(references[s2])+"\">"+I(s1, nodes, node_k)+"</a>";
 		});
 
