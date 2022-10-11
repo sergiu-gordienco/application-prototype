@@ -2462,7 +2462,6 @@ declare class RequestModule {
      */
     url(): string;
     /**
-     * returns `RequestModule.RequestConfig["url"]`
      * @method basicAuth
      * @memberof RequestModule#
      * @returns {{username: string, password: string}}
@@ -2470,7 +2469,6 @@ declare class RequestModule {
      */
     basicAuth(): any;
     /**
-     * returns `RequestModule.RequestConfig["url"]`
      * @method basicAuth
      * @memberof RequestModule#
      * @returns {{username: string, password: string}}
