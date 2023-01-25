@@ -4,6 +4,7 @@ module.require([
 	"brightness :: brightness",
 	"gamma  :: gamma",
 	"invert	:: invert",
+	"grayscale	:: grayscale",
 	"clip   :: clip",
 	"vibrance :: vibrance",
 	"sepia  :: sepia",
