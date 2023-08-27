@@ -1,29 +1,36 @@
 String.prototype.markdown	= function () {
 	var s = this;var h='';
-	function E(s){return escape(s + "").replace(/\%u([0-9a-f]{4})/gi,'&#x$1;').replace(/\%([0-9a-f]{2})/gi,'&#x$1;')
-			.replace(/\&\#x20\;/gi,' ')
-			.replace(/\&\#x5f\;/gi,'_')
-			.replace(/\&\#x7e\;/gi,'~')
-			.replace(/\&\#x26\;/gi,'&')
-			.replace(/\&\#x2a\;/gi,'*')
-			.replace(/\&\#x5b\;/gi,'[')
-			.replace(/\&\#x5d\;/gi,']')
-			.replace(/\&\#x5c\;/gi,'\x5c')
-			.replace(/\&\#x23\;/gi,'#')
-			.replace(/\&\#x3d\;/gi,'=')
-			.replace(/\&\#x21\;/gi,'!')
-			.replace(/\&\#x2e\;/gi,'.')
-			.replace(/\&\#x2c\;/gi,',')
-			.replace(/\&\#x3a\;/gi,':')
-			.replace(/\&\#x3b\;/gi,';')
-			.replace(/\&\#x0a\;/gi,'\n')
-			.replace(/\&\#x0d\;/gi,'\r')
-			.replace(/\&\#x09\;/gi,'\t')
-			.replace(/\&\#x60\;/gi,'`')
-			.replace(/\&\#x28\;/gi,'(')
-			.replace(/\&\#x29\;/gi,')')
-			.replace(/\&\#x25\;/gi,'%')
-			.replace(/\&\#x02\;/gi,'\x02')
+	
+	function E(s){
+		return s.replace(/./gu, function (s) {
+			if (s.length > 1) return s;
+			return escape(s + "").replace(/\%u([0-9a-f]{4})/gi, function (e) {
+				return unescape(e);
+			}).replace(/\%([0-9a-f]{2})/gi,'&#x$1;')
+				.replace(/\&\#x20\;/gi,' ')
+				.replace(/\&\#x5f\;/gi,'_')
+				.replace(/\&\#x7e\;/gi,'~')
+				.replace(/\&\#x26\;/gi,'&')
+				.replace(/\&\#x2a\;/gi,'*')
+				.replace(/\&\#x5b\;/gi,'[')
+				.replace(/\&\#x5d\;/gi,']')
+				.replace(/\&\#x5c\;/gi,'\x5c')
+				.replace(/\&\#x23\;/gi,'#')
+				.replace(/\&\#x3d\;/gi,'=')
+				.replace(/\&\#x21\;/gi,'!')
+				.replace(/\&\#x2e\;/gi,'.')
+				.replace(/\&\#x2c\;/gi,',')
+				.replace(/\&\#x3a\;/gi,':')
+				.replace(/\&\#x3b\;/gi,';')
+				.replace(/\&\#x0a\;/gi,'\n')
+				.replace(/\&\#x0d\;/gi,'\r')
+				.replace(/\&\#x09\;/gi,'\t')
+				.replace(/\&\#x60\;/gi,'`')
+				.replace(/\&\#x28\;/gi,'(')
+				.replace(/\&\#x29\;/gi,')')
+				.replace(/\&\#x25\;/gi,'%')
+				.replace(/\&\#x02\;/gi,'\x02')
+		});
 	}
 
 	
@@ -210,7 +217,7 @@ String.prototype.markdown	= function () {
 		f_match(/\[([^\]]*)]\(([^()]+)\)\[([^\]]+)\]/g, function (s0, s1, s2, s3) {
 			return "<a href=\""+E(s2)+"\" name=\""+E(s3)+"\">"+I(s1, nodes, node_k)+"</a>";
 		});
-		f_match(/\[([^\]]*)]\(([^()]+)\)/g, function (s0, s1, s2) {
+		f_match(/\[([^\]]+)]\(([^()]+)\)/g, function (s0, s1, s2) {
 			return "<a href=\""+E(s2)+"\">"+I(s1, nodes, node_k)+"</a>";
 		});
 
