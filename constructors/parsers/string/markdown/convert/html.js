@@ -361,8 +361,10 @@ String.prototype.markdown	= function () {
 				if (line.match(/^\x23{6}\s/))	status	= 'h6';
 				if (line.match(/^\>\s/))	status	= 'quote';
 				if (['p','quote'].indexOf(status) !== -1) {
-					if (['-','*'].indexOf(line[0] || '') !== -1 && [' ','\t'].indexOf(line[1] || '') !== -1) {
-						if (
+					if (['-','*'].indexOf(line[0] || '') !== -1) {
+						if ([' ','\t'].indexOf(line[1] || '') !== -1) {
+							status = 'ul';
+						} else if (
 							line.match(/^\*\s*\*+\s*\*\s*$/)
 							||
 							line.match(/^\-\s*\-+\s*\-\s*$/)
