@@ -777,7 +777,7 @@ this.P=slDOMlib.getParentN;
 this.d=slDOMlib.clearE;
 this.D=slDOMlib.delE;
 this.X=slDOMlib.copyE;
-this.p=slDOMlib.getParentTag;
+this.PT=slDOMlib.getParentTag;
 this.S=slDOMlib.getByTag;
 this.Q=slDOMlib.getByQuery;
 this.I=slDOMlib.getById;
@@ -973,7 +973,7 @@ getParentN:function(t){if(!t)t=1;var i;for(i=0;i<t;i++)if(this.newE.parentNode)t
 clearE:function(){var e;try{while(this.newE.childNodes[0])this.newE.removeChild(this.newE.childNodes[0]);}catch(e){};return this;},
 delE:function(){var e;try{this.newE.parentNode.removeChild(this.newE);}catch(e){};return true;},
 copyE:function(t){this.newE=this.newE.cloneNode(true);return this;},
-getParentTag:function(t){var i = getParentByTagName(this.newE,t.toLowerCase());if(i)this.newE = i;return this;},
+getParentTag:function(t, force){var i = getParentByTagName(this.newE,t.toLowerCase());if(i || force) this.newE = i || null;return this;},
 getByTag:function(t,i,a,c){if(!i)i=0;var r=this.__(a).getElementsByTagName(t);if(c && !r[this._i(i,r.length)]) return false;this.newE=r[this._i(i,r.length)];return this;},
 getByQuery:function(t,i,a,c){if(!i)i=0;var r=(this.__(a)[i === 0 ? 'querySelector' : 'querySelectorAll'])(t);if(i===0){if(c && !r) return false;this.newE = r;return this;};if(c && !r[this._i(i,r.length)]) return false;this.newE=r[this._i(i,r.length)];return this;},
 getById:function(t){var e;try{this.newE=document.getElementById(t);}catch(e){};return this;},
@@ -1321,7 +1321,7 @@ animate_2D : function(obj){
 	}
 };
 
-function getParentByTagName(obj, tag){var obj_parent = obj.parentNode;if (!obj_parent) return obj;if (obj_parent.tagName.toLowerCase() == tag) return obj_parent;else return getParentByTagName(obj_parent, tag);}
+function getParentByTagName(obj, tag){if (!(obj && obj.parentNode)) return null; var obj_parent = obj.parentNode;if (!obj_parent) return obj;if (obj_parent.tagName && obj_parent.tagName.toLowerCase() == tag) return obj_parent;else return getParentByTagName(obj_parent, tag);}
 
 _public._	= _;
 _public.__	= __;
