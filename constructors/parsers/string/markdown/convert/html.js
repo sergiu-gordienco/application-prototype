@@ -1,4 +1,12 @@
-String.prototype.markdown	= function () {
+String.prototype.markdown	= function (options) {
+	options = Object.assign(
+		{
+			URLWrapper: function (string, selector, markdown) {
+				return string;
+			}
+		},
+		options || {}
+	);
 	var s = this;var h='';
 	
 	function E(s){
@@ -138,15 +146,23 @@ String.prototype.markdown	= function () {
 			if (s2.match(/^\d+$/)) {
 				s2 += 'px';
 			}
-			return '<img style="width: ' + (s1) + '; height:'+ (s2) + ';" src="'+E(s4)+'" title="'+E(s3)+'" />';
+			return '<img style="width: ' + (s1) + '; height:'+ (s2) + ';" src="'+E(options.URLWrapper(s4, 'img[src]', s0))+'" title="'+E(s3)+'" />';
 		});
 		// f_match(/\!image\-(\d+\%{0,1})x(\d+\%{0,1})\[([^\]]*)]\(([^(]+)\)/g,'<img width="$1" height="$2" src="$4" title="$3" />');
 		
 		f_match(/\!\[([^\]]*)]\(([^(]+)\)/g, function (s0, s1, s2) {
-			return "<img src=\""+E(s2)+"\" title=\""+E(s1)+"\" alt=\""+E(s1)+"\">";
+			return "<img src=\""+E(options.URLWrapper(s2, 'img[src]', s0))+"\" title=\""+E(s1)+"\" alt=\""+E(s1)+"\">";
 		});
 
-		f_match(/\!object\-(\d+\%{0,1})x(\d+\%{0,1})\[([^\]]*)]\(([^(]+)\)/g,'<object width="$1" height="$2" src="$4">$3</object>');
+		f_match(/\!object\-(\d+\%{0,1}|auto|\d+vw|\d+vh|\d+vmin|\d+vmax|\d+em|\d+pt|\d+px|)x(\d+\%{0,1}|auto|\d+vw|\d+vh|\d+vmin|\d+vmax|\d+em|\d+pt|\d+px|)\[([^\]]*)]\(([^(]+)\)/g, function (s0, s1, s2, s3, s4) {
+			if (s1.match(/^\d+$/)) {
+				s1 += 'px';
+			}
+			if (s2.match(/^\d+$/)) {
+				s2 += 'px';
+			}
+			return '<object style="width: ' + (s1) + '; height:'+ (s2) + ';" src="'+E(options.URLWrapper(s4, 'object[src]', s0))+'" title="'+E(s3)+'">'+E(s3)+'</object>';
+		});
 		f_match(/\!iframe\-(\d+\%{0,1}|auto|\d+vw|\d+vh|\d+vmin|\d+vmax|\d+em|\d+pt|\d+px|)x(\d+\%{0,1}|auto|\d+vw|\d+vh|\d+vmin|\d+vmax|\d+em|\d+pt|\d+px|)\[([^\]]*)]\(([^(]+)\)/g, function (s0, s1, s2, s3, s4) {
 			if (s1.match(/^\d+$/)) {
 				s1 += 'px';
@@ -154,20 +170,20 @@ String.prototype.markdown	= function () {
 			if (s2.match(/^\d+$/)) {
 				s2 += 'px';
 			}
-			return '<iframe style="width: ' + (s1) + '; height:'+ (s2) + ';" src="'+E(s4)+'" title="'+E(s3)+'">'+E(s3)+'</iframe>';
+			return '<iframe style="width: ' + (s1) + '; height:'+ (s2) + ';" src="'+E(options.URLWrapper(s4, 'iframe[src]', s0))+'" title="'+E(s3)+'">'+E(s3)+'</iframe>';
 		});
 		// f_match(/\!iframe\-(\d+\%{0,1})x(\d+\%{0,1})\[([^\]]*)]\(([^(]+)\)/g,'<iframe width="$1" height="$2" src="$4" frameborder="0" allowfullscreen >$3</iframe>');
-		f_match(/\!video\-(\d+\%{0,1}|auto|\d+vw|\d+vh|\d+vmin|\d+vmax|\d+em|\d+pt|\d+px|)x(\d+\%{0,1}|auto|\d+vw|\d+vh|\d+vmin|\d+vmax|\d+em|\d+pt|\d+px|)\[([^\]]*)]\(([^(]+)\)/g, function (match, s1, s2, s3, s4) {
+		f_match(/\!video\-(\d+\%{0,1}|auto|\d+vw|\d+vh|\d+vmin|\d+vmax|\d+em|\d+pt|\d+px|)x(\d+\%{0,1}|auto|\d+vw|\d+vh|\d+vmin|\d+vmax|\d+em|\d+pt|\d+px|)\[([^\]]*)]\(([^(]+)\)/g, function (s0, s1, s2, s3, s4) {
 			if (s1.match(/^\d+$/)) {
 				s1 += 'px';
 			}
 			if (s2.match(/^\d+$/)) {
 				s2 += 'px';
 			}
-			return '<video style="width: ' + (s1) + '; height:'+ (s2) + ';" controls>'+(s4 + '').split(';').filter(function (v) { return v.length; }).map(function (s) { return '<source src="'+E(s).replace('#','" type="')+'">';}).join("")+''+I(s3, nodes, node_k)+'</video>';
+			return '<video style="width: ' + (s1) + '; height:'+ (s2) + ';" controls>'+(s4 + '').split(';').filter(function (v) { return v.length; }).map(function (s) { return '<source src="'+E(options.URLWrapper(s, 'video[src]', s0)).replace('#','" type="')+'">';}).join("")+''+I(s3, nodes, node_k)+'</video>';
 		});
-		f_match(/!audio\[([^\]]*)]\(([^()]+)\)/g, function (match, s3, s4) {
-			return '<audio controls>'+(s4 + '').split(';').filter(function (v) { return v.length; }).map(function (s) { return '<source src="'+E(s).replace('#','" type="')+'">';}).join("")+''+I(s3, nodes, node_k)+'</audio>';
+		f_match(/!audio\[([^\]]*)]\(([^()]+)\)/g, function (s0, s3, s4) {
+			return '<audio controls>'+(s4 + '').split(';').filter(function (v) { return v.length; }).map(function (s) { return '<source src="'+E(options.URLWrapper(s, 'audio[src]', s0)).replace('#','" type="')+'">';}).join("")+''+I(s3, nodes, node_k)+'</audio>';
 		});
 		
 		f_match(/\!image\-(\d+\%{0,1}|auto|\d+vw|\d+vh|\d+vmin|\d+vmax|\d+em|\d+pt|\d+px|)x(\d+\%{0,1}|auto|\d+vw|\d+vh|\d+vmin|\d+vmax|\d+em|\d+pt|\d+px|)\[([^\]]*)]\[([^(]+)\]/g, function (s0, s1, s2, s3, s4) {
@@ -177,14 +193,14 @@ String.prototype.markdown	= function () {
 			if (s2.match(/^\d+$/)) {
 				s2 += 'px';
 			}
-			return '<img style="width: ' + (s1) + '; height:'+ (s2) + ';" src="' + references[s4] + '" title="' + s3 + '" />';
+			return '<img style="width: ' + (s1) + '; height:'+ (s2) + ';" src="' + E(options.URLWrapper(references[s4], 'img[src]', s0)) + '" title="' + s3 + '" />';
 		});
 		f_match(/\!\[([^\]]*)]\[([^(]+)\]/g, function (s0, s1, s2) {
-			return "<img src=\""+E(references[s2])+"\" title=\""+E(s1)+"\" alt=\""+E(s1)+"\">";
+			return "<img src=\""+E(options.URLWrapper(references[s2], 'img[src]', s0))+"\" title=\""+E(s1)+"\" alt=\""+E(s1)+"\">";
 		});
 
 		f_match(/\!object\-(\d+\%{0,1})x(\d+\%{0,1})\[([^\]]*)]\[([^(]+)\]/g, function (s0, s1, s2, s3, s4) {
-			return '<object width="' + s1 + '" height="' + s2 + '" src="' + references[s4] + '">' + s3 + '</object>'
+			return '<object width="' + s1 + '" height="' + s2 + '" src="' + E(options.URLWrapper(references[s4], 'object[src]', s0)) + '">' + s3 + '</object>'
 		});
 		f_match(/\!iframe\-(\d+\%{0,1}|auto|\d+vw|\d+vh|\d+vmin|\d+vmax|\d+em|\d+pt|\d+px|)x(\d+\%{0,1}|auto|\d+vw|\d+vh|\d+vmin|\d+vmax|\d+em|\d+pt|\d+px|)\[([^\]]*)]\[([^(]+)\]/g,  function (s0, s1, s2, s3, s4) {
 			if (s1.match(/^\d+$/)) {
@@ -193,45 +209,45 @@ String.prototype.markdown	= function () {
 			if (s2.match(/^\d+$/)) {
 				s2 += 'px';
 			}
-			return '<iframe style="width: ' + (s1) + '; height:'+ (s2) + ';" src="' + references[s4] + '" frameborder="0" allowfullscreen >' + s3 + '</iframe>';
+			return '<iframe style="width: ' + (s1) + '; height:'+ (s2) + ';" src="' + E(options.URLWrapper(references[s4], 'iframe[src]', s0)) + '" frameborder="0" allowfullscreen >' + s3 + '</iframe>';
 		});
-		f_match(/\!video\-(\d+\%{0,1}|auto|\d+vw|\d+vh|\d+vmin|\d+vmax|\d+em|\d+pt|\d+px|)x(\d+\%{0,1}|auto|\d+vw|\d+vh|\d+vmin|\d+vmax|\d+em|\d+pt|\d+px|)\[([^\]]*)]\[([^(]+)\]/g, function (match, s1, s2, s3, s4) {
+		f_match(/\!video\-(\d+\%{0,1}|auto|\d+vw|\d+vh|\d+vmin|\d+vmax|\d+em|\d+pt|\d+px|)x(\d+\%{0,1}|auto|\d+vw|\d+vh|\d+vmin|\d+vmax|\d+em|\d+pt|\d+px|)\[([^\]]*)]\[([^(]+)\]/g, function (s0, s1, s2, s3, s4) {
 			if (s1.match(/^\d+$/)) {
 				s1 += 'px';
 			}
 			if (s2.match(/^\d+$/)) {
 				s2 += 'px';
 			}
-			return '<video style="width: ' + (s1) + '; height:'+ (s2) + ';" controls>'+(s4 + '').split(';').filter(function (v) { return v.length; }).map(function (s) { return '<source src="'+E(references[s]).replace('#','" type="')+'">';}).join("")+''+I(s3, nodes, node_k)+'</video>';
+			return '<video style="width: ' + (s1) + '; height:'+ (s2) + ';" controls>'+(s4 + '').split(';').filter(function (v) { return v.length; }).map(function (s) { return '<source src="'+E(options.URLWrapper(references[s], 'video[src]', s0)).replace('#','" type="')+'">';}).join("")+''+I(s3, nodes, node_k)+'</video>';
 		});
-		f_match(/!audio\[([^\]]*)]\[([^()]+)\]/g, function (match, s3, s4) {
-			return '<audio controls>'+(s4 + '').split(';').filter(function (v) { return v.length; }).map(function (s) { return '<source src="'+E(references[s]).replace('#','" type="')+'">';}).join("")+''+I(s3, nodes, node_k)+'</audio>';
+		f_match(/!audio\[([^\]]*)]\[([^()]+)\]/g, function (s0, s3, s4) {
+			return '<audio controls>'+(s4 + '').split(';').filter(function (v) { return v.length; }).map(function (s) { return '<source src="'+E(options.URLWrapper(references[s], 'audio[src]', s0)).replace('#','" type="')+'">';}).join("")+''+I(s3, nodes, node_k)+'</audio>';
 		});
 
 		f_match(/\[([^\]]*)]\(([^()]+)\)\[blank\]/g, function (s0, s1, s2) {
-			return "<a href=\""+E(s2)+"\" target=\"_blank\">"+I(s1, nodes, node_k)+"</a>";
+			return "<a href=\""+E(options.URLWrapper(s2, 'a[href]', s0))+"\" target=\"_blank\">"+I(s1, nodes, node_k)+"</a>";
 		});
 		f_match(/\[([^\]]*)]\(([^()]+)\)\[download\=([^\]]+)\]/g, function (s0, s1, s2, s3) {
-			return "<a href=\""+E(s2)+"\" download=\""+E(s3)+"\">"+I(s1, nodes, node_k)+"</a>";
+			return "<a href=\""+E(options.URLWrapper(s2, 'a[href]', s0))+"\" download=\""+E(s3)+"\">"+I(s1, nodes, node_k)+"</a>";
 		});
 		f_match(/\[([^\]]*)]\(([^()]+)\)\[([^\]]+)\]/g, function (s0, s1, s2, s3) {
-			return "<a href=\""+E(s2)+"\" name=\""+E(s3)+"\">"+I(s1, nodes, node_k)+"</a>";
+			return "<a href=\""+E(options.URLWrapper(s2, 'a[href]', s0))+"\" name=\""+E(s3)+"\">"+I(s1, nodes, node_k)+"</a>";
 		});
 		f_match(/\[([^\]]+)]\(([^()]+)\)/g, function (s0, s1, s2) {
-			return "<a href=\""+E(s2)+"\">"+I(s1, nodes, node_k)+"</a>";
+			return "<a href=\""+E(options.URLWrapper(s2, 'a[href]', s0))+"\">"+I(s1, nodes, node_k)+"</a>";
 		});
 
 		f_match(/\[([^\]]*)]\[([^()]+)\]\[blank\]/g, function (s0, s1, s2) {
-			return "<a href=\""+E(references[s2])+"\" target=\"_blank\">"+I(s1, nodes, node_k)+"</a>";
+			return "<a href=\""+E(options.URLWrapper(references[s2], 'a[href]', s0))+"\" target=\"_blank\">"+I(s1, nodes, node_k)+"</a>";
 		});
 		f_match(/\[([^\]]*)]\[([^()]+)\]\[download\=([^\]]+)\]/g, function (s0, s1, s2, s3) {
-			return "<a href=\""+E(references[s2])+"\" download=\""+E(s3)+"\">"+I(s1, nodes, node_k)+"</a>";
+			return "<a href=\""+E(options.URLWrapper(references[s2], 'a[href]', s0))+"\" download=\""+E(s3)+"\">"+I(s1, nodes, node_k)+"</a>";
 		});
 		f_match(/\[([^\]]*)]\[([^()]+)\]\[([^\]]+)\]/g, function (s0, s1, s2, s3) {
-			return "<a href=\""+E(references[s2])+"\" name=\""+E(s3)+"\">"+I(s1, nodes, node_k)+"</a>";
+			return "<a href=\""+E(options.URLWrapper(references[s2], 'a[href]', s0))+"\" name=\""+E(s3)+"\">"+I(s1, nodes, node_k)+"</a>";
 		});
 		f_match(/\[([^\]]*)]\[([^()]+)\]/g, function (s0, s1, s2) {
-			return "<a href=\""+E(references[s2])+"\">"+I(s1, nodes, node_k)+"</a>";
+			return "<a href=\""+E(options.URLWrapper(references[s2], 'a[href]', s0))+"\">"+I(s1, nodes, node_k)+"</a>";
 		});
 
 		f_match(/(\_\_\_)([^\<\>]+?)\1/g, function (s0, s1, s2) {
@@ -248,7 +264,7 @@ String.prototype.markdown	= function () {
 		});
 
 		f_match(/(http|https|ftp|ftps|mailto|tel)\:[^\s\n]+/g, function (s0, s1, s2) {
-			return "<a href=\""+E(s0)+"\">"+E(s0)+"</a>";
+			return "<a href=\""+E(options.URLWrapper(s0, 'a[href]', s0))+"\">"+E(s0)+"</a>";
 		});
 
 		f_apply();
@@ -528,6 +544,6 @@ String.prototype.markdown	= function () {
 	return h;
 };
 
-module.exports = function markdown2Html(data) {
-	return data.markdown();
+module.exports = function markdown2Html(data, options) {
+	return data.markdown(options);
 };
