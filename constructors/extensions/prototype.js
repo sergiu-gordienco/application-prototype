@@ -441,15 +441,34 @@ if (document)
 		return arguments[0];
 	};
 	((function () {
-		var objEncodeURL	= function(o,k) {
+		var objEncodeURL	= function(o,k, encodeURIKeys) {
 			var r = [],i;
 				if(!k) k = "";
 				if(Array.isArray(o) && k) {
 					for( i=0; i<o.length; i++ )
-						r.push(objEncodeURL(o[i],""+k+"["+i+"]"));
+						r.push(
+							objEncodeURL(
+								o[i],
+								""+k+(
+									encodeURIKeys ? encodeURIComponent("["+i+"]") : ("[" + i + "]")
+								)
+							),
+							encodeURIKeys
+						);
 				} else if( typeof(o) == "object" ) {
 					for( i in o )
-						r.push(objEncodeURL(o[i], ""+k+( k ? "[" : "" )+i+( k ? "]" : "" ) ));
+						r.push(
+							objEncodeURL(
+								o[i], "" + k + (
+									encodeURIKeys ? encodeURIComponent(
+										( k ? "[" : "" )+i+( k ? "]" : "" )
+									) : (
+										( k ? "[" : "" )+i+( k ? "]" : "" )
+									)
+								),
+								encodeURIKeys
+							)
+						);
 				} else if( k ) {
 					return ""+k+"="+encodeURIComponent(o);
 				}
@@ -1639,7 +1658,7 @@ parseUrlVars	: function(json,params) {
 	};
 	var s = this;
 	json	= !!json;
-	if(params.isURL) s.replace(/^[\s\S]*?\?/,'');
+	if(params.isURL) s = s.replace(/^[\s\S]*?\?/,'');
 	var r = {},p = s.split('&');
 	p.forEach(function(v){
 		var m,v;
@@ -1651,6 +1670,9 @@ parseUrlVars	: function(json,params) {
 			} else {
 				var a = [];
 				var p = /^(\[([^\]]*)\]|([^\[]+))/,y;
+				if (k.match(/\%5b[^\%].*?\%5d/i)) {
+					k = k.decodeURI();
+				}
 				while( y = k.match(p) ) {
 					if(!y[0]) break;
 					k = k.replace(p,'');
