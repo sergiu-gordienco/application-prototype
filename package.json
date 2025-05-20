@@ -1,8 +1,8 @@
 {
   "name": "application-prototype",
-  "version": "1.29.1",
+  "version": "1.29.2",
   "description": "Application builder - prototype",
-  "main": "index.ts",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "docs": "rm -rf ./documentation/* ; jsdoc -c jsdoc.json ; ",
