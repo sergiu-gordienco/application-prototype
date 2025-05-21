@@ -65,7 +65,7 @@ module.exports =
 		// console.warn("Not a Browser Space, window doesn't exist");
 	}
 	if (typeof(document) === "undefined") {
-		document = null;
+		document = undefined;
 		// console.warn("Not a Browser Space, document not found");
 	}
 	if (typeof(navigator) === "undefined") {
