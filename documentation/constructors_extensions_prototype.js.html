@@ -1666,7 +1666,12 @@ utf8decode : function() {
 toRegexp : function(flags){
 	if(!flags) flags	= '';
 	var e,r = null;try {
-		eval("r = "+(this.match(/^\//) ? this : '/'+this+'/')+""+flags+" ;");
+		var m = this.match(/^\/[\s\S]*\/[a-z]*$/);
+		r = new RegExp((
+			m ? (
+				this.replace(/^\//, '').replace(/\/[a-z]*$/, '')
+			) : this
+		), (m ? this.replace(/^\/[\s\S]*\/([a-z]*)$/, '$1') : '') + flags);
 	} catch(e) { r = null; };
 	return r;
 },
