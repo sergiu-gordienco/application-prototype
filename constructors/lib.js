@@ -35,6 +35,7 @@ loader.list = [
 			'lib',
 			'request',
 			'request/http-interceptor',
+			'request/http-track-progress',
 			'request/http-cache',
 			'request/params-parser',
 			'request/params-parser/cli',
