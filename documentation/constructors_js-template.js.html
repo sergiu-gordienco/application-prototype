@@ -438,7 +438,7 @@ var parseTextNodes = function (textNode, cb, config) {
 		if (typeof(textNode.text) === "string") {
 			const node  = document.createTextNode(textNode.text);
 			textNode.parentNode.insertBefore(node, textNode);
-			const cNode = textParser([textNode], {});
+			const cNode = textParser([node], {});
 			config.textNodes.push(cNode);
 			textNode.parentNode.removeChild(textNode);
 		}
