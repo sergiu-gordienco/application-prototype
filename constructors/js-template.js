@@ -376,7 +376,15 @@ var parseTextNodes = function (textNode, cb, config) {
 		}
 	};
 
-	if (textNode.nodeType === Node.ELEMENT_NODE) {
+	if (textNode.nodeType === Node.ELEMENT_NODE && textNode.tagName === 'SCRIPT' && textNode.getAttribute('type') === 'text/js-template') {
+		if (typeof(textNode.text) === "string") {
+			const node  = document.createTextNode(textNode.text);
+			textNode.parentNode.insertBefore(node, textNode);
+			const cNode = textParser([textNode], {});
+			config.textNodes.push(cNode);
+			textNode.parentNode.removeChild(textNode);
+		}
+	} else if (textNode.nodeType === Node.ELEMENT_NODE) {
 		if (textNode.childNodes[0]) {
 			ate(textNode.childNodes[0]);
 		}

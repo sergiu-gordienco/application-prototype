@@ -17,10 +17,62 @@ This is a templating system that:
 ### 1. **Template Parsing**
 
 **`parseTextNodes()`** - Handles text interpolation with `{{ }}` syntax:
+**Example:**
+
+```html
+	<span>Hello {{ name }}</span>
+```
+
 ```javascript
-// Example: "Hello {{ name }}"
 parseTextNodes(element, callback, config);
 ```
+
+### 1.2. **Template Parsing Big structures**
+
+**Example:**
+
+```html
+	<script type="text/js-template">
+		3 + 9
+	</script>
+```
+
+```html
+	will render "12"
+```
+
+### 1.3. **Template Parsing Big structures**
+
+**Example:**
+
+```html
+	<script type="text/js-template">
+		[
+			document.createElement('img')
+		]
+	</script>
+```
+
+```html
+	<img />
+```
+
+### 1.4. **Template Parsing Big structures**
+
+**Example:**
+
+```html
+	<script type="text/js-template">
+		(() => {
+			return document.createElement('button')
+		})()
+	</script>
+```
+
+```html
+	<button></button>
+```
+
 
 **`attrParser()`** - Processes special attributes:
 - `ev-*` or `(*)` - Event handlers
