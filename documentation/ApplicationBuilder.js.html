@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>ApplicationBuilder.js - Application Prototype - Framework</title>
+    
+    <meta name="description" content="Application Prototype Framework based on Module Pattern" />
+    
+        <meta name="keywords" content="javascript, js, application-prototype, prototype" />
+        <meta name="keyword" content="javascript, js, application-prototype, prototype" />
+    
+    
+    
+    <meta property="og:title" content="Application Prototype - Framework"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:image" content=""/>
+    
+    <meta property="og:url" content="https://labs.sgapps.io/open-source/application-prototype"/>
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav class="wrap">
+    
+    <input type="text" id="nav-search" placeholder="Search" />
+    
+    <h2><a href="index.html">Home</a></h2><h2><a href="https://labs.sgapps.io/open-source/application-prototype" target="_blank" class="menu-item" id="website_link" >Project Page ( Git Lab )</a></h2><h2><a href="http://gordienco.net/" target="_blank" class="menu-item" id="website_link" >About Me</a></h2><h2><a href="https://github.com/sergiu-gordienco/application-prototype" target="_blank" class="menu-item" id="github_link" >GitHub</a></h2><h3>Modules</h3><ul><li><a href="module-application-prototype.html">application-prototype</a></li><li><a href="module-uriLoad.html">uriLoad</a><ul class='methods'><li data-type='method' style='display: none;'><a href="module-uriLoad.html#.link">link</a></li><li data-type='method' style='display: none;'><a href="module-uriLoad.html#.script">script</a></li></ul></li></ul><h3>Classes</h3><ul><li><a href="ApplicationBuilder.html">ApplicationBuilder</a></li><li><a href="ApplicationPrototype.html">ApplicationPrototype</a></li><li><a href="ApplicationPrototype.Builder.html">Builder</a><ul class='methods'><li data-type='method' style='display: none;'><a href="ApplicationPrototype.Builder.html#bind">bind</a></li><li data-type='method' style='display: none;'><a href="ApplicationPrototype.Builder.html#consoleOptions">consoleOptions</a></li><li data-type='method' style='display: none;'><a href="ApplicationPrototype.Builder.html#crudEvents">crudEvents</a></li><li data-type='method' style='display: none;'><a href="ApplicationPrototype.Builder.html#debugEnabled">debugEnabled</a></li><li data-type='method' style='display: none;'><a href="ApplicationPrototype.Builder.html#emit">emit</a></li><li data-type='method' style='display: none;'><a href="ApplicationPrototype.Builder.html#isBrowser">isBrowser</a></li><li data-type='method' style='display: none;'><a href="ApplicationPrototype.Builder.html#isNode">isNode</a></li><li data-type='method' style='display: none;'><a href="ApplicationPrototype.Builder.html#modulePath">modulePath</a></li><li data-type='method' style='display: none;'><a href="ApplicationPrototype.Builder.html#moduleRegister">moduleRegister</a></li><li data-type='method' style='display: none;'><a href="ApplicationPrototype.Builder.html#off">off</a></li><li data-type='method' style='display: none;'><a href="ApplicationPrototype.Builder.html#on">on</a></li><li data-type='method' style='display: none;'><a href="ApplicationPrototype.Builder.html#once">once</a></li><li data-type='method' style='display: none;'><a href="ApplicationPrototype.Builder.html#property">property</a></li><li data-type='method' style='display: none;'><a href="ApplicationPrototype.Builder.html#require">require</a></li><li data-type='method' style='display: none;'><a href="ApplicationPrototype.Builder.html#runModulesInFiles">runModulesInFiles</a></li></ul></li><li class="level-hide"><a href="ApplicationPrototype.Builder.Promise.html">Promise</a><ul class='methods'><li data-type='method' style='display: none;'><a href="ApplicationPrototype.Builder.Promise.html#.all">all</a></li><li data-type='method' style='display: none;'><a href="ApplicationPrototype.Builder.Promise.html#.race">race</a></li><li data-type='method' style='display: none;'><a href="ApplicationPrototype.Builder.Promise.html#.reject">reject</a></li><li data-type='method' style='display: none;'><a href="ApplicationPrototype.Builder.Promise.html#.resolve">resolve</a></li></ul></li><li><a href="ApplicationPrototype.Instance.html">Instance</a><ul class='methods'><li data-type='method' style='display: none;'><a href="ApplicationPrototype.Instance.html#bind">bind</a></li><li data-type='method' style='display: none;'><a href="ApplicationPrototype.Instance.html#crudEvents">crudEvents</a></li><li data-type='method' style='display: none;'><a href="ApplicationPrototype.Instance.html#emit">emit</a></li><li data-type='method' style='display: none;'><a href="ApplicationPrototype.Instance.html#off">off</a></li><li data-type='method' style='display: none;'><a href="ApplicationPrototype.Instance.html#on">on</a></li><li data-type='method' style='display: none;'><a href="ApplicationPrototype.Instance.html#once">once</a></li><li data-type='method' style='display: none;'><a href="ApplicationPrototype.Instance.html#property">property</a></li><li data-type='method' style='display: none;'><a href="ApplicationPrototype.Instance.html#property">property</a></li></ul></li><li><a href="async.Async.html">Async</a><ul class='methods'><li data-type='method' style='display: none;'><a href="async.Async.html#done">done</a></li><li data-type='method' style='display: none;'><a href="async.Async.html#errors">errors</a></li><li data-type='method' style='display: none;'><a href="async.Async.html#flush">flush</a></li><li data-type='method' style='display: none;'><a href="async.Async.html#index">index</a></li><li data-type='method' style='display: none;'><a href="async.Async.html#processing">processing</a></li><li data-type='method' style='display: none;'><a href="async.Async.html#receive">receive</a></li><li data-type='method' style='display: none;'><a href="async.Async.html#reserve">reserve</a></li><li data-type='method' style='display: none;'><a href="async.Async.html#responses">responses</a></li><li data-type='method' style='display: none;'><a href="async.Async.html#run">run</a></li><li data-type='method' style='display: none;'><a href="async.Async.html#wait">wait</a></li></ul></li><li><a href="ExtensionsPrototype.slDOMSet.html">slDOMSet</a><ul class='methods'><li data-type='method' style='display: none;'><a href="ExtensionsPrototype.slDOMSet.html#add">add</a></li><li data-type='method' style='display: none;'><a href="ExtensionsPrototype.slDOMSet.html#attr">attr</a></li><li data-type='method' style='display: none;'><a href="ExtensionsPrototype.slDOMSet.html#attr">attr</a></li><li data-type='method' style='display: none;'><a href="ExtensionsPrototype.slDOMSet.html#attr">attr</a></li><li data-type='method' style='display: none;'><a href="ExtensionsPrototype.slDOMSet.html#attr">attr</a></li><li data-type='method' style='display: none;'><a href="ExtensionsPrototype.slDOMSet.html#config">config</a></li><li data-type='method' style='display: none;'><a href="ExtensionsPrototype.slDOMSet.html#config">config</a></li><li data-type='method' style='display: none;'><a href="ExtensionsPrototype.slDOMSet.html#each">each</a></li><li data-type='method' style='display: none;'><a href="ExtensionsPrototype.slDOMSet.html#env">env</a></li><li data-type='method' style='display: none;'><a href="ExtensionsPrototype.slDOMSet.html#eq">eq</a></li><li data-type='method' style='display: none;'><a href="ExtensionsPrototype.slDOMSet.html#filter">filter</a></li><li data-type='method' style='display: none;'><a href="ExtensionsPrototype.slDOMSet.html#find">find</a></li><li data-type='method' style='display: none;'><a href="ExtensionsPrototype.slDOMSet.html#get">get</a></li><li data-type='method' style='display: none;'><a href="ExtensionsPrototype.slDOMSet.html#get">get</a></li><li data-type='method' style='display: none;'><a href="ExtensionsPrototype.slDOMSet.html#map">map</a></li><li data-type='method' style='display: none;'><a href="ExtensionsPrototype.slDOMSet.html#set">set</a></li><li data-type='method' style='display: none;'><a href="ExtensionsPrototype.slDOMSet.html#set">set</a></li><li data-type='method' style='display: none;'><a href="ExtensionsPrototype.slDOMSet.html#unique">unique</a></li></ul></li><li><a href="JSTemplateComponent.html">JSTemplateComponent</a></li><li><a href="RequestModule.html">RequestModule</a><ul class='members'><li data-type='member' style='display: none;'><a href="RequestModule.html#.READY_STATE_DONE">READY_STATE_DONE</a></li><li data-type='member' style='display: none;'><a href="RequestModule.html#.READY_STATE_HEADERS_RECEIVED">READY_STATE_HEADERS_RECEIVED</a></li><li data-type='member' style='display: none;'><a href="RequestModule.html#.READY_STATE_LOADING">READY_STATE_LOADING</a></li><li data-type='member' style='display: none;'><a href="RequestModule.html#.READY_STATE_OPENED">READY_STATE_OPENED</a></li><li data-type='member' style='display: none;'><a href="RequestModule.html#.READY_STATE_UNSENT">READY_STATE_UNSENT</a></li></ul><ul class='methods'><li data-type='method' style='display: none;'><a href="RequestModule.html#.ParamsParser">ParamsParser</a></li><li data-type='method' style='display: none;'><a href="RequestModule.html#async">async</a></li><li data-type='method' style='display: none;'><a href="RequestModule.html#async">async</a></li><li data-type='method' style='display: none;'><a href="RequestModule.html#basicAuth">basicAuth</a></li><li data-type='method' style='display: none;'><a href="RequestModule.html#basicAuth">basicAuth</a></li><li data-type='method' style='display: none;'><a href="RequestModule.html#config">config</a></li><li data-type='method' style='display: none;'><a href="RequestModule.html#configurator">configurator</a></li><li data-type='method' style='display: none;'><a href="RequestModule.html#headers">headers</a></li><li data-type='method' style='display: none;'><a href="RequestModule.html#headers">headers</a></li><li data-type='method' style='display: none;'><a href="RequestModule.html#method">method</a></li><li data-type='method' style='display: none;'><a href="RequestModule.html#method">method</a></li><li data-type='method' style='display: none;'><a href="RequestModule.html#open">open</a></li><li data-type='method' style='display: none;'><a href="RequestModule.html#readyState">readyState</a></li><li data-type='method' style='display: none;'><a href="RequestModule.html#request">request</a></li><li data-type='method' style='display: none;'><a href="RequestModule.html#response">response</a></li><li data-type='method' style='display: none;'><a href="RequestModule.html#send">send</a></li><li data-type='method' style='display: none;'><a href="RequestModule.html#status">status</a></li><li data-type='method' style='display: none;'><a href="RequestModule.html#statusText">statusText</a></li><li data-type='method' style='display: none;'><a href="RequestModule.html#timeout">timeout</a></li><li data-type='method' style='display: none;'><a href="RequestModule.html#timeout">timeout</a></li><li data-type='method' style='display: none;'><a href="RequestModule.html#url">url</a></li><li data-type='method' style='display: none;'><a href="RequestModule.html#url">url</a></li><li data-type='method' style='display: none;'><a href="RequestModule.html#withCredentials">withCredentials</a></li><li data-type='method' style='display: none;'><a href="RequestModule.html#withCredentials">withCredentials</a></li></ul></li></ul><h3>Events</h3><ul><li class="level-hide"><a href="ApplicationPrototype.Instance.html#.event:__afterGet">__afterGet</a></li><li class="level-hide"><a href="ApplicationPrototype.Instance.html#.event:__afterGet::propName">__afterGet::propName</a></li><li class="level-hide"><a href="ApplicationPrototype.Instance.html#.event:__afterSet">__afterSet</a></li><li class="level-hide"><a href="ApplicationPrototype.Instance.html#.event:__afterSet::propName">__afterSet::propName</a></li><li class="level-hide"><a href="ApplicationPrototype.Instance.html#.event:__onGet">__onGet</a></li><li class="level-hide"><a href="ApplicationPrototype.Instance.html#.event:__onGet::propName">__onGet::propName</a></li><li class="level-hide"><a href="ApplicationPrototype.Instance.html#.event:__onSet">__onSet</a></li><li class="level-hide"><a href="ApplicationPrototype.Instance.html#.event:__onSet::propName">__onSet::propName</a></li></ul><h3>Interfaces</h3><ul><li></li><li><a href="Array.html">Array</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Array.html#__pointerFilter">__pointerFilter</a></li><li data-type='method' style='display: none;'><a href="Array.html#base64encode">base64encode</a></li><li data-type='method' style='display: none;'><a href="Array.html#bytesToHex">bytesToHex</a></li><li data-type='method' style='display: none;'><a href="Array.html#inArray">inArray</a></li><li data-type='method' style='display: none;'><a href="Array.html#indexOfSect">indexOfSect</a></li><li data-type='method' style='display: none;'><a href="Array.html#max">max</a></li><li data-type='method' style='display: none;'><a href="Array.html#min">min</a></li><li data-type='method' style='display: none;'><a href="Array.html#move">move</a></li><li data-type='method' style='display: none;'><a href="Array.html#resetArray">resetArray</a></li><li data-type='method' style='display: none;'><a href="Array.html#shuffle">shuffle</a></li><li data-type='method' style='display: none;'><a href="Array.html#split">split</a></li><li data-type='method' style='display: none;'><a href="Array.html#splitSect">splitSect</a></li><li data-type='method' style='display: none;'><a href="Array.html#toBinaryString">toBinaryString</a></li><li data-type='method' style='display: none;'><a href="Array.html#toBlob">toBlob</a></li><li data-type='method' style='display: none;'><a href="Array.html#toBytesBinary">toBytesBinary</a></li><li data-type='method' style='display: none;'><a href="Array.html#toBytesEscaped">toBytesEscaped</a></li><li data-type='method' style='display: none;'><a href="Array.html#toParamObj">toParamObj</a></li><li data-type='method' style='display: none;'><a href="Array.html#toStringUtf8">toStringUtf8</a></li><li data-type='method' style='display: none;'><a href="Array.html#unique">unique</a></li></ul></li><li><a href="ArrayBuffer.html">ArrayBuffer</a><ul class='methods'><li data-type='method' style='display: none;'><a href="ArrayBuffer.html#base64encode">base64encode</a></li><li data-type='method' style='display: none;'><a href="ArrayBuffer.html#toArray">toArray</a></li><li data-type='method' style='display: none;'><a href="ArrayBuffer.html#toBytes">toBytes</a></li><li data-type='method' style='display: none;'><a href="ArrayBuffer.html#toStringUtf8">toStringUtf8</a></li></ul></li><li><a href="async.html">async</a><ul class='methods'><li data-type='method' style='display: none;'><a href="async.html#.flow">flow</a></li><li data-type='method' style='display: none;'><a href="async.html#.flow_map">flow_map</a></li><li data-type='method' style='display: none;'><a href="async.html#.map">map</a></li><li data-type='method' style='display: none;'><a href="async.html#.waterfall">waterfall</a></li><li data-type='method' style='display: none;'><a href="async.html#.waterfall_map">waterfall_map</a></li></ul></li><li><a href="Blob.html">Blob</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Blob.html#toArrayBuffer">toArrayBuffer</a></li><li data-type='method' style='display: none;'><a href="Blob.html#toURL">toURL</a></li></ul></li><li><a href="BrowserSessionModule.html">BrowserSessionModule</a><ul class='methods'><li data-type='method' style='display: none;'><a href="BrowserSessionModule.html#.clear">clear</a></li><li data-type='method' style='display: none;'><a href="BrowserSessionModule.html#.findItems">findItems</a></li><li data-type='method' style='display: none;'><a href="BrowserSessionModule.html#.getItem">getItem</a></li><li data-type='method' style='display: none;'><a href="BrowserSessionModule.html#.getItems">getItems</a></li><li data-type='method' style='display: none;'><a href="BrowserSessionModule.html#.removeItem">removeItem</a></li><li data-type='method' style='display: none;'><a href="BrowserSessionModule.html#.removeItems">removeItems</a></li><li data-type='method' style='display: none;'><a href="BrowserSessionModule.html#.setItem">setItem</a></li><li data-type='method' style='display: none;'><a href="BrowserSessionModule.html#.setItems">setItems</a></li></ul></li><li><a href="Buffer.html">Buffer</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Buffer.html#base64encode">base64encode</a></li><li data-type='method' style='display: none;'><a href="Buffer.html#toArray">toArray</a></li><li data-type='method' style='display: none;'><a href="Buffer.html#toBytes">toBytes</a></li><li data-type='method' style='display: none;'><a href="Buffer.html#toStringUtf8">toStringUtf8</a></li></ul></li><li><a href="ExtensionsPrototype.html">ExtensionsPrototype</a><ul class='members'><li data-type='member' style='display: none;'><a href="ExtensionsPrototype.html#._">_</a></li><li data-type='member' style='display: none;'><a href="ExtensionsPrototype.html#.__">__</a></li><li data-type='member' style='display: none;'><a href="ExtensionsPrototype.html#.fn">fn</a></li><li data-type='member' style='display: none;'><a href="ExtensionsPrototype.html#.object">object</a></li><li data-type='member' style='display: none;'><a href="ExtensionsPrototype.html#.string">string</a></li><li data-type='member' style='display: none;'><a href="ExtensionsPrototype.html#.WindowExtend">WindowExtend</a></li></ul></li><li><a href="Function.html">Function</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Function.html#runInWorker">runInWorker</a></li><li data-type='method' style='display: none;'><a href="Function.html#toWorker">toWorker</a></li><li data-type='method' style='display: none;'><a href="Function.html#toWorkerURL">toWorkerURL</a></li></ul></li><li><a href="HTMLElement.html">HTMLElement</a></li><li><a href="JSTemplate.html">JSTemplate</a><ul class='methods'><li data-type='method' style='display: none;'><a href="JSTemplate.html#.attrParser">attrParser</a></li><li data-type='method' style='display: none;'><a href="JSTemplate.html#.expressionBuilder">expressionBuilder</a></li><li data-type='method' style='display: none;'><a href="JSTemplate.html#.nodeParser">nodeParser</a></li><li data-type='method' style='display: none;'><a href="JSTemplate.html#.parseTextNodes">parseTextNodes</a></li><li data-type='method' style='display: none;'><a href="JSTemplate.html#.textParser">textParser</a></li></ul></li><li><a href="JSTemplateComponent.contextInstance.html">contextInstance</a><ul class='members'><li data-type='member' style='display: none;'><a href="JSTemplateComponent.contextInstance.html#.node">node</a></li><li data-type='member' style='display: none;'><a href="JSTemplateComponent.contextInstance.html#.references">references</a></li></ul><ul class='methods'><li data-type='method' style='display: none;'><a href="JSTemplateComponent.contextInstance.html#.redraw">redraw</a></li><li data-type='method' style='display: none;'><a href="JSTemplateComponent.contextInstance.html#.redrawForce">redrawForce</a></li></ul></li><li><a href="JSTemplateComponent.contextWithInstance.html">contextWithInstance</a><ul class='members'><li data-type='member' style='display: none;'><a href="JSTemplateComponent.contextWithInstance.html#.__instance">__instance</a></li><li data-type='member' style='display: none;'><a href="JSTemplateComponent.contextWithInstance.html#.__lifeCycle">__lifeCycle</a></li><li data-type='member' style='display: none;'><a href="JSTemplateComponent.contextWithInstance.html#.state">state</a></li></ul></li><li><a href="JSTemplateComponent.contextWithoutInstance.html">contextWithoutInstance</a><ul class='members'><li data-type='member' style='display: none;'><a href="JSTemplateComponent.contextWithoutInstance.html#.__lifeCycle">__lifeCycle</a></li><li data-type='member' style='display: none;'><a href="JSTemplateComponent.contextWithoutInstance.html#.state">state</a></li></ul></li><li><a href="String.html">String</a><ul class='methods'><li data-type='method' style='display: none;'><a href="String.html#add_Class">add_Class</a></li><li data-type='method' style='display: none;'><a href="String.html#add_Class">add_Class</a></li><li data-type='method' style='display: none;'><a href="String.html#base64decode">base64decode</a></li><li data-type='method' style='display: none;'><a href="String.html#base64decode">base64decode</a></li><li data-type='method' style='display: none;'><a href="String.html#base64decodeBytes">base64decodeBytes</a></li><li data-type='method' style='display: none;'><a href="String.html#base64decodeBytes">base64decodeBytes</a></li><li data-type='method' style='display: none;'><a href="String.html#base64decodeBytesArray">base64decodeBytesArray</a></li><li data-type='method' style='display: none;'><a href="String.html#base64decodeBytesArray">base64decodeBytesArray</a></li><li data-type='method' style='display: none;'><a href="String.html#base64decodeClean">base64decodeClean</a></li><li data-type='method' style='display: none;'><a href="String.html#base64decodeClean">base64decodeClean</a></li><li data-type='method' style='display: none;'><a href="String.html#base64encode">base64encode</a></li><li data-type='method' style='display: none;'><a href="String.html#base64encode">base64encode</a></li><li data-type='method' style='display: none;'><a href="String.html#base64encodeBytes">base64encodeBytes</a></li><li data-type='method' style='display: none;'><a href="String.html#base64encodeBytes">base64encodeBytes</a></li><li data-type='method' style='display: none;'><a href="String.html#base64encodeBytesArray">base64encodeBytesArray</a></li><li data-type='method' style='display: none;'><a href="String.html#base64encodeBytesArray">base64encodeBytesArray</a></li><li data-type='method' style='display: none;'><a href="String.html#base64encodeClean">base64encodeClean</a></li><li data-type='method' style='display: none;'><a href="String.html#base64encodeClean">base64encodeClean</a></li><li data-type='method' style='display: none;'><a href="String.html#buildQuery">buildQuery</a></li><li data-type='method' style='display: none;'><a href="String.html#buildQuery">buildQuery</a></li><li data-type='method' style='display: none;'><a href="String.html#buildSearchArray">buildSearchArray</a></li><li data-type='method' style='display: none;'><a href="String.html#buildSearchArray">buildSearchArray</a></li><li data-type='method' style='display: none;'><a href="String.html#cleanTags">cleanTags</a></li><li data-type='method' style='display: none;'><a href="String.html#cleanTags">cleanTags</a></li><li data-type='method' style='display: none;'><a href="String.html#decodeURI">decodeURI</a></li><li data-type='method' style='display: none;'><a href="String.html#decodeURI">decodeURI</a></li><li data-type='method' style='display: none;'><a href="String.html#decryptAes">decryptAes</a></li><li data-type='method' style='display: none;'><a href="String.html#decryptAes">decryptAes</a></li><li data-type='method' style='display: none;'><a href="String.html#decryptTea">decryptTea</a></li><li data-type='method' style='display: none;'><a href="String.html#decryptTea">decryptTea</a></li><li data-type='method' style='display: none;'><a href="String.html#del_Class">del_Class</a></li><li data-type='method' style='display: none;'><a href="String.html#del_Class">del_Class</a></li><li data-type='method' style='display: none;'><a href="String.html#encodeURI">encodeURI</a></li><li data-type='method' style='display: none;'><a href="String.html#encodeURI">encodeURI</a></li><li data-type='method' style='display: none;'><a href="String.html#encryptAes">encryptAes</a></li><li data-type='method' style='display: none;'><a href="String.html#encryptAes">encryptAes</a></li><li data-type='method' style='display: none;'><a href="String.html#encryptTea">encryptTea</a></li><li data-type='method' style='display: none;'><a href="String.html#encryptTea">encryptTea</a></li><li data-type='method' style='display: none;'><a href="String.html#escape">escape</a></li><li data-type='method' style='display: none;'><a href="String.html#escape">escape</a></li><li data-type='method' style='display: none;'><a href="String.html#escapeHex">escapeHex</a></li><li data-type='method' style='display: none;'><a href="String.html#escapeHex">escapeHex</a></li><li data-type='method' style='display: none;'><a href="String.html#fnd_Class">fnd_Class</a></li><li data-type='method' style='display: none;'><a href="String.html#fnd_Class">fnd_Class</a></li><li data-type='method' style='display: none;'><a href="String.html#fromHex">fromHex</a></li><li data-type='method' style='display: none;'><a href="String.html#fromHex">fromHex</a></li><li data-type='method' style='display: none;'><a href="String.html#fromHtml">fromHtml</a></li><li data-type='method' style='display: none;'><a href="String.html#fromHtml">fromHtml</a></li><li data-type='method' style='display: none;'><a href="String.html#lcfirst">lcfirst</a></li><li data-type='method' style='display: none;'><a href="String.html#lcfirst">lcfirst</a></li><li data-type='method' style='display: none;'><a href="String.html#markdown">markdown</a></li><li data-type='method' style='display: none;'><a href="String.html#match_str">match_str</a></li><li data-type='method' style='display: none;'><a href="String.html#match_str">match_str</a></li><li data-type='method' style='display: none;'><a href="String.html#md5">md5</a></li><li data-type='method' style='display: none;'><a href="String.html#md5">md5</a></li><li data-type='method' style='display: none;'><a href="String.html#parseUrl">parseUrl</a></li><li data-type='method' style='display: none;'><a href="String.html#parseUrl">parseUrl</a></li><li data-type='method' style='display: none;'><a href="String.html#parseUrlVars">parseUrlVars</a></li><li data-type='method' style='display: none;'><a href="String.html#sha1">sha1</a></li><li data-type='method' style='display: none;'><a href="String.html#sha1">sha1</a></li><li data-type='method' style='display: none;'><a href="String.html#sha256">sha256</a></li><li data-type='method' style='display: none;'><a href="String.html#sha256">sha256</a></li><li data-type='method' style='display: none;'><a href="String.html#subs">subs</a></li><li data-type='method' style='display: none;'><a href="String.html#subs">subs</a></li><li data-type='method' style='display: none;'><a href="String.html#subs">subs</a></li><li data-type='method' style='display: none;'><a href="String.html#swp_case">swp_case</a></li><li data-type='method' style='display: none;'><a href="String.html#swp_case">swp_case</a></li><li data-type='method' style='display: none;'><a href="String.html#toArrayBufferFromUtf8">toArrayBufferFromUtf8</a></li><li data-type='method' style='display: none;'><a href="String.html#toArrayBufferFromUtf8">toArrayBufferFromUtf8</a></li><li data-type='method' style='display: none;'><a href="String.html#toHex">toHex</a></li><li data-type='method' style='display: none;'><a href="String.html#toHex">toHex</a></li><li data-type='method' style='display: none;'><a href="String.html#toHtml">toHtml</a></li><li data-type='method' style='display: none;'><a href="String.html#toHtml">toHtml</a></li><li data-type='method' style='display: none;'><a href="String.html#toHtmlSimple">toHtmlSimple</a></li><li data-type='method' style='display: none;'><a href="String.html#toHtmlSimple">toHtmlSimple</a></li><li data-type='method' style='display: none;'><a href="String.html#toRegexp">toRegexp</a></li><li data-type='method' style='display: none;'><a href="String.html#toRegexp">toRegexp</a></li><li data-type='method' style='display: none;'><a href="String.html#ucfirst">ucfirst</a></li><li data-type='method' style='display: none;'><a href="String.html#ucfirst">ucfirst</a></li><li data-type='method' style='display: none;'><a href="String.html#unescape">unescape</a></li><li data-type='method' style='display: none;'><a href="String.html#unescape">unescape</a></li><li data-type='method' style='display: none;'><a href="String.html#unicode">unicode</a></li><li data-type='method' style='display: none;'><a href="String.html#unicode">unicode</a></li><li data-type='method' style='display: none;'><a href="String.html#utf8">utf8</a></li><li data-type='method' style='display: none;'><a href="String.html#utf8">utf8</a></li><li data-type='method' style='display: none;'><a href="String.html#utf8decode">utf8decode</a></li><li data-type='method' style='display: none;'><a href="String.html#utf8decode">utf8decode</a></li><li data-type='method' style='display: none;'><a href="String.html#utf8encode">utf8encode</a></li><li data-type='method' style='display: none;'><a href="String.html#utf8encode">utf8encode</a></li><li data-type='method' style='display: none;'><a href="String.html#utf8need">utf8need</a></li><li data-type='method' style='display: none;'><a href="String.html#utf8need">utf8need</a></li></ul></li><li></li></ul><h3>Global</h3><ul><li><a href="global.html#ApplicationBuilderConstructor">ApplicationBuilderConstructor</a></li><li><a href="global.html#ApplicationBuilderExports">ApplicationBuilderExports</a></li><li><a href="global.html#ApplicationPrototypeConstructor">ApplicationPrototypeConstructor</a></li><li><a href="global.html#isBrowser">isBrowser</a></li><li><a href="global.html#isNode">isNode</a></li><li><a href="global.html#NodeInterface">NodeInterface</a></li><li><a href="global.html#RequestModuleConstructor">RequestModuleConstructor</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">ApplicationBuilder.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// jshint -W080
+// jshint -W002
+// jshint -W083
+// jshint -W069
+// jshint -W061
+// jshint -W054
+var isBrowser=new Function("try {return this===window;}catch(e){ return false;}");
+var isNode=new Function("var isBrowser = false; try { isBrowser = this===window;}catch(e){ isBrowser = false;}; try {return !isBrowser &amp;&amp; ( this ===global );}catch(e){console.error(e); return false;}");
+// jshint +W054
+
+/**
+ * ApplicationBuilder - Extended application builder with module loading, caching, and debugging.
+ * Builds on ApplicationPrototype to provide a full dependency management system
+ * for modular JavaScript applications in both browser and Node.js environments.
+ * @constructor
+ * @param {function|object} callback - Constructor callback or options object
+ * @param {function} [callback.onconstruct] - Called during construction with (variables, configurations)
+ * @param {function} [callback.onready] - Called when the builder is ready with (variables, configurations)
+ * @returns {ApplicationPrototype} The configured application instance
+ */
+function ApplicationBuilder(callback) {
+	var __requireNode, __globalNode, __dirnameNode;
+	if (isNode()) {
+		__requireNode = function (moduleName) {
+			return require(moduleName);
+		};
+
+		__globalNode = global;
+
+		__dirnameNode = __dirname;
+	}
+
+	if (isBrowser()) {
+		if (this === window) {
+			return new ApplicationBuilder(callback);
+		}
+	} else {
+		if (this === global) {
+			return new ApplicationBuilder(callback);
+		}
+	}
+
+	var consoleOptions = {
+		file: true,
+		contextName: true,
+		timestamp: true,
+		logType: true
+	};
+	var consoleArguments = function (_type, _args, module) {
+		if (isNode()) {
+			return consoleArgumentsNode(_type, _args, module);
+		} else {
+			return consoleArgumentsBrowser(_type, _args, module);
+		}
+	};
+	var getExecInfo = function () {
+		var err;
+		try { throw Error("debug error"); } catch (err) {
+			return err.stack.replace(/^[^\n]+\n[^\n]+\n/, '').replace(/^\n+/, '');
+		}
+		return null;
+	};
+	var consoleArgumentsNode    = function (_type, _args, module) {
+		var args = Array.prototype.slice.call(_args);
+		var typeColors = {
+			log : 36,
+			warn: 33,
+			info: 34,
+			error: 31
+		};
+		var typeColor = 31;
+
+		if (_type in typeColors) typeColor = typeColors[_type];
+
+		var path, info = ( getExecInfo() + '' );
+		path = info;
+
+
+		info = ([
+			/\n\s*.*?(\S{0,23}\.\([^\)]+\)\s+\[as\s+[^\]]+\])/,
+			/\n\s*.*\[as\s+([^\]]+)\]/,
+			/\n\s*at\s+(\S*?)\s+.*_moduleRunner.*\&lt;anonymous\>/,
+			/\n\s*at\s+(process\._\S+)\s+\([^\)\n]+/,
+			/\n\s*at\s+(process\.\S+)\s+\([^\)\n]+/
+		].map(function (item) {
+			return info.match(item);
+		}).filter(function (item) {
+			return !!item;
+		})[0] || [])[1] || 'unknown';
+
+		path = ([
+			[ /\n\s*at\s+(\.{0,1}\/.*)/ ],
+			[ /\n\s*at\s+(\S*?)\s+.*_moduleRunner.*\&lt;anonymous\>\:\d+\:\d+/, function (item) {
+				var url = ((module || {}).meta || {}).url;
+				return item.replace('&lt;anonymous>', url);
+			} ],
+			[ /\n\s*at\s+process\._\S+\s+\(([^\)\n]+)/ ],
+			[ /\n\s*at\s+process\.\S+\s+\(([^\)\n]+)/ ]
+		].map(function (item) {
+			var value = path.match(item[0]);
+			if (!value) return;
+
+			if (item[1]) return item[1](value[1]);
+
+			return value[1];
+		}).filter(function (item) {
+			return !!item;
+		}))[0] || ((module || {}).meta || {}).url || 'unknown';
+
+		var cwd = process.cwd();
+
+		if (path.indexOf(cwd) === 0 &amp;&amp; path.substr(0, cwd.length)) {
+			path = './' + path.substr(cwd.length + 1);
+		}
+
+		var sint  = function (i, n) { return ('000000' + i).substr(0 - (n || 2)); };
+		var date = new Date();
+
+		args.unshift(
+			(
+				consoleOptions.timestamp ?
+				( '\x1b[2m'
+					+ sint(date.getHours())
+					+ ':' + sint(date.getMinutes())
+					+ ':' + sint(date.getSeconds())
+					+ '.' + sint(date.getSeconds(), 3) + ' ' )
+				: ''
+			)
+			+ '\x1b[2;1;' + typeColor + 'm'
+			+ ( consoleOptions.logType ? ( _type.toUpperCase() + '\t' ) : '' )
+			+ '\x1b[22m'
+			+ ( consoleOptions.contextName ? ( ' ' + info ) : '' )
+			+ '\x1b[37m'
+			+ ( consoleOptions.file ? ( '\t(' + path + ') ' ) : '' )
+		);
+		args.push('\x1b[0m');
+
+		return args;
+	};
+	var consoleArgumentsBrowser = function (_type, _args, module) {
+		var args = Array.prototype.slice.call(_args).map(function (arg, index) {
+			return arg;
+		});
+		var info = (getExecInfo() || '');
+		info = ([
+			/\n.*module.exports.*blob\:.*\#file=(.*)/,
+			/\n\s*at\s+(\S+.*blob\:(http|https|\/\/)[^\)\n]+)\s*\)/,
+			/\n\s*at\s+(\S+).*blob\:(http|https|\/\/)/,
+			/\n.*\n.*\n\s*(\S+\@(blob\:|)((http|https)\:\/\/|).*Function\:\d+)/i			
+		].map(function (item) {
+			return info.match(item);
+		}).filter(function (item) {
+			return !!item;
+		})[0] || [])[1] || 'unknown';
+		var sint  = function (i, n) { return ('000000' + i).substr(0 - (n || 2)); };
+		var date = new Date();
+		var prefix = ( consoleOptions.timestamp ? ( "%c["
+				+ sint(date.getHours())
+				+ ':' + sint(date.getMinutes())
+				+ ':' + sint(date.getSeconds())
+				+ '.' + sint(date.getSeconds(), 3)
+				+ "] " ) : ''
+			)
+			+ ( consoleOptions.logType ? ( "%c" + _type.toUpperCase() + " " ) : '' )
+			+ (
+				( consoleOptions.contextName || consoleArguments.file )
+				? (
+					"%c " + ((((module || {}).meta || {}).name + ' ' + (info.replace(/^.*(\:\d+\:\d+)\s*$/, ' line$1').replace(/(\/\&lt;\s*|)\@.*(\:\d+\:\d+|\:\d+).*/, '()$2'))) || info || '?...')
+			+ "%c\n"
+				) : ''
+			)
+			// + '\n---------\n' + getExecInfo() + '\n---------\n'
+			;
+		if (typeof(args[0]) === "string") {
+			args[0] = prefix + args[0];
+		} else {
+			args.unshift(prefix);
+		}
+		var typeSettings = (
+			{
+				error : {
+					"background-color": "firebrick",
+					"color": "white"
+				},
+				warn : {
+					"background-color": "goldenrod",
+					"color": "black"
+				},
+				info : {
+					"background-color": "SkyBlue",
+					"color": "black"
+				},
+				debug : {
+					"background-color": "#232323",
+					"color": "white"
+				}
+			}
+		)[_type] || {
+			"background-color": "#28a296",
+			"color": "#000000"
+		};
+		args.splice(
+			1, 0,
+			"font-weight: normal;"
+				+ "background-color:" + typeSettings["background-color"] + ';'
+				+ "color:" + typeSettings["color"] + ';'
+		);
+		args.splice(
+			2, 0,
+			"font-weight: bold;"
+				+ "background-color:" + typeSettings["background-color"] + ';'
+				+ "color:" + typeSettings["color"] + ';'
+		);
+		args.splice(3, 0, "font-weight: bold;background-color: initial;color: initial;");
+		args.splice(4, 0, "font-weight: normal;");
+		// if (_type === "error") {
+		// 	args.push(getExecInfo().replace(/^\n.*\n.*/, ''));
+		// }
+		return args;
+	};
+
+	var m_urlload = function (url, callback) {
+		var request = new XMLHttpRequest();
+		request.responseType = "text";
+		request.addEventListener("load", function () {
+			callback(url, request.responseText || request.response);
+		});
+		request.withCredentials = true;
+		request.open("GET", url, true);
+		request.send();
+	};
+
+	var config;
+	var module_path	= './constructors';
+	var vars;
+	var cacheSuffix = null;
+	var params	= {
+		callback_ready	: false
+	};
+	var ApplicationPrototypeJSDocs = null;
+	if (callback &amp;&amp; typeof(callback) === "object") {
+		if (typeof(callback.onready) === "function") {
+			params.callback_ready	= callback.onready;
+		}
+
+		if (typeof(callback.onconstruct) === "function") {
+			callback	= callback.onconstruct;
+		} else {
+			callback	= false;
+		}
+	}
+
+	if (isNode()) ApplicationPrototype = require('./ApplicationPrototype.js');
+	var Application	= new ApplicationPrototype(function (
+			configurations,
+			variables,
+			methods,
+			public_methods,
+			private_methods
+		) {
+		config	= configurations;
+		vars	= variables;
+		config.cache_enabled	= false;
+		config.debug_enabled	= false;
+		config.runModulesInFiles = false;
+		// console.log(callback.toString());
+		if (typeof(callback) === "function") {
+			callback.apply(methods, [variables, configurations]);
+		}
+	});
+
+	Application.bind("isNode", function () {
+		return isNode();
+	}, "");
+
+	Application.bind("isBrowser", function () {
+		return isBrowser();
+	}, "");
+
+	Application.bind("Promise", function (cb, module) {
+		var err		= undefined;
+		var value	= undefined;
+		var cb_resolve	= [];
+		var cb_reject	= [];
+		var pending		= true;
+		var resolve		= function (v) {
+			if (pending) {
+				pending	= false;
+				value	= v;
+				cb_resolve.forEach(function (f) {
+					run(f, value);
+				});
+			}
+		};
+		var reject		= function (e) {
+			if (pending) {
+				pending	= false;
+				err	= e;
+				cb_reject.forEach(function (f) {
+					run(f, err);
+				});
+			}
+		};
+		var run	= function (f, v) {
+			var er;
+			try {
+				f(v);
+			} catch (er) {
+				console.error.apply(console, consoleArguments("error", [er], module));
+			}
+			return er;
+		};
+		var p = {
+			then : function (onFullfiled, onRejected) {
+				p.catch(onRejected || function PromiseError(err) {
+					console.error.apply(console, consoleArguments("error", [er], module));
+				});
+				return Application.Promise(function (resolve, reject) {
+					var callback = function (data) {
+						var res, err;
+						try {
+							res = onFullfiled(data);
+							resolve(res);
+						} catch (err) {
+							console.error.apply(console, consoleArguments("error", [err], module));
+							reject(err);
+						}
+					};
+					p.catch(reject);
+					if (typeof(onFullfiled) === "function") {
+						if (pending) {
+							cb_resolve.push(callback);
+						} else if (typeof(err) === "undefined") {
+							run(callback, value);
+						}
+					}
+				});
+			},
+			catch: function (onRejected) {
+				if (typeof(onRejected) === "function") {
+					if (pending) {
+						cb_reject.push(onRejected);
+					} else if (typeof(err) !== "undefined") {
+						run(onRejected, err);
+					}
+				}
+				return p;
+			},
+			resolve	: resolve,
+			reject	: reject
+		};
+		try {
+			if (typeof(cb) === "function") {
+				cb(resolve, reject);
+			}
+		} catch (err) {
+			console.warn.apply(console, consoleArguments("warn", ["Promise Exception on constructor exeution: ", cb], module));
+
+			console.error.apply(console, consoleArguments("error", [err], module));
+			reject(err);
+		}
+		return p;
+	});
+
+	if (Application.isBrowser()) {
+		if (!window.Promise) {
+			window.Promise = Application.Promise;
+		}
+	}
+
+	Application.Promise.reject	= function (value, module) {
+		return new Application.Promise(function (resolve, reject) {
+			reject(value);
+		}, module);
+	};
+	Application.Promise.resolve	= function (value, module) {
+		return new Application.Promise(function (resolve, reject) {
+			resolve(value);
+		}, module);
+	};
+	Application.Promise.race	= function (a) {
+		var p	= new Application.Promise();
+		var i, solved = false;
+		for (i=0;i&lt;a.length;i++) {
+			a[i].then(function (val) {
+				if (solved) return;
+				solved	= true;
+				p.resolve(val);
+			}, function (err) {
+				if (solved) return;
+				p.reject(err);
+			});
+		}
+		return p;
+	};
+	Application.Promise.all	= function (a) {
+		var p = new Application.Promise();
+		var values = [];var i;
+		for (i=0;i&lt;a.length;i++) {
+			a[i].then(function (val) {
+				values.push(val);
+				if (values.length === a.length) {
+					p.resolve(values);
+				}
+			}, function (err) {
+				p.reject(err);
+			});
+		}
+		return p;
+	};
+
+	Application.bind('cacheEnabled', function (state) {
+		if (typeof(state) === "boolean") {
+			config.cache_enabled	= state;
+		}
+		if (typeof(state) === "string") {
+			if (state) {
+				cacheSuffix = state;
+			} else {
+				cacheSuffix = null;
+			}
+		}
+		return config.cache_enabled;
+	});
+
+
+	Application.bind('runModulesInFiles', function (state) {
+		if (typeof(state) === "boolean") {
+			config.runModulesInFiles	= state;
+		}
+		return config.runModulesInFiles;
+	});
+
+	var _self = this;
+	Application.bind('debugEnabled', function (state) {
+		if (typeof(state) === "boolean") {
+			config.debug_enabled	= state;
+
+			if (config.debug_enabled) {
+				if (!ApplicationPrototypeJSDocs) {
+					ApplicationPrototypeJSDocs = _self.docs();
+					if (ApplicationPrototypeJSDocs) {
+						ApplicationPrototypeJSDocs.subscribe(Application);
+					}
+				}
+			}
+		}
+		return config.debug_enabled;
+	});
+
+	Application.bind('consoleOptions', function (options) {
+		if (options &amp;&amp; typeof(options) === "object") {
+			Object.keys(options)
+				.forEach(function (prop) {
+					if (prop in consoleOptions)
+					if (typeof(consoleOptions[prop]) === typeof(options[prop]))
+						consoleOptions[prop] = options[prop];
+				});
+		}
+
+		return JSON.parse(JSON.stringify(consoleOptions));
+	});
+
+	Application.bind('modulePath', function (path) {
+		if (path &amp;&amp; typeof(path) === "string") {
+			if (isNode()) {
+				if (path.match(/^@(constructors|core)\:\/\//)) {
+					path = path.replace(/^@(constructors|core)\:\/\//, __dirnameNode + '/constructors');
+				} else if (!path.match(/^([a-zA-Z][a-z0-9A-Z]*\:\/\/|\.|\/)/)) {
+					path = './' + path;
+				}
+			}
+			module_path	= path;
+		}
+		return module_path;
+	});
+
+
+	;((function () {
+		var store	= {};
+		Application.bind('moduleRegister', function (path, modules) {
+			if (typeof(path) === "string" &amp;&amp; Array.isArray(modules)) {
+				modules.forEach(function (module_name) {
+					var moduleMeta	= Application.moduleResolve(module_name, path);
+					// console.log("modulePath", App.modulePath(), module_name, moduleMeta);
+					store[moduleMeta["name"]]	= moduleMeta;
+					store['#' + module_name]	= moduleMeta;
+				});
+			}
+			return store;
+		});
+
+		Application.bind("moduleResolve", function (module_name, path) {
+			if (typeof(path) === "undefined")
+				path = module_path;
+
+			/** module name formats
+
+			https://example/module/path/{module-name}.js
+			http://example/module/path/{module-name}.js#?module={module-name}
+			http://example/module/path/file.js?module={module-name}
+			{path/to/module-name}
+			{path/to/module-name.js}
+			path/to/file.js#?module={module-name}
+			*/
+
+			// return moduleMeta but requestQuery
+			if (('#' + module_name) in store) {
+				// console.warn('#' + module_name, ' founded in store ', store['#' + module_name]);
+				return store['#' + module_name];
+			}
+
+			if (isNode() &amp;&amp; module_name.match(/^.\//)) {
+				if (module_name.indexOf(module_path) === 0) {
+					module_name = module_name.substr(module_path.length + 1);
+				}
+			}
+
+			var moduleMeta	= {
+				store	: {},
+				$requestQuery : module_name,
+				module_path	: path,
+				name	: module_name,
+				url		: path + '/' + module_name.replace(/[\#\?].*$/, '') + '.js',
+				path	: '',
+				__dirname	: ''
+			};
+
+			if (module_name.match(/^(http|https|ws)\:\/\//)) {
+				moduleMeta.url = module_name;
+			} else if (module_name.match(/^\//)) {
+				moduleMeta.url = module_name;
+				if (!moduleMeta.url.match(/((\.js)(\?.*|\#.*|))$/)) {
+					var m = moduleMeta.url.match(/^(.*?)([\?|#].*|)$/);
+					if (m) {
+						moduleMeta.url = m[1] + '.js' + m[2];
+					} else {
+						moduleMeta.url += '.js';
+					}
+				}
+			}
+			;((function (m) {
+				if (m &amp;&amp; m[2]) {
+					moduleMeta["name"] = m[2];
+				}
+			})(module_name.match(/(\#[\?]{0,1}module\=|\?module\=|\&amp;module\=)([a-z0-9A-Z][a-z0-9\_\.\-A-Z]*)/)));
+
+
+			if (moduleMeta["name"] in store) {
+				// console.warn(moduleMeta["name"], ' founded in store ', store[moduleMeta["name"]]);
+				return store[moduleMeta["name"]];
+			}
+
+			moduleMeta.path = moduleMeta.url.replace(/(\.js|)(\?.*|\#.*|)$/, '');
+			moduleMeta.__dirname	= moduleMeta.path.replace(/\/[^\/]+$/, '');
+
+			return moduleMeta;
+		});
+	})());
+
+
+	;((function () {
+		var fs = false;
+		if (isNode()) {
+			fs = require('fs');
+
+			var nodeInterface = new ApplicationPrototype();
+			nodeInterface.bind('process', function __Node_Process() {
+				return global.process;
+			});
+			nodeInterface.bind('global', function __Node_GlobalObject() {
+				return global;
+			});
+			nodeInterface.bind('require', function __Node_Require(moduleName) {
+				if (moduleName[0] === ".") {
+					moduleName = process.cwd() + '/' + moduleName;
+				}
+				return __requireNode(moduleName);
+			});
+			nodeInterface.bind('globalReference', function __Node_GlobalReference(referenceName) {
+				return global[referenceName];
+			});
+			Application.bind('NodeInterface', function _NodeInterface() {
+				return nodeInterface;
+			});
+		}
+		var module_cache = {};
+		var module_requests = {};
+		var require_cache	= {};
+		var _console        = console;
+		var chunkIndex      = 0;
+
+		Application.bind("require", function (module_name, callback) {
+			if (typeof(module_name) === "string") {
+				var moduleMeta	= Application.moduleResolve(module_name, undefined);
+				var __dirname	= moduleMeta.__dirname;
+				// TODO validate path
+				if (moduleMeta["name"] in require_cache) {
+					if (callback)
+						callback(require_cache[moduleMeta["name"]].exports || null, undefined);
+					return require_cache[moduleMeta["name"]].$request;
+				} else {
+					var $request, requireDownload;
+					if (moduleMeta.path in module_requests) {
+						$request = module_requests[moduleMeta.path];
+					} else {
+						requireDownload = true;
+						$request = new Application.Promise();
+						module_requests[moduleMeta.path] = $request;
+					}
+					var module	= {
+						cache		: function () {
+							module_cache[moduleMeta.path] = module_cache[moduleMeta.path] || {};
+							return module_cache[moduleMeta.path];
+						},
+						require	: function (moduleName, cb) {
+							var updateModuleName = function (name, path) {
+								if (path.match(/^(http|https|ws)\:\/\//)) {
+									if (!name.match(/((\.js)(\?.*|\#.*|))$/)) {
+										name += ".js";
+									}
+								}
+								if (name.indexOf("::") !== -1) {
+									name = name.split(/\s*\:\:\s*/);
+									return name[0] + " :: " + path + "/" + name[1];
+								} else {
+									return path + "/" + name;
+								}
+							};
+							if (typeof(moduleName) === "string") {
+								return Application.require(updateModuleName(moduleName, moduleMeta.path), cb);
+							} else if (Array.isArray(moduleName)) {
+								return Application.require(moduleName.map(function (m) {
+									return updateModuleName(m, moduleMeta.path);
+								}), cb);
+							}
+						},
+						resourceUrl	: function (path) {
+							return moduleMeta.path + "/" + path;
+						},
+						meta : moduleMeta,
+						$request	: $request
+					};
+
+					if (Application.debugEnabled()) {
+						if (ApplicationPrototypeJSDocs &amp;&amp; typeof(ApplicationPrototypeJSDocs) === "object") {
+							ApplicationPrototypeJSDocs.subscribeModule(module);
+						}
+					}
+
+					;((function () {
+						var data	= undefined;
+						Object.defineProperty(module, 'exports', {
+							get: function() { return data || null; },
+							set: function(val) {
+								if ( typeof(data) === "undefined" ) {
+									data	= val;
+									require_cache[moduleMeta["name"]]	= module;
+									module.$request.resolve(module.exports);
+									if (callback)
+										callback(module.exports || null, undefined);
+								} else {
+									data	= val;
+								}
+							},
+							enumerable: true,
+							configurable: true
+						});
+					})());
+
+					var global	= Application;
+					module.atime		= new Date().valueOf();
+					module.Application	= function () {
+						return (Application || global || null);
+					};
+
+					var module_url = moduleMeta.url + ((!Application.cacheEnabled() &amp;&amp; !isNode()) ? ((moduleMeta.url.indexOf('?') === -1 ? '?' : '&amp;') + 't='+( cacheSuffix ? cacheSuffix : module.atime ) ) : '');
+
+					var module_header = Application.debugEnabled() ? ("/**" +
+						"\n * Platform: ApplicationBuilder/ApplicationPrototype by Sergiu Gordienco Vasile" +
+						"\n * Module Name: " + module.meta.name +
+						"\n * Module Url: " + module.meta.url +
+						"\n */\n\n") : "";
+
+					module_header += 'var exports = (' + (function (module) {
+						var initialValue = module.exports;var value = {};
+						var timer = setInterval(function () {
+							if (initialValue !== module.exports) { clearInterval(timer); }
+							else if (value !== exports) {
+								if (Application.debugEnabled()) {
+									console.warn("⚠ DEPRECATED:\n\nPlease use `module.exports` instead of `exports` in Application Prototype Framework");
+								}
+								clearInterval(timer);
+								module.exports = exports;
+							}
+						}, 100);
+
+						return value;
+					}).toString() + ')(module);';
+					var console = {
+						log : function () {
+							if (Application.debugEnabled())
+								_console.log.apply(_console, consoleArguments("log", arguments, module));
+						},
+						info : function () {
+							if (Application.debugEnabled())
+								_console.info.apply(_console, consoleArguments("info", arguments, module));
+						},
+						warn : function () {
+							if (Application.debugEnabled())
+								_console.warn.apply(_console, consoleArguments("warn", arguments, module));
+						},
+						error : function () {
+							if (Application.debugEnabled()) {
+								_console.log.apply(_console, consoleArguments("error", [], module));
+								var args = Array.prototype.slice.call(arguments);
+								if (
+									args[0]
+									&amp;&amp; ( args[0] instanceof Error )
+									&amp;&amp; typeof(args[0].stack) === "string"
+									&amp;&amp; args[0].name !== "ModuleError"
+									&amp;&amp; args[0].stack.indexOf(Application.modulePath()) !== -1
+								) {
+									args[0] = moduleError(args[0]);
+								}
+								_console.error.apply(_console, args);
+							}
+						},
+						debug : function () {
+							if (Application.debugEnabled())
+								_console.debug.apply(_console, consoleArguments("debug", arguments, module));
+						},
+						clear : function () {
+							_console.clear.apply(_console, arguments);
+						},
+						count : function () {
+							_console.count.apply(_console, arguments);
+						},
+						countReset : function () {
+							_console.countReset.apply(_console, arguments);
+						},
+						dir : function () {
+							_console.dir.apply(_console, arguments);
+						},
+						dirxml : function () {
+							_console.dirxml.apply(_console, arguments);
+						},
+						group : function () {
+							_console.group.apply(_console, arguments);
+						},
+						groupEnd : function () {
+							_console.groupEnd.apply(_console, arguments);
+						},
+						groupCollapsed : function () {
+							_console.groupCollapsed.apply(_console, arguments);
+						},
+						time : function () {
+							_console.time.apply(_console, arguments);
+						},
+						trace : function () {
+							_console.trace.apply(_console, arguments);
+						},
+						timeLog : function () {
+							_console.timeLog.apply(_console, arguments);
+						},
+						timeEnd : function () {
+							_console.timeEnd.apply(_console, arguments);
+						}
+					};
+					Object.defineProperty(console, 'memory', {
+						get : function () {
+							return _console.memory;
+						},
+						set : function (v) {
+							console.warn('console.memory is readonly');
+						},
+						configurable: false
+					});
+					if (Application.isBrowser()) {
+						if (!window.console.__parent) {
+							console.__parent = window.console;
+							window.console = console;
+						} else {
+							console.__parent = window.console.__parent;
+						}
+					} else {
+						if (__globalNode &amp;&amp; !__globalNode.console.__parent) {
+							console.__parent = __globalNode.console;
+							__globalNode.console = console;
+						} else {
+							if (__globalNode &amp;&amp; __globalNode.console.__parent)
+								console.__parent = __globalNode.console.__parent;
+						}
+					}
+					var moduleError    = function (err, name) {
+						var prettyError = new SyntaxError(err.message, module.meta.url, err.lineNumber);
+						name = name || "ModuleError";
+						prettyError.name = name;
+						prettyError.original = err;
+						prettyError.fileName = module.meta.url;
+						var addrMatch = err.stack.match(/\:(\d+)\:(\d+)/) || [];
+						prettyError.lineNumber = err.lineNumber || addrMatch[1] || 0;
+						prettyError.columnNumber = err.columnNumber || addrMatch[2] || 0;
+						var url = module.meta.url;
+						if (url[0] === '/' &amp;&amp; isBrowser()) url = location.origin + url;
+						prettyError.stack = name + ': ' + err.message
+							+ ' ; line ' + prettyError.lineNumber + ':' + prettyError.columnNumber + '\n' + (
+								err.stack.indexOf(Application.modulePath()) !== -1
+								? err.stack
+								: '\n    export@' + url + ':' + prettyError.lineNumber + ':' + prettyError.columnNumber
+							);
+
+						return prettyError;
+					};
+					var moduleRunner   = function _moduleRunner(body) {
+						var er, err;
+						var __NodeModuleRequire = function (moduleName) {
+							if (!isNode()) throw Error('require is not available in BrowserMode');
+
+							if (moduleName[0] === ".") {
+								moduleName = __dirname + '/' + moduleName;
+							}
+							return Application.NodeInterface().require(moduleName);
+						};
+
+						var Promise = function (resolve, reject) {
+							return new Application.Promise(resolve, function (err) {
+								err = moduleError(err);
+								console.error(err);
+								reject(err);
+							}, module);
+						};
+						Promise.race    = Application.Promise.race;
+						Promise.all     = Application.Promise.all;
+						Promise.resolve = function (handler, module) {
+							return Application.Promise.resolve(handler, module);
+						};
+						Promise.reject  = function (handler, module) {
+							return Application.Promise.reject(handler, module);
+						};
+						var moduleBlock;
+						try {
+							moduleBlock = new Function(
+								'module',
+								'console',
+								'__dirname',
+								'Application',
+								'global',
+								'moduleError',
+								'ApplicationPrototype',
+								'require',
+								'Promise',
+								module_header + body
+							);
+						} catch (er) {
+							err = er;
+						}
+
+						if (err) {
+							throw moduleError(err, 'ModuleLoadSyntaxError');
+						}
+
+						moduleBlock.displayName = module.meta.name;
+
+						if (Application.runModulesInFiles() &amp;&amp; Application.isBrowser()) {
+							var chunkID = 'chunk'
+								+ new Date().valueOf().toString(36)
+								+ '-' + Math.floor(100000000 + 100000000 * Math.random()).toString(36)
+								+ '-' + (chunkIndex++) + ':' + module.meta.name;
+							var script, url;
+							window[chunkID] = function (moduleInit) {
+								delete window[chunkID];
+								var err;
+								try {
+									moduleInit.apply(
+										module,
+										[
+											module,
+											console,
+											__dirname,
+											Application,
+											global,
+											moduleError,
+											ApplicationPrototype,
+											__NodeModuleRequire,
+											Promise
+										]
+									);
+
+									script.parentNode.removeChild(script);
+									URL.revokeObjectURL(url);
+								} catch (err) {
+									throw moduleError(err);
+								}
+							};
+							url = URL.createObjectURL(new Blob(
+								[
+									module_header,
+									'\n;(window["' + chunkID + '"](',
+									moduleBlock.toString(),
+									'));'
+								],
+								{
+									type: 'application/javascript'
+								}
+							));
+
+							if (Application.debugEnabled()) {
+								if (module.meta.url[0] === '/') url = url + '#file=' + location.origin + module.meta.url;
+							}
+
+							script = document.createElement('script');
+							script.setAttribute("type", "text/javascript");
+							script.setAttribute("async", "");
+							(
+								document.getElementsByTagName('head')[0]
+								|| document.getElementsByTagName('body')[0]
+								|| document.getElementsByTagName('html')[0]
+							).appendChild(
+								script
+							);
+							script.setAttribute("src", url);
+
+							return;
+						} else {
+							moduleBlock.toSource = function () { /* Application Prototype Module */ };
+							moduleBlock.toString = function () { /* Application Prototype Module */ };
+
+							err = null;
+							try {
+								moduleBlock.apply(
+									module,
+									[
+										module,
+										console,
+										__dirname,
+										Application,
+										global,
+										moduleError,
+										ApplicationPrototype,
+										__NodeModuleRequire,
+										Promise
+									]
+								);
+							} catch (er) {
+								err = er;
+							}
+
+							if (err) {
+								throw moduleError(err);
+							}
+						}
+					};
+
+					if (requireDownload) {
+						if (isNode()) {
+							fs.readFile(
+								require("path").normalize((function (url) {
+									if (url.match(/^[a-z][a-z\d]*\:/)) {
+										return url;
+									}
+									return url.replace(/\?.*/, '');
+								})(module_url)), 'utf8', function (err, module_text) {
+									if (err) {
+										console.error(err);
+										module.$request.reject(moduleError(err));
+										return;
+									}
+
+									err = undefined;
+									try {
+										if (Application.debugEnabled()) {
+											if (ApplicationPrototypeJSDocs) {
+												var runCode = function () {
+													return moduleRunner(module_text);
+												};
+												ApplicationPrototypeJSDocs.evalModule(module_text, module, module_header, runCode);
+											} else {
+												moduleRunner(module_text);
+											}
+										} else {
+											moduleRunner(module_text);
+										}
+									} catch(err) {
+										console.warn("Application Loading Module", module_url);
+										module.$request.reject(moduleError(err));
+										console.error(moduleError(err));
+									}
+								}
+							);
+						} else {
+							m_urlload(module_url, function (module_url, module_text) {
+								var err;
+								try {
+									if (Application.debugEnabled()) {
+										if (ApplicationPrototypeJSDocs) {
+											var runCode = function () {
+												return moduleRunner(module_text);
+											};
+											ApplicationPrototypeJSDocs.evalModule(module_text, module, module_header, runCode);
+										} else {
+											moduleRunner(module_text);
+										}
+									} else {
+										moduleRunner(module_text);
+									}
+								} catch(err) {
+									console.warn("Application Loading Module", module_url);
+									module.$request.reject(moduleError(err));
+									console.error(moduleError(err));
+								}
+							});
+						}
+					} else {
+						module.$request.then(function (obj) {
+							if (callback) {
+								callback(obj || null, undefined);
+							}
+						}).catch(function (err) {
+							console.warn("Application Loading Module", module_url);
+							console.error(moduleError(err));
+						});
+					}
+					return module.$request;
+				}
+			} else if (Array.isArray(module_name)) {
+				var modules		= {};
+				var module_count	= 0;
+				var module_length	= module_name.length;
+				var module_errors	= [];
+				// jshint -W004
+				var $request	= Application.Promise();
+				// jshint +W004
+				module_name.forEach(function (module_name) {
+					var module_link	= false;
+					((function (m) {
+						if (Array.isArray(m) &amp;&amp; m[3].substr(0, 2) !== '//') {
+							module_link	= m[1];
+							module_name	= m[3];
+						}
+					})(module_name.match(/^([a-zA-Z0-9\_\-\."]+)(\s*\:\:\s*)(.*?)$/)));
+					Application.require(module_name, function (module_exports, err) {
+						module_count			+= 1;
+						modules[module_name]	= module_exports;
+						if (module_link &amp;&amp; module_link !== module_name)
+							modules[module_link]	= module_exports;
+						if (err) {
+							$request.reject(err);
+							module_errors.push({ "module_name": module_name, "error" : err });
+						}
+						if (module_count === module_length) {
+							if (!module_errors.length)
+								$request.resolve(modules);
+							if (callback)
+								callback(modules, module_errors);
+						}
+					});
+				});
+				return $request;
+			}
+		});
+	})());
+
+	if (typeof(params.callback_ready) === "function") {
+		var er;
+		try {
+			params.callback_ready.apply(Application, [vars, config]);
+		} catch (er) {
+			console.warn("Application callbackReady error", er);
+		}
+	}
+	return Application;
+};
+
+ApplicationBuilder.prototype.docs = ((function (ApplicationPrototypeJSDocs) {
+	var _ApplicationPrototypeJSDocs = function () {
+		return ApplicationPrototypeJSDocs;
+	};
+	return _ApplicationPrototypeJSDocs;
+})((function () {
+	var ApplicationPrototypeJSDocs = {
+		subscribe : function (App) {
+
+		},
+		subscribeModule : function (module) {
+
+		},
+		evalModule: function (moduleCode, module, moduleHeaderText, runCode) {
+			var err, e;
+			try {
+				runCode();
+			} catch (e) {
+				err = e;
+			}
+
+			// module.$request.then(function () {
+			// 	console.log(module.exports.toString());
+			// }, console.error);
+
+			if (err) throw err;
+		}
+	};
+
+	return ApplicationPrototypeJSDocs;
+})()));
+
+if (isNode()) {
+	module.exports	= ApplicationBuilder;
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.5</a> using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+<script src="scripts/search.js" defer></script>
+
+
+<script src="scripts/collapse.js" defer></script>
+
+
+    <script src="https://sgapps.io/components/sgapps-labs-examples/toolbar/loader.js"></script>
+    
+</body>
+</html>
