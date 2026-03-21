@@ -212,12 +212,12 @@ More usage examples may be found in examples folder: [Examples](docs/examples)
 		Hello {{ data.name }}
 	</div>
 ```
-Code inside `{{` and `}}` is a template. It will be parsed and changed when `renerJs` is called.
-The code bellow renders object data into html template.
-NOTE: Oject names from html template and function call must coincide, otherwise it wont work.
+Code inside `{{` and `}}` is a template. It will be parsed and changed when `renderJs` is called.
+The code below renders object data into the HTML template.
+NOTE: Object names from the HTML template and function call must coincide, otherwise it won't work.
 ```js
 	...
-	document.selectElementById('mydiv').renderJs(null, {
+	document.getElementById('mydiv').renderJs(null, {
 		data : {
 			name : 'test'
 		}

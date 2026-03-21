@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ApplicationPrototype - Documentation</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="description" content="An event-driven modular JavaScript framework for browser and Node.js with zero dependencies.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple.min.css">
+    <style>
+        :root {
+            --base-font-size: 15px;
+            --theme-color: #4a6cf7;
+            --sidebar-width: 280px;
+            --sidebar-nav-link-color--active: #4a6cf7;
+            --sidebar-nav-link-border-color--active: #4a6cf7;
+            --sidebar-nav-link-font-weight--active: 600;
+            --link-color: #4a6cf7;
+            --link-color--hover: #3451b2;
+            --blockquote-border-color: #4a6cf7;
+            --code-theme-background: #f6f8fa;
+            --code-inline-background: #f0f2f5;
+            --code-inline-color: #d63384;
+            --heading-color: #1a1a2e;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        .sidebar .app-name {
+            font-weight: 700;
+            text-align: center;
+            padding: 20px 0 10px;
+        }
+
+        .sidebar .app-name span {
+            font-size: 1.1em;
+            color: #1a1a2e;
+        }
+
+        .sidebar .app-name small {
+            display: block;
+            font-size: 0.7em;
+            color: #888;
+            font-weight: 400;
+            margin-top: 4px;
+        }
+
+        .markdown-section h1 {
+            font-weight: 700;
+            border-bottom: 2px solid #eaecef;
+            padding-bottom: 8px;
+        }
+
+        .markdown-section h2 {
+            font-weight: 600;
+            border-bottom: 1px solid #eaecef;
+            padding-bottom: 6px;
+        }
+
+        .markdown-section table {
+            display: table;
+            width: 100%;
+        }
+
+        .markdown-section table th {
+            background-color: #f6f8fa;
+            font-weight: 600;
+        }
+
+        .markdown-section table td,
+        .markdown-section table th {
+            padding: 8px 12px;
+            border: 1px solid #e1e4e8;
+        }
+
+        .markdown-section table tr:hover td {
+            background-color: #f9fbfd;
+        }
+
+        .markdown-section pre {
+            border-radius: 6px;
+            border: 1px solid #e1e4e8;
+        }
+
+        .markdown-section code {
+            border-radius: 3px;
+        }
+
+        .cover-main {
+            color: #1a1a2e;
+        }
+
+        .cover-main blockquote p {
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+    <script>
+        window.$docsify = {
+            name: '<span>ApplicationPrototype</span><small>v1.30.3</small>',
+            nameLink: '/',
+            repo: 'https://github.com/sergiu-gordienco/application-prototype',
+            homepage: 'index.md',
+            loadSidebar: true,
+            subMaxLevel: 3,
+            auto2top: true,
+            relativePath: true,
+            search: {
+                maxAge: 86400000,
+                paths: 'auto',
+                placeholder: 'Search documentation...',
+                noData: 'No results found',
+                depth: 4
+            },
+            copyCode: {
+                buttonText: 'Copy',
+                successText: 'Copied'
+            },
+            pagination: {
+                previousText: 'Previous',
+                nextText: 'Next',
+                crossChapter: true,
+                crossChapterText: true
+            },
+            notFoundPage: true,
+            themeColor: '#4a6cf7'
+        };
+    </script>
+    <!-- Docsify core -->
+    <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js"></script>
+    <!-- Plugins -->
+    <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/plugins/search.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/docsify-copy-code@2/dist/docsify-copy-code.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/docsify-pagination@2/dist/docsify-pagination.min.js"></script>
+    <!-- Syntax highlighting -->
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-javascript.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-json.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-markup.min.js"></script>
+</body>
+</html>

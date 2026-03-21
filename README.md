@@ -1,4 +1,4 @@
-# application-builder
+# application-prototype
 
 [![pipeline status](https://labs.sgapps.io/open-source/application-prototype/badges/master/pipeline.svg)](https://labs.sgapps.io/open-source/application-prototype/-/commits/master)
 [![License » Creative Commons Attribution-NonCommercial 4.0 / or Granted by SGApps Labs](https://img.shields.io/badge/License-CC--BY--NC--4.0-crimson)](https://labs.sgapps.io/open-source/application-prototype/-/blob/master/LICENSE)
@@ -13,61 +13,94 @@
 [![GitHub issues](https://img.shields.io/github/issues/sergiu-gordienco/application-prototype)](https://github.com/sergiu-gordienco/application-prototype/issues)
 [![GitHub pull requests](https://img.shields.io/github/issues-pr/sergiu-gordienco/application-prototype)](https://github.com/sergiu-gordienco/application-prototype/pulls)
 
-A JavaScript Application Builder
+A modular JavaScript Application Builder framework for building event-driven applications with support for two-way data binding, custom HTML elements, async operations, and more.
 
-available for front-end ( browsers or applications like electron.atom.io, or another cool stuff )
+Available for front-end (browsers, Electron, and similar environments) and as a Node.js package.
+
+## Installation
+
+### Browser (Bower)
 
 ```sh
 bower install app-prototype
 ```
 
-and available as a NodeJS package `application-prototype`
+### Node.js
 
 ```sh
-sudo npm install -g application-prototype
+npm install application-prototype
 ```
 
-## Present Objects
+## Quick Start
 
-- [**ApplicationPrototype**](docs/index.md) - a builder for application design pattern ;
-  *Documentation* [here](docs/index.md)
-- [**ApplicationBuilder**](docs/index.md#applicationbuilder) - a builder for application design pattern that requires a lot of custom dependencies ;
-  *Documentation* [here](docs/index.md#applicationbuilder)
+### Browser Setup
 
-## Present modules / libraries
+```html
+<script src="ApplicationPrototype.js"></script>
+<script src="ApplicationBuilder.js"></script>
+<script>
+  var App = new ApplicationBuilder({
+    onready: function () {
+      var App = this;
+      App.modulePath('/path/to/constructors');
+      App.require(['extensions/prototype', 'lib'], function (libs) {
+        libs.lib();
+        // App is ready, load your modules
+      });
+    }
+  });
+</script>
+```
 
-- [lib](docs/modules/lib.md) - a `function` that register in Application all default sub-modules
-- [async](docs/modules/async.md) - a module for executing asynchronous a list of operations in flow or waterfall
+### Node.js Setup
 
-- [js-template](docs/modules/js-template.md) - a library for emulating Two-Way Data Binding
-- [custom-elements](docs/modules/custom-elements.md) - a library for implementing webComponents
+```js
+var ApplicationPrototype = require('application-prototype');
+var app = new ApplicationPrototype();
 
-- [browser-session](docs/modules/browser-session.md) - a cross browser function implemented with Promises and indexed-db ;
-- [browser-session/strategy/indexed-db](docs/modules/browser-session/strategy/indexed-db.md) - IndexedDb strategy
-- [browser-session/strategy/local-storage](docs/modules/browser-session/strategy/local-storage.md) - Local Storage strategy
+app.bind('myMethod', function (arg1, arg2) {
+  // your logic here
+});
 
-- [extensions/prototype](docs/modules/extensions/prototype.md) - rich library for cross browsing ; documentation @TODO
-- [request](docs/modules/request.md) - a XmlHttprequest Wrapper
-- [request/params-parser](docs/modules/request/params-parser.md) - documentation @TODO
-- [uri-load](docs/modules/uri-load.md) - a script for loading async a list of stylesheets or scripts
+app.on('onMyMethod', function (arg1, arg2) {
+  console.log('myMethod was called');
+});
 
-- [canvas-draw](docs/modules/canvas-draw.md) - documentation @TODO
-- [graphic](docs/modules/graphic.md) - a function that quickly loads all `graphic` sub-modules
-- [graphic/convert](docs/modules/graphic/convert.md) - library, set of modules `graphic/convert/*`
-- [graphic/convert/blob-to-imagedata](docs/modules/graphic/convert/blob-to-imagedata.md) - conversion of Blob to ImageData
-- [graphic/convert/imagedata-to-blob](docs/modules/graphic/convert/imagedata-to-blob.md) - conversion of ImageData to Blob
-- [graphic/filters](docs/modules/graphic/filters.md) - library, set of modules `graphic/filters/*`
-- [graphic/filters/blur](docs/modules/graphic/filters/blur.md) - adding **Blur** filter over an ImageData
-- [graphic/filters/contrast](docs/modules/graphic/filters/contrast.md) - adding **Contrast** filter over an ImageData
-- [graphic/filters/saturation](docs/modules/graphic/filters/saturation.md) - adding **Saturation** filter over an ImageData
-- [graphic/polyfill](docs/modules/graphic/polyfill.md) - contains Commons Browsers polyfills
-- [graphic/recognition](docs/modules/graphic/recognition.md) - library, set of modules `graphic/recognition/*`
-- [graphic/recognition/edge-detection](docs/modules/graphic/recognition/edge-detection.md) - module for edge recognition
-- [graphic/utils](docs/modules/graphic/utils.md) - library, set of modules `graphic/utils/*`
-- [graphic/utils/imagedata-clone](docs/modules/graphic/utils/imagedata-clone.md) - module for ImageData Clone
+app.myMethod('hello', 'world');
+```
+
+## Documentation
+
+**[Full Documentation](docs/index.md)** | [Getting Started](docs/getting-started.md) | [Architecture](docs/architecture.md)
+
+### Core
+
+- [ApplicationPrototype](docs/core/application-prototype.md) - event-driven object builder with before/on/after lifecycle hooks
+- [ApplicationBuilder](docs/core/application-builder.md) - module loading, caching, debugging, and dependency management
+
+### Modules
+
+| Group | Modules | Key Feature |
+|-------|---------|-------------|
+| [**Async**](docs/async/index.md) | flow, waterfall, map, filter, forEach | Sequential & parallel orchestration |
+| [**UI / Templating**](docs/ui/index.md) | js-template, components, custom-elements | `{{ }}` two-way binding, `*if`, `*for` directives |
+| [**Networking**](docs/networking/index.md) | request, progress tracking, params-parser | Chainable HTTP client with upload/download events |
+| [**Storage**](docs/storage/index.md) | browser-session (IndexedDB / localStorage) | ~200MB Promise-based key-value store |
+| [**Resource Loading**](docs/resource-loading/uri-load.md) | uri-load | Dynamic script/stylesheet injection |
+| [**Graphics**](docs/graphics/index.md) | 10+ image filters, canvas-draw, conversions | Pure JS image processing pipeline |
+| [**Media**](docs/media/index.md) | webcam, getUserMedia | Camera capture with polyfill |
+| [**Parsers**](docs/parsers/index.md) | CSV parse/encode, Markdown to HTML | Lightweight format conversion |
+| [**Extensions**](docs/extensions/index.md) | 50+ utility methods, SHA/AES/MD5 encryption | One import enriches all built-in types |
+
+### Guides
+
+- [Building a Single-Page Application](docs/guides/building-a-spa.md) - task manager with templating, storage, and API calls
+- [Building an Image Editor](docs/guides/building-an-image-editor.md) - photo filters with webcam capture
+- [Building a Data Dashboard](docs/guides/building-a-data-dashboard.md) - sortable table with API data and caching
 
 ## Contribution
-if you find code interesting you may participate by updating documentation using pull request or mail messages to [sergiu.gordienco@gmail.com](mailto:sergiu.gordienco@gmail.com)
+
+If you find the code interesting, you may participate by updating documentation using pull requests or by sending messages to [sergiu.gordienco@gmail.com](mailto:sergiu.gordienco@gmail.com).
 
 ### Typedarray polyfill
 

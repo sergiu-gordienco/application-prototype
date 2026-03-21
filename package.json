@@ -10,6 +10,7 @@
     "docs-dictionary-dev": "npm run docs-dictionary; while true; do find . -not -path './documentation' | entr -pd npm run docs-dictionary; done",
     "docs-dev": "npm run docs; while true; do find . -not -path './documentation' | entr -pd npm run docs; done",
     "docs-preview": "live-server --wait=6500 --no-browser documentation",
+    "docs-site": "npx serve docs -l 3000",
     "build": "npm run docs-dictionary ; npm run docs "
   },
   "repository": {

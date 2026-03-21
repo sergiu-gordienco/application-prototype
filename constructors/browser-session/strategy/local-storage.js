@@ -83,7 +83,7 @@ module.exports  = function (storage) {
         } else {
           resolve(
             evtGrp(
-              ( typeof(data) !== undefined || data !== null ) ? {
+              ( typeof(data) !== "undefined" || data !== null ) ? {
                 k : key,
                 v : data
               } : data

@@ -4,10 +4,13 @@ var sessionDbConnection = false;
 var dbConnectionBuilder 	= false;
 
 /**
- * browserSessionBuilder description
+ * Creates a new browser session instance backed by IndexedDB or localStorage.
+ * Provides a Promise-based key-value storage API with automatic JSON serialization.
+ * Falls back to localStorage if IndexedDB is not available.
  * @interface BrowserSessionModule
- * @param  {string|object} objectStoreArg name or object of strategyStore
- * @param {object} [objectStoreConf]
+ * @param {string|object} objectStoreArg - Strategy name ('local-storage', 'indexed-db') or a strategyStore object
+ * @param {object} [objectStoreConf] - Configuration options for the storage strategy
+ * @returns {Promise<BrowserSessionModule>} A promise resolving to the session instance
  */
 var browserSessionBuilder	= function (objectStoreArg, objectStoreConf) {
 	var app	= new ApplicationPrototype();
@@ -91,7 +94,7 @@ var browserSessionBuilder	= function (objectStoreArg, objectStoreConf) {
 							reject(event);
 						});
 					};
-					if (typeof(result) !== undefined) {
+					if (typeof(result) !== "undefined") {
 						app.removeItem(key).then(function () {
 							setValue();
 						}, function (event) {

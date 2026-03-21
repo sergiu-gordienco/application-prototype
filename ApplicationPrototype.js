@@ -2,9 +2,27 @@
 /* jshint -W054, -W018, undef:true */
 /* globals APP_BUILDER_GLOBAL, window, module, process, console, global, setImmediate, setTimeout */
 
+/**
+ * Detects if code is running in a browser environment.
+ * @function isBrowser
+ * @returns {boolean} true if running in a browser
+ */
 var isBrowser=new Function("try {return this===window;}catch(e){ return false;}");
+/**
+ * Detects if code is running in a Node.js environment.
+ * @function isNode
+ * @returns {boolean} true if running in Node.js
+ */
 var isNode=new Function("var isBrowser = false; try { isBrowser = this===window;}catch(e){ isBrowser = false;}; try {return !isBrowser && ( this ===global );}catch(e){console.error(e); return false;}");
 
+/**
+ * ApplicationPrototype - A lightweight event-driven object builder.
+ * Provides method binding with before/on/after lifecycle hooks,
+ * event emission, and optional method interruption.
+ * @constructor
+ * @param {function} [builder] - Optional builder function receiving (config, vars, methods, public_methods, private_methods)
+ * @returns {object} The public methods object with event capabilities
+ */
 var ApplicationPrototype = ((function (window, undefined) {
 	window.ApplicationPrototype	= (function (builder) {
 		var methods = {};

@@ -14,7 +14,7 @@ all values that are saved in **browserSession** **_Object_** are automatically s
 <head>
   <title>Document - browserSession Demo</title>
   <script
-    src="./application-prototype/constructors/bowser-session.js"
+    src="./application-prototype/constructors/browser-session.js"
     type="text/javascript">
   </script>
 </head>
@@ -127,7 +127,7 @@ retrieve multiple items from **browserSession** **_Object_**
 
 Example:
 ```js
-session.setItem(['item1', 'item2', 'item3']).then(function (result) {
+session.getItems(['item1', 'item2', 'item3']).then(function (result) {
   console.log("Success, the new value is: ", result);
   // result: {
   //  item1: 'a..',
@@ -196,7 +196,7 @@ find items in store by filtering them
 Example:
 ```js
 session.findItems(function (itemKey, itemValue) {
-  if (key.match(/foo/)) {
+  if (itemKey.match(/foo/)) {
     return true;
   } else {
     return false;

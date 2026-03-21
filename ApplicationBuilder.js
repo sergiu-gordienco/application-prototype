@@ -8,6 +8,16 @@ var isBrowser=new Function("try {return this===window;}catch(e){ return false;}"
 var isNode=new Function("var isBrowser = false; try { isBrowser = this===window;}catch(e){ isBrowser = false;}; try {return !isBrowser && ( this ===global );}catch(e){console.error(e); return false;}");
 // jshint +W054
 
+/**
+ * ApplicationBuilder - Extended application builder with module loading, caching, and debugging.
+ * Builds on ApplicationPrototype to provide a full dependency management system
+ * for modular JavaScript applications in both browser and Node.js environments.
+ * @constructor
+ * @param {function|object} callback - Constructor callback or options object
+ * @param {function} [callback.onconstruct] - Called during construction with (variables, configurations)
+ * @param {function} [callback.onready] - Called when the builder is ready with (variables, configurations)
+ * @returns {ApplicationPrototype} The configured application instance
+ */
 function ApplicationBuilder(callback) {
 	var __requireNode, __globalNode, __dirnameNode;
 	if (isNode()) {
@@ -173,7 +183,7 @@ function ApplicationBuilder(callback) {
 					"color": "white"
 				},
 				warn : {
-					"background-color": "golderod",
+					"background-color": "goldenrod",
 					"color": "black"
 				},
 				info : {

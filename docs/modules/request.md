@@ -139,10 +139,10 @@ In this example we use default `get` request from url and return data as text. W
 	app.url('some url')
 	.response('text')
 	.then(function (data) {
-		//recieved data
+		//received data
 	},
 	function (err) {
-		//error happend
+		//error happened
 	});
 ```
 
@@ -155,9 +155,9 @@ This example sends a `post` request with the encoded string in it's body. All va
 	.configurator('prepare-post')
 	.send('hello%20world')
 	.then(function (data) {
-		//recieved data
+		//received data
 	}), function (err) {
-		//error happend
+		//error happened
 	};
 ```
 

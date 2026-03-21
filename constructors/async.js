@@ -5,10 +5,17 @@
  */
 
 /**
- * Module used processing data asynchronous
+ * Module for executing asynchronous operations in flow (sequential) or waterfall (parallel) mode.
+ * Provides methods for async flow, waterfall, map, filter, and forEach operations.
  * @example
  * Application.require('async').then(function (asyncOperations) {
- *	// @TODO
+ *   var async = asyncOperations();
+ *   async.flow([
+ *     [function (next) { setTimeout(function () { next('result1'); }, 100); }],
+ *     [function (next) { setTimeout(function () { next('result2'); }, 100); }]
+ *   ], function () {
+ *     console.log('All operations completed');
+ *   });
  * }, console.error);
  * @interface async
  * @returns {async.AsyncConstructor}

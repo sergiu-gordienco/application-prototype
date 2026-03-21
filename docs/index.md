@@ -1,307 +1,91 @@
 # ApplicationPrototype
 
-returns an object ApplicationPrototype
+**An event-driven modular JavaScript framework for browser and Node.js** that gives you reactive templating, async orchestration, HTTP handling, 200MB client-side storage, image processing, and more -- with zero external dependencies.
 
-### Methods:
+## Why Choose application-prototype?
 
-- **bind** - `function` - Attach an method
-	- arguments:
-		- **methodName** `string`
-		- **method** `function`
-		- **config** [`string` or `object`]
-			- if `object`
-			```js
-			{
-				listenedBefore	: true, // enable event beforeMethod
-				listenedOn		: true, // enable event onMethod
-				listenedAfter	: true, // enable event afterMethod
-				allowInterruption: true // enable interruption by returning false in method
-			}
-			```
-			- if is `string` options from object are `false` and if it contains some substrings it enables specific options from object
-				- `"light"` - enables `listenedOn` and `allowInterruption`
-				- `"on"` » `listenedOn = true`
-				- `"af"` » `listenedAfter = true`
-				- `"st"` » `allowInterruption = true`
-				- `"bf"` » `listenedBefore = true`
-				- `"before"` » `listenedBefore = true`
+- **Zero dependencies** -- no node_modules bloat, no supply chain risk
+- **No build step required** -- works with plain `<script>` tags, no webpack/rollup/vite needed
+- **Browser + Node.js** -- same API works in both environments
+- **Event-driven lifecycle** -- every method automatically gets `before`/`on`/`after` hooks
+- **Built-in module loader** -- lazy-load modules on demand with dependency management
+- **Two-way data binding** -- Angular/Vue-like `{{ }}` templating without the framework weight
+- **200MB client storage** -- IndexedDB-backed session storage with Promise API
+- **Image processing** -- 10+ filters (blur, contrast, sepia, etc.) in pure JavaScript
+- **Async orchestration** -- sequential and parallel execution with concurrency control
+- **Encryption built-in** -- SHA1, SHA256, MD5, AES, Base64 on any string
 
+## Quick Example
 
-
-- **on** - `function` - Attach an event listener to an eventName, returns listener-id
 ```js
-	app.on("onRender", function (a, b, c ) { /* ... */ });
-
-	// add listeners to multiple events
-	app.on("onRender", function (a, b, c ) { /* ... */ });
-```
-```js
-	var listenerId = app.on(
-		"onRender",
-		function (a, b, c ) { /* ... */ },
-		"predefined-listener-id"
-	);
-```
-
-- **once** - `function` - Attach an event listener to an eventName only once, returns listener-id
-```js
-	// listen once
-	app.once("onRender", function (a, b, c ) { /* ... */ });
-```
-
-- **off** - `function` - Remove an event listener
-```js
-app.off("onRender") // remove all listeners for a specific eventName
-```
-```js
-app.off("onRender", "listenerId") // remove an specific listener-id
-
-// remove an specific listener-id from multiple events
-app.off("onInit, onRender", "listenerId")
-```
-
-- **emit** - `function` - emits an event
-```js
-app.emit("onRender", [arg1, arg2 /*, ...*/]); // emit a event with a specific eventName
-```
-```js
-app.emit("onRender", [arg1, arg2 /*, ...*/], true);
-// context of listeners will contain methods that will be tracked by events
-```
-```js
-app.emit("onRender", [arg1, arg2 /*, ...*/], false, true);
-// the event emiting will not be stoppable
-```
-
-- **crudEvents** - ( no yet documented @todo )
-```js
-
+// Create an event-driven object in 10 lines
 var app = new ApplicationPrototype();
 
-app.bind("render", function (p1, p2) {
-	// this !== app ; this contains methods from app but they may not be listened
-	// see app.emit
-
-	// your logic
+app.bind('greet', function (name) {
+    return 'Hello, ' + name + '!';
 });
 
-// or
-
-app.bind(function renderSimplier(p1, p2) {
-	// this !== app ; this contains methods from app but they may not be listened
-	// see app.emit
-
-	// your logic
+app.on('beforeGreet', function (name) {
+    console.log('About to greet:', name);
 });
 
-app.on("beforeRender", function (p1, p2) {
-	// this !== app ; this contains methods from app but they may not be listened
-	// see app.emit
-
-	// your code
-
-	if (/* some condition */) {
-		return false; // prevent executing of method app.render(), and stop next listeners
-		// this functionality may not be accessible see app.emit
-	}
+app.on('afterGreet', function (name) {
+    console.log('Greeted:', name);
 });
 
-app.on("onRender", function (p1, p2) { /* ... */ });
-
-app.on("afterRender", function (p1, p2) { /* ... */ });
-
-var param1 = "test";
-var param2 = { test: 2 };
-app.render(param1, param2);
-
-// retrigger event afterRender
-app.emit("afterRender", [param1, param2]);
+app.greet('World'); // logs: "About to greet: World" then "Greeted: World"
 ```
 
-# ApplicationBuilder
+## Module Overview
 
-# Documentation not ready
+| Module Group | What It Does | Key Advantage |
+|---|---|---|
+| [**Core**](core/application-prototype.md) | Event-driven objects with lifecycle hooks | Every method is automatically observable |
+| [**Async**](async/index.md) | Sequential & parallel async orchestration | Control concurrency without Promise chains |
+| [**UI / Templating**](ui/index.md) | Two-way data binding, components, custom elements | Angular-like power without a build step |
+| [**Networking**](networking/index.md) | HTTP client with progress, interception, routing | Chainable API with upload/download events |
+| [**Storage**](storage/index.md) | IndexedDB/localStorage key-value store | ~200MB Promise-based storage |
+| [**Resource Loading**](resource-loading/uri-load.md) | Dynamic script/stylesheet loading | Lazy-load resources on demand |
+| [**Graphics**](graphics/index.md) | Image filters, canvas animation, conversions | Pure JS image processing pipeline |
+| [**Media**](media/index.md) | Webcam capture, getUserMedia | Simple callback API for camera access |
+| [**Parsers**](parsers/index.md) | CSV parse/encode, Markdown to HTML | Lightweight data format conversion |
+| [**Extensions**](extensions/index.md) | 50+ utility methods, encryption, polyfills | One import enriches all built-in prototypes |
 
-Example of initialization in a browser envirorment
+## Getting Started
 
-```javascript
-var App;
-((function () {
-	var AppInitialized = new Promise(function (resolve, reject) {
-		App	= new ApplicationBuilder({
-			onconstruct	: function () {
-				console.log("Constructor", this, arguments);
-			},
-			onready	: function () {
-				var App	= this;
-				// path from where will be requested default packages
-				App.modulePath('/components/app-prototype/constructors');
-				App.cacheEnabled(false);
-				App.debugEnabled(true);
-
-				// load 2 default packages
-				App.require([
-					"extensions/prototype",
-
-					// package "lib" is going to register location of all default packages
-					"lib"
-				], function (libs) {
-					// load lib to register location of default
-					// packages before change App.modulePath
-					libs.lib();
-
-					App.bind("ePrototype", function () {
-						return libs["extensions/prototype"];
-					});
-
-					// change modulePath to your default packages
-					App.modulePath('/scripts/modules/');
-
-					resolve(App);
-				});
-			}
-		});
-	});
-
-	window.Application = function (cb) {
-		AppInitialized.then(function () {
-			cb(App);
-		}, function (err) {
-			console.error(err);
-		});
-	};
-})());
-
+```html
+<!-- Browser: just two script tags -->
+<script src="ApplicationPrototype.js"></script>
+<script src="ApplicationBuilder.js"></script>
+<script>
+    var App = new ApplicationBuilder({
+        onready: function () {
+            var App = this;
+            App.modulePath('./constructors');
+            App.require(['extensions/prototype', 'lib'], function (libs) {
+                libs.lib();
+                console.log('Application ready!');
+            });
+        }
+    });
+</script>
 ```
 
-## Contribution
-if you find code interesting you may participate by updating documentation using pull request or mail messages to [sergiu.gordienco@gmail.com](mailto:sergiu.gordienco@gmail.com)
-
-
-## Application.Promise
-
-It is a polyfill for Promise constructors
-
-more documentation on [Promise - Mozilla | MDN](https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/Promise.jsm/Promise)
-
-## Application.cacheEnabled( `true` or `false` )
-
-Enable / disable browser's cache for ApplicationBuilder
-
-## Application.debugEnabled( `true` or `false` )
-
-If it is enabled it, increase verbosity for ApplicationBuilder Framework
-
-## Application.modulePath
-
-Defines the location from where will downloaded requested modules
-
-## Application.moduleRegister
-
-`@TODO - documentation in progress`
-
-## Application.moduleResolve
-
-`@TODO - documentation in progress`
-
-## Application.require
-
-- Use with callback
+```bash
+# Node.js: install and require
+npm install application-prototype
+```
 
 ```js
-Application.require("module-name", function (err, requiredModule) {
-	// work with it
-})
+var ApplicationPrototype = require('application-prototype').application;
+var app = new ApplicationPrototype();
+app.bind('hello', function () { return 'world'; });
 ```
 
-- Use as Promise
+[Full Getting Started Guide](getting-started.md) | [Architecture Overview](architecture.md)
 
-```js
-Application.require("module-name").then(function (requiredModule) {
-	// work with it
-}).catch(function (err) {
-	console.log(error);
-})
-```
+## License
 
-- Use multiple require
+[Creative Commons Attribution-NonCommercial 4.0](http://creativecommons.org/licenses/by-nc/4.0/) / or Granted by SGApps Labs
 
-```js
-Application.require([
-	"ePrototype :: extensions/prototype",
-	"uriLoad :: uri-load"
-]).then(function (lib) {
-	lib.ePrototype; // ... use it
-	lib.uriLoad; // ... use it
-	// work with it
-}).catch(function (err) {
-	console.log(error);
-})
-```
-
-- Module name formats
-
-```js
-/*
-	https://example/module/path/{module-name}.js
-	http://example/module/path/{module-name}.js#?module={module-name}
-	http://example/module/path/file.js?module={module-name}
-	{path/to/module-name}
-	{path/to/module-name.js}
-	path/to/file.js#?module={module-name}
-*/
-```
-
-## Link modules to global module list
-
-@TODO documentation not ready
-
-### module.cache()
-
-Returns an object that will be common for all modules from same path.
-
-### module.resourceUrl( path )
-
-Returns an URL like `modules.path + path`,
-
-For example for module `test` from `/scripts/modules/test.js` the `module.resourceUrl('style.css')` will result as `/scripts/modules/test/style.css`
-
-### module.meta
-
-- module.meta.store	- a Store used for keeping links to dependencies
-- module.meta.$requestQuery - String Query used for module request
-- module.meta.module_path - Path where is store module's JavaScript File
-- module.meta.path	- same as module.meta.module_path
-- module.meta.name	- module_name
-- module.meta.url	- Ex: `path + '/' + module_name + '.js'`
-- module.meta.\_\_dirname	- where module is stored full path
-
-### module.$request
-
-Promise used to retrieve module object
-
-### module.atime
-
-Module last access time
-
-### module.Application
-
-### module.require
-
-Same as `Application.require` except that it will import modules from neighbor folder named with module-name;
-
-- Example for a module named "module-a"
-
-```javascript
-	module.require('render', function (err, render) {
-		// `render` required from file "./module-a/render.js"
-	})
-```
-
-## Retrieving multiple sub-modules
-
-```javascript
-	module.require('render', function (err, render) {
-		// `render` required from file "./module-a/render.js"
-	})
-```
+By [Sergiu Gordienco](https://www.linkedin.com/in/sergiu-gordienco/) | [sgapps.io](https://sgapps.io)

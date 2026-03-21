@@ -27,8 +27,25 @@ Possible event handlers:
 		'__onInit' : function () { ... },
 		'__onContentChange' : function () { ... },
 		'__onRemove' : function () { ... },
-		'__onAttrChange' : function () { ... }
+		'__onAttrChange' : function (attributeName, oldValue) { ... }
 	}
+```
+
+> **Note:** When an attribute changes, **both** `__onContentChange` and `__onAttrChange` are triggered. `__onAttrChange` receives the attribute name and old value as arguments.
+
+#### `element.methods` Property
+
+All registered custom methods are accessible on any element via the `.methods` property, which is added to `HTMLElement.prototype`. This works as both a getter and setter:
+
+```js
+// Access registered methods on an element
+var el = document.querySelector('mycustomelement');
+el.methods.myMethod();            // calls the registered method with `this` = the element
+
+// Set methods directly
+el.methods = {
+    highlight: function () { this.style.background = 'yellow'; }
+};
 ```
 
 Example:
