@@ -1,3 +1,46 @@
+/**
+ * ApplicationBuilder - Extended application builder with module loading, caching, and debugging.
+ * Builds on ApplicationPrototype to provide a full dependency management system
+ * for modular JavaScript applications in both browser and Node.js environments.
+ * @constructor
+ * @param {function|object} callback - Constructor callback or options object
+ * @param {function} [callback.onconstruct] - Called during construction with (variables, configurations)
+ * @param {function} [callback.onready] - Called when the builder is ready with (variables, configurations)
+ * @returns {ApplicationPrototype} The configured application instance
+ */
+declare class ApplicationBuilder {
+    constructor(callback: {
+        onconstruct?: (...params: any[]) => any;
+        onready?: (...params: any[]) => any;
+    });
+}
+
+/**
+ * Detects if code is running in a browser environment.
+ * @function isBrowser
+ * @returns {boolean} true if running in a browser
+ */
+declare function isBrowser(): boolean;
+
+/**
+ * Detects if code is running in a Node.js environment.
+ * @function isNode
+ * @returns {boolean} true if running in Node.js
+ */
+declare function isNode(): boolean;
+
+/**
+ * ApplicationPrototype - A lightweight event-driven object builder.
+ * Provides method binding with before/on/after lifecycle hooks,
+ * event emission, and optional method interruption.
+ * @constructor
+ * @param {function} [builder] - Optional builder function receiving (config, vars, methods, public_methods, private_methods)
+ * @returns {object} The public methods object with event capabilities
+ */
+declare class ApplicationPrototype {
+    constructor(builder?: (...params: any[]) => any);
+}
+
 declare namespace async {
     /**
      * @callback AsyncConstructor
@@ -203,10 +246,17 @@ declare namespace async {
 }
 
 /**
- * Module used processing data asynchronous
+ * Module for executing asynchronous operations in flow (sequential) or waterfall (parallel) mode.
+ * Provides methods for async flow, waterfall, map, filter, and forEach operations.
  * @example
  * Application.require('async').then(function (asyncOperations) {
- *	// @TODO
+ *   var async = asyncOperations();
+ *   async.flow([
+ *     [function (next) { setTimeout(function () { next('result1'); }, 100); }],
+ *     [function (next) { setTimeout(function () { next('result2'); }, 100); }]
+ *   ], function () {
+ *     console.log('All operations completed');
+ *   });
  * }, console.error);
  * @interface async
  * @returns {async.AsyncConstructor}
@@ -284,10 +334,13 @@ declare namespace BrowserSessionModule {
 }
 
 /**
- * browserSessionBuilder description
+ * Creates a new browser session instance backed by IndexedDB or localStorage.
+ * Provides a Promise-based key-value storage API with automatic JSON serialization.
+ * Falls back to localStorage if IndexedDB is not available.
  * @interface BrowserSessionModule
- * @param  {string|object} objectStoreArg name or object of strategyStore
- * @param {object} [objectStoreConf]
+ * @param {string|object} objectStoreArg - Strategy name ('local-storage', 'indexed-db') or a strategyStore object
+ * @param {object} [objectStoreConf] - Configuration options for the storage strategy
+ * @returns {Promise<BrowserSessionModule>} A promise resolving to the session instance
  */
 declare interface BrowserSessionModule {
 }
@@ -2998,9 +3051,15 @@ declare namespace ApplicationPrototype {
 }
 
 /**
- * @interface ApplicationPrototype
+ * ApplicationPrototype - A lightweight event-driven object builder.
+ * Provides method binding with before/on/after lifecycle hooks,
+ * event emission, and optional method interruption.
+ * @constructor
+ * @param {function} [builder] - Optional builder function receiving (config, vars, methods, public_methods, private_methods)
+ * @returns {object} The public methods object with event capabilities
  */
-declare interface ApplicationPrototype {
+declare class ApplicationPrototype {
+    constructor(builder?: (...params: any[]) => any);
 }
 
 /**
@@ -3668,6 +3727,14 @@ declare interface String {
      */
     toArrayBufferFromUtf8(): ArrayBuffer;
 }
+
+/**
+ * application-prototype - A modular JavaScript Application Builder framework.
+ * @module application-prototype
+ * @property {function} application - ApplicationPrototype constructor for lightweight event-driven objects
+ * @property {function} builder - ApplicationBuilder constructor with module loading and dependency management
+ */
+declare module "application-prototype" { }
 
 declare module "application-prototype" {
 

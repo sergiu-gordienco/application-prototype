@@ -15,7 +15,7 @@
 		"encoding": "utf8",
 		"readme": "README.md",
 		"mainpagetitle": "Application Prototype - by Sergiu Gordienco",
-		"destination": "documentation/",
+		"destination": "jsdoc-documentation/",
 		"recurse": true,
 		"verbose": true
 	},
