@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="120" viewBox="0 0 1200 120">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#1a1a2e"/>
+      <stop offset="50%" style="stop-color:#16213e"/>
+      <stop offset="100%" style="stop-color:#0f3460"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#4a6cf7"/>
+      <stop offset="100%" style="stop-color:#6c63ff"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="120" rx="8" fill="url(#bg)"/>
+
+  <!-- Accent bar -->
+  <rect y="112" width="1200" height="8" rx="0 0 8 8" fill="url(#accent)" opacity="0.8"/>
+
+  <!-- Decorative circles -->
+  <circle cx="80" cy="60" r="45" fill="#4a6cf7" opacity="0.08"/>
+  <circle cx="1120" cy="60" r="55" fill="#6c63ff" opacity="0.06"/>
+  <circle cx="1050" cy="30" r="25" fill="#4a6cf7" opacity="0.05"/>
+
+  <!-- Icon: book/docs -->
+  <g transform="translate(60, 35)">
+    <rect x="0" y="0" width="40" height="50" rx="4" fill="none" stroke="#4a6cf7" stroke-width="2.5" opacity="0.9"/>
+    <line x1="10" y1="14" x2="30" y2="14" stroke="#4a6cf7" stroke-width="2" opacity="0.7"/>
+    <line x1="10" y1="22" x2="28" y2="22" stroke="#4a6cf7" stroke-width="2" opacity="0.5"/>
+    <line x1="10" y1="30" x2="24" y2="30" stroke="#4a6cf7" stroke-width="2" opacity="0.4"/>
+    <line x1="10" y1="38" x2="20" y2="38" stroke="#4a6cf7" stroke-width="2" opacity="0.3"/>
+  </g>
+
+  <!-- Title -->
+  <text x="120" y="52" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="26" font-weight="700" fill="#ffffff">
+    ApplicationPrototype
+  </text>
+
+  <!-- Subtitle -->
+  <text x="120" y="78" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="15" fill="#a0aec0">
+    Zero-dependency event-driven framework for Browser &amp; Node.js
+  </text>
+
+  <!-- CTA Button -->
+  <g transform="translate(880, 35)">
+    <rect width="260" height="50" rx="25" fill="url(#accent)"/>
+    <text x="130" y="32" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="16" font-weight="600" fill="#ffffff" text-anchor="middle">
+      View Documentation &#x2192;
+    </text>
+  </g>
+</svg>

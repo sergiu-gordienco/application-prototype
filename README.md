@@ -3,7 +3,7 @@
 [![pipeline status](https://labs.sgapps.io/open-source/application-prototype/badges/master/pipeline.svg)](https://labs.sgapps.io/open-source/application-prototype/-/commits/master)
 [![License » Creative Commons Attribution-NonCommercial 4.0 / or Granted by SGApps Labs](https://img.shields.io/badge/License-CC--BY--NC--4.0-crimson)](https://labs.sgapps.io/open-source/application-prototype/-/blob/master/LICENSE)
 [![Repository - GitLab](https://img.shields.io/badge/Repository-GitLab-blue?logo=gitlab)](https://labs.sgapps.io/open-source/application-prototype/)
-[![Documentation](https://img.shields.io/badge/Documentation-Api-blue?logo=html5)](http://open-source.gordienco.net/application-prototype/)
+[![Documentation](https://img.shields.io/badge/Documentation-Api-blue?logo=html5)](https://sergiu-gordienco.github.io/application-prototype/#/)
 [![Sergiu Gordienco](https://img.shields.io/badge/author-Sergiu_Gordienco-blue?logo=linkedin)](https://www.linkedin.com/in/sergiu-gordienco/)
 [![email sergiu.gordienco@gmail.com](https://img.shields.io/badge/email-sergiu.gordienco@gmail.com-blue?logo=email)](mailto:sergiu.gordienco@gmail.com)
 
@@ -12,6 +12,8 @@
 [![GitHub package.json version (branch)](https://img.shields.io/github/package-json/v/sergiu-gordienco/application-prototype/master)](https://github.com/sergiu-gordienco/application-prototype)
 [![GitHub issues](https://img.shields.io/github/issues/sergiu-gordienco/application-prototype)](https://github.com/sergiu-gordienco/application-prototype/issues)
 [![GitHub pull requests](https://img.shields.io/github/issues-pr/sergiu-gordienco/application-prototype)](https://github.com/sergiu-gordienco/application-prototype/pulls)
+
+[![ApplicationPrototype Documentation](docs/media/banner-docs.svg)](https://sergiu-gordienco.github.io/application-prototype/#/)
 
 A modular JavaScript Application Builder framework for building event-driven applications with support for two-way data binding, custom HTML elements, async operations, and more.
 
