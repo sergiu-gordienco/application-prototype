@@ -343,6 +343,43 @@ function ApplicationBuilder(callback) {
 		var pending		= true;
 		var resolve		= function (v) {
 			if (pending) {
+				// Promises/A+ 2.3 - thenable adoption: if the fulfillment
+				// value is itself a thenable (e.g. a Promise returned from a
+				// `.then` handler), adopt its eventual state instead of
+				// resolving with the thenable object directly.
+				if (v === p) {
+					reject(new TypeError("Chaining cycle detected: a Promise cannot be resolved with itself"));
+					return;
+				}
+				if (v !== null &amp;&amp; (typeof(v) === "object" || typeof(v) === "function")) {
+					var then;
+					try {
+						then	= v.then;
+					} catch (thenErr) {
+						reject(thenErr);
+						return;
+					}
+					if (typeof(then) === "function") {
+						var settled	= false;
+						try {
+							then.call(v, function (val) {
+								if (settled) { return; }
+								settled	= true;
+								resolve(val);
+							}, function (e) {
+								if (settled) { return; }
+								settled	= true;
+								reject(e);
+							});
+						} catch (adoptErr) {
+							if (!settled) {
+								settled	= true;
+								reject(adoptErr);
+							}
+						}
+						return;
+					}
+				}
 				pending	= false;
 				value	= v;
 				cb_resolve.forEach(function (f) {
