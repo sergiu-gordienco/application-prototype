@@ -419,12 +419,14 @@ function ApplicationBuilder(callback) {
 		var p	= new Application.Promise();
 		var i, solved = false;
 		for (i=0;i<a.length;i++) {
-			a[i].then(function (val) {
+			// coerce non-thenable entries so a plain value can win the race
+			Application.Promise.resolve(a[i]).then(function (val) {
 				if (solved) return;
 				solved	= true;
 				p.resolve(val);
 			}, function (err) {
 				if (solved) return;
+				solved	= true;
 				p.reject(err);
 			});
 		}
@@ -432,14 +434,28 @@ function ApplicationBuilder(callback) {
 	};
 	Application.Promise.all	= function (a) {
 		var p = new Application.Promise();
-		var values = [];var i;
-		for (i=0;i<a.length;i++) {
-			a[i].then(function (val) {
-				values.push(val);
-				if (values.length === a.length) {
+		var values = new Array(a.length);
+		var remaining = a.length;
+		var i;
+		// an empty input list resolves immediately with an empty array
+		if (remaining === 0) {
+			p.resolve(values);
+			return p;
+		}
+		var makeHandler = function (index) {
+			return function (val) {
+				// store by input index so result order matches input order,
+				// not completion order
+				values[index] = val;
+				remaining -= 1;
+				if (remaining === 0) {
 					p.resolve(values);
 				}
-			}, function (err) {
+			};
+		};
+		for (i=0;i<a.length;i++) {
+			// coerce non-thenable entries (spec: Promise.resolve each value)
+			Application.Promise.resolve(a[i]).then(makeHandler(i), function (err) {
 				p.reject(err);
 			});
 		}
